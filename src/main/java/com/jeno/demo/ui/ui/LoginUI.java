@@ -1,8 +1,9 @@
-package com.jeno.wkapp.ui;
+package com.jeno.wkapp.ui.ui;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.server.*;
+import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
@@ -36,6 +37,10 @@ public class LoginUI extends UI {
             return;
         }
 
+        Label title = new Label("De mega super deluxe WK pronostiek");
+        title.setStyleName("login_page_title");
+        title.setContentMode(ContentMode.HTML);
+
         VerticalLayout layout = new VerticalLayout();
         LoginForm loginForm = new LoginForm();
         loginForm.addLoginListener(this::loginEvent);
@@ -53,6 +58,7 @@ public class LoginUI extends UI {
             final Authentication authenticated = authenticationProvider.authenticate(auth);
             SecurityContextHolder.getContext().setAuthentication(authenticated);
             sessionAuthenticationStrategy.onAuthentication(auth, ((VaadinServletRequest) VaadinService.getCurrentRequest()).getHttpServletRequest(), ((VaadinServletResponse)VaadinService.getCurrentResponse()).getHttpServletResponse());
+            // Go to HomeUI
             Page.getCurrent().setLocation("/");
         } catch (final AuthenticationException ex) {
             String message = "Incorrect user or password";

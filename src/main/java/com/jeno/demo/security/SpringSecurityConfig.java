@@ -52,6 +52,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionAuthenticationStrategy(sessionControlAuthenticationStrategy());
     }
 
+    // inMemoryUserDetailsService for the purpose of demo
     @Bean
     public UserDetailsService inMemoryUserDetailsManager(BCryptPasswordEncoder bCryptPasswordEncoder) {
         InMemoryUserDetailsManager inMemoryUserDetailsService = new InMemoryUserDetailsManager(new ArrayList<>());
