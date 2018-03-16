@@ -1,6 +1,6 @@
-package com.jeno.wkapp.ui.ui;
+package com.jeno.demo.ui.ui;
 
-import com.jeno.wkapp.ui.views.state.State;
+import com.jeno.demo.ui.views.state.State;
 import com.vaadin.server.VaadinService;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;

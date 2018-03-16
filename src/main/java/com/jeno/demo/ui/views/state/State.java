@@ -1,4 +1,4 @@
-package com.jeno.wkapp.ui.views.state;
+package com.jeno.demo.ui.views.state;
 
 import java.util.Arrays;
 import java.util.List;

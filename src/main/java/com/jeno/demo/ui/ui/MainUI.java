@@ -1,7 +1,7 @@
-package com.jeno.wkapp.ui.ui;
+package com.jeno.demo.ui.ui;
 
-import com.jeno.wkapp.ui.views.accessdenied.AccessDeniedView;
-import com.jeno.wkapp.ui.views.error.ErrorView;
+import com.jeno.demo.ui.views.accessdenied.AccessDeniedView;
+import com.jeno.demo.ui.views.error.ErrorView;
 import com.vaadin.annotations.Theme;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.VaadinRequest;

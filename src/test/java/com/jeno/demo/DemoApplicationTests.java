@@ -1,4 +1,4 @@
-package com.jeno.wkapp;
+package com.jeno.demo;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

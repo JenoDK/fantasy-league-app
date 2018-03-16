@@ -1,4 +1,4 @@
-package com.jeno.wkapp.ui.views.error;
+package com.jeno.demo.ui.views.error;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;

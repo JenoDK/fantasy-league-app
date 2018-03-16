@@ -1,6 +1,6 @@
-package com.jeno.wkapp.ui.views.profile;
+package com.jeno.demo.ui.views.profile;
 
-import com.jeno.wkapp.ui.views.state.State;
+import com.jeno.demo.ui.views.state.State;
 import com.vaadin.navigator.View;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
