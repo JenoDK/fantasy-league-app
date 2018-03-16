@@ -1,6 +1,7 @@
 .gradle
 /build/
 !gradle/wrapper/gradle-wrapper.jar
+/src/rebel.xml
 
 ### STS ###
 .apt_generated
@@ -11,6 +12,7 @@
 .springBeans
 
 ### IntelliJ IDEA ###
+/out/
 .idea
 *.iws
 *.iml
