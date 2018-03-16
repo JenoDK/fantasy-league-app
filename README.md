@@ -1,6 +1,9 @@
 # Spring Boot application with Vaadin and Spring Security
 A basic demo application to showcase Spring Boot in combination with Spring Security and Vaadin
 
+## Spring security config
+See the SpringSecurityConfig class for more customization
+
 ## Authentication
 Authentication is done programmatically in LoginUI 
 For the sake of the demo the [UserDetailsService](http://www.baeldung.com/spring-security-authentication-with-a-database)
