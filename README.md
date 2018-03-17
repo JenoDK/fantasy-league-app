@@ -21,4 +21,8 @@ Define more views in State and by defining a
 [View](https://vaadin.com/api/com/vaadin/navigator/View.html) 
 with the [@SpringView](https://vaadin.com/api/vaadin-spring/com/vaadin/spring/annotation/SpringView.html) annotation.
 
+## Run
+```bash
+./gradlew bootRun
+```
 
