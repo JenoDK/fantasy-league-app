@@ -35,6 +35,8 @@ dependencies {
 	compile('com.vaadin:vaadin-spring-boot-starter')
 	compile 'io.reactivex:rxjava:1.2.6'
 	compile 'com.google.guava:guava:23.0'
+	compile 'org.liquibase:liquibase-core:3.5.5'
+
 
 	runtime('mysql:mysql-connector-java')
 

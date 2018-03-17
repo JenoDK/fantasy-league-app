@@ -1,4 +1,4 @@
-package com.jeno.wkapp.security;
+package com.jeno.wkapp.config;
 
 import com.vaadin.spring.annotation.EnableVaadin;
 import org.springframework.beans.factory.annotation.Autowired;
