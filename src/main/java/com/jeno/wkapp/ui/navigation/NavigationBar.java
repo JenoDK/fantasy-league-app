@@ -1,4 +1,4 @@
-package com.jeno.wkapp.ui.ui;
+package com.jeno.wkapp.ui.navigation;
 
 import com.jeno.wkapp.ui.views.state.State;
 import com.vaadin.server.VaadinService;

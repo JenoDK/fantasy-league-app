@@ -1,5 +1,6 @@
-package com.jeno.wkapp.ui.ui;
+package com.jeno.wkapp.ui;
 
+import com.jeno.wkapp.ui.navigation.NavigationBar;
 import com.jeno.wkapp.ui.views.accessdenied.AccessDeniedView;
 import com.jeno.wkapp.ui.views.error.ErrorView;
 import com.vaadin.annotations.Theme;

@@ -1,17 +1,16 @@
-package com.jeno.wkapp.ui.ui;
+package com.jeno.wkapp.ui;
 
+import com.jeno.wkapp.ui.login.CustomLoginForm;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.server.*;
 import com.vaadin.shared.ui.ContentMode;
-import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,6 +25,8 @@ public class LoginUI extends UI {
     private AuthenticationProvider authenticationProvider;
     @Autowired
     private SessionAuthenticationStrategy sessionAuthenticationStrategy;
+
+    private CustomLoginForm loginForm;
 
     @Override
     protected void init(VaadinRequest request) {
@@ -42,7 +43,7 @@ public class LoginUI extends UI {
         title.setContentMode(ContentMode.HTML);
 
         VerticalLayout layout = new VerticalLayout();
-        LoginForm loginForm = new LoginForm();
+        loginForm = new CustomLoginForm();
         loginForm.addLoginListener(this::loginEvent);
 
         layout.addComponent(loginForm);
@@ -61,8 +62,7 @@ public class LoginUI extends UI {
             // Go to HomeUI
             Page.getCurrent().setLocation("/");
         } catch (final AuthenticationException ex) {
-            String message = "Incorrect user or password";
-            Notification.show(message, Notification.Type.ERROR_MESSAGE);
+            loginForm.setError("Incorrect user or password");
         }
     }
 
