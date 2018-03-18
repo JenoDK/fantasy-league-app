@@ -1,4 +1,4 @@
-package com.jeno.wkapp.repository;
+package com.jeno.wkapp.data.repository;
 
 import com.jeno.wkapp.model.Role;
 import com.jeno.wkapp.model.RoleName;

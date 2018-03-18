@@ -1,10 +1,11 @@
-package com.jeno.wkapp.ui.login;
+package com.jeno.wkapp.ui.form;
 
-import com.vaadin.server.ErrorMessage;
 import com.vaadin.shared.ui.ContentMode;
-import com.vaadin.ui.*;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.LoginForm;
+import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
-import sun.rmi.runtime.Log;
 
 public class CustomLoginForm extends VerticalLayout {
 
@@ -29,8 +30,8 @@ public class CustomLoginForm extends VerticalLayout {
 		errorLabel.setValue(errorMsg);
 	}
 
-	public void addLoginListener(LoginForm.LoginListener loginEvent) {
-		loginForm.addLoginListener(loginEvent);
+	public void addLoginListener(LoginForm.LoginListener loginListener) {
+		loginForm.addLoginListener(loginListener);
 	}
 
 }

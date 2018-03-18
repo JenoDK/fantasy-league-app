@@ -1,28 +1,22 @@
 package com.jeno.wkapp.config;
 
+import com.jeno.wkapp.data.security.UserDetailsServiceImpl;
 import com.vaadin.spring.annotation.EnableVaadin;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.authentication.configurers.provisioning.InMemoryUserDetailsManagerConfigurer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.session.CompositeSessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionFixationProtectionStrategy;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -39,9 +33,20 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login")).accessDeniedPage("/accessDenied")
                 .and()
             .authorizeRequests()
-                .antMatchers("/VAADIN/**", "/PUSH/**", "/UIDL/**", "/login", "/login/**", "/error/**", "/accessDenied/**", "/vaadinServlet/**")
+                .antMatchers(
+                        "/VAADIN/**",
+                        "/PUSH/**", "/UIDL/**",
+                        "/register**",
+                        "/register",
+                        "/login",
+                        "/login/**",
+                        "/error/**",
+                        "/accessDenied/**",
+                        "/vaadinServlet/**")
                     .permitAll()
-                .antMatchers("/login*")
+                .antMatchers(
+                        "/login*",
+                        "/register*")
                     .anonymous()
                 .anyRequest()
                     .authenticated()
@@ -50,20 +55,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                     .logoutSuccessUrl("/login")
                     .and()
                 .sessionManagement().sessionAuthenticationStrategy(sessionControlAuthenticationStrategy());
-    }
-
-    // inMemoryUserDetailsService for the purpose of demo
-    @Bean
-    public UserDetailsService inMemoryUserDetailsManager(BCryptPasswordEncoder bCryptPasswordEncoder) {
-        InMemoryUserDetailsManager inMemoryUserDetailsService = new InMemoryUserDetailsManager(new ArrayList<>());
-        inMemoryUserDetailsService.createUser(
-            User.builder()
-                .passwordEncoder(pw -> bCryptPasswordEncoder.encode(pw))
-                .username("admin")
-                .password("admin")
-                .roles("ADMIN")
-                .build());
-        return inMemoryUserDetailsService;
     }
 
     @Bean
@@ -89,7 +80,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public DaoAuthenticationProvider createDaoAuthenticationProvider(UserDetailsService userDetailsService) {
+    public DaoAuthenticationProvider createDaoAuthenticationProvider(UserDetailsServiceImpl userDetailsService) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(userDetailsService);
         provider.setPasswordEncoder(passwordEncoder());

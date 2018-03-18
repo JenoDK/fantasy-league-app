@@ -14,6 +14,7 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
+apply from: 'liquibase.gradle'
 
 group = 'com.jeno'
 version = '0.0.1-SNAPSHOT'
@@ -33,10 +34,9 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-security')
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile('com.vaadin:vaadin-spring-boot-starter')
-	compile 'io.reactivex:rxjava:1.2.6'
 	compile 'com.google.guava:guava:23.0'
 	compile 'org.liquibase:liquibase-core:3.5.5'
-
+	compile group: 'io.reactivex.rxjava2', name: 'rxjava', version: '2.1.10'
 
 	runtime('mysql:mysql-connector-java')
 
