@@ -1,4 +1,4 @@
-package com.jeno.demo.ui.ui;
+package com.jeno.demo.ui.navigation;
 
 import com.jeno.demo.ui.views.state.State;
 import com.vaadin.server.VaadinService;

@@ -1,9 +1,9 @@
-package com.jeno.demo.ui.ui;
+package com.jeno.demo.ui;
 
+import com.jeno.demo.ui.form.CustomLoginForm;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.server.*;
-import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 
 @SpringUI(path = "/login")
-@Title("LoginPage")
+@Title("Login")
 @Theme("valo")
 public class LoginUI extends UI {
 
@@ -24,6 +24,10 @@ public class LoginUI extends UI {
     private AuthenticationProvider authenticationProvider;
     @Autowired
     private SessionAuthenticationStrategy sessionAuthenticationStrategy;
+
+    private VerticalLayout mainLayout;
+    private Button registerButton;
+    private CustomLoginForm loginForm;
 
     @Override
     protected void init(VaadinRequest request) {
@@ -34,19 +38,23 @@ public class LoginUI extends UI {
             Page.getCurrent().setLocation("/");
             return;
         }
+        mainLayout = new VerticalLayout();
+        mainLayout.setSizeFull();
 
-        Label title = new Label("De mega super deluxe WK pronostiek");
-        title.setStyleName("login_page_title");
-        title.setContentMode(ContentMode.HTML);
+        registerButton = new Button("Register");
+        registerButton.addClickListener(ignored -> Page.getCurrent().setLocation("/register"));
 
-        VerticalLayout layout = new VerticalLayout();
-        LoginForm loginForm = new LoginForm();
+        loginForm = new CustomLoginForm();
         loginForm.addLoginListener(this::loginEvent);
 
-        layout.addComponent(loginForm);
-        layout.setComponentAlignment(loginForm, Alignment.MIDDLE_CENTER);
-        layout.setSizeFull();
-        setContent(layout);
+        mainLayout.addComponent(registerButton);
+        mainLayout.addComponent(loginForm);
+        mainLayout.setComponentAlignment(registerButton, Alignment.TOP_LEFT);
+        mainLayout.setExpandRatio(registerButton, 1f);
+        mainLayout.setComponentAlignment(loginForm, Alignment.MIDDLE_CENTER);
+        mainLayout.setExpandRatio(loginForm, 9f);
+
+        setContent(mainLayout);
     }
 
     private void loginEvent(LoginForm.LoginEvent e) {
@@ -59,8 +67,7 @@ public class LoginUI extends UI {
             // Go to HomeUI
             Page.getCurrent().setLocation("/");
         } catch (final AuthenticationException ex) {
-            String message = "Incorrect user or password";
-            Notification.show(message, Notification.Type.ERROR_MESSAGE);
+            loginForm.setError("Incorrect user or password");
         }
     }
 

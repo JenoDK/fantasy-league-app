@@ -28,4 +28,3 @@ with the [@SpringView](https://vaadin.com/api/vaadin-spring/com/vaadin/spring/an
 ```bash
 ./gradlew bootRun
 ```
-

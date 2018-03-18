@@ -1,0 +1,25 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <include file="add-default-roles.xml" relativeToChangelogFile="true"/>
+
+    <changeSet author="Jeno" id="add-jeno-user">
+        <insert tableName="users">
+            <column name="name" value="Jeno"/>
+            <column name="username" value="Rexdan"/>
+            <column name="password" value="$2a$10$Oi9NHNKh4msYZszqp7oG0ezbpdE6G/oLaO99cj88MhL9e88DJT9A6"/>
+            <column name="email" value="jeno@genohm.com"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="Jeno" id="add-jeno-user-role">
+        <insert tableName="user_roles">
+            <column name="user_id" valueComputed="(SELECT id FROM users WHERE username = 'Rexdan')"/>
+            <column name="role_id" valueComputed="(SELECT id FROM roles WHERE name = 'ROLE_ADMIN')"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
