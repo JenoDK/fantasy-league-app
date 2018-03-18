@@ -2,7 +2,7 @@
 A basic demo application to showcase Spring Boot in combination with Spring Security and Vaadin
 
 ## TODO for this repo
-This repo is a copy of [wk-app](https://github.com/JenoDK/wk-app), that repo has evolved quite a bit and this repo should be updated to [commit](https://github.com/JenoDK/wk-app/commit/cb4cdce3f37a4a30c68ddbb8c5bd01951df3cc02)
+This repo was cloned from (it should have been the other way around) [wk-app](https://github.com/JenoDK/wk-app), that repo has evolved quite a bit and this repo should be updated to [commit](https://github.com/JenoDK/wk-app/commit/cb4cdce3f37a4a30c68ddbb8c5bd01951df3cc02)
 
 ## Spring security config
 See the SpringSecurityConfig class for more customization
