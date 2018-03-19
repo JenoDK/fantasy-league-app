@@ -3,8 +3,8 @@ configurations {
 }
 
 //loading properties file.
-Properties applicationProps = new Properties()
-applicationProps.load(new FileInputStream("src/main/resources/application.properties"))
+Properties devProps = new Properties()
+devProps.load(new FileInputStream("src/main/resources/application-dev.properties"))
 
 task liquibaseGenerateChangeLog(type: JavaExec) {
     group = "liquibase"
@@ -15,9 +15,9 @@ task liquibaseGenerateChangeLog(type: JavaExec) {
     main = "liquibase.integration.commandline.Main"
 
     args "--changeLogFile=src/main/resources/db/liquibase/" + buildTimestamp() + "_changelog.xml"
-    args "--username=" + applicationProps.getProperty('spring.datasource.username')
-    args "--password=" + applicationProps.getProperty('spring.datasource.password')
-    args "--url=" + applicationProps.getProperty('spring.datasource.url')
+    args "--username=" + devProps.getProperty('spring.datasource.username')
+    args "--password=" + devProps.getProperty('spring.datasource.password')
+    args "--url=" + devProps.getProperty('spring.datasource.url')
     args "--driver=com.mysql.jdbc.Driver"
     args "generateChangeLog"
 }

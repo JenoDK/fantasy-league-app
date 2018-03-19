@@ -1,11 +1,12 @@
-package com.jeno.demo.ui;
+package com.jeno.demo.ui.login;
 
-import com.jeno.demo.ui.form.CustomLoginForm;
+import com.jeno.demo.ui.RedirectUI;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.server.*;
 import com.vaadin.spring.annotation.SpringUI;
-import com.vaadin.ui.*;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.LoginForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -18,43 +19,35 @@ import org.springframework.security.web.authentication.session.SessionAuthentica
 @SpringUI(path = "/login")
 @Title("Login")
 @Theme("valo")
-public class LoginUI extends UI {
+public class LoginUI extends RedirectUI {
 
     @Autowired
     private AuthenticationProvider authenticationProvider;
     @Autowired
     private SessionAuthenticationStrategy sessionAuthenticationStrategy;
 
-    private VerticalLayout mainLayout;
-    private Button registerButton;
     private CustomLoginForm loginForm;
 
-    @Override
-    protected void init(VaadinRequest request) {
-        setSizeFull();
+    public LoginUI() {
+        super("Register", "/register");
+    }
 
+    @Override
+    public void doInit(VaadinRequest request, int uiId, String embedId) {
         // If user authenticated, redirect to main page
         if (!(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)) {
             Page.getCurrent().setLocation("/");
             return;
         }
-        mainLayout = new VerticalLayout();
-        mainLayout.setSizeFull();
 
-        registerButton = new Button("Register");
-        registerButton.addClickListener(ignored -> Page.getCurrent().setLocation("/register"));
+        super.doInit(request, uiId, embedId);
+    }
 
+    @Override
+    protected Component getMiddleComponent() {
         loginForm = new CustomLoginForm();
         loginForm.addLoginListener(this::loginEvent);
-
-        mainLayout.addComponent(registerButton);
-        mainLayout.addComponent(loginForm);
-        mainLayout.setComponentAlignment(registerButton, Alignment.TOP_LEFT);
-        mainLayout.setExpandRatio(registerButton, 1f);
-        mainLayout.setComponentAlignment(loginForm, Alignment.MIDDLE_CENTER);
-        mainLayout.setExpandRatio(loginForm, 9f);
-
-        setContent(mainLayout);
+        return loginForm;
     }
 
     private void loginEvent(LoginForm.LoginEvent e) {

@@ -1,8 +1,7 @@
-package com.jeno.demo.ui;
+package com.jeno.demo.ui.main;
 
-import com.jeno.demo.ui.navigation.NavigationBar;
-import com.jeno.demo.ui.views.accessdenied.AccessDeniedView;
-import com.jeno.demo.ui.views.error.ErrorView;
+import com.jeno.demo.ui.main.views.accessdenied.AccessDeniedView;
+import com.jeno.demo.ui.main.views.error.ErrorView;
 import com.vaadin.annotations.Theme;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.VaadinRequest;

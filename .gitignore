@@ -2,6 +2,7 @@
 /build/
 !gradle/wrapper/gradle-wrapper.jar
 /src/main/resources/rebel.xml
+/src/main/resources/application-dev.properties
 
 ### STS ###
 .apt_generated

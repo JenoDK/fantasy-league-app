@@ -14,7 +14,7 @@ public class RxUtil {
 	 * {@link Button}.
 	 */
 	public static Observable<Button.ClickEvent> clicks(Button button) {
-		return Observable.<Button.ClickEvent>create(subscriber -> {
+		return Observable.create(subscriber -> {
 			final Button.ClickListener listener = subscriber::onNext;
 			Registration registration = button.addClickListener(listener);
 			subscriber.setCancellable(() -> registration.remove());

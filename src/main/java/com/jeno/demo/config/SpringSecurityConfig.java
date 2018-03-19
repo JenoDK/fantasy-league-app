@@ -40,13 +40,16 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/register",
                         "/login",
                         "/login/**",
+                        "/forgotPassword**",
+                        "/forgotPassword",
                         "/error/**",
                         "/accessDenied/**",
                         "/vaadinServlet/**")
                     .permitAll()
                 .antMatchers(
                         "/login*",
-                        "/register*")
+                        "/register*",
+                        "/forgotPassword*")
                     .anonymous()
                 .anyRequest()
                     .authenticated()

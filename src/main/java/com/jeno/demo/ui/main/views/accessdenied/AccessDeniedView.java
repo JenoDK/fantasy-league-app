@@ -1,4 +1,4 @@
-package com.jeno.demo.ui.views.accessdenied;
+package com.jeno.demo.ui.main.views.accessdenied;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;

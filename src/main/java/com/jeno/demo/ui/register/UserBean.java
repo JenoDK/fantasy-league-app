@@ -1,4 +1,4 @@
-package com.jeno.demo.ui.form;
+package com.jeno.demo.ui.register;
 
 import com.jeno.demo.model.User;
 

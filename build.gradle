@@ -34,9 +34,10 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-security')
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile('com.vaadin:vaadin-spring-boot-starter')
-	compile 'com.google.guava:guava:23.0'
-	compile 'org.liquibase:liquibase-core:3.5.5'
-	compile group: 'io.reactivex.rxjava2', name: 'rxjava', version: '2.1.10'
+	compile('com.google.guava:guava:23.0')
+	compile('org.liquibase:liquibase-core:3.5.5')
+	compile('io.reactivex.rxjava2:rxjava:2.1.10')
+	compile('it.ozimov:spring-boot-email-core:0.6.3')
 
 	runtime('mysql:mysql-connector-java')
 

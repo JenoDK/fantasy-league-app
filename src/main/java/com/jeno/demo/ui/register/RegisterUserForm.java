@@ -1,4 +1,4 @@
-package com.jeno.demo.ui.form;
+package com.jeno.demo.ui.register;
 
 import com.jeno.demo.model.User;
 import com.jeno.demo.util.RxUtil;
@@ -15,7 +15,7 @@ import io.reactivex.Observable;
 import java.util.Map;
 import java.util.Optional;
 
-public class UserForm extends FormLayout {
+public class RegisterUserForm extends FormLayout {
 
 	private TextField nameField;
 	private TextField userNameField;
@@ -23,11 +23,13 @@ public class UserForm extends FormLayout {
 	private PasswordField passwordField;
 	private PasswordField repeatPasswordField;
 
+	private Link forgotPasswordLink;
+
 	private Button submit;
 
 	private BeanValidationBinder<UserBean> binder = new BeanValidationBinder<>(UserBean.class);
 
-	public UserForm() {
+	public RegisterUserForm() {
 		super();
 		initLayout();
 		initBinder();

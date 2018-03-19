@@ -1,6 +1,6 @@
-package com.jeno.demo.ui.navigation;
+package com.jeno.demo.ui.main;
 
-import com.jeno.demo.ui.views.state.State;
+import com.jeno.demo.ui.main.views.state.State;
 import com.vaadin.server.VaadinService;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;

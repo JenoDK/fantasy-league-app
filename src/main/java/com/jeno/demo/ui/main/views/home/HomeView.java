@@ -1,8 +1,8 @@
-package com.jeno.demo.ui.views.home;
+package com.jeno.demo.ui.main.views.home;
 
 import com.jeno.demo.data.security.CustomUserDetails;
 import com.jeno.demo.model.RoleName;
-import com.jeno.demo.ui.views.state.State;
+import com.jeno.demo.ui.main.views.state.State;
 import com.vaadin.navigator.View;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
