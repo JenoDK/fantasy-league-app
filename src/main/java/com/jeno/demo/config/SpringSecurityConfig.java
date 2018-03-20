@@ -1,5 +1,6 @@
 package com.jeno.demo.config;
 
+import com.jeno.demo.data.security.CustomBCryptPasswordEncoder;
 import com.jeno.demo.data.security.UserDetailsServiceImpl;
 import com.vaadin.spring.annotation.EnableVaadin;
 import org.springframework.context.annotation.Bean;
@@ -10,7 +11,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.session.CompositeSessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
@@ -42,6 +42,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/login/**",
                         "/forgotPassword**",
                         "/forgotPassword",
+                        "/resetPassword**",
+                        "/resetPassword",
                         "/error/**",
                         "/accessDenied/**",
                         "/vaadinServlet/**")
@@ -49,7 +51,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(
                         "/login*",
                         "/register*",
-                        "/forgotPassword*")
+                        "/forgotPassword*",
+                        "/resetPassword*")
                     .anonymous()
                 .anyRequest()
                     .authenticated()
@@ -91,8 +94,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    public CustomBCryptPasswordEncoder passwordEncoder() {
+        return new CustomBCryptPasswordEncoder();
     }
 
 }

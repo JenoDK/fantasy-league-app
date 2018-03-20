@@ -1,5 +1,6 @@
 package com.jeno.demo.ui.login;
 
+import com.jeno.demo.ui.common.CustomTitleForm;
 import com.vaadin.server.ExternalResource;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.*;
@@ -15,14 +16,18 @@ public class CustomLoginForm extends LoginForm {
 		forgotPasswordLink = new Link("Forgot password", new ExternalResource("/forgotPassword"));
 		errorLabel = new Label("", ContentMode.HTML);
 
-		VerticalLayout layout = new VerticalLayout();
-		layout.setSpacing(true);
-		layout.setMargin(true);
+		CustomTitleForm layout = new CustomTitleForm("Login");
+		layout.setWidthUndefined();
 		layout.addComponent(userNameField);
 		layout.addComponent(passwordField);
 		layout.addComponent(forgotPasswordLink);
 		layout.addComponent(loginButton);
 		layout.addComponent(errorLabel);
+		layout.setComponentAlignment(userNameField, Alignment.MIDDLE_CENTER);
+		layout.setComponentAlignment(passwordField, Alignment.MIDDLE_CENTER);
+		layout.setComponentAlignment(forgotPasswordLink, Alignment.MIDDLE_CENTER);
+		layout.setComponentAlignment(loginButton, Alignment.MIDDLE_CENTER);
+		layout.setComponentAlignment(errorLabel, Alignment.MIDDLE_CENTER);
 
 		return layout;
 	}

@@ -28,7 +28,7 @@ public class PasswordResetService {
 		String token = UUID.randomUUID().toString();
 		PasswordResetToken pwResetToken = new PasswordResetToken(user, token);
 		passwordResetTokenRepository.save(pwResetToken);
-		String url = contextPath + "/changePassword?id=" + user.getId() + "&token=" + token;
+		String url = contextPath + "/resetPassword?id=" + user.getId() + "&token=" + token;
 		try {
 			final Email email = DefaultEmail.builder()
 					.from(new InternetAddress("jenotestemail@gmail.com", "Jeno Test"))

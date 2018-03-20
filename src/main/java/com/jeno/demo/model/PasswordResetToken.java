@@ -23,6 +23,9 @@ public class PasswordResetToken {
 
 	private Date expiryDate;
 
+	public PasswordResetToken() {
+	}
+
 	public PasswordResetToken(User user, String token) {
 		this.user = user;
 		this.token = token;
@@ -31,6 +34,38 @@ public class PasswordResetToken {
 
 	private Date createExpiryDate() {
 		return Date.from(LocalDateTime.now().plusMinutes(EXPIRATION_IN_MINUTES).atZone(ZoneId.systemDefault()).toInstant());
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public Date getExpiryDate() {
+		return expiryDate;
+	}
+
+	public void setExpiryDate(Date expiryDate) {
+		this.expiryDate = expiryDate;
 	}
 
 }

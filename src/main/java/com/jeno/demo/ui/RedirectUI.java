@@ -1,6 +1,5 @@
 package com.jeno.demo.ui;
 
-import com.jeno.demo.model.User;
 import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.*;
@@ -29,14 +28,14 @@ public abstract class RedirectUI extends UI {
 		redirectButton = new Button(redirectButtonText);
 		redirectButton.addClickListener(ignored -> Page.getCurrent().setLocation(redirectPath));
 
-		Component component = getMiddleComponent();
+		Component middleComponent = getMiddleComponent();
 
 		mainLayout.addComponent(redirectButton);
-		mainLayout.addComponent(component);
+		mainLayout.addComponent(middleComponent);
 		mainLayout.setComponentAlignment(redirectButton, Alignment.TOP_LEFT);
 		mainLayout.setExpandRatio(redirectButton, 1f);
-		mainLayout.setComponentAlignment(component, Alignment.MIDDLE_CENTER);
-		mainLayout.setExpandRatio(component, 9f);
+		mainLayout.setComponentAlignment(middleComponent, Alignment.MIDDLE_CENTER);
+		mainLayout.setExpandRatio(middleComponent, 9f);
 
 		setContent(mainLayout);
 	}

@@ -1,10 +1,10 @@
 package com.jeno.demo.ui.register;
 
 import com.jeno.demo.model.User;
+import com.jeno.demo.ui.common.CustomTitleForm;
 import com.jeno.demo.util.RxUtil;
+import com.jeno.demo.util.VaadinUtil;
 import com.vaadin.data.BeanValidationBinder;
-import com.vaadin.data.ValidationResult;
-import com.vaadin.data.Validator;
 import com.vaadin.data.validator.EmailValidator;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.ErrorMessage;
@@ -13,9 +13,8 @@ import com.vaadin.ui.*;
 import io.reactivex.Observable;
 
 import java.util.Map;
-import java.util.Optional;
 
-public class RegisterUserForm extends FormLayout {
+public class RegisterUserForm extends CustomTitleForm {
 
 	private TextField nameField;
 	private TextField userNameField;
@@ -30,7 +29,7 @@ public class RegisterUserForm extends FormLayout {
 	private BeanValidationBinder<UserBean> binder = new BeanValidationBinder<>(UserBean.class);
 
 	public RegisterUserForm() {
-		super();
+		super("Register");
 		initLayout();
 		initBinder();
 	}
@@ -43,12 +42,7 @@ public class RegisterUserForm extends FormLayout {
 				.bind("email");
 		binder.forField(passwordField).bind("password");
 		binder.forField(repeatPasswordField)
-			.withValidator((Validator<String>) (value, context) -> {
-				if (!value.isEmpty() && !passwordField.getOptionalValue().equals(Optional.ofNullable(value))) {
-					return ValidationResult.error("Needs to be the same as password");
-				}
-				return ValidationResult.ok();
-			})
+			.withValidator(VaadinUtil.getPasswordsMatchValidator(passwordField))
 			.bind("repeatPassword");
 		binder.setBean(new UserBean());
 	}
@@ -82,20 +76,6 @@ public class RegisterUserForm extends FormLayout {
 	}
 
 	public void setErrorMap(Map<String, String> errorMap) {
-		errorMap.entrySet().forEach(entry -> {
-			binder.getBinding(entry.getKey()).ifPresent(binding -> {
-				((AbstractComponent) binding.getField()).setComponentError(new ErrorMessage() {
-					@Override
-					public ErrorLevel getErrorLevel() {
-						return ErrorLevel.ERROR;
-					}
-
-					@Override
-					public String getFormattedHtmlMessage() {
-						return entry.getValue();
-					}
-				});
-			});
-		});
+		VaadinUtil.setErrorMap(binder, errorMap);
 	}
 }
