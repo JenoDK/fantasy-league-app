@@ -1,0 +1,9 @@
+@import "../valo/valo.scss";
+@import "fantasy-league.scss";
+
+.fantasy-league {
+  @include valo;
+  @include fantasy-league;
+}
+
+

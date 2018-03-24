@@ -1,0 +1,9 @@
+@mixin fantasy-league {
+
+    .v-slot-ignore-error-indicator {
+        .v-errorindicator {
+            display:none;
+        }
+    }
+
+}
