@@ -6,6 +6,7 @@ import com.jeno.demo.util.RxUtil;
 import com.jeno.demo.util.VaadinUtil;
 import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.event.ShortcutAction;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;
@@ -45,12 +46,14 @@ public class ResetPasswordForm extends CustomTitleForm {
 		setWidthUndefined();
 
 		passwordField = new PasswordField("Password");
+		passwordField.setIcon(VaadinIcons.PASSWORD);
 		repeatPasswordField = new PasswordField("Repeat Password");
+		repeatPasswordField.setIcon(VaadinIcons.PASSWORD);
 
 		addComponent(passwordField);
 		addComponent(repeatPasswordField);
 
-		submit = new Button("Submit");
+		submit = new Button("Submit", VaadinIcons.USER_CHECK);
 		submit.setClickShortcut(ShortcutAction.KeyCode.ENTER);
 		addComponent(submit);
 

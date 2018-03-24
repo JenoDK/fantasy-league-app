@@ -60,7 +60,7 @@ public class LoginUI extends RedirectUI {
             // Go to HomeUI
             Page.getCurrent().setLocation("/");
         } catch (final AuthenticationException ex) {
-            loginForm.setError("Incorrect user or password");
+            loginForm.setError(ex.getMessage());
         }
     }
 

@@ -12,6 +12,7 @@
             <column name="username" value="Rexdan"/>
             <column name="password" value="$2a$10$Oi9NHNKh4msYZszqp7oG0ezbpdE6G/oLaO99cj88MhL9e88DJT9A6"/>
             <column name="email" value="jeno@genohm.com"/>
+            <column name="active" valueBoolean="true"/>
         </insert>
     </changeSet>
 

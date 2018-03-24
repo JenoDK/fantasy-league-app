@@ -1,7 +1,10 @@
 package com.jeno.demo.ui;
 
+import com.vaadin.icons.VaadinIcons;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;
+import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
@@ -25,7 +28,7 @@ public abstract class RedirectUI extends UI {
 		mainLayout = new VerticalLayout();
 		mainLayout.setSizeFull();
 
-		redirectButton = new Button(redirectButtonText);
+		redirectButton = new Button(redirectButtonText, VaadinIcons.ARROW_CIRCLE_LEFT);
 		redirectButton.addClickListener(ignored -> Page.getCurrent().setLocation(redirectPath));
 
 		Component middleComponent = getMiddleComponent();
@@ -48,8 +51,9 @@ public abstract class RedirectUI extends UI {
 		VerticalLayout successLayout = new VerticalLayout();
 		successLayout.setHeightUndefined();
 
-		Label successLabel = new Label(successMessage);
+		Label successLabel = new Label(successMessage, ContentMode.HTML);
 		successLabel.addStyleName(ValoTheme.LABEL_LARGE);
+		successLabel.addStyleName(ValoTheme.LABEL_SUCCESS);
 
 		successLayout.addComponent(successLabel);
 		successLayout.addComponent(redirectButton);

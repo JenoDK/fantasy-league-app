@@ -1,4 +1,4 @@
-package com.jeno.demo.data.service;
+package com.jeno.demo.data.service.email;
 
 import com.google.common.collect.Lists;
 import com.jeno.demo.data.repository.PasswordResetTokenRepository;

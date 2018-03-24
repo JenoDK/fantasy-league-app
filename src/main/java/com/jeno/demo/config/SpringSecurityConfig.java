@@ -35,7 +35,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
                 .antMatchers(
                         "/VAADIN/**",
-                        "/PUSH/**", "/UIDL/**",
+                        "/PUSH/**",
+                        "/UIDL/**",
                         "/register**",
                         "/register",
                         "/login",
@@ -44,6 +45,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/forgotPassword",
                         "/resetPassword**",
                         "/resetPassword",
+                        "/activateAccount**",
+                        "/activateAccount",
                         "/error/**",
                         "/accessDenied/**",
                         "/vaadinServlet/**")
@@ -52,7 +55,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/login*",
                         "/register*",
                         "/forgotPassword*",
-                        "/resetPassword*")
+                        "/resetPassword*",
+                        "/activateAccount*")
                     .anonymous()
                 .anyRequest()
                     .authenticated()

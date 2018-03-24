@@ -1,6 +1,7 @@
 package com.jeno.demo.ui.login;
 
 import com.jeno.demo.ui.common.CustomTitleForm;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.ExternalResource;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.*;
@@ -14,7 +15,12 @@ public class CustomLoginForm extends LoginForm {
 	@Override
 	protected Component createContent(TextField userNameField, PasswordField passwordField, Button loginButton) {
 		forgotPasswordLink = new Link("Forgot password", new ExternalResource("/forgotPassword"));
+		forgotPasswordLink.setIcon(VaadinIcons.QUESTION_CIRCLE_O);
 		errorLabel = new Label("", ContentMode.HTML);
+
+		userNameField.setIcon(VaadinIcons.CLIPBOARD_USER);
+		passwordField.setIcon(VaadinIcons.PASSWORD);
+		loginButton.setIcon(VaadinIcons.USER_CHECK);
 
 		CustomTitleForm layout = new CustomTitleForm("Login");
 		layout.setWidthUndefined();

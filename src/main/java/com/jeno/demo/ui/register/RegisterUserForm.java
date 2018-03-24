@@ -7,9 +7,11 @@ import com.jeno.demo.util.VaadinUtil;
 import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.data.validator.EmailValidator;
 import com.vaadin.event.ShortcutAction;
-import com.vaadin.server.ErrorMessage;
-import com.vaadin.shared.ui.ErrorLevel;
-import com.vaadin.ui.*;
+import com.vaadin.icons.VaadinIcons;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Link;
+import com.vaadin.ui.PasswordField;
+import com.vaadin.ui.TextField;
 import io.reactivex.Observable;
 
 import java.util.Map;
@@ -51,10 +53,19 @@ public class RegisterUserForm extends CustomTitleForm {
 		setWidthUndefined();
 
 		nameField = new TextField("Name");
+		nameField.setIcon(VaadinIcons.USER);
+
 		userNameField = new TextField("Username");
+		userNameField.setIcon(VaadinIcons.CLIPBOARD_USER);
+
 		emailField = new TextField("Email");
+		emailField.setIcon(VaadinIcons.MAILBOX);
+
 		passwordField = new PasswordField("Password");
+		passwordField.setIcon(VaadinIcons.PASSWORD);
+
 		repeatPasswordField = new PasswordField("Repeat Password");
+		repeatPasswordField.setIcon(VaadinIcons.PASSWORD);
 
 		addComponent(nameField);
 		addComponent(userNameField);
@@ -62,7 +73,7 @@ public class RegisterUserForm extends CustomTitleForm {
 		addComponent(passwordField);
 		addComponent(repeatPasswordField);
 
-		submit = new Button("Submit");
+		submit = new Button("Submit", VaadinIcons.USER_CHECK);
 		submit.setClickShortcut(ShortcutAction.KeyCode.ENTER);
 		addComponent(submit);
 	}

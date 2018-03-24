@@ -2,15 +2,10 @@ package com.jeno.demo.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
 
 @Entity
-@Table(name = "passwordresettoken")
-public class PasswordResetToken {
-
-	private static final int EXPIRATION_IN_MINUTES = 60 * 24;
+@Table(name = "accountactivationtoken")
+public class AccountActivationToken {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,22 +17,15 @@ public class PasswordResetToken {
 	@JoinColumn(nullable = false, name = "user_id")
 	private User user;
 
-	private Date expiryDate;
-
 	@NotNull
 	private boolean used = false;
 
-	public PasswordResetToken() {
+	public AccountActivationToken() {
 	}
 
-	public PasswordResetToken(User user, String token) {
+	public AccountActivationToken(User user, String token) {
 		this.user = user;
 		this.token = token;
-		this.expiryDate = createExpiryDate();
-	}
-
-	private Date createExpiryDate() {
-		return Date.from(LocalDateTime.now().plusMinutes(EXPIRATION_IN_MINUTES).atZone(ZoneId.systemDefault()).toInstant());
 	}
 
 	public Long getId() {
@@ -62,14 +50,6 @@ public class PasswordResetToken {
 
 	public void setUser(User user) {
 		this.user = user;
-	}
-
-	public Date getExpiryDate() {
-		return expiryDate;
-	}
-
-	public void setExpiryDate(Date expiryDate) {
-		this.expiryDate = expiryDate;
 	}
 
 	public boolean isUsed() {

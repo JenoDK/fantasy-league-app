@@ -1,10 +1,9 @@
-package com.jeno.demo.ui.resetpassword;
+package com.jeno.demo.ui.activateaccount;
 
 import com.jeno.demo.data.dao.UserDao;
-import com.jeno.demo.data.dao.ValidationException;
-import com.jeno.demo.data.repository.PasswordResetTokenRepository;
+import com.jeno.demo.data.repository.AccountActivationTokenRepository;
 import com.jeno.demo.data.repository.UserRepository;
-import com.jeno.demo.model.PasswordResetToken;
+import com.jeno.demo.model.AccountActivationToken;
 import com.jeno.demo.model.User;
 import com.jeno.demo.ui.RedirectUI;
 import com.vaadin.annotations.Theme;
@@ -14,31 +13,30 @@ import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Arrays;
-import java.util.Date;
 
-@SpringUI(path = "/resetPassword")
+@SpringUI(path = "/activateAccount")
 @Title("Reset Password")
 @Theme("valo")
-public class ResetPasswordUI extends RedirectUI {
+public class ActivateAccountUI extends RedirectUI {
 
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
-	private PasswordResetTokenRepository passwordResetTokenRepository;
+	private AccountActivationTokenRepository accountActivationTokenRepository;
 	@Autowired
 	private UserDao userDao;
 
 	Component middleComponent;
 
-	private ResetPasswordForm form;
 	private Label errorLabel;
 	private User user;
 
-	public ResetPasswordUI() {
+	public ActivateAccountUI() {
 		super("Login", "/login");
 	}
 
@@ -46,24 +44,19 @@ public class ResetPasswordUI extends RedirectUI {
 	protected void init(VaadinRequest request) {
 		try {
 			user = processResetPasswordRequest(request);
-			form = new ResetPasswordForm(user);
-			form.validSubmit().subscribe(newPassword -> {
-				try {
-					user.setPassword(newPassword);
-					userDao.update(user);
-					actionSuccessful("Password updated for account " + user.getUsername());
-				} catch (ValidationException ex) {
-					form.setErrorMap(ex.getErrorMap());
-				}
-			});
-			middleComponent = form;
-		} catch (InvalidResetPasswordRequest e) {
+			user.setActive(true);
+			userDao.update(user);
+			middleComponent = new VerticalLayout();
+			super.init(request);
+			actionSuccessful("Thanks for your activation " + user.getUsername());
+		} catch (InvalidAccountActivationRequest e) {
 			middleComponent = createErrorComponent("Bad request: " + e.getMessage());
+			super.init(request);
 		} catch (Exception e) {
 			e.printStackTrace();
 			middleComponent = createErrorComponent("Something went wrong, try again later or contact administrator");
+			super.init(request);
 		}
-		super.init(request);
 	}
 
 	private User processResetPasswordRequest(VaadinRequest request) {
@@ -72,37 +65,31 @@ public class ResetPasswordUI extends RedirectUI {
 
 		String userId = Arrays.stream(idParameterValue)
 				.findFirst()
-				.orElseThrow(() -> new InvalidResetPasswordRequest("Missing id parameter in URL"));
+				.orElseThrow(() -> new InvalidAccountActivationRequest("Missing id parameter in URL"));
 
 		String token = Arrays.stream(tokenParameterValue)
 				.findFirst()
-				.orElseThrow(() -> new InvalidResetPasswordRequest("Missing token parameter in URL"));
+				.orElseThrow(() -> new InvalidAccountActivationRequest("Missing token parameter in URL"));
 
 		// Map userid to Long
 		Long userIdLong;
 		try {
 			userIdLong = Long.valueOf(userId);
 		} catch (NumberFormatException e) {
-			throw new InvalidResetPasswordRequest("Bad 'id' parameter in URL");
+			throw new InvalidAccountActivationRequest("Bad 'id' parameter in URL");
 		}
 
 		// Fetch user
 		User user = userRepository.findById(userIdLong)
-				.orElseThrow(() -> new InvalidResetPasswordRequest("User not found"));
+				.orElseThrow(() -> new InvalidAccountActivationRequest("User not found"));
 		// Fetch passwordResetToken
-		PasswordResetToken pwResettoken = passwordResetTokenRepository.findByTokenAndUser(token, user)
-				.filter(pwResettoken1 -> !pwResettoken1.isUsed())
-				.orElseThrow(() -> new InvalidResetPasswordRequest("No active password reset token found for user " + user.getUsername()));
+		AccountActivationToken accountActivationToken = accountActivationTokenRepository.findByTokenAndUser(token, user)
+				.filter(accountActivationToken1 -> !accountActivationToken1.isUsed())
+				.orElseThrow(() -> new InvalidAccountActivationRequest("No active account activation token found for user " + user.getUsername()));
 
-		// Check if token is not expired
-		Date now = new Date();
-		if (now.before(pwResettoken.getExpiryDate())) {
-			pwResettoken.setUsed(true);
-			passwordResetTokenRepository.saveAndFlush(pwResettoken);
-			return user;
-		} else {
-			throw new InvalidResetPasswordRequest("Password reset token expired, request a new one");
-		}
+		accountActivationToken.setUsed(true);
+		accountActivationTokenRepository.saveAndFlush(accountActivationToken);
+		return user;
 	}
 
 	private Label createErrorComponent(String errorMessage) {

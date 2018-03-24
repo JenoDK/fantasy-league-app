@@ -7,6 +7,7 @@ import org.hibernate.annotations.NaturalId;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Set;
 
@@ -43,11 +44,18 @@ public class User extends DateAudit {
 	@Size(max = 100)
 	private String password;
 
+	@NotNull
+	private boolean active = false;
+
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "user_roles",
 			joinColumns = @JoinColumn(name = "user_id"),
 			inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles = Sets.newHashSet();
+
+	@Lob
+	@Basic(fetch = FetchType.LAZY)
+	private byte[] profile_picture;
 
 	public User() {
 	}
@@ -107,4 +115,19 @@ public class User extends DateAudit {
 		this.roles = roles;
 	}
 
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
+	public byte[] getProfile_picture() {
+		return profile_picture;
+	}
+
+	public void setProfile_picture(byte[] profile_picture) {
+		this.profile_picture = profile_picture;
+	}
 }

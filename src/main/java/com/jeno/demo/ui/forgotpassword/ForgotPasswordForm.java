@@ -6,6 +6,7 @@ import com.jeno.demo.util.RxUtil;
 import com.jeno.demo.util.VaadinUtil;
 import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.data.validator.EmailValidator;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;
@@ -36,8 +37,9 @@ public class ForgotPasswordForm extends CustomTitleForm {
 
 	private void initLayout() {
 		emailField = new TextField("Email");
+		emailField.setIcon(VaadinIcons.MAILBOX);
 
-		button = new Button("Request password reset");
+		button = new Button("Reset", VaadinIcons.REFRESH);
 
 		errorLabel = new Label("", ContentMode.HTML);
 

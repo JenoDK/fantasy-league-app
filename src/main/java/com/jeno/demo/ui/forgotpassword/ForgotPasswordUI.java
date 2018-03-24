@@ -1,7 +1,7 @@
 package com.jeno.demo.ui.forgotpassword;
 
 import com.jeno.demo.data.repository.UserRepository;
-import com.jeno.demo.data.service.PasswordResetService;
+import com.jeno.demo.data.service.email.PasswordResetService;
 import com.jeno.demo.exception.EmailException;
 import com.jeno.demo.model.User;
 import com.jeno.demo.ui.RedirectUI;

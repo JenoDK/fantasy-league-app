@@ -3,6 +3,7 @@
 !gradle/wrapper/gradle-wrapper.jar
 /src/main/resources/rebel.xml
 /src/main/resources/application-dev.properties
+/src/main/webapp/VAADIN/widgetsets
 
 ### STS ###
 .apt_generated
