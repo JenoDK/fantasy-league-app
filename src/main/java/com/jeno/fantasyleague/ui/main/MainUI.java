@@ -1,6 +1,7 @@
 package com.jeno.fantasyleague.ui.main;
 
 import com.jeno.fantasyleague.data.security.SecurityHolder;
+import com.jeno.fantasyleague.ui.main.navigation.TopBar;
 import com.jeno.fantasyleague.ui.main.views.accessdenied.AccessDeniedView;
 import com.jeno.fantasyleague.ui.main.views.error.ErrorView;
 import com.vaadin.annotations.Theme;
@@ -25,10 +26,13 @@ public class MainUI extends UI {
     @Override
     protected void init(VaadinRequest request) {
         final VerticalLayout root = new VerticalLayout();
+        root.addStyleName("main-layout");
+        root.setSpacing(false);
+        root.setMargin(false);
         root.setSizeFull();
         setContent(root);
 
-        root.addComponent(new NavigationBar(securityHolder.getUser()));
+        root.addComponent(new TopBar(securityHolder.getUser()));
 
         // View container, navigation results go in here
         final Panel viewContainer = new Panel();

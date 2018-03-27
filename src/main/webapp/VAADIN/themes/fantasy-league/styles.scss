@@ -1,9 +1,11 @@
 @import "../valo/valo.scss";
 @import "fantasy-league.scss";
+@import "topbar.scss";
 
 .fantasy-league {
   @include valo;
   @include fantasy-league;
+  @include topbar;
 }
 
 

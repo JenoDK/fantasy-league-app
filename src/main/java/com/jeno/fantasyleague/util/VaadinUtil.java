@@ -7,9 +7,7 @@ import com.vaadin.server.UserError;
 import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinServletRequest;
 import com.vaadin.shared.ui.ErrorLevel;
-import com.vaadin.ui.AbstractComponent;
-import com.vaadin.ui.AbstractField;
-import com.vaadin.ui.PasswordField;
+import com.vaadin.ui.*;
 
 import java.util.Map;
 import java.util.Optional;
@@ -66,4 +64,10 @@ public class VaadinUtil {
 		});
 		return errorsWithoutBinding;
 	}
+
+	public static void logout() {
+		String logoutUrl = VaadinService.getCurrentRequest().getContextPath() + "/logout";
+		UI.getCurrent().getPage().setLocation(logoutUrl);
+	}
+
 }

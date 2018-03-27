@@ -1,0 +1,35 @@
+@mixin topbar {
+
+    .topbar {
+        margin-bottom: 10px;
+    }
+
+    .fantasy-league-menubar {
+        /* Remove button like styling */
+        border: 0px;
+        background-image: none;
+        box-shadow: none;
+
+        .v-menubar-menuitem-menu-state-item {
+
+            border: 0px;
+            height: 60px;
+
+            &.v-menubar-menuitem-selected {
+                background-image: none;
+                box-shadow: none;
+            }
+
+            .v-menubar-menuitem-caption:after {
+                font-size: 1em;
+                margin-top: 0.5em;
+            }
+
+            .v-icon {
+                width: 50px;
+                height: auto;
+            }
+        }
+    }
+
+}
