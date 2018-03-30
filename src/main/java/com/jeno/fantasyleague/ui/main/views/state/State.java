@@ -8,7 +8,8 @@ import java.util.stream.Collectors;
 
 public enum State {
 
-    HOME(StateUrlConstants.HOME, "Home", true, Images.HOME_ICON, 0),
+    HOME(StateUrlConstants.HOME, "Home", true, Images.Icons.HOME_ICON, 0),
+    LEAGUE(StateUrlConstants.LEAGUE, "League", true, Images.Icons.LEAGUE_ICON, 0),
     PROFILE(StateUrlConstants.PROFILE, "Profile", false, 20);
 
     private String identifier;
@@ -62,6 +63,7 @@ public enum State {
 
         public static final String HOME = "";
         public static final String PROFILE = "profile";
+        public static final String LEAGUE = "league";
 
         private StateUrlConstants() {
         }

@@ -14,6 +14,7 @@
 
             border: 0px;
             height: 60px;
+            padding: 0 10px;
 
             &.v-menubar-menuitem-selected {
                 background-image: none;
@@ -28,6 +29,7 @@
             .v-icon {
                 width: 50px;
                 height: auto;
+                margin: 0px;
             }
         }
     }

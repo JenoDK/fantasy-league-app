@@ -1,0 +1,13 @@
+@mixin all-components {
+
+    .v-caption-no-required-indicator {
+        display: none;
+    }
+
+    .v-slot-ignore-error-indicator {
+        .v-errorindicator {
+            display:none;
+        }
+    }
+
+}

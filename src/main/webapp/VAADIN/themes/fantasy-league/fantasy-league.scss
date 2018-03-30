@@ -2,11 +2,13 @@
 
     .main-layout {
         padding: 10px;
-    }
+        min-width: 1070px;
 
-    .v-slot-ignore-error-indicator {
-        .v-errorindicator {
-            display:none;
+        .view-container {
+            background: inherit;
+            border-radius: 0px;
+            border: none;
+            border-top: 2px solid #d5d5d5;
         }
     }
 

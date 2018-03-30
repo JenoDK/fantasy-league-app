@@ -36,6 +36,7 @@ public class MainUI extends UI {
 
         // View container, navigation results go in here
         final Panel viewContainer = new Panel();
+        viewContainer.addStyleName("view-container");
         viewContainer.setSizeFull();
         root.addComponent(viewContainer);
         root.setExpandRatio(viewContainer, 1.0f);
