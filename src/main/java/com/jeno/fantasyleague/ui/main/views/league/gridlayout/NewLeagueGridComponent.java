@@ -25,7 +25,7 @@ public class NewLeagueGridComponent extends AbstractLeagueGridComponent {
 		setExpandRatio(leagueForm, 0.8f);
 	}
 
-	public Observable<LeagueBean> newLeague() {
+	public Observable<League> newLeague() {
 		return leagueForm.validSubmit();
 	}
 

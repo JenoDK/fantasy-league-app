@@ -3,7 +3,6 @@ package com.jeno.fantasyleague.ui.main.views.league;
 import com.jeno.fantasyleague.annotation.SpringUIScope;
 import com.jeno.fantasyleague.data.security.SecurityHolder;
 import com.jeno.fantasyleague.model.League;
-import com.jeno.fantasyleague.ui.main.views.league.gridlayout.LeagueBean;
 import com.jeno.fantasyleague.ui.main.views.league.gridlayout.LeagueGridLayout;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.SingleLeagueView;
 import com.vaadin.ui.VerticalLayout;
@@ -44,7 +43,7 @@ public class LeagueView {
         leagueGridLayout.setLeagues(leagues);
     }
 
-    public Observable<LeagueBean> newLeague() {
+    public Observable<League> newLeague() {
         return leagueGridLayout.newLeague();
     }
 

@@ -49,7 +49,7 @@ public class LeagueGridLayout extends GridLayout {
 		addComponent(value);
 	}
 
-	public Observable<LeagueBean> newLeague() {
+	public Observable<League> newLeague() {
 		return newLeagueComponent.newLeague();
 	}
 

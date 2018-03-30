@@ -1,5 +1,6 @@
 package com.jeno.fantasyleague.ui.main.views.league.gridlayout;
 
+import com.jeno.fantasyleague.model.League;
 import com.jeno.fantasyleague.model.leaguetemplates.Template;
 import com.jeno.fantasyleague.util.RxUtil;
 import com.jeno.fantasyleague.util.VaadinUtil;
@@ -21,7 +22,7 @@ public class LeagueForm extends HorizontalLayout {
 
 	private Button submit;
 
-	private BeanValidationBinder<LeagueBean> binder = new BeanValidationBinder<>(LeagueBean.class);
+	private BeanValidationBinder<League> binder = new BeanValidationBinder<>(League.class);
 
 	public LeagueForm() {
 		super();
@@ -32,7 +33,7 @@ public class LeagueForm extends HorizontalLayout {
 	private void initBinder() {
 		binder.forField(nameField).bind("name");
 		binder.forField(templateCombobox).bind("template");
-		binder.setBean(new LeagueBean());
+		binder.setBean(new League());
 	}
 
 	private void initLayout() {
@@ -70,7 +71,7 @@ public class LeagueForm extends HorizontalLayout {
 		setComponentAlignment(submit, Alignment.BOTTOM_RIGHT);
 	}
 
-	public Observable<LeagueBean> validSubmit() {
+	public Observable<League> validSubmit() {
 		return RxUtil.clicks(submit)
 				// Validate and don't emit if invalid
 				.filter(ignored -> binder.validate().isOk())
@@ -83,6 +84,6 @@ public class LeagueForm extends HorizontalLayout {
 	}
 
 	public void reset() {
-		binder.setBean(new LeagueBean());
+		binder.setBean(new League());
 	}
 }

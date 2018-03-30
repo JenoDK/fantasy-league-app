@@ -75,8 +75,9 @@
             <column name="updated_at" type="datetime"/>
             <column name="created_by" type="BIGINT"/>
             <column name="updated_by" type="BIGINT"/>
-            <column name="name" type="VARCHAR(40)"/>
+            <column name="name" type="VARCHAR(32)"/>
             <column name="description" type="LONGTEXT"/>
+            <column name="template" type="VARCHAR(32)"/>
         </createTable>
     </changeSet>
 
@@ -89,8 +90,40 @@
             <column name="updated_at" type="datetime"/>
             <column name="created_by" type="BIGINT"/>
             <column name="updated_by" type="BIGINT"/>
-            <column name="name" type="VARCHAR(40)"/>
+            <column name="name" type="VARCHAR(32)"/>
+            <column name="icon_path" type="VARCHAR(128)"/>
             <column name="icon" type="LONGBLOB"/>
+            <column name="league_id" type="BIGINT"/>
+            <column name="contestantgroup_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="jeno (generated)" id="add-game-table">
+        <createTable tableName="game">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="created_at" type="datetime"/>
+            <column name="updated_at" type="datetime"/>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="league_id" type="BIGINT"/>
+            <column name="home_team_id" type="BIGINT"/>
+            <column name="home_team_score" type="TINYINT"/>
+            <column name="away_team_id" type="BIGINT"/>
+            <column name="away_team_score" type="TINYINT"/>
+            <column name="location" type="VARCHAR(128)"/>
+            <column name="round" type="VARCHAR(32)"/>
+            <column name="game_date_time" type="datetime"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="jeno (generated)" id="add-contestantgroup-table">
+        <createTable tableName="contestantgroup">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="VARCHAR(32)"/>
             <column name="league_id" type="BIGINT"/>
         </createTable>
     </changeSet>
