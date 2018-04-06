@@ -28,23 +28,17 @@ public class League extends UserAudit {
 	@Enumerated(EnumType.STRING)
 	private Template template;
 
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "league_users",
 			joinColumns = @JoinColumn(name = "league_id"),
 			inverseJoinColumns = @JoinColumn(name = "user_id"))
 	private Set<User> users = Sets.newHashSet();
 
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "league_owners",
 			joinColumns = @JoinColumn(name = "league_id"),
 			inverseJoinColumns = @JoinColumn(name = "user_id"))
 	private Set<User> owners = Sets.newHashSet();
-
-	@OneToMany(mappedBy = "league", fetch = FetchType.EAGER)
-	private Set<ContestantGroup> contestantGroups;
-
-	@OneToMany(mappedBy = "league", fetch = FetchType.EAGER)
-	private Set<Game> games;
 
 	public League() {
 	}
@@ -97,11 +91,4 @@ public class League extends UserAudit {
 		this.owners = owners;
 	}
 
-	public Set<ContestantGroup> getContestantGroups() {
-		return contestantGroups;
-	}
-
-	public Set<Game> getGames() {
-		return games;
-	}
 }

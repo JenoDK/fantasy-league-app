@@ -16,6 +16,8 @@ import java.util.List;
 public class LeagueView {
 
     @Autowired
+    private SingleLeagueServiceProvider singleLeagueServiceProvider;
+    @Autowired
     private SecurityHolder securityHolder;
 
     private VerticalLayout layout;
@@ -57,7 +59,7 @@ public class LeagueView {
 
     private void viewLeague(League league) {
         layout.removeAllComponents();
-        singleLeagieView = new SingleLeagueView(league, securityHolder.getUser());
+        singleLeagieView = new SingleLeagueView(league, singleLeagueServiceProvider, securityHolder.getUser());
         singleLeagieView.backToLeaguesView().subscribe(ignored -> showLeagueGridLayout());
         layout.addComponent(singleLeagieView);
     }

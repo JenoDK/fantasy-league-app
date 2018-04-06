@@ -1,12 +1,17 @@
 package com.jeno.fantasyleague.ui.main;
 
 import com.jeno.fantasyleague.data.security.SecurityHolder;
+import com.jeno.fantasyleague.ui.main.broadcast.Broadcaster;
+import com.jeno.fantasyleague.ui.main.broadcast.Notification;
 import com.jeno.fantasyleague.ui.main.navigation.TopBar;
 import com.jeno.fantasyleague.ui.main.views.accessdenied.AccessDeniedView;
 import com.jeno.fantasyleague.ui.main.views.error.ErrorView;
+import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.VaadinRequest;
+import com.vaadin.server.VaadinSession;
+import com.vaadin.shared.communication.PushMode;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.ui.Panel;
@@ -16,12 +21,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @SpringUI
 @Theme("fantasy-league")
-public class MainUI extends UI {
+@Push(value = PushMode.AUTOMATIC)
+public class MainUI extends UI implements Broadcaster.BroadcastListener {
 
     @Autowired
     private SpringViewProvider viewProvider;
     @Autowired
     private SecurityHolder securityHolder;
+
+    private TopBar topBar;
 
     @Override
     protected void init(VaadinRequest request) {
@@ -32,7 +40,8 @@ public class MainUI extends UI {
         root.setSizeFull();
         setContent(root);
 
-        root.addComponent(new TopBar(securityHolder.getUser()));
+        topBar = new TopBar(securityHolder.getUser());
+        root.addComponent(topBar);
 
         // View container, navigation results go in here
         final Panel viewContainer = new Panel();
@@ -48,6 +57,21 @@ public class MainUI extends UI {
         // View for when no view matching navigation is found
         navigator.setErrorView(new ErrorView());
         navigator.addProvider(viewProvider);
+
+        // Register to receive broadcasts
+        Broadcaster.register(securityHolder.getUser().getId(), this);
+    }
+
+    // Must also unregister when the UI expires
+    @Override
+    public void detach() {
+        Broadcaster.unregister(securityHolder.getUser().getId(), this);
+        super.detach();
+    }
+
+    @Override
+    public void receiveBroadcast(Notification message) {
+        access(() -> topBar.addClientNotification(message));
     }
 
 }

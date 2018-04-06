@@ -1,6 +1,6 @@
 package com.jeno.fantasyleague.data.security;
 
-import com.jeno.fantasyleague.data.repository.UserRepository;
+import com.jeno.fantasyleague.data.service.repo.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,11 +12,11 @@ import org.springframework.stereotype.Component;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Autowired
-	private UserRepository userRepository;
+	private UserService userService;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		return userRepository.findByUsername(username)
+		return userService.findByUsernameAndJoinRoles(username)
 			.map(user -> {
 				if (user.isActive()) {
 					return new CustomUserDetails(user);

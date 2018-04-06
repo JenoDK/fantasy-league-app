@@ -47,7 +47,7 @@ public class User extends DateAudit {
 	@NotNull
 	private boolean active = false;
 
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "user_roles",
 			joinColumns = @JoinColumn(name = "user_id"),
 			inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -130,4 +130,5 @@ public class User extends DateAudit {
 	public void setProfile_picture(byte[] profile_picture) {
 		this.profile_picture = profile_picture;
 	}
+
 }

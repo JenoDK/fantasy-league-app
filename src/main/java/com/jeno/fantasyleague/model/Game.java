@@ -14,15 +14,15 @@ public class Game extends UserAudit {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@ManyToOne(targetEntity = League.class, fetch = FetchType.EAGER)
+	@ManyToOne(targetEntity = League.class, fetch = FetchType.LAZY)
 	@JoinColumn(nullable = false, name = "league_id")
 	private League league;
 
-	@ManyToOne(targetEntity = Contestant.class, fetch = FetchType.EAGER)
+	@ManyToOne(targetEntity = Contestant.class, fetch = FetchType.LAZY)
 	@JoinColumn(nullable = false, name = "home_team_id")
 	private Contestant home_team;
 
-	@ManyToOne(targetEntity = Contestant.class, fetch = FetchType.EAGER)
+	@ManyToOne(targetEntity = Contestant.class, fetch = FetchType.LAZY)
 	@JoinColumn(nullable = false, name = "away_team_id")
 	private Contestant away_team;
 

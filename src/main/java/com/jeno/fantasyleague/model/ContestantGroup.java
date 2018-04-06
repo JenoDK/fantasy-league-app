@@ -17,11 +17,11 @@ public class ContestantGroup {
 	@Size(max = 32)
 	private String name;
 
-	@ManyToOne(targetEntity = League.class, fetch = FetchType.EAGER)
+	@ManyToOne(targetEntity = League.class, fetch = FetchType.LAZY)
 	@JoinColumn(nullable = false, name = "league_id")
 	private League league;
 
-	@OneToMany(mappedBy = "contestant_group", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "contestant_group", fetch = FetchType.LAZY)
 	private Set<Contestant> contestants;
 
 	public ContestantGroup() {

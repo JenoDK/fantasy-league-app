@@ -1,8 +1,6 @@
 package com.jeno.fantasyleague.ui.main.views.home;
 
 import com.jeno.fantasyleague.data.security.SecurityHolder;
-import com.jeno.fantasyleague.model.Role;
-import com.jeno.fantasyleague.model.RoleName;
 import com.jeno.fantasyleague.model.User;
 import com.jeno.fantasyleague.ui.main.views.state.State;
 import com.vaadin.navigator.View;
@@ -28,10 +26,7 @@ public class HomeView extends VerticalLayout implements View {
 
     private String getGreeting() {
         User user = securityHolder.getUser();
-        boolean isAdmin = user.getRoles().stream()
-                .map(Role::getName)
-                .anyMatch(roleName -> RoleName.ROLE_ADMIN.equals(roleName));
-        return "Greetings " + (isAdmin ? "admin" : "user") + " " + user.getUsername();
+        return "Greetings " + user.getUsername();
     }
 
 }

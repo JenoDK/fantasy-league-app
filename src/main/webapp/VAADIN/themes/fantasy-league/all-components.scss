@@ -10,4 +10,17 @@
         }
     }
 
+    .v-grid .v-grid-cell.icon-column {
+        padding: 0px;
+
+        .component-wrap {
+            height: 100%;
+            display: block;
+        }
+    }
+
+    .cursor-hover-pointer {
+        cursor: pointer;
+    }
+
 }

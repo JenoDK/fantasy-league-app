@@ -1,10 +1,26 @@
 package com.jeno.fantasyleague.util;
 
+import com.jeno.fantasyleague.model.User;
+import com.vaadin.server.Resource;
+import com.vaadin.server.StreamResource;
+import com.vaadin.server.ThemeResource;
+
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 
 public class ImageUtil {
+
+	public static Resource getUserProfilePictureResource(User user) {
+		if (user.getProfile_picture() != null) {
+			return new StreamResource(
+					() -> new ByteArrayInputStream(user.getProfile_picture()),
+					"profile_picture.png");
+		} else {
+			return new ThemeResource(Images.DEFAULT_PROFILE_PICTURE);
+		}
+	}
 
 	/**
 	 * Resizes one dimension to one within the boundry while maintaining aspect ratio

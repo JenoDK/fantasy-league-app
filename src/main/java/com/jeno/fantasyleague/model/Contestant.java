@@ -25,11 +25,11 @@ public class Contestant extends UserAudit {
 	@Size(max = 128)
 	private String icon_path;
 
-	@ManyToOne(targetEntity = League.class, fetch = FetchType.EAGER)
+	@ManyToOne(targetEntity = League.class, fetch = FetchType.LAZY)
 	@JoinColumn(nullable = false, name = "league_id")
 	private League league;
 
-	@ManyToOne(targetEntity = ContestantGroup.class, fetch = FetchType.EAGER)
+	@ManyToOne(targetEntity = ContestantGroup.class, fetch = FetchType.LAZY)
 	@JoinColumn(name = "contestantgroup_id")
 	private ContestantGroup contestant_group;
 
