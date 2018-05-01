@@ -1,4 +1,4 @@
-package com.jeno.fantasyleague.model.leaguetemplates;
+package com.jeno.fantasyleague.model.enums;
 
 import com.jeno.fantasyleague.data.service.leaguetemplates.LeagueTemplateConfig;
 import com.jeno.fantasyleague.util.Images;

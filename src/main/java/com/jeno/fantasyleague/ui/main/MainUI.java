@@ -1,8 +1,8 @@
 package com.jeno.fantasyleague.ui.main;
 
 import com.jeno.fantasyleague.data.security.SecurityHolder;
+import com.jeno.fantasyleague.model.UserNotification;
 import com.jeno.fantasyleague.ui.main.broadcast.Broadcaster;
-import com.jeno.fantasyleague.ui.main.broadcast.Notification;
 import com.jeno.fantasyleague.ui.main.navigation.TopBar;
 import com.jeno.fantasyleague.ui.main.views.accessdenied.AccessDeniedView;
 import com.jeno.fantasyleague.ui.main.views.error.ErrorView;
@@ -10,7 +10,6 @@ import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.VaadinRequest;
-import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.communication.PushMode;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringViewProvider;
@@ -28,6 +27,8 @@ public class MainUI extends UI implements Broadcaster.BroadcastListener {
     private SpringViewProvider viewProvider;
     @Autowired
     private SecurityHolder securityHolder;
+    @Autowired
+    private NotificationModel notificationModel;
 
     private TopBar topBar;
 
@@ -40,7 +41,7 @@ public class MainUI extends UI implements Broadcaster.BroadcastListener {
         root.setSizeFull();
         setContent(root);
 
-        topBar = new TopBar(securityHolder.getUser());
+        topBar = new TopBar(securityHolder.getUser(), securityHolder.getUserNotifications(), notificationModel);
         root.addComponent(topBar);
 
         // View container, navigation results go in here
@@ -70,8 +71,8 @@ public class MainUI extends UI implements Broadcaster.BroadcastListener {
     }
 
     @Override
-    public void receiveBroadcast(Notification message) {
-        access(() -> topBar.addClientNotification(message));
+    public void receiveBroadcast(UserNotification notification) {
+        access(() -> topBar.updateNotifications(securityHolder.getUserNotifications()));
     }
 
 }

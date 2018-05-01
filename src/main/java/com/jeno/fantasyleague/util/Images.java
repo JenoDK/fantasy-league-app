@@ -16,5 +16,6 @@ public class Images {
 		public static final String FIFA_WORLD_CUP_2018 = "images/icons/fifa_world_cup_2018.png";
 		public static final String CUSTOM_LEAGUE = "images/icons/custom_league.png";
 		public static final String REMOVE = "images/icons/remove.png";
+		public static final String CHECK = "images/icons/check.png";
 	}
 }

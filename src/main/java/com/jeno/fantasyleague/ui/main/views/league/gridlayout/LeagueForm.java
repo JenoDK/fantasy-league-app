@@ -1,7 +1,7 @@
 package com.jeno.fantasyleague.ui.main.views.league.gridlayout;
 
 import com.jeno.fantasyleague.model.League;
-import com.jeno.fantasyleague.model.leaguetemplates.Template;
+import com.jeno.fantasyleague.model.enums.Template;
 import com.jeno.fantasyleague.util.RxUtil;
 import com.jeno.fantasyleague.util.VaadinUtil;
 import com.vaadin.data.BeanValidationBinder;

@@ -32,6 +32,22 @@
                 margin: 0px;
             }
         }
+
+        .v-menubar-menuitem-menu-notification-item, .v-menubar-menuitem-accept-decline-item {
+            font-size: 0.8em;
+            padding: 3px 37px 3px 15px;
+        }
+
+        .v-menubar-menuitem-accept-decline-item {
+            padding: 0 5px 0 5px;
+
+            .v-icon {
+                width: 20px;
+                height: auto;
+                margin-right: 10px;
+            }
+        }
+
     }
 
 }

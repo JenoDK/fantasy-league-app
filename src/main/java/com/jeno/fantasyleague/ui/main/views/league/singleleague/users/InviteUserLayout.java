@@ -5,14 +5,12 @@ import com.jeno.fantasyleague.model.User;
 import com.jeno.fantasyleague.ui.common.grid.CustomGrid;
 import com.jeno.fantasyleague.ui.common.grid.CustomGridBuilder;
 import com.jeno.fantasyleague.ui.main.broadcast.Broadcaster;
-import com.jeno.fantasyleague.ui.main.broadcast.Notification;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.jeno.fantasyleague.util.Images;
 import com.vaadin.data.provider.CallbackDataProvider;
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.ThemeResource;
-import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
@@ -73,7 +71,9 @@ public class InviteUserLayout extends VerticalLayout {
 		Button inviteButton = new Button("Invite Users");
 		inviteButton.addClickListener(ignored -> {
 			usersToInviteDataProvider.getItems().forEach(
-					user -> Broadcaster.broadcast(user.getId(), new Notification("TEST", "MSG")));
+					user -> Broadcaster.broadcast(
+							user.getId(),
+							singleLeagueServiceProvider.createLeagueInviteUserNotification(user, league)));
 		});
 		addComponent(inviteButton);
 	}

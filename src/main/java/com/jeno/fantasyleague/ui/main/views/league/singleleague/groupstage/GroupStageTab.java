@@ -1,4 +1,4 @@
-package com.jeno.fantasyleague.ui.main.views.league.singleleague.upcomingmatches;
+package com.jeno.fantasyleague.ui.main.views.league.singleleague.groupstage;
 
 import com.jeno.fantasyleague.model.ContestantGroup;
 import com.jeno.fantasyleague.model.Game;
@@ -8,6 +8,7 @@ import com.vaadin.data.provider.DataProvider;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
@@ -15,25 +16,37 @@ import java.util.Comparator;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class UpcomingMatchesTab extends VerticalLayout {
+public class GroupStageTab extends VerticalLayout {
 
-	public UpcomingMatchesTab(League league, SingleLeagueServiceProvider singleLeagueService) {
+	private TabSheet tabSheet;
+	private VerticalLayout upcomingMatchesLayout;
+	private VerticalLayout predictionsLayout;
+
+	public GroupStageTab(League league, SingleLeagueServiceProvider singleLeagueService) {
 		super();
 		setMargin(false);
 		setSpacing(false);
 
-		addGamesGrids(league, singleLeagueService);
+		tabSheet = new TabSheet();
+
+		upcomingMatchesLayout = new VerticalLayout();
+		initGamesGrids(league, singleLeagueService);
+		tabSheet.addTab(upcomingMatchesLayout, "Upcoming games");
+
+		predictionsLayout = new VerticalLayout();
+		tabSheet.addTab(predictionsLayout, "My Predictions");
+
+		addComponent(tabSheet);
 	}
 
-	private void addGamesGrids(League league, SingleLeagueServiceProvider singleLeagueService) {
+	private void initGamesGrids(League league, SingleLeagueServiceProvider singleLeagueService) {
 		singleLeagueService.getContestantGroupRepository().findByLeague(league).stream()
 				.sorted(Comparator.comparing(ContestantGroup::getName))
 				.forEach(group -> {
 					ListDataProvider<Game> dataProvider = createGroupGamesDataProvider(singleLeagueService, league, group);
 					Label groupLabel = new Label(group.getName(), ContentMode.HTML);
 					groupLabel.addStyleName(ValoTheme.LABEL_H3);
-					GamesGrid grid = new GamesGrid(dataProvider);
-					addComponents(groupLabel, grid);
+					upcomingMatchesLayout.addComponents(groupLabel, new GamesGrid(dataProvider));
 				});
 	}
 

@@ -1,6 +1,7 @@
 package com.jeno.fantasyleague.ui.main.broadcast;
 
 import com.google.common.collect.ArrayListMultimap;
+import com.jeno.fantasyleague.model.UserNotification;
 
 import java.io.Serializable;
 import java.util.concurrent.ExecutorService;
@@ -23,11 +24,11 @@ public class Broadcaster implements Serializable {
 		listeners.remove(userId, listener);
 	}
 
-	public static synchronized void broadcast(final Long userId, final Notification notification) {
+	public static synchronized void broadcast(final Long userId, final UserNotification notification) {
 		listeners.get(userId).forEach(listener -> listener.receiveBroadcast(notification));
 	}
 
 	public interface BroadcastListener {
-		void receiveBroadcast(Notification notification);
+		void receiveBroadcast(UserNotification notification);
 	}
 }

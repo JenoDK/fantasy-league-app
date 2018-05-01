@@ -30,6 +30,26 @@
         </createTable>
     </changeSet>
 
+    <changeSet author="jeno (generated)" id="add-usernotification-table">
+        <createTable tableName="usernotification">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="created_at" type="datetime"/>
+            <column name="updated_at" type="datetime"/>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="notification_type" type="VARCHAR(32)"/>
+            <column name="viewed" type="TINYINT(1)"/>
+            <column name="message" type="VARCHAR(255)"/>
+            <column name="reference_id" type="BIGINT"/>
+            <column name="reference_table" type="VARCHAR(32)"/>
+        </createTable>
+    </changeSet>
+
     <changeSet author="jeno (generated)" id="add-roles-table">
         <createTable tableName="roles">
             <column autoIncrement="true" name="id" type="BIGINT">

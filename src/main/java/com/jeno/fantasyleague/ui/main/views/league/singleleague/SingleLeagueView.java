@@ -3,7 +3,7 @@ package com.jeno.fantasyleague.ui.main.views.league.singleleague;
 import com.jeno.fantasyleague.model.League;
 import com.jeno.fantasyleague.model.User;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
-import com.jeno.fantasyleague.ui.main.views.league.singleleague.upcomingmatches.UpcomingMatchesTab;
+import com.jeno.fantasyleague.ui.main.views.league.singleleague.groupstage.GroupStageTab;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.users.UsersTab;
 import com.jeno.fantasyleague.util.RxUtil;
 import com.vaadin.icons.VaadinIcons;
@@ -38,7 +38,7 @@ public class SingleLeagueView extends VerticalLayout {
 		title.addStyleName(ValoTheme.LABEL_H1);
 
 		tabSheet = new TabSheet();
-		tabSheet.addTab(new UpcomingMatchesTab(league, singleLeagueServiceprovider), "Upcoming Matches");
+		tabSheet.addTab(new GroupStageTab(league, singleLeagueServiceprovider), "Group stage");
 		tabSheet.addTab(new UsersTab(league, singleLeagueServiceprovider), "Users");
 
 		addComponent(backToLeaguesView);

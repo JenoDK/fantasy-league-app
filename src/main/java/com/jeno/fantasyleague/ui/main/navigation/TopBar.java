@@ -1,9 +1,12 @@
 package com.jeno.fantasyleague.ui.main.navigation;
 
 import com.jeno.fantasyleague.model.User;
-import com.jeno.fantasyleague.ui.main.broadcast.Notification;
+import com.jeno.fantasyleague.model.UserNotification;
+import com.jeno.fantasyleague.ui.main.NotificationModel;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.HorizontalLayout;
+
+import java.util.List;
 
 public class TopBar extends HorizontalLayout {
 
@@ -11,20 +14,20 @@ public class TopBar extends HorizontalLayout {
 	private NavigationBar navigationBar;
 	private ProfileMenuBar profileBar;
 
-	public TopBar(User user) {
+	public TopBar(User user, List<UserNotification> userNotifications, NotificationModel notificationModel) {
 		super();
 		this.user = user;
 
-		initLayout();
+		initLayout(userNotifications, notificationModel);
 	}
 
-	private void initLayout() {
+	private void initLayout(List<UserNotification> userNotifications, NotificationModel notificationModel) {
 		addStyleName("topbar");
 		setWidth("100%");
 		setHeightUndefined();
 
 		navigationBar = new NavigationBar();
-		profileBar = new ProfileMenuBar(user);
+		profileBar = new ProfileMenuBar(user, userNotifications, notificationModel);
 
 		addComponent(navigationBar);
 		addComponent(profileBar);
@@ -32,7 +35,7 @@ public class TopBar extends HorizontalLayout {
 		setComponentAlignment(profileBar, Alignment.MIDDLE_RIGHT);
 	}
 
-	public void addClientNotification(Notification message) {
-		profileBar.addClientNotification(message);
+	public void updateNotifications(List<UserNotification> userNotifications) {
+		profileBar.updateNotifications(userNotifications);
 	}
 }

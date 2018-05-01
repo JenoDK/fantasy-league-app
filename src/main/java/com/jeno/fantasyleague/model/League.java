@@ -2,7 +2,7 @@ package com.jeno.fantasyleague.model;
 
 import com.google.common.collect.Sets;
 import com.jeno.fantasyleague.model.audit.UserAudit;
-import com.jeno.fantasyleague.model.leaguetemplates.Template;
+import com.jeno.fantasyleague.model.enums.Template;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;

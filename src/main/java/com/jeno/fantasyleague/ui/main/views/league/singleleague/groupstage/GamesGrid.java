@@ -1,4 +1,4 @@
-package com.jeno.fantasyleague.ui.main.views.league.singleleague.upcomingmatches;
+package com.jeno.fantasyleague.ui.main.views.league.singleleague.groupstage;
 
 import com.jeno.fantasyleague.model.Contestant;
 import com.jeno.fantasyleague.model.Game;
@@ -28,12 +28,22 @@ public class GamesGrid extends Grid<Game> {
 	private void initGrid() {
 		addColumn(game -> createTeamLayout(game.getHome_team()), new ComponentRenderer())
 			.setCaption("Home team");
+		addColumn(game -> getScore(game.getHome_team_score()))
+				.setCaption("Home team score");
 		addColumn(game -> createTeamLayout(game.getAway_team()), new ComponentRenderer())
 			.setCaption("Away team");
+		addColumn(game -> getScore(game.getAway_team_score()))
+				.setCaption("Away team score");
+		addColumn(Game::getRound)
+				.setCaption("Round");
 		addColumn(Game::getLocation)
 			.setCaption("Location");
 		addColumn(Game::getGame_date_time, new LocalDateTimeRenderer())
 			.setCaption("Date");
+	}
+
+	private String getScore(Integer score) {
+		return score != null ? score.toString() : "-";
 	}
 
 	private HorizontalLayout createTeamLayout(Contestant contestant) {

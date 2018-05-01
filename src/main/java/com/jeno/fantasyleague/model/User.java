@@ -53,6 +53,9 @@ public class User extends DateAudit {
 			inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles = Sets.newHashSet();
 
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+	private Set<UserNotification> notifications;
+
 	@Lob
 	@Basic(fetch = FetchType.LAZY)
 	private byte[] profile_picture;
@@ -131,4 +134,11 @@ public class User extends DateAudit {
 		this.profile_picture = profile_picture;
 	}
 
+	public Set<UserNotification> getNotifications() {
+		return notifications;
+	}
+
+	public void setNotifications(Set<UserNotification> notifications) {
+		this.notifications = notifications;
+	}
 }
