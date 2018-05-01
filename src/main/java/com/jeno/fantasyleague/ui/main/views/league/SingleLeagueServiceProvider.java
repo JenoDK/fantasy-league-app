@@ -1,16 +1,22 @@
 package com.jeno.fantasyleague.ui.main.views.league;
 
 import com.jeno.fantasyleague.data.repository.ContestantGroupRepository;
+import com.jeno.fantasyleague.data.repository.ContestantWeightRepository;
 import com.jeno.fantasyleague.data.repository.GameRepository;
 import com.jeno.fantasyleague.data.repository.LeagueRepository;
 import com.jeno.fantasyleague.data.repository.UserNotificationRepository;
+import com.jeno.fantasyleague.data.security.SecurityHolder;
 import com.jeno.fantasyleague.data.service.repo.user.UserService;
+import com.jeno.fantasyleague.model.ContestantWeight;
 import com.jeno.fantasyleague.model.League;
 import com.jeno.fantasyleague.model.User;
 import com.jeno.fantasyleague.model.UserNotification;
 import com.jeno.fantasyleague.model.enums.NotificationType;
 import com.vaadin.spring.annotation.SpringComponent;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @SpringComponent
 public class SingleLeagueServiceProvider {
@@ -21,11 +27,16 @@ public class SingleLeagueServiceProvider {
 	@Autowired
 	private ContestantGroupRepository contestantGroupRepository;
 	@Autowired
+	private ContestantWeightRepository contestantWeightRepository;
+	@Autowired
 	private GameRepository gameRepository;
 	@Autowired
 	private LeagueRepository leagueRepository;
 	@Autowired
 	private UserNotificationRepository userNotificationRepository;
+
+	@Autowired
+	private SecurityHolder securityHolder;
 
 	public GameRepository getGameRepository() {
 		return gameRepository;
@@ -43,6 +54,10 @@ public class SingleLeagueServiceProvider {
 		return contestantGroupRepository;
 	}
 
+	public ContestantWeightRepository getContestantWeightRepository() {
+		return contestantWeightRepository;
+	}
+
 	public UserNotification createLeagueInviteUserNotification(User user, League league) {
 		UserNotification notification = new UserNotification();
 		notification.setUser(user);
@@ -51,5 +66,16 @@ public class SingleLeagueServiceProvider {
 		notification.setReference_table("league");
 		notification.setNotification_type(NotificationType.LEAGUE_INVITE);
 		return userNotificationRepository.saveAndFlush(notification);
+	}
+
+	public List<User> getUsersWithPendingInvite(League league) {
+		return userNotificationRepository
+				.findByNotificationTypeAndReferenceIdAndJoinUsers(NotificationType.LEAGUE_INVITE, league.getId()).stream()
+						.map(UserNotification::getUser)
+						.collect(Collectors.toList());
+	}
+
+	public List<ContestantWeight> getContestantWeights(League league) {
+		return contestantWeightRepository.findByUserAndLeagueAndJoinContestant(securityHolder.getUser(), league);
 	}
 }

@@ -98,6 +98,7 @@
             <column name="name" type="VARCHAR(32)"/>
             <column name="description" type="LONGTEXT"/>
             <column name="template" type="VARCHAR(32)"/>
+            <column name="league_starting_date" type="datetime"/>
         </createTable>
     </changeSet>
 
@@ -115,6 +116,7 @@
             <column name="icon" type="LONGBLOB"/>
             <column name="league_id" type="BIGINT"/>
             <column name="contestantgroup_id" type="BIGINT"/>
+            <column name="power_index" type="TINYINT"/>
         </createTable>
     </changeSet>
 
@@ -135,6 +137,18 @@
             <column name="location" type="VARCHAR(128)"/>
             <column name="round" type="VARCHAR(32)"/>
             <column name="game_date_time" type="datetime"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="jeno (generated)" id="add-contestantweight-table">
+        <createTable tableName="contestantweight">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="contestant_id" type="BIGINT"/>
+            <column name="user_id" type="BIGINT"/>
+            <column name="league_id" type="BIGINT"/>
+            <column name="weight" type="TINYINT"/>
         </createTable>
     </changeSet>
 

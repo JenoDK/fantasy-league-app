@@ -13,8 +13,6 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
 import java.util.Comparator;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 public class GroupStageTab extends VerticalLayout {
 
@@ -52,13 +50,6 @@ public class GroupStageTab extends VerticalLayout {
 
 	private ListDataProvider<Game> createGroupGamesDataProvider(SingleLeagueServiceProvider singleLeagueService, League league, ContestantGroup group) {
 		return DataProvider.fromStream(singleLeagueService.getGameRepository().findByLeagueAndJoinTeams(league, group).stream());
-	}
-
-	private Set<Game> extractGames(ContestantGroup group, Set<Game> allGames) {
-		return group.getContestants().stream()
-				.flatMap(contestant -> allGames.stream()
-						.filter(game -> contestant.equals(game.getHome_team()) || contestant.equals(game.getAway_team())))
-				.collect(Collectors.toSet());
 	}
 
 }

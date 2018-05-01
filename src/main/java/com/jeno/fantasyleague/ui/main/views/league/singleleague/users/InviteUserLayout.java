@@ -1,5 +1,6 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.users;
 
+import com.google.common.collect.Lists;
 import com.jeno.fantasyleague.model.League;
 import com.jeno.fantasyleague.model.User;
 import com.jeno.fantasyleague.ui.common.grid.CustomGrid;
@@ -25,7 +26,7 @@ import java.util.stream.Stream;
 
 public class InviteUserLayout extends VerticalLayout {
 
-	public InviteUserLayout(League league, List<User> existingUsers, SingleLeagueServiceProvider singleLeagueServiceProvider) {
+	public InviteUserLayout(League league, List<User> usersToExclude, SingleLeagueServiceProvider singleLeagueServiceProvider) {
 		super();
 		setMargin(false);
 
@@ -33,11 +34,11 @@ public class InviteUserLayout extends VerticalLayout {
 		inviteUsers.addStyleName(ValoTheme.LABEL_H3);
 		addComponent(inviteUsers);
 
-		Set<Long> existingUserIds =  existingUsers.stream()
+		Set<Long> usersToExcludeIds =  usersToExclude.stream()
 				.map(User::getId)
 				.collect(Collectors.toSet());
 
-		DataProvider<User, String> dataProvider = getAddUserComboboxDataProvider(singleLeagueServiceProvider, existingUserIds);
+		DataProvider<User, String> dataProvider = getAddUserComboboxDataProvider(singleLeagueServiceProvider, usersToExcludeIds);
 
 		ListDataProvider<User> usersToInviteDataProvider = DataProvider.fromStream(Stream.empty());
 		CustomGridBuilder usersToInviteGridBuilder = UserGrid.getDefaultUserGridBuilder(usersToInviteDataProvider);
@@ -47,7 +48,7 @@ public class InviteUserLayout extends VerticalLayout {
 						"removeColumn",
 						user -> new CustomGridBuilder.IconColumnValue(new ThemeResource(Images.Icons.REMOVE), grid -> {
 							grid.removeItem(user);
-							existingUserIds.remove(user.getId());
+							usersToExcludeIds.remove(user.getId());
 							dataProvider.refreshAll();
 						}),
 						""))
@@ -60,7 +61,7 @@ public class InviteUserLayout extends VerticalLayout {
 			if (event.getValue() != null) {
 				usersToInviteGrid.addItem(event.getValue());
 				userComboBox.setValue(userComboBox.getEmptyValue());
-				existingUserIds.add(event.getValue().getId());
+				usersToExcludeIds.add(event.getValue().getId());
 				dataProvider.refreshAll();
 			}
 		});
@@ -71,9 +72,13 @@ public class InviteUserLayout extends VerticalLayout {
 		Button inviteButton = new Button("Invite Users");
 		inviteButton.addClickListener(ignored -> {
 			usersToInviteDataProvider.getItems().forEach(
-					user -> Broadcaster.broadcast(
-							user.getId(),
-							singleLeagueServiceProvider.createLeagueInviteUserNotification(user, league)));
+					user -> {
+						Broadcaster.broadcast(
+								user.getId(),
+								singleLeagueServiceProvider.createLeagueInviteUserNotification(user, league));
+					});
+			usersToInviteGrid.setItems(Lists.newArrayList());
+			dataProvider.refreshAll();
 		});
 		addComponent(inviteButton);
 	}

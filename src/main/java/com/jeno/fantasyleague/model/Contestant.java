@@ -33,6 +33,8 @@ public class Contestant extends UserAudit {
 	@JoinColumn(name = "contestantgroup_id")
 	private ContestantGroup contestant_group;
 
+	private Integer power_index;
+
 	public Contestant() {
 	}
 
@@ -82,5 +84,13 @@ public class Contestant extends UserAudit {
 
 	public void setContestant_group(ContestantGroup contestant_group) {
 		this.contestant_group = contestant_group;
+	}
+
+	public Integer getPower_index() {
+		return power_index;
+	}
+
+	public void setPower_index(Integer power_index) {
+		this.power_index = power_index;
 	}
 }

@@ -4,10 +4,21 @@ import com.google.common.collect.Sets;
 import com.jeno.fantasyleague.model.audit.UserAudit;
 import com.jeno.fantasyleague.model.enums.Template;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -39,6 +50,8 @@ public class League extends UserAudit {
 			joinColumns = @JoinColumn(name = "league_id"),
 			inverseJoinColumns = @JoinColumn(name = "user_id"))
 	private Set<User> owners = Sets.newHashSet();
+
+	private LocalDateTime league_starting_date;
 
 	public League() {
 	}
@@ -91,4 +104,11 @@ public class League extends UserAudit {
 		this.owners = owners;
 	}
 
+	public LocalDateTime getLeague_starting_date() {
+		return league_starting_date;
+	}
+
+	public void setLeague_starting_date(LocalDateTime league_starting_date) {
+		this.league_starting_date = league_starting_date;
+	}
 }

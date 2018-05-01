@@ -4,6 +4,7 @@ import com.jeno.fantasyleague.annotation.SpringUIScope;
 import com.jeno.fantasyleague.data.repository.LeagueRepository;
 import com.jeno.fantasyleague.data.security.SecurityHolder;
 import com.jeno.fantasyleague.data.service.leaguetemplates.LeagueTemplateService;
+import com.jeno.fantasyleague.data.service.repo.contestantweight.ContestantWeightService;
 import com.jeno.fantasyleague.model.League;
 import com.jeno.fantasyleague.model.User;
 import io.reactivex.Observable;
@@ -20,6 +21,8 @@ public class LeagueModel {
 	private LeagueRepository leagueRepo;
 	@Autowired
 	private SecurityHolder securityHolder;
+	@Autowired
+	private ContestantWeightService contestantWeightService;
 
 	@Autowired
 	private BeanFactory beanFactory;
@@ -37,6 +40,7 @@ public class LeagueModel {
 		League newLeague = leagueRepo.save(league);
 
 		templateServiceBean.run(newLeague, user);
+		contestantWeightService.addDefaultContestantWeights(newLeague, user);
 
 		// Fetch again in order to get the possibly new games/contestants/...
 		this.newLeague.onNext(leagueRepo.findById(newLeague.getId()).get());

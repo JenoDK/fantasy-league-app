@@ -1,5 +1,6 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.users;
 
+import com.google.common.collect.Lists;
 import com.jeno.fantasyleague.model.League;
 import com.jeno.fantasyleague.model.User;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
@@ -22,8 +23,13 @@ public class UsersTab extends VerticalLayout {
 		leagueUsersLabel.addStyleName(ValoTheme.LABEL_H3);
 		addComponent(leagueUsersLabel);
 		List<User> users = singleLeagueServiceProvider.getLeagueRepository().fetchLeagueUsers(league.getId());
+
 		addComponent(new UserGrid(DataProvider.fromStream(users.stream())));
-		addComponent(new InviteUserLayout(league, users, singleLeagueServiceProvider));
+
+		List<User> usersWithPendingInvites = singleLeagueServiceProvider.getUsersWithPendingInvite(league);
+		List<User> usersToExcludeFromInviteChoices = Lists.newArrayList(users);
+		usersToExcludeFromInviteChoices.addAll(usersWithPendingInvites);
+		addComponent(new InviteUserLayout(league, usersToExcludeFromInviteChoices, singleLeagueServiceProvider));
 	}
 
 }

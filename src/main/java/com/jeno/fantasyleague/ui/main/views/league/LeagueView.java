@@ -1,7 +1,6 @@
 package com.jeno.fantasyleague.ui.main.views.league;
 
 import com.jeno.fantasyleague.annotation.SpringUIScope;
-import com.jeno.fantasyleague.data.security.SecurityHolder;
 import com.jeno.fantasyleague.model.League;
 import com.jeno.fantasyleague.ui.main.views.league.gridlayout.LeagueGridLayout;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.SingleLeagueView;
@@ -17,8 +16,6 @@ public class LeagueView {
 
     @Autowired
     private SingleLeagueServiceProvider singleLeagueServiceProvider;
-    @Autowired
-    private SecurityHolder securityHolder;
 
     private VerticalLayout layout;
     private LeagueGridLayout leagueGridLayout;
@@ -59,7 +56,7 @@ public class LeagueView {
 
     private void viewLeague(League league) {
         layout.removeAllComponents();
-        singleLeagieView = new SingleLeagueView(league, singleLeagueServiceProvider, securityHolder.getUser());
+        singleLeagieView = new SingleLeagueView(league, singleLeagueServiceProvider);
         singleLeagieView.backToLeaguesView().subscribe(ignored -> showLeagueGridLayout());
         layout.addComponent(singleLeagieView);
     }
