@@ -6,30 +6,39 @@ import com.jeno.fantasyleague.model.User;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.shared.ui.ContentMode;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
 import java.util.List;
 
-public class UsersTab extends VerticalLayout {
+public class UsersTab extends HorizontalLayout {
 
 	public UsersTab(League league, SingleLeagueServiceProvider singleLeagueServiceProvider) {
 		super();
 		setMargin(false);
-		setSpacing(false);
+		setSpacing(true);
+
+		VerticalLayout leftSide = new VerticalLayout();
+		leftSide.setMargin(false);
+		leftSide.setSpacing(false);
 
 		Label leagueUsersLabel = new Label("League Users", ContentMode.HTML);
 		leagueUsersLabel.addStyleName(ValoTheme.LABEL_H3);
-		addComponent(leagueUsersLabel);
+		leftSide.addComponent(leagueUsersLabel);
 		List<User> users = singleLeagueServiceProvider.getLeagueRepository().fetchLeagueUsers(league.getId());
 
-		addComponent(new UserGrid(DataProvider.fromStream(users.stream())));
+		leftSide.addComponent(new UserGrid(DataProvider.fromStream(users.stream())));
 
-		List<User> usersWithPendingInvites = singleLeagueServiceProvider.getUsersWithPendingInvite(league);
-		List<User> usersToExcludeFromInviteChoices = Lists.newArrayList(users);
-		usersToExcludeFromInviteChoices.addAll(usersWithPendingInvites);
-		addComponent(new InviteUserLayout(league, usersToExcludeFromInviteChoices, singleLeagueServiceProvider));
+		addComponent(leftSide);
+
+		if (singleLeagueServiceProvider.userIsLeagueAdmin(league)) {
+			List<User> usersWithPendingInvites = singleLeagueServiceProvider.getUsersWithPendingInvite(league);
+			List<User> usersToExcludeFromInviteChoices = Lists.newArrayList(users);
+			usersToExcludeFromInviteChoices.addAll(usersWithPendingInvites);
+			addComponent(new InviteUserLayout(league, usersToExcludeFromInviteChoices, singleLeagueServiceProvider));
+		}
 	}
 
 }

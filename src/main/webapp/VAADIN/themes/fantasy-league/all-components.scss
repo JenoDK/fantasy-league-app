@@ -4,7 +4,7 @@
         display: none;
     }
 
-    .v-slot-ignore-error-indicator {
+    .v-slot-ignore-error-indicator, .v-caption-v-slot-ignore-error-indicator {
         .v-errorindicator {
             display:none;
         }

@@ -1,9 +1,9 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.teamweights;
 
 import com.jeno.fantasyleague.model.League;
+import com.jeno.fantasyleague.ui.common.field.StringToPositiveConverter;
 import com.jeno.fantasyleague.util.GridUtil;
 import com.vaadin.data.Binder;
-import com.vaadin.data.converter.StringToIntegerConverter;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.shared.ui.grid.HeightMode;
 import com.vaadin.ui.Grid;
@@ -46,7 +46,7 @@ public class TeamWeightsGrid extends Grid<TeamWeightBean> {
 		field.setReadOnly(!LocalDateTime.now().isBefore(league.getLeague_starting_date()));
 		Binder<TeamWeightBean> binder = new Binder<>(TeamWeightBean.class);
 		binder.forField(field)
-				.withConverter(new StringToIntegerConverter("Must enter a number"))
+				.withConverter(new StringToPositiveConverter(0, "Must enter a positive number"))
 				.bind(TeamWeightBean::getWeight, TeamWeightBean::setWeight);
 		binder.setBean(weight);
 		binder.addValueChangeListener(ignored -> weightChanged.onNext(ignored.getValue()));

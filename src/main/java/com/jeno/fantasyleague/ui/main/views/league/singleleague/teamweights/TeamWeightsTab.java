@@ -10,13 +10,11 @@ import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import io.reactivex.functions.Predicate;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,7 +22,7 @@ import java.util.stream.Collectors;
 public class TeamWeightsTab extends HorizontalLayout {
 
 	private TeamWeightsGrid teamWeightsGrid;
-	private TextField weightLeftField;
+	private Label weightLeftField;
 	private Button resetToOriginal;
 	private Button submit;
 	private Label errorLabel;
@@ -50,23 +48,27 @@ public class TeamWeightsTab extends HorizontalLayout {
 
 	public void initRightSide(League league, SingleLeagueServiceProvider singleLeagueServiceprovider) {
 		VerticalLayout rightSide = new VerticalLayout();
+		rightSide.setMargin(false);
+		rightSide.setSpacing(true);
 
 		resetToOriginal = new Button("Reset to original", VaadinIcons.REFRESH);
+		resetToOriginal.addStyleName(ValoTheme.BUTTON_PRIMARY);
+		resetToOriginal.addStyleName(ValoTheme.BUTTON_TINY);
 		RxUtil.clicks(resetToOriginal).subscribe(ignored -> teamWeights.stream().forEach(teamWeightBean -> {
 			teamWeightBean.reset();
-			weightLeftField.setValue("" + getWeightToDistribute());
+			weightLeftField.setValue(getWeightToDistributeString());
 		}));
 		rightSide.addComponent(resetToOriginal);
 		rightSide.addComponents(new Label());
 
-		weightLeftField = new TextField("Weight to distribute");
-		weightLeftField.setReadOnly(true);
-		weightLeftField.setValue("" + getWeightToDistribute());
+		weightLeftField = new Label(getWeightToDistributeString());
 		rightSide.addComponent(weightLeftField);
 		teamWeightsGrid.weightChanged().subscribe(ignored ->
-			weightLeftField.setValue("" + getWeightToDistribute()));
+			weightLeftField.setValue(getWeightToDistributeString()));
 
 		submit = new Button("Submit", VaadinIcons.USER_CHECK);
+		submit.addStyleName(ValoTheme.BUTTON_PRIMARY);
+		submit.addStyleName(ValoTheme.BUTTON_TINY);
 		rightSide.addComponent(submit);
 
 		Label infoLabel = new Label("Changes can be made until " + DateUtil.DATE_TIME_FORMATTER.format(league.getLeague_starting_date()));
@@ -82,25 +84,37 @@ public class TeamWeightsTab extends HorizontalLayout {
 		RxUtil.clicks(submit)
 				.filter(distributedCorrectly())
 				.subscribe(ignored -> {
-					singleLeagueServiceprovider.getContestantWeightRepository().saveAll(getConestantWeights());
-					errorLabel.setStyleName(ValoTheme.LABEL_SUCCESS);
-					errorLabel.setValue("Changes saved successfully");
-					errorLabel.setVisible(true);
+					if (LocalDateTime.now().isBefore(league.getLeague_starting_date())) {
+						singleLeagueServiceprovider.getContestantWeightRepository().saveAll(getConestantWeights());
+						errorLabel.setStyleName(ValoTheme.LABEL_SUCCESS);
+						errorLabel.setValue("Changes saved successfully");
+						errorLabel.setVisible(true);
+					} else {
+						setError("Changes can not be done after " + DateUtil.DATE_TIME_FORMATTER.format(league.getLeague_starting_date()));
+					}
 				});
+	}
+
+	public String getWeightToDistributeString() {
+		return "Weight to distribute: " + getWeightToDistribute();
 	}
 
 	public Predicate<Button.ClickEvent> distributedCorrectly() {
 		return ignored -> {
 			boolean allDistributed = getWeightToDistribute() == 0;
 			if (!allDistributed) {
-				errorLabel.setStyleName(ValoTheme.LABEL_FAILURE);
-				errorLabel.setValue("Please distribute all available points");
-				errorLabel.setVisible(true);
+				setError("Please distribute 100 points");
 			} else {
 				errorLabel.setVisible(false);
 			}
 			return allDistributed;
 		};
+	}
+
+	public void setError(String msg) {
+		errorLabel.setStyleName(ValoTheme.LABEL_FAILURE);
+		errorLabel.setValue(msg);
+		errorLabel.setVisible(true);
 	}
 
 	public Integer getWeightToDistribute() {

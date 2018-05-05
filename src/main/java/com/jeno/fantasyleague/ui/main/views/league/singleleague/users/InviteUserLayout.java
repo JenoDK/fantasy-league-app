@@ -55,6 +55,7 @@ public class InviteUserLayout extends VerticalLayout {
 			.build();
 
 		ComboBox<User> userComboBox = new ComboBox<>("Select user");
+		userComboBox.addStyleName(ValoTheme.COMBOBOX_SMALL);
 		userComboBox.setItemCaptionGenerator(user -> user.getUsername());
 		userComboBox.setDataProvider(dataProvider);
 		userComboBox.addValueChangeListener(event -> {
@@ -70,6 +71,8 @@ public class InviteUserLayout extends VerticalLayout {
 		addComponent(usersToInviteGrid);
 
 		Button inviteButton = new Button("Invite Users");
+		inviteButton.addStyleName(ValoTheme.BUTTON_PRIMARY);
+		inviteButton.addStyleName(ValoTheme.BUTTON_TINY);
 		inviteButton.addClickListener(ignored -> {
 			usersToInviteDataProvider.getItems().forEach(
 					user -> {

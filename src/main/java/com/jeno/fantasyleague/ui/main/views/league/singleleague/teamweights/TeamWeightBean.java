@@ -22,7 +22,7 @@ public class TeamWeightBean {
 	}
 
 	public Integer getWeight() {
-		return weight;
+		return weight != null ? weight : 0;
 	}
 
 	public void setWeight(Integer weight) {

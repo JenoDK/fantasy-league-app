@@ -78,4 +78,10 @@ public class SingleLeagueServiceProvider {
 	public List<ContestantWeight> getContestantWeights(League league) {
 		return contestantWeightRepository.findByUserAndLeagueAndJoinContestant(securityHolder.getUser(), league);
 	}
+
+	public boolean userIsLeagueAdmin(League league) {
+		User loggedInUser = securityHolder.getUser();
+		return leagueRepository.fetchLeagueOwners(league.getId()).stream()
+				.anyMatch(owner -> owner.getId().equals(loggedInUser.getId()));
+	}
 }
