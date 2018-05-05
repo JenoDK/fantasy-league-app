@@ -66,7 +66,7 @@ public class TeamWeightsTab extends HorizontalLayout {
 		teamWeightsGrid.weightChanged().subscribe(ignored ->
 			weightLeftField.setValue(getWeightToDistributeString()));
 
-		submit = new Button("Submit", VaadinIcons.USER_CHECK);
+		submit = new Button("Update weights", VaadinIcons.USER_CHECK);
 		submit.addStyleName(ValoTheme.BUTTON_PRIMARY);
 		submit.addStyleName(ValoTheme.BUTTON_TINY);
 		rightSide.addComponent(submit);

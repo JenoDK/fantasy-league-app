@@ -16,6 +16,7 @@ import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
@@ -74,14 +75,18 @@ public class InviteUserLayout extends VerticalLayout {
 		inviteButton.addStyleName(ValoTheme.BUTTON_PRIMARY);
 		inviteButton.addStyleName(ValoTheme.BUTTON_TINY);
 		inviteButton.addClickListener(ignored -> {
-			usersToInviteDataProvider.getItems().forEach(
-					user -> {
-						Broadcaster.broadcast(
-								user.getId(),
-								singleLeagueServiceProvider.createLeagueInviteUserNotification(user, league));
-					});
-			usersToInviteGrid.setItems(Lists.newArrayList());
-			dataProvider.refreshAll();
+			if (singleLeagueServiceProvider.loggedInUserIsLeagueAdmin(league)) {
+				usersToInviteDataProvider.getItems().forEach(
+						user -> {
+							Broadcaster.broadcast(
+									user.getId(),
+									singleLeagueServiceProvider.createLeagueInviteUserNotification(user, league));
+						});
+				usersToInviteGrid.setItems(Lists.newArrayList());
+				dataProvider.refreshAll();
+			} else {
+				Notification.show("Your admin rights have been revoked, please refresh the page");
+			}
 		});
 		addComponent(inviteButton);
 	}

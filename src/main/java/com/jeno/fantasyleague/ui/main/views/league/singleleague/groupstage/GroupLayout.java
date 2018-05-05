@@ -10,6 +10,7 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
@@ -37,8 +38,12 @@ public class GroupLayout extends VerticalLayout {
 					.filter(GameBean::scoreChanged)
 					.map(GameBean::setTeamScoresAndGetModelItem)
 					.collect(Collectors.toList());
-			singleLeagueService.getGameRepository().saveAll(changedGames);
-			saveScoreUpdatesButton.setVisible(false);
+			if (singleLeagueService.loggedInUserIsLeagueAdmin(league)) {
+				singleLeagueService.getGameRepository().saveAll(changedGames);
+				saveScoreUpdatesButton.setVisible(false);
+			} else {
+				Notification.show("Your admin rights have been revoked, please refresh the page");
+			}
 		});
 		gamesGrid.scoreChanged()
 				.map(ignored -> gamesGrid.getItems().stream().anyMatch(GameBean::scoreChanged))
