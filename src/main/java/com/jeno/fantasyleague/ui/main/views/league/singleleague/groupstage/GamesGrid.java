@@ -7,7 +7,6 @@ import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.jeno.fantasyleague.util.GridUtil;
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValueProvider;
-import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Setter;
 import com.vaadin.shared.ui.grid.HeightMode;
 import com.vaadin.ui.Grid;
@@ -55,7 +54,7 @@ public class GamesGrid extends Grid<GameBean> {
 	private void initGrid() {
 		addColumn(game -> GridUtil.createTeamLayout(game.getHome_team()), new ComponentRenderer())
 			.setCaption("Team A");
-		if (singleLeagueService.userIsLeagueAdmin(league)) {
+		if (singleLeagueService.loggedInUserIsLeagueAdmin(league)) {
 			addColumn(game -> getScoreLayoutForAdmin(game), new ComponentRenderer())
 					.setCaption("Score")
 					.setStyleGenerator(item -> "v-align-center");

@@ -29,11 +29,11 @@ public class UsersTab extends HorizontalLayout {
 		leftSide.addComponent(leagueUsersLabel);
 		List<User> users = singleLeagueServiceProvider.getLeagueRepository().fetchLeagueUsers(league.getId());
 
-		leftSide.addComponent(new UserGrid(DataProvider.fromStream(users.stream())));
+		leftSide.addComponent(new UserGrid(DataProvider.fromStream(users.stream()), singleLeagueServiceProvider, league));
 
 		addComponent(leftSide);
 
-		if (singleLeagueServiceProvider.userIsLeagueAdmin(league)) {
+		if (singleLeagueServiceProvider.loggedInUserIsLeagueAdmin(league)) {
 			List<User> usersWithPendingInvites = singleLeagueServiceProvider.getUsersWithPendingInvite(league);
 			List<User> usersToExcludeFromInviteChoices = Lists.newArrayList(users);
 			usersToExcludeFromInviteChoices.addAll(usersWithPendingInvites);

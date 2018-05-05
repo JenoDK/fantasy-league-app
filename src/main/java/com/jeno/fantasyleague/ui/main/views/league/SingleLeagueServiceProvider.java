@@ -1,5 +1,6 @@
 package com.jeno.fantasyleague.ui.main.views.league;
 
+import com.google.common.collect.Sets;
 import com.jeno.fantasyleague.data.repository.ContestantGroupRepository;
 import com.jeno.fantasyleague.data.repository.ContestantWeightRepository;
 import com.jeno.fantasyleague.data.repository.GameRepository;
@@ -16,6 +17,7 @@ import com.vaadin.spring.annotation.SpringComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @SpringComponent
@@ -79,9 +81,33 @@ public class SingleLeagueServiceProvider {
 		return contestantWeightRepository.findByUserAndLeagueAndJoinContestant(securityHolder.getUser(), league);
 	}
 
-	public boolean userIsLeagueAdmin(League league) {
-		User loggedInUser = securityHolder.getUser();
-		return leagueRepository.fetchLeagueOwners(league.getId()).stream()
-				.anyMatch(owner -> owner.getId().equals(loggedInUser.getId()));
+	public boolean loggedInUserIsLeagueCreator(League league) {
+		return league.getCreatedBy().getId().equals(securityHolder.getUser().getId());
 	}
+
+	public boolean loggedInUserIsLeagueAdmin(League league) {
+		return userIsLeagueAdmin(league, securityHolder.getUser());
+	}
+
+	public boolean userIsLeagueAdmin(League league, User user) {
+		return leagueRepository.fetchLeagueOwners(league.getId()).stream()
+				.anyMatch(owner -> owner.getId().equals(user.getId()));
+	}
+
+	public void promoteUserToLeagueOwner(League league, User user) {
+		Set<User> owners = Sets.newHashSet(leagueRepository.fetchLeagueOwners(league.getId()));
+		owners.add(user);
+		league.setOwners(owners);
+		leagueRepository.saveAndFlush(league);
+	}
+
+	public void demoteUserToLeagueNonOwner(League league, User user) {
+		Set<User> owners = Sets.newHashSet(leagueRepository.fetchLeagueOwners(league.getId()));
+		owners.removeIf(owner -> owner.getId().equals(user.getId()));
+		if (owners.size() >= 1) {
+			league.setOwners(owners);
+			leagueRepository.saveAndFlush(league);
+		}
+	}
+
 }
