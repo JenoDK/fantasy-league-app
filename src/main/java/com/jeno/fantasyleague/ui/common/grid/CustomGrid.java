@@ -1,16 +1,25 @@
 package com.jeno.fantasyleague.ui.common.grid;
 
+import com.google.common.collect.Lists;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.shared.ui.grid.HeightMode;
-import com.vaadin.ui.*;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.Grid;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Image;
 import com.vaadin.ui.renderers.ComponentRenderer;
+
+import java.util.Collection;
+import java.util.List;
 
 public class CustomGrid<T> extends Grid<T> {
 
-	private final CustomGridBuilder<T> builder;
+	private CustomGridBuilder<T> builder;
+	private List<T> listDataproviderItems = Lists.newArrayList();
 
 	public CustomGrid(CustomGridBuilder<T> builder) {
-		super();
+		this();
 		this.builder = builder;
 
 		setDataProvider(builder.dataProvider);
@@ -18,9 +27,24 @@ public class CustomGrid<T> extends Grid<T> {
 		if (builder.columnOrder.length > 0) {
 			setColumnOrder(builder.columnOrder);
 		}
+	}
+
+	public CustomGrid() {
+		super();
 		setRowHeight(36);
 		setHeightByRows(5);
 		setHeightMode(HeightMode.ROW);
+	}
+
+	@Override
+	public void setItems(Collection<T> items) {
+		super.setItems(items);
+		this.listDataproviderItems = Lists.newArrayList(items);
+		setHeight(36f * (items.size() + 1), Unit.PIXELS);
+	}
+
+	public List<T> getItems() {
+		return listDataproviderItems;
 	}
 
 	public void removeItem(T itemToRemove) {

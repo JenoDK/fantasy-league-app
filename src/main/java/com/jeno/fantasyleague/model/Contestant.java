@@ -35,6 +35,8 @@ public class Contestant extends UserAudit {
 
 	private Integer power_index;
 
+	private Integer points_in_group = 0;
+
 	public Contestant() {
 	}
 
@@ -92,5 +94,13 @@ public class Contestant extends UserAudit {
 
 	public void setPower_index(Integer power_index) {
 		this.power_index = power_index;
+	}
+
+	public Integer getPoints_in_group() {
+		return points_in_group;
+	}
+
+	public void setPoints_in_group(Integer points_in_group) {
+		this.points_in_group = points_in_group;
 	}
 }

@@ -1,4 +1,4 @@
-package com.jeno.fantasyleague.ui.main.views.league.singleleague.groupstage;
+package com.jeno.fantasyleague.ui.main.views.league.singleleague.groupstage.upcomingmatches;
 
 import com.jeno.fantasyleague.model.Contestant;
 import com.jeno.fantasyleague.model.Game;
@@ -40,11 +40,11 @@ public class GameBean {
 	}
 
 	public Integer getHome_team_score() {
-		return homeTeamScore != null ? homeTeamScore : 0;
+		return getTeamScore(homeTeamScore);
 	}
 
 	public Integer getAway_team_score() {
-		return awayTeamScore != null ? awayTeamScore : 0;
+		return getTeamScore(awayTeamScore);
 	}
 
 	public void setHomeTeamScore(Integer homeTeamScore) {

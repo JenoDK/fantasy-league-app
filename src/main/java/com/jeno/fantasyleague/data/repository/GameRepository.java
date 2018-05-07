@@ -14,6 +14,8 @@ import java.util.List;
 @Repository
 public interface GameRepository extends JpaRepository<Game, Long>, JpaSpecificationExecutor<Game> {
 
+	List<Game> findByLeague(League league);
+
 	@Query("SELECT g FROM Game g " +
 			"INNER JOIN FETCH g.home_team ht " +
 			"INNER JOIN FETCH g.away_team at " +

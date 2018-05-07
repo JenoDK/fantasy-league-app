@@ -5,11 +5,16 @@ import com.jeno.fantasyleague.data.repository.ContestantGroupRepository;
 import com.jeno.fantasyleague.data.repository.ContestantWeightRepository;
 import com.jeno.fantasyleague.data.repository.GameRepository;
 import com.jeno.fantasyleague.data.repository.LeagueRepository;
+import com.jeno.fantasyleague.data.repository.PredictionRepository;
 import com.jeno.fantasyleague.data.repository.UserNotificationRepository;
 import com.jeno.fantasyleague.data.security.SecurityHolder;
+import com.jeno.fantasyleague.data.service.repo.game.GameService;
+import com.jeno.fantasyleague.data.service.repo.prediction.PredictionService;
 import com.jeno.fantasyleague.data.service.repo.user.UserService;
 import com.jeno.fantasyleague.model.ContestantWeight;
+import com.jeno.fantasyleague.model.Game;
 import com.jeno.fantasyleague.model.League;
+import com.jeno.fantasyleague.model.Prediction;
 import com.jeno.fantasyleague.model.User;
 import com.jeno.fantasyleague.model.UserNotification;
 import com.jeno.fantasyleague.model.enums.NotificationType;
@@ -25,6 +30,8 @@ public class SingleLeagueServiceProvider {
 
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private GameService gameService;
 
 	@Autowired
 	private ContestantGroupRepository contestantGroupRepository;
@@ -32,6 +39,8 @@ public class SingleLeagueServiceProvider {
 	private ContestantWeightRepository contestantWeightRepository;
 	@Autowired
 	private GameRepository gameRepository;
+	@Autowired
+	private PredictionRepository predictionRepository;
 	@Autowired
 	private LeagueRepository leagueRepository;
 	@Autowired
@@ -52,12 +61,20 @@ public class SingleLeagueServiceProvider {
 		return userService;
 	}
 
+	public GameService getGameService() {
+		return gameService;
+	}
+
 	public ContestantGroupRepository getContestantGroupRepository() {
 		return contestantGroupRepository;
 	}
 
 	public ContestantWeightRepository getContestantWeightRepository() {
 		return contestantWeightRepository;
+	}
+
+	public PredictionRepository getPredictionRepository() {
+		return predictionRepository;
 	}
 
 	public UserNotification createLeagueInviteUserNotification(User user, League league) {
@@ -110,4 +127,7 @@ public class SingleLeagueServiceProvider {
 		}
 	}
 
+	public List<Prediction> getLoggedInUserPredictions(List<Game> games) {
+		return predictionRepository.findByGameInAndUser(games, securityHolder.getUser());
+	}
 }

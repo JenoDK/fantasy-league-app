@@ -1,0 +1,49 @@
+package com.jeno.fantasyleague.data.service.repo.league;
+
+import com.jeno.fantasyleague.data.repository.LeagueRepository;
+import com.jeno.fantasyleague.data.service.leaguetemplates.LeagueTemplateService;
+import com.jeno.fantasyleague.data.service.repo.contestantweight.ContestantWeightService;
+import com.jeno.fantasyleague.data.service.repo.prediction.PredictionService;
+import com.jeno.fantasyleague.model.League;
+import com.jeno.fantasyleague.model.User;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+@Transactional
+@Component
+public class LeagueServiceImpl implements LeagueService {
+
+	@Autowired
+	private ContestantWeightService contestantWeightService;
+	@Autowired
+	private PredictionService predictionService;
+	@Autowired
+	private LeagueRepository leagueRepo;
+	@Autowired
+	private BeanFactory beanFactory;
+
+	@Override
+	public League addLeague(League league, User user) {
+		League newLeague = leagueRepo.save(league);
+
+		// Run template bean
+		LeagueTemplateService templateServiceBean = beanFactory.getBean(league.getTemplate().getTemplateServiceBeanName(), LeagueTemplateService.class);
+		templateServiceBean.run(newLeague, user);
+
+		addUserToLeague(newLeague, user);
+
+		return leagueRepo.findById(newLeague.getId()).get();
+	}
+
+	@Override
+	public void addUserToLeague(League league, User user) {
+		league.getUsers().add(user);
+		League updatedLeague = leagueRepo.saveAndFlush(league);
+
+		contestantWeightService.addDefaultContestantWeights(updatedLeague, user);
+		predictionService.addDefaultPredictions(league, user);
+	}
+
+}

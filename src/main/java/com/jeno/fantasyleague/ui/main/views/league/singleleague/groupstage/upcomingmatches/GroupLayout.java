@@ -1,4 +1,4 @@
-package com.jeno.fantasyleague.ui.main.views.league.singleleague.groupstage;
+package com.jeno.fantasyleague.ui.main.views.league.singleleague.groupstage.upcomingmatches;
 
 import com.jeno.fantasyleague.model.ContestantGroup;
 import com.jeno.fantasyleague.model.Game;
@@ -39,7 +39,7 @@ public class GroupLayout extends VerticalLayout {
 					.map(GameBean::setTeamScoresAndGetModelItem)
 					.collect(Collectors.toList());
 			if (singleLeagueService.loggedInUserIsLeagueAdmin(league)) {
-				singleLeagueService.getGameRepository().saveAll(changedGames);
+				singleLeagueService.getGameService().updateGroupStageGameScores(changedGames);
 				saveScoreUpdatesButton.setVisible(false);
 			} else {
 				Notification.show("Your admin rights have been revoked, please refresh the page");

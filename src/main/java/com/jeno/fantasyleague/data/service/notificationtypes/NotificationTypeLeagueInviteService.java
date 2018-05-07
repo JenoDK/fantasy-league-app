@@ -2,7 +2,7 @@ package com.jeno.fantasyleague.data.service.notificationtypes;
 
 import com.jeno.fantasyleague.data.repository.LeagueRepository;
 import com.jeno.fantasyleague.data.repository.UserNotificationRepository;
-import com.jeno.fantasyleague.data.service.repo.contestantweight.ContestantWeightService;
+import com.jeno.fantasyleague.data.service.repo.league.LeagueService;
 import com.jeno.fantasyleague.model.League;
 import com.jeno.fantasyleague.model.UserNotification;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,16 +17,13 @@ public class NotificationTypeLeagueInviteService implements NotificationTypeServ
 	private UserNotificationRepository userNotificationRepository;
 
 	@Autowired
-	private ContestantWeightService contestantWeightService;
+	private LeagueService leagueService;
 
 	@Override
 	public void accepted(UserNotification notification) throws NotificationException {
 		Optional<League> league = leagueRepository.findByIdAndJoinUsers(notification.getReference_id());
 		if (league.isPresent()) {
-			league.get().getUsers().add(notification.getUser());
-			leagueRepository.saveAndFlush(league.get());
-
-			contestantWeightService.addDefaultContestantWeights(league.get(), notification.getUser());
+			leagueService.addUserToLeague(league.get(), notification.getUser());
 		} else {
 			throw new NotificationException("League no longer exists");
 		}
