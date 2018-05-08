@@ -1,14 +1,19 @@
-package com.jeno.fantasyleague.data.service.leaguetemplates;
+package com.jeno.fantasyleague.data.service.leaguetemplates.worldcup2018;
 
 import com.google.common.collect.Lists;
 import com.jeno.fantasyleague.data.repository.ContestantGroupRepository;
 import com.jeno.fantasyleague.data.repository.ContestantRepository;
 import com.jeno.fantasyleague.data.repository.GameRepository;
 import com.jeno.fantasyleague.data.repository.LeagueRepository;
+import com.jeno.fantasyleague.data.repository.LeagueSettingRepository;
+import com.jeno.fantasyleague.data.service.leaguetemplates.LeagueSettingRenderer;
+import com.jeno.fantasyleague.data.service.leaguetemplates.LeagueTemplateService;
+import com.jeno.fantasyleague.data.service.leaguetemplates.TemplateException;
 import com.jeno.fantasyleague.model.Contestant;
 import com.jeno.fantasyleague.model.ContestantGroup;
 import com.jeno.fantasyleague.model.Game;
 import com.jeno.fantasyleague.model.League;
+import com.jeno.fantasyleague.model.LeagueSetting;
 import com.jeno.fantasyleague.model.User;
 import com.jeno.fantasyleague.util.DateUtil;
 import org.apache.commons.csv.CSVFormat;
@@ -22,7 +27,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +45,13 @@ public class FifaWorldCup2018Service implements LeagueTemplateService {
 	private GameRepository gameRepository;
 	@Autowired
 	private LeagueRepository leagueRepository;
+	@Autowired
+	private FifaWorldCup2018SettingRenderer fifaWorldCup2018SettingRenderer;
+
+	@Override
+	public LeagueSettingRenderer getLeagueSettingRenderer() {
+		return fifaWorldCup2018SettingRenderer;
+	}
 
 	@Override
 	public void run(League newLeague, User user) throws TemplateException {
@@ -58,6 +69,7 @@ public class FifaWorldCup2018Service implements LeagueTemplateService {
 			newLeague.setLeague_starting_date(earliestGameDate.get());
 			leagueRepository.saveAndFlush(newLeague);
 		}
+		fifaWorldCup2018SettingRenderer.addDefaultLeagueSettings(newLeague);
 	}
 
 	private List<Game> addGames(List<Contestant> contestants, League league) {

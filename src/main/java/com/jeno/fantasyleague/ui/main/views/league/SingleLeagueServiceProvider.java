@@ -8,6 +8,7 @@ import com.jeno.fantasyleague.data.repository.LeagueRepository;
 import com.jeno.fantasyleague.data.repository.PredictionRepository;
 import com.jeno.fantasyleague.data.repository.UserNotificationRepository;
 import com.jeno.fantasyleague.data.security.SecurityHolder;
+import com.jeno.fantasyleague.data.service.leaguetemplates.LeagueTemplateService;
 import com.jeno.fantasyleague.data.service.repo.game.GameService;
 import com.jeno.fantasyleague.data.service.repo.prediction.PredictionService;
 import com.jeno.fantasyleague.data.service.repo.user.UserService;
@@ -19,6 +20,7 @@ import com.jeno.fantasyleague.model.User;
 import com.jeno.fantasyleague.model.UserNotification;
 import com.jeno.fantasyleague.model.enums.NotificationType;
 import com.vaadin.spring.annotation.SpringComponent;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -48,6 +50,8 @@ public class SingleLeagueServiceProvider {
 
 	@Autowired
 	private SecurityHolder securityHolder;
+	@Autowired
+	private BeanFactory beanFactory;
 
 	public GameRepository getGameRepository() {
 		return gameRepository;
@@ -129,5 +133,9 @@ public class SingleLeagueServiceProvider {
 
 	public List<Prediction> getLoggedInUserPredictions(List<Game> games) {
 		return predictionRepository.findByGameInAndUser(games, securityHolder.getUser());
+	}
+
+	public LeagueTemplateService getLeagueTemplateServiceBean(League league) {
+		return beanFactory.getBean(league.getTemplate().getTemplateServiceBeanName(), LeagueTemplateService.class);
 	}
 }

@@ -7,4 +7,6 @@ public interface LeagueTemplateService {
 
 	void run(League newLeague, User user) throws TemplateException;
 
+	LeagueSettingRenderer getLeagueSettingRenderer();
+
 }

@@ -15,7 +15,7 @@ public interface LeagueRepository extends JpaRepository<League, Long> {
 
 	List<League> findByUsers(User user);
 
-	@Query("SELECT l FROM League l INNER JOIN FETCH l.users")
+	@Query("SELECT l FROM League l INNER JOIN FETCH l.users WHERE l.id = :id")
 	Optional<League> findByIdAndJoinUsers(@Param("id") Long leagueId);
 
 	@Query("SELECT l.users FROM League l WHERE l.id = :id")

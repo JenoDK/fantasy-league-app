@@ -13,4 +13,8 @@ public class GroupTeamBean {
 	public Contestant getContestant() {
 		return contestant;
 	}
+
+	public Integer getPoints_in_group() {
+		return contestant.getPoints_in_group();
+	}
 }

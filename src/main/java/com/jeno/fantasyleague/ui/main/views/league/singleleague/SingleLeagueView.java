@@ -2,6 +2,7 @@ package com.jeno.fantasyleague.ui.main.views.league.singleleague;
 
 import com.jeno.fantasyleague.model.League;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
+import com.jeno.fantasyleague.ui.main.views.league.singleleague.leaguesettings.LeagueSettingsTab;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.groupstage.GroupStageTab;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.teamweights.TeamWeightsTab;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.users.UsersTab;
@@ -39,6 +40,9 @@ public class SingleLeagueView extends VerticalLayout {
 		tabSheet.addTab(new GroupStageTab(league, singleLeagueServiceprovider), "Group Stage");
 		tabSheet.addTab(new UsersTab(league, singleLeagueServiceprovider), "Users");
 		tabSheet.addTab(new TeamWeightsTab(league, singleLeagueServiceprovider), "My Team Weights");
+		if (singleLeagueServiceprovider.loggedInUserIsLeagueCreator(league)) {
+			tabSheet.addTab(new LeagueSettingsTab(league, singleLeagueServiceprovider), "League Settings");
+		}
 
 		addComponent(backToLeaguesView);
 		addComponent(title);

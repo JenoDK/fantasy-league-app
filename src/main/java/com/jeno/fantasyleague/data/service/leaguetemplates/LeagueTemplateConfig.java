@@ -1,5 +1,7 @@
 package com.jeno.fantasyleague.data.service.leaguetemplates;
 
+import com.jeno.fantasyleague.data.service.leaguetemplates.custom.CustomTemplateService;
+import com.jeno.fantasyleague.data.service.leaguetemplates.worldcup2018.FifaWorldCup2018Service;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

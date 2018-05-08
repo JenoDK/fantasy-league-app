@@ -20,9 +20,9 @@ public class GroupStandingsGrid extends CustomGrid<GroupTeamBean> {
 				.setCaption("Team")
 				.setId("team");
 		Column<GroupTeamBean, Integer> pointsColumn =
-			addColumn(teamBean -> teamBean.getContestant().getPoints_in_group())
+			addColumn(teamBean -> teamBean.getPoints_in_group())
 				.setCaption("Points")
 				.setId("points");
-		setSortOrder(new GridSortOrderBuilder().thenDesc(pointsColumn).thenDesc(teamColumn));
+		setSortOrder(new GridSortOrderBuilder().thenDesc(pointsColumn));
 	}
 }

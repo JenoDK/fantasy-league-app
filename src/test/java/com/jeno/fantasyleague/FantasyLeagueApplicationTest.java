@@ -1,6 +1,6 @@
 package com.jeno.fantasyleague;
 
-import com.jeno.fantasyleague.data.service.leaguetemplates.FifaWorldCup2018Service;
+import com.jeno.fantasyleague.data.service.leaguetemplates.worldcup2018.FifaWorldCup2018Service;
 import org.junit.Test;
 import org.springframework.util.StringUtils;
 

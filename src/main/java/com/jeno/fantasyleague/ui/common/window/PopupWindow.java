@@ -4,11 +4,9 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.Window;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 
 public class PopupWindow extends Window {
-
-	private final Consumer<Window> onCancel;
-	private final Consumer<Window> onConfirm;
 
 	public PopupWindow(Builder builder) {
 		super();
@@ -28,10 +26,15 @@ public class PopupWindow extends Window {
 		setCaption(builder.caption);
 		setId(builder.id);
 
-		this.onCancel = builder.onCancel;
-		this.onConfirm = builder.onConfirm;
+		try {
+			setContent(builder.contentGenerator.apply(this));
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
 
-		setContent(builder.contents);
+	public void show() {
+		UI.getCurrent().addWindow(this);
 	}
 
 	public static class Builder {
@@ -45,22 +48,17 @@ public class PopupWindow extends Window {
 		private boolean resizable = false;
 		private boolean sizeUndefined = false;
 
-		private String confirmText = "Ok";
-		private String cancelText = "Cancel";
 		private final String id;
 		private final String caption;
 
 		private static final Consumer<Window> CLOSE = Window::close;
 
-		private Consumer<Window> onConfirm = CLOSE;
-		private Consumer<Window> onCancel = CLOSE;
+		private final Function<Window, Component> contentGenerator;
 
-		private final Component contents;
-
-		public Builder(String name, String id, Component contents) {
-			this.caption = name;
+		public Builder(String caption, String id, Function<Window, Component> contentGenerator) {
+			this.caption = caption;
 			this.id = id;
-			this.contents = contents;
+			this.contentGenerator = contentGenerator;
 		}
 
 		public Builder resizable(boolean resizable) {
@@ -88,23 +86,10 @@ public class PopupWindow extends Window {
 			return this;
 		}
 
-		public Builder setOnConfirm(Consumer<Window> onConfirm) {
-			this.onConfirm =  onConfirm;
-			return this;
-		}
-
-		public Builder setOnCancel(Consumer<Window> onCancel) {
-			this.onCancel = onCancel;
-			return this;
-		}
-
 		public PopupWindow build() {
 			return new PopupWindow(this);
 		}
 
-		public void show() {
-			UI.getCurrent().addWindow(build());
-		}
 	}
 
 }
