@@ -26,6 +26,7 @@ public class PredictionLayout extends VerticalLayout {
 	public PredictionLayout(SingleLeagueServiceProvider singleLeagueService, League league, ContestantGroup group) {
 		super();
 		setSpacing(false);
+		setMargin(false);
 
 		Label groupLabel = new Label(group.getName(), ContentMode.HTML);
 		groupLabel.addStyleName(ValoTheme.LABEL_H3);

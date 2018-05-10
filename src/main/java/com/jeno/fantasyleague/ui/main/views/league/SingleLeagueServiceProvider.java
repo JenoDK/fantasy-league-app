@@ -12,6 +12,7 @@ import com.jeno.fantasyleague.data.repository.LeagueRepository;
 import com.jeno.fantasyleague.data.repository.PredictionRepository;
 import com.jeno.fantasyleague.data.repository.UserNotificationRepository;
 import com.jeno.fantasyleague.data.security.SecurityHolder;
+import com.jeno.fantasyleague.data.service.email.ApplicationEmailService;
 import com.jeno.fantasyleague.data.service.leaguetemplates.LeagueTemplateService;
 import com.jeno.fantasyleague.data.service.repo.game.GameService;
 import com.jeno.fantasyleague.data.service.repo.league.LeagueService;
@@ -36,6 +37,8 @@ public class SingleLeagueServiceProvider {
 	private GameService gameService;
 	@Autowired
 	private LeagueService leagueService;
+	@Autowired
+	private ApplicationEmailService emailService;
 
 	@Autowired
 	private ContestantGroupRepository contestantGroupRepository;
@@ -143,5 +146,9 @@ public class SingleLeagueServiceProvider {
 
 	public double getUserLeagueScore(League league) {
 		return leagueService.getLeagueScoreForUser(league, securityHolder.getUser());
+	}
+
+	public ApplicationEmailService getEmailService() {
+		return emailService;
 	}
 }

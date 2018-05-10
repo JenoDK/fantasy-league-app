@@ -11,7 +11,6 @@ import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.groupstage.prediction.PredictionLayout;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.groupstage.standings.GroupStandingsLayout;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.groupstage.upcomingmatches.GroupLayout;
-import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.VerticalLayout;
 
 public class GroupStageTab extends VerticalLayout {
@@ -36,14 +35,18 @@ public class GroupStageTab extends VerticalLayout {
 		addComponent(tabSheet);
 	}
 
-	private GridLayout createPredictionsLayout(League league, SingleLeagueServiceProvider singleLeagueService, List<ContestantGroup> groups) {
-		GridLayout predictionsLayout = new GridLayout(2, 1);
+	private VerticalLayout createPredictionsLayout(League league, SingleLeagueServiceProvider singleLeagueService, List<ContestantGroup> groups) {
+		VerticalLayout predictionsLayout = new VerticalLayout();
+		predictionsLayout.setMargin(false);
+		predictionsLayout.setSpacing(false);
 		groups.forEach(group -> predictionsLayout.addComponent(new PredictionLayout(singleLeagueService, league, group)));
 		return predictionsLayout;
 	}
 
-	private GridLayout createGroupStandingsLayout(SingleLeagueServiceProvider singleLeagueService, List<ContestantGroup> groups) {
-		GridLayout groupStandingsLayout = new GridLayout(2, 1);
+	private VerticalLayout createGroupStandingsLayout(SingleLeagueServiceProvider singleLeagueService, List<ContestantGroup> groups) {
+		VerticalLayout groupStandingsLayout = new VerticalLayout();
+		groupStandingsLayout.setMargin(false);
+		groupStandingsLayout.setSpacing(false);
 		groups.forEach(group -> groupStandingsLayout.addComponent(new GroupStandingsLayout(singleLeagueService, group)));
 		return groupStandingsLayout;
 	}

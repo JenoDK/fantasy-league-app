@@ -19,6 +19,7 @@ public class GroupStandingsLayout extends VerticalLayout {
 	public GroupStandingsLayout(SingleLeagueServiceProvider singleLeagueService, ContestantGroup group) {
 		super();
 		setSpacing(false);
+		setMargin(false);
 
 		Label groupLabel = new Label(group.getName(), ContentMode.HTML);
 		groupLabel.addStyleName(ValoTheme.LABEL_H3);
