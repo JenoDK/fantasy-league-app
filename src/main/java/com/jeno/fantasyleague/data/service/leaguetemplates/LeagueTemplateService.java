@@ -9,4 +9,6 @@ public interface LeagueTemplateService {
 
 	LeagueSettingRenderer getLeagueSettingRenderer();
 
+	double calculateUserScore(League league, User user);
+
 }

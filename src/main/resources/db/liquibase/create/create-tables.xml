@@ -131,8 +131,10 @@
             <column name="home_team_score" type="TINYINT"/>
             <column name="away_team_id" type="BIGINT"/>
             <column name="away_team_score" type="TINYINT"/>
+            <column name="winner_id" type="BIGINT"/>
             <column name="location" type="VARCHAR(128)"/>
             <column name="round" type="VARCHAR(32)"/>
+            <column name="stage" type="VARCHAR(128)"/>
             <column name="game_date_time" type="datetime"/>
             <column name="created_at" type="datetime"/>
             <column name="updated_at" type="datetime"/>

@@ -1,5 +1,7 @@
 package com.jeno.fantasyleague.data.service.repo.game;
 
+import java.util.List;
+
 import com.jeno.fantasyleague.data.repository.ContestantRepository;
 import com.jeno.fantasyleague.data.repository.GameRepository;
 import com.jeno.fantasyleague.model.Contestant;
@@ -7,8 +9,6 @@ import com.jeno.fantasyleague.model.Game;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Transactional
 @Component
@@ -21,11 +21,11 @@ public class GameServiceImpl implements GameService {
 
 	@Override
 	public void updateGroupStageGameScores(List<Game> games) {
+		games.stream().forEach(this::distributePointsAndUpdateGame);
 		gameRepository.saveAll(games);
-		games.stream().forEach(this::distributePoints);
 	}
 
-	private void distributePoints(Game game) {
+	private void distributePointsAndUpdateGame(Game game) {
 		Contestant homeTeam = game.getHome_team();
 		Integer homeScore = game.getHome_team_score();
 		Contestant awayTeam = game.getAway_team();
@@ -34,6 +34,7 @@ public class GameServiceImpl implements GameService {
 		if (homeScore > awayScore) {
 			homeTeam.setPoints_in_group(homeTeam.getPoints_in_group() + 3);
 			contestantRepository.saveAndFlush(homeTeam);
+			game.setWinner(homeTeam);
 		// Draw
 		} else if (homeScore == awayScore) {
 			homeTeam.setPoints_in_group(homeTeam.getPoints_in_group() + 1);
@@ -44,6 +45,7 @@ public class GameServiceImpl implements GameService {
 		} else {
 			awayTeam.setPoints_in_group(homeTeam.getPoints_in_group() + 3);
 			contestantRepository.saveAndFlush(awayTeam);
+			game.setWinner(awayTeam);
 		}
 	}
 }

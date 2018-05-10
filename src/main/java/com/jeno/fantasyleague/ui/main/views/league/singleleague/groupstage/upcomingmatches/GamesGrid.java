@@ -18,7 +18,7 @@ public class GamesGrid extends Grid<GameBean> {
 
 	private final League league;
 	private final SingleLeagueServiceProvider singleLeagueService;
-	private final BehaviorSubject<Object> scoreChanged = BehaviorSubject.create();
+	private final BehaviorSubject<Boolean> scoreChanged = BehaviorSubject.create();
 	private List<GameBean> items;
 
 	public GamesGrid(League league, SingleLeagueServiceProvider singleLeagueService) {
@@ -72,10 +72,10 @@ public class GamesGrid extends Grid<GameBean> {
 	}
 
 	private String getScores(Integer teamAScore, Integer teamBScore) {
-		return GameBean.getTeamScore(teamAScore) + " - " + GameBean.getTeamScore(teamBScore);
+		return (teamAScore != null ? teamAScore : " ") + " - " + (teamBScore != null ? teamBScore : " ");
 	}
 
-	public Observable<Object> scoreChanged() {
+	public Observable<Boolean> scoreChanged() {
 		return scoreChanged;
 	}
 

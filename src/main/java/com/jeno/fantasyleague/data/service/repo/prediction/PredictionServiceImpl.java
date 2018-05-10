@@ -1,5 +1,8 @@
 package com.jeno.fantasyleague.data.service.repo.prediction;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.jeno.fantasyleague.data.repository.GameRepository;
 import com.jeno.fantasyleague.data.repository.PredictionRepository;
 import com.jeno.fantasyleague.model.Game;
@@ -9,9 +12,6 @@ import com.jeno.fantasyleague.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Transactional
 @Component
@@ -34,8 +34,7 @@ public class PredictionServiceImpl implements PredictionService {
 		Prediction prediction = new Prediction();
 		prediction.setGame(game);
 		prediction.setUser(user);
-		prediction.setAway_team_score(0);
-		prediction.setHome_team_score(0);
 		return prediction;
 	}
+
 }

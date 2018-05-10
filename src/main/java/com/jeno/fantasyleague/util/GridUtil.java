@@ -1,8 +1,11 @@
 package com.jeno.fantasyleague.util;
 
 import com.jeno.fantasyleague.model.Contestant;
+import com.jeno.fantasyleague.resources.Resources;
+import com.jeno.fantasyleague.ui.common.field.NonNullValidator;
 import com.jeno.fantasyleague.ui.common.field.StringToPositiveConverter;
 import com.vaadin.data.Binder;
+import com.vaadin.data.BinderValidationStatus;
 import com.vaadin.data.ValueProvider;
 import com.vaadin.server.Setter;
 import com.vaadin.server.Sizeable;
@@ -36,24 +39,33 @@ public class GridUtil {
 			Setter<T, Integer> homeTeamSetter,
 			ValueProvider<T, Integer> awayTeamGetter,
 			Setter<T, Integer> awayTeamSetter,
-			BehaviorSubject<Object> scoreChanged) {
+			BehaviorSubject<Boolean> scoreChanged) {
 		HorizontalLayout layout = new HorizontalLayout();
-		layout.addComponent(createScoreField(t, homeTeamGetter, homeTeamSetter, scoreChanged));
+		Binder<T> binder = new Binder<>();
+		layout.addComponent(createScoreField(t, binder, homeTeamGetter, homeTeamSetter, scoreChanged));
 		layout.addComponent(new Label("-"));
-		layout.addComponent(createScoreField(t, awayTeamGetter, awayTeamSetter, scoreChanged));
+		layout.addComponent(createScoreField(t, binder, awayTeamGetter, awayTeamSetter, scoreChanged));
+		binder.addValueChangeListener(ignored -> {
+			BinderValidationStatus<T> status = binder.validate();
+			if (status.isOk()) {
+				scoreChanged.onNext(true);
+			} else {
+				scoreChanged.onNext(false);
+			}
+		});
+		binder.setBean(t);
 		return layout;
 	}
 
-	private static <T> TextField createScoreField(T t, ValueProvider<T, Integer> getter, Setter<T, Integer> setter, BehaviorSubject<Object> scoreChanged) {
+	private static <T> TextField createScoreField(T t, Binder<T> binder, ValueProvider<T, Integer> getter, Setter<T, Integer> setter, BehaviorSubject<Boolean> scoreChanged) {
 		TextField field = new TextField();
 		field.setWidth(30, Sizeable.Unit.PIXELS);
 		field.addStyleName("v-slot-ignore-error-indicator");
-		Binder<T> binder = new Binder<>();
 		binder.forField(field)
-				.withConverter(new StringToPositiveConverter(0, "Must enter a positive number"))
+				.withNullRepresentation(" ")
+				.withConverter(new StringToPositiveConverter(null, Resources.getMessage("error.positiveNumber")))
+				.withValidator(new NonNullValidator(Resources.getMessage("error.cannotBeNull")))
 				.bind(getter, setter);
-		binder.setBean(t);
-		binder.addValueChangeListener(ignored -> scoreChanged.onNext(ignored.getValue()));
 		field.addStyleName(ValoTheme.TEXTFIELD_TINY);
 		return field;
 	}

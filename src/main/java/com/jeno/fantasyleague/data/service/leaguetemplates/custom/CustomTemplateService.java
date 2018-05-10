@@ -22,4 +22,9 @@ public class CustomTemplateService implements LeagueTemplateService {
 		return customSettingRenderer;
 	}
 
+	@Override
+	public double calculateUserScore(League league, User user) {
+		return 0;
+	}
+
 }

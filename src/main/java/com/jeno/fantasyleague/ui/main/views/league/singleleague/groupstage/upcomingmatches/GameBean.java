@@ -10,13 +10,13 @@ public class GameBean {
 
 	private final Game game;
 
-	private Integer homeTeamScore = 0;
-	private Integer awayTeamScore = 0;
+	private Integer homeTeamScore;
+	private Integer awayTeamScore;
 
 	public GameBean(Game game) {
 		this.game = game;
-		homeTeamScore = getTeamScore(game.getHome_team_score());
-		awayTeamScore = getTeamScore(game.getAway_team_score());
+		homeTeamScore = game.getHome_team_score();
+		awayTeamScore = game.getAway_team_score();
 	}
 
 	public Contestant getHome_team() {
@@ -40,11 +40,11 @@ public class GameBean {
 	}
 
 	public Integer getHome_team_score() {
-		return getTeamScore(homeTeamScore);
+		return homeTeamScore;
 	}
 
 	public Integer getAway_team_score() {
-		return getTeamScore(awayTeamScore);
+		return awayTeamScore;
 	}
 
 	public void setHomeTeamScore(Integer homeTeamScore) {
@@ -55,9 +55,11 @@ public class GameBean {
 		this.awayTeamScore = awayTeamScore;
 	}
 
-	public boolean scoreChanged() {
-		return !Objects.equals(homeTeamScore, getTeamScore(game.getHome_team_score()))
-				|| !Objects.equals(awayTeamScore, getTeamScore(game.getAway_team_score()));
+	public boolean scoreChangedAndIsValid() {
+		boolean scoreChanged = !Objects.equals(homeTeamScore, game.getHome_team_score())
+				|| !Objects.equals(awayTeamScore, game.getAway_team_score());
+		boolean nonNullValues = Objects.nonNull(homeTeamScore) && Objects.nonNull(awayTeamScore);
+		return scoreChanged && nonNullValues;
 	}
 
 	public Game setTeamScoresAndGetModelItem() {

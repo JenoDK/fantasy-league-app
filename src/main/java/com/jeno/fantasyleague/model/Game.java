@@ -26,12 +26,18 @@ public class Game extends UserAudit {
 	@JoinColumn(nullable = false, name = "away_team_id")
 	private Contestant away_team;
 
+	@ManyToOne(targetEntity = Contestant.class, fetch = FetchType.LAZY)
+	@JoinColumn(name = "winner_id")
+	private Contestant winner;
+
 	@Size(max = 128)
 	private String location;
 
 	private LocalDateTime game_date_time;
 
 	private String round;
+
+	private String stage;
 
 	private Integer home_team_score;
 
@@ -72,6 +78,14 @@ public class Game extends UserAudit {
 		this.away_team = away_team;
 	}
 
+	public Contestant getWinner() {
+		return winner;
+	}
+
+	public void setWinner(Contestant winner) {
+		this.winner = winner;
+	}
+
 	public String getLocation() {
 		return location;
 	}
@@ -94,6 +108,14 @@ public class Game extends UserAudit {
 
 	public void setRound(String round) {
 		this.round = round;
+	}
+
+	public String getStage() {
+		return stage;
+	}
+
+	public void setStage(String stage) {
+		this.stage = stage;
 	}
 
 	public Integer getHome_team_score() {

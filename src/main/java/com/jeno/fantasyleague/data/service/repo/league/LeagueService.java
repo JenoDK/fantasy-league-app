@@ -8,4 +8,6 @@ public interface LeagueService {
 	League addLeague(League league, User user);
 
 	void addUserToLeague(League league, User user);
+
+	double getLeagueScoreForUser(League league, User user);
 }

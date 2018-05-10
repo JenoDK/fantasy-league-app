@@ -1,5 +1,11 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.groupstage.prediction;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 import com.google.common.collect.Lists;
 import com.jeno.fantasyleague.model.ContestantGroup;
 import com.jeno.fantasyleague.model.Game;
@@ -14,12 +20,6 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public class PredictionLayout extends VerticalLayout {
 
@@ -39,7 +39,7 @@ public class PredictionLayout extends VerticalLayout {
 		savePredictionsButton.setVisible(false);
 		savePredictionsButton.addClickListener(ignored -> {
 			List<Prediction> predictions = predictionsGrid.getItems().stream()
-					.filter(PredictionBean::scoreChanged)
+					.filter(PredictionBean::scoreChangedAndIsValid)
 					.filter(predictionBean -> LocalDateTime.now().isBefore(predictionBean.getGame().getGame_date_time()))
 					.map(PredictionBean::setPredictionsAndGetModelItem)
 					.collect(Collectors.toList());
@@ -47,7 +47,7 @@ public class PredictionLayout extends VerticalLayout {
 			savePredictionsButton.setVisible(false);
 		});
 		predictionsGrid.scoreChanged()
-				.map(ignored -> predictionsGrid.getItems().stream().anyMatch(PredictionBean::scoreChanged))
+				.map(isValid -> predictionsGrid.getItems().stream().anyMatch(PredictionBean::scoreChangedAndIsValid) && isValid)
 				.subscribe(savePredictionsButton::setVisible);
 
 		HorizontalLayout titleLayout = new HorizontalLayout();

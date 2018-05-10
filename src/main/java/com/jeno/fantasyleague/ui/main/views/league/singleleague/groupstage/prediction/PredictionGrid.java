@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 
 public class PredictionGrid extends CustomGrid<PredictionBean> {
 
-	private final BehaviorSubject<Object> scoreChanged = BehaviorSubject.create();
+	private final BehaviorSubject<Boolean> scoreChanged = BehaviorSubject.create();
 
 	public PredictionGrid() {
 		super();
@@ -41,12 +41,16 @@ public class PredictionGrid extends CustomGrid<PredictionBean> {
 					scoreChanged);
 		} else {
 			HorizontalLayout layout = new HorizontalLayout();
-			layout.addComponent(new Label(GameBean.getTeamScore(predictionBean.getHomeTeamScore()) + " - " + GameBean.getTeamScore(predictionBean.getAwayTeamScore())));
+			layout.addComponent(new Label(getScores(predictionBean.getHomeTeamScore(), predictionBean.getAwayTeamScore())));
 			return layout;
 		}
 	}
 
-	public Observable<Object> scoreChanged() {
+	private String getScores(Integer teamAScore, Integer teamBScore) {
+		return (teamAScore != null ? teamAScore : " ") + " - " + (teamBScore != null ? teamBScore : " ");
+	}
+
+	public Observable<Boolean> scoreChanged() {
 		return scoreChanged;
 	}
 }

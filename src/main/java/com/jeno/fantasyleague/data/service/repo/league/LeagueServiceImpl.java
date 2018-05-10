@@ -46,4 +46,11 @@ public class LeagueServiceImpl implements LeagueService {
 		predictionService.addDefaultPredictions(league, user);
 	}
 
+	@Override
+	public double getLeagueScoreForUser(League league, User user) {
+		// Run template bean
+		LeagueTemplateService templateServiceBean = beanFactory.getBean(league.getTemplate().getTemplateServiceBeanName(), LeagueTemplateService.class);
+		return templateServiceBean.calculateUserScore(league, user);
+	}
+
 }

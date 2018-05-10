@@ -1,10 +1,10 @@
 package com.jeno.fantasyleague.data.service.repo.prediction;
 
+import java.util.List;
+
 import com.jeno.fantasyleague.model.League;
 import com.jeno.fantasyleague.model.Prediction;
 import com.jeno.fantasyleague.model.User;
-
-import java.util.List;
 
 public interface PredictionService {
 

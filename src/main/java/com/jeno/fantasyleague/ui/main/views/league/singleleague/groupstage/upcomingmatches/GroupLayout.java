@@ -1,5 +1,8 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.groupstage.upcomingmatches;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.jeno.fantasyleague.model.ContestantGroup;
 import com.jeno.fantasyleague.model.Game;
 import com.jeno.fantasyleague.model.League;
@@ -13,9 +16,6 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class GroupLayout extends VerticalLayout {
 
@@ -35,7 +35,7 @@ public class GroupLayout extends VerticalLayout {
 		saveScoreUpdatesButton.setVisible(false);
 		saveScoreUpdatesButton.addClickListener(ignored -> {
 			List<Game> changedGames = gamesGrid.getItems().stream()
-					.filter(GameBean::scoreChanged)
+					.filter(GameBean::scoreChangedAndIsValid)
 					.map(GameBean::setTeamScoresAndGetModelItem)
 					.collect(Collectors.toList());
 			if (singleLeagueService.loggedInUserIsLeagueAdmin(league)) {
@@ -46,7 +46,7 @@ public class GroupLayout extends VerticalLayout {
 			}
 		});
 		gamesGrid.scoreChanged()
-				.map(ignored -> gamesGrid.getItems().stream().anyMatch(GameBean::scoreChanged))
+				.map(isValid -> gamesGrid.getItems().stream().anyMatch(GameBean::scoreChangedAndIsValid) && isValid)
 				.subscribe(saveScoreUpdatesButton::setVisible);
 
 		Button refreshButton = new Button("Refresh", VaadinIcons.REFRESH);

@@ -1,25 +1,24 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.groupstage.prediction;
 
+import java.util.Objects;
+
 import com.jeno.fantasyleague.model.Contestant;
 import com.jeno.fantasyleague.model.Game;
 import com.jeno.fantasyleague.model.Prediction;
-import com.jeno.fantasyleague.ui.main.views.league.singleleague.groupstage.upcomingmatches.GameBean;
-
-import java.util.Objects;
 
 public class PredictionBean {
 
 	private final Game game;
 	private final Prediction prediction;
 
-	private Integer homeTeamScore = 0;
-	private Integer awayTeamScore = 0;
+	private Integer homeTeamScore;
+	private Integer awayTeamScore;
 
 	public PredictionBean(Game game, Prediction prediction) {
 		this.game = game;
 		this.prediction = prediction;
-		homeTeamScore = GameBean.getTeamScore(prediction.getHome_team_score());
-		awayTeamScore = GameBean.getTeamScore(prediction.getAway_team_score());
+		homeTeamScore = prediction.getHome_team_score();
+		awayTeamScore = prediction.getAway_team_score();
 	}
 
 	public Contestant getHomeTeam() {
@@ -35,7 +34,7 @@ public class PredictionBean {
 	}
 
 	public Integer getHomeTeamScore() {
-		return GameBean.getTeamScore(homeTeamScore);
+		return homeTeamScore;
 	}
 
 	public void setHomeTeamScore(Integer homeTeamScore) {
@@ -43,21 +42,28 @@ public class PredictionBean {
 	}
 
 	public Integer getAwayTeamScore() {
-		return GameBean.getTeamScore(awayTeamScore);
+		return awayTeamScore;
 	}
 
 	public void setAwayTeamScore(Integer awayTeamScore) {
 		this.awayTeamScore = awayTeamScore;
 	}
 
-	public boolean scoreChanged() {
-		return !Objects.equals(homeTeamScore, GameBean.getTeamScore(prediction.getHome_team_score()))
-				|| !Objects.equals(awayTeamScore, GameBean.getTeamScore(prediction.getAway_team_score()));
+	public boolean scoreChangedAndIsValid() {
+		boolean scoreChanged = !Objects.equals(homeTeamScore, prediction.getHome_team_score())
+				|| !Objects.equals(awayTeamScore, prediction.getAway_team_score());
+		boolean nonNullValues = Objects.nonNull(homeTeamScore) && Objects.nonNull(awayTeamScore);
+		return scoreChanged && nonNullValues;
 	}
 
 	public Prediction setPredictionsAndGetModelItem() {
 		prediction.setHome_team_score(homeTeamScore);
 		prediction.setAway_team_score(awayTeamScore);
+		if (homeTeamScore > awayTeamScore) {
+			prediction.setWinner(game.getHome_team());
+		} else if (homeTeamScore < awayTeamScore) {
+			prediction.setWinner(game.getAway_team());
+		}
 		return prediction;
 	}
 

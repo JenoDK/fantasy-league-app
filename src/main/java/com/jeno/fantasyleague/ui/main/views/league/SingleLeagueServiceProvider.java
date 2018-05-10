@@ -1,5 +1,9 @@
 package com.jeno.fantasyleague.ui.main.views.league;
 
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import com.google.common.collect.Sets;
 import com.jeno.fantasyleague.data.repository.ContestantGroupRepository;
 import com.jeno.fantasyleague.data.repository.ContestantWeightRepository;
@@ -10,7 +14,7 @@ import com.jeno.fantasyleague.data.repository.UserNotificationRepository;
 import com.jeno.fantasyleague.data.security.SecurityHolder;
 import com.jeno.fantasyleague.data.service.leaguetemplates.LeagueTemplateService;
 import com.jeno.fantasyleague.data.service.repo.game.GameService;
-import com.jeno.fantasyleague.data.service.repo.prediction.PredictionService;
+import com.jeno.fantasyleague.data.service.repo.league.LeagueService;
 import com.jeno.fantasyleague.data.service.repo.user.UserService;
 import com.jeno.fantasyleague.model.ContestantWeight;
 import com.jeno.fantasyleague.model.Game;
@@ -23,10 +27,6 @@ import com.vaadin.spring.annotation.SpringComponent;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 @SpringComponent
 public class SingleLeagueServiceProvider {
 
@@ -34,6 +34,8 @@ public class SingleLeagueServiceProvider {
 	private UserService userService;
 	@Autowired
 	private GameService gameService;
+	@Autowired
+	private LeagueService leagueService;
 
 	@Autowired
 	private ContestantGroupRepository contestantGroupRepository;
@@ -137,5 +139,9 @@ public class SingleLeagueServiceProvider {
 
 	public LeagueTemplateService getLeagueTemplateServiceBean(League league) {
 		return beanFactory.getBean(league.getTemplate().getTemplateServiceBeanName(), LeagueTemplateService.class);
+	}
+
+	public double getUserLeagueScore(League league) {
+		return leagueService.getLeagueScoreForUser(league, securityHolder.getUser());
 	}
 }
