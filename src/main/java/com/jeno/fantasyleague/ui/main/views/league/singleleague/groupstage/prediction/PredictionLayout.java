@@ -64,7 +64,7 @@ public class PredictionLayout extends VerticalLayout {
 	}
 
 	private List<PredictionBean> getPredictions(SingleLeagueServiceProvider singleLeagueService, League league, ContestantGroup group) {
-		Map<Long, Game> games = singleLeagueService.getGameRepository().findByLeagueAndJoinTeams(league, group).stream()
+		Map<Long, Game> games = singleLeagueService.getGameRepository().findByLeagueAndGroupStageAndJoinTeams(league, group).stream()
 				.collect(Collectors.toMap(Game::getId, Function.identity()));
 		return singleLeagueService.getLoggedInUserPredictions(Lists.newArrayList(games.values())).stream()
 				// Like this because we want the Contestants in the game entity.

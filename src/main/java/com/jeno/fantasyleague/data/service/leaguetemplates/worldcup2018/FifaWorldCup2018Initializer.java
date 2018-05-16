@@ -35,6 +35,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(rollbackFor = Exception.class)
 public class FifaWorldCup2018Initializer {
 
+	public static final String ROUND_NUMBER = "Round Number";
+	public static final String DATE = "Date";
+	public static final String LOCATION = "Location";
+	public static final String HOME_TEAM = "Home Team";
+	public static final String AWAY_TEAM = "Away Team";
 	@Autowired
 	private FifaWorldCup2018SettingRenderer fifaWorldCup2018SettingRenderer;
 	@Autowired
@@ -53,37 +58,72 @@ public class FifaWorldCup2018Initializer {
 				Arrays.stream(Team.values())
 						.map(team -> createContestant(team, groupsMap, newLeague))
 						.collect(Collectors.toList()));
-		List<Game> addedGames = addGames(contestantList, newLeague);
-		Optional<LocalDateTime> earliestGameDate = addedGames.stream()
-				.map(Game::getGame_date_time)
-				.min(LocalDateTime::compareTo);
-		if (earliestGameDate.isPresent()) {
-			newLeague.setLeague_starting_date(earliestGameDate.get());
-			leagueRepository.saveAndFlush(newLeague);
-		}
+		List<Game> addedGames = addGroupStageGames(contestantList, newLeague);
+		setLeagueStartDate(newLeague, addedGames);
+		addKnockoutStageGames(newLeague);
 		fifaWorldCup2018SettingRenderer.addDefaultLeagueSettings(newLeague);
 	}
 
-	private List<Game> addGames(List<Contestant> contestants, League league) {
+	private List<Game> addKnockoutStageGames(League league) {
+		return gameRepository.saveAll(
+				readCsv("csv/fifa-world-cup-2018-knockoutstage.csv").stream()
+						.map(record -> createKnockoutStage(record, league))
+						.collect(Collectors.toList()));
+	}
+
+	private List<Game> addGroupStageGames(List<Contestant> contestants, League league) {
+		return gameRepository.saveAll(
+				readCsv("csv/fifa-world-cup-2018-groupstage.csv").stream()
+						.map(record -> createGroupStageGame(record, contestants, league))
+						.collect(Collectors.toList()));
+	}
+
+	private List<CSVRecord> readCsv(String path) {
 		try {
-			Reader in = new FileReader(new ClassPathResource("csv/fifa-world-cup-2018-RomanceStandardTime.csv").getFile());
-			List<Game> games = Lists.newArrayList(CSVFormat.RFC4180.withHeader().parse(in)).stream()
-					.map(record -> createGame(record, contestants, league))
-					.collect(Collectors.toList());
-			return gameRepository.saveAll(games);
+			Reader in = new FileReader(new ClassPathResource(path).getFile());
+			return Lists.newArrayList(CSVFormat.RFC4180.withHeader().parse(in));
 		} catch (FileNotFoundException e) {
 			throw new TemplateException("CSV file for FIFA World Cup 2018 not found", e);
 		} catch (IOException e) {
-			throw new TemplateException("Something went wron during the parsing of the csv file", e);
+			throw new TemplateException("Something went wrong during the parsing of the csv file", e);
 		}
 	}
 
-	private Game createGame(CSVRecord record, List<Contestant> contestants, League league) {
-		String round = record.get("Round Number");
-		String date = record.get("Date");
-		String location = record.get("Location");
-		String home_team = record.get("Home Team");
-		String away_team = record.get("Away Team");
+	private Game createKnockoutStage(CSVRecord record, League league) {
+		String round = record.get(ROUND_NUMBER);
+		String date = record.get(DATE);
+		String location = record.get(LOCATION);
+		String home_team = record.get(HOME_TEAM);
+		String away_team = record.get(AWAY_TEAM);
+
+		Game game = new Game();
+		game.setRound(round);
+		game.setStage(getKnockoutStage(round).name());
+		game.setLocation(location);
+		game.setGame_date_time(LocalDateTime.parse(date, DateUtil.DATE_TIME_FORMATTER));
+		game.setHome_team_placeholder(home_team);
+		game.setAway_team_placeholder(away_team);
+		game.setLeague(league);
+		return game;
+	}
+
+	private FifaWorldCup2018Stages getKnockoutStage(String round) {
+		if ("Round of 16".equals(round)) {
+			return FifaWorldCup2018Stages.EIGHTH_FINALS;
+		} else if ("Quarter Finals".equals(round)) {
+			return FifaWorldCup2018Stages.QUARTER_FINALS;
+		} else if ("Semi Finals".equals(round)) {
+			return FifaWorldCup2018Stages.SEMI_FINALS;
+		}
+		return FifaWorldCup2018Stages.FINALS;
+	}
+
+	private Game createGroupStageGame(CSVRecord record, List<Contestant> contestants, League league) {
+		String round = record.get(ROUND_NUMBER);
+		String date = record.get(DATE);
+		String location = record.get(LOCATION);
+		String home_team = record.get(HOME_TEAM);
+		String away_team = record.get(AWAY_TEAM);
 
 		Contestant homeTeam = contestants.stream()
 				.filter(c -> c.getName().equals(home_team))
@@ -123,6 +163,16 @@ public class FifaWorldCup2018Initializer {
 		return contestant;
 	}
 
+	private void setLeagueStartDate(League newLeague, List<Game> addedGames) {
+		Optional<LocalDateTime> earliestGameDate = addedGames.stream()
+				.map(Game::getGame_date_time)
+				.min(LocalDateTime::compareTo);
+		if (earliestGameDate.isPresent()) {
+			newLeague.setLeague_starting_date(earliestGameDate.get());
+			leagueRepository.saveAndFlush(newLeague);
+		}
+	}
+
 	public enum Team {
 
 		ARGENTINA("Argentina", Group.GROUP_D, 69, "images/icons/country_icons/argentina.png"),
@@ -157,33 +207,11 @@ public class FifaWorldCup2018Initializer {
 		SWITZERLAND("Switzerland", Group.GROUP_E, 60, "images/icons/country_icons/switzerland.png"),
 		TUNISIA("Tunisia", Group.GROUP_G, 31, "images/icons/country_icons/tunisia.png"),
 		URUGUAY("Uruguay", Group.GROUP_A, 51, "images/icons/country_icons/uruguay.png");
-//		WINNER_GROUP_A("Winner Group A", "images/icons/unknown.png"),
-//		RUNNER_UP_GROUP_A("Runner-up Group A", "images/icons/unknown.png"),
-//		WINNER_GROUP_B("Winner Group B", "images/icons/unknown.png"),
-//		RUNNER_UP_GROUP_B("Runner-up Group B", "images/icons/unknown.png"),
-//		WINNER_GROUP_C("Winner Group C", "images/icons/unknown.png"),
-//		RUNNER_UP_GROUP_C("Runner-up Group C", "images/icons/unknown.png"),
-//		WINNER_GROUP_D("Winner Group D", "images/icons/unknown.png"),
-//		RUNNER_UP_GROUP_D("Runner-up Group D", "images/icons/unknown.png"),
-//		WINNER_GROUP_E("Winner Group E", "images/icons/unknown.png"),
-//		RUNNER_UP_GROUP_E("Runner-up Group E", "images/icons/unknown.png"),
-//		WINNER_GROUP_F("Winner Group F", "images/icons/unknown.png"),
-//		RUNNER_UP_GROUP_F("Runner-up Group F", "images/icons/unknown.png"),
-//		WINNER_GROUP_G("Winner Group G", "images/icons/unknown.png"),
-//		RUNNER_UP_GROUP_G("Runner-up Group G", "images/icons/unknown.png"),
-//		WINNER_GROUP_H("Winner Group H", "images/icons/unknown.png"),
-//		RUNNER_UP_GROUP_H("Runner-up Group H", "images/icons/unknown.png"),
-//		TO_BE_ANNOUNCED("To be announced", "images/icons/unknown.png");
 
 		private String name;
 		private Optional<Group> group = Optional.empty();
 		private Integer powerIndex;
 		private String iconPath;
-
-		Team(String name, String iconPath) {
-			this.name = name;
-			this.iconPath = iconPath;
-		}
 
 		Team(String name, Group group, Integer powerIndex, String iconPath) {
 			this.name = name;

@@ -128,8 +128,10 @@
             </column>
             <column name="league_id" type="BIGINT"/>
             <column name="home_team_id" type="BIGINT"/>
+            <column name="home_team_placeholder" type="VARCHAR(128)"/>
             <column name="home_team_score" type="TINYINT"/>
             <column name="away_team_id" type="BIGINT"/>
+            <column name="away_team_placeholder" type="VARCHAR(128)"/>
             <column name="away_team_score" type="TINYINT"/>
             <column name="winner_id" type="BIGINT"/>
             <column name="location" type="VARCHAR(128)"/>

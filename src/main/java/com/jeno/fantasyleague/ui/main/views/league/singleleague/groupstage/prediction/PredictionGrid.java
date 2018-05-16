@@ -41,13 +41,9 @@ public class PredictionGrid extends CustomGrid<PredictionBean> {
 					scoreChanged);
 		} else {
 			HorizontalLayout layout = new HorizontalLayout();
-			layout.addComponent(new Label(getScores(predictionBean.getHomeTeamScore(), predictionBean.getAwayTeamScore())));
+			layout.addComponent(new Label(GridUtil.getScores(predictionBean.getHomeTeamScore(), predictionBean.getAwayTeamScore())));
 			return layout;
 		}
-	}
-
-	private String getScores(Integer teamAScore, Integer teamBScore) {
-		return (teamAScore != null ? teamAScore : " ") + " - " + (teamBScore != null ? teamBScore : " ");
 	}
 
 	public Observable<Boolean> scoreChanged() {

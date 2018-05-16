@@ -33,6 +33,10 @@ public class GridUtil {
 		return layout;
 	}
 
+	public static String getScores(Integer teamAScore, Integer teamBScore) {
+		return (teamAScore != null ? teamAScore : " ") + " - " + (teamBScore != null ? teamBScore : " ");
+	}
+
 	public static  <T> HorizontalLayout getTextFieldScoreLayout(
 			T t,
 			ValueProvider<T, Integer> homeTeamGetter,

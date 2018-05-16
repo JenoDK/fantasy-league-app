@@ -1,0 +1,31 @@
+@mixin single-league-view {
+
+	.bracket-gridlayout {
+
+		.v-gridlayout-slot {
+
+			.bracketplaceholder-top-right {
+				border-radius: 0px 50px 0px 0px;
+				border-top: 1px solid black;
+				border-right: 1px solid black;
+			}
+
+			.bracketplaceholder-right {
+				border-right: 1px solid black;
+			}
+
+			.bracketplaceholder-bottom-right {
+				border-radius: 0px 0px 50px 0px;
+				border-bottom: 1px solid black;
+				border-right: 1px solid black;
+			}
+
+			.bracket-game {
+				padding: 10px;
+			}
+
+		}
+
+	}
+
+}

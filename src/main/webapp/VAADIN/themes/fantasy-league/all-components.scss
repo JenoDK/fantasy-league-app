@@ -23,4 +23,22 @@
         cursor: pointer;
     }
 
+    .black-small-border {
+		border: 1px solid black;
+	}
+
+	.no-left-margin-padding {
+		margin-left: 0px;
+		padding-left: 0px;
+	}
+
+	.margin-top-10 {
+		padding-top: 10px;
+	}
+
+	.no-visual-panel {
+		background: none;
+		border: none;
+	}
+
 }

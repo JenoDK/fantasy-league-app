@@ -22,9 +22,19 @@ public class Game extends UserAudit {
 	@JoinColumn(nullable = false, name = "home_team_id")
 	private Contestant home_team;
 
+	@Column(name = "home_team_id", insertable = false, updatable = false)
+	private Long home_team_fk;
+
+	private String home_team_placeholder;
+
 	@ManyToOne(targetEntity = Contestant.class, fetch = FetchType.LAZY)
 	@JoinColumn(nullable = false, name = "away_team_id")
 	private Contestant away_team;
+
+	@Column(name = "away_team_id", insertable = false, updatable = false)
+	private Long away_team_fk;
+
+	private String away_team_placeholder;
 
 	@ManyToOne(targetEntity = Contestant.class, fetch = FetchType.LAZY)
 	@JoinColumn(name = "winner_id")
@@ -70,12 +80,36 @@ public class Game extends UserAudit {
 		this.home_team = home_team;
 	}
 
+	public Long getHome_team_fk() {
+		return home_team_fk;
+	}
+
+	public String getHome_team_placeholder() {
+		return home_team_placeholder;
+	}
+
+	public void setHome_team_placeholder(String home_team_placeholder) {
+		this.home_team_placeholder = home_team_placeholder;
+	}
+
 	public Contestant getAway_team() {
 		return away_team;
 	}
 
 	public void setAway_team(Contestant away_team) {
 		this.away_team = away_team;
+	}
+
+	public Long getAway_team_fk() {
+		return away_team_fk;
+	}
+
+	public String getAway_team_placeholder() {
+		return away_team_placeholder;
+	}
+
+	public void setAway_team_placeholder(String away_team_placeholder) {
+		this.away_team_placeholder = away_team_placeholder;
 	}
 
 	public Contestant getWinner() {

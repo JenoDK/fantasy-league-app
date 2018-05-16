@@ -73,7 +73,7 @@ public class GroupLayout extends VerticalLayout {
 	}
 
 	private List<GameBean> getGameBeans(SingleLeagueServiceProvider singleLeagueService, League league, ContestantGroup group) {
-		return singleLeagueService.getGameRepository().findByLeagueAndJoinTeams(league, group).stream()
+		return singleLeagueService.getGameRepository().findByLeagueAndGroupStageAndJoinTeams(league, group).stream()
 				.map(GameBean::new)
 				.collect(Collectors.toList());
 	}

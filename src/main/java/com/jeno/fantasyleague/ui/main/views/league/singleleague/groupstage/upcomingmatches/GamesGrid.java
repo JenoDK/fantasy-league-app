@@ -57,7 +57,7 @@ public class GamesGrid extends Grid<GameBean> {
 				.setCaption("Score")
 				.setStyleGenerator(item -> "v-align-center");
 		} else {
-			addColumn(game -> getScores(game.getHome_team_score(), game.getAway_team_score()))
+			addColumn(game -> GridUtil.getScores(game.getHome_team_score(), game.getAway_team_score()))
 				.setCaption("Score")
 				.setStyleGenerator(item -> "v-align-center");
 		}
@@ -69,10 +69,6 @@ public class GamesGrid extends Grid<GameBean> {
 			.setCaption("Location");
 		addColumn(GameBean::getGame_date_time, new LocalDateTimeRenderer())
 			.setCaption("Date");
-	}
-
-	private String getScores(Integer teamAScore, Integer teamBScore) {
-		return (teamAScore != null ? teamAScore : " ") + " - " + (teamBScore != null ? teamBScore : " ");
 	}
 
 	public Observable<Boolean> scoreChanged() {

@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import com.google.common.collect.Sets;
 import com.jeno.fantasyleague.data.repository.ContestantGroupRepository;
+import com.jeno.fantasyleague.data.repository.ContestantRepository;
 import com.jeno.fantasyleague.data.repository.ContestantWeightRepository;
 import com.jeno.fantasyleague.data.repository.GameRepository;
 import com.jeno.fantasyleague.data.repository.LeagueRepository;
@@ -40,6 +41,8 @@ public class SingleLeagueServiceProvider {
 	@Autowired
 	private ApplicationEmailService emailService;
 
+	@Autowired
+	private ContestantRepository contestantRepository;
 	@Autowired
 	private ContestantGroupRepository contestantGroupRepository;
 	@Autowired
@@ -76,6 +79,10 @@ public class SingleLeagueServiceProvider {
 
 	public ContestantGroupRepository getContestantGroupRepository() {
 		return contestantGroupRepository;
+	}
+
+	public ContestantRepository getContestantRepository() {
+		return contestantRepository;
 	}
 
 	public ContestantWeightRepository getContestantWeightRepository() {

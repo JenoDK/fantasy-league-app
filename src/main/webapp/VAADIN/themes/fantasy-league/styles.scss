@@ -2,6 +2,7 @@
 @import "fantasy-league.scss";
 @import "topbar.scss";
 @import "league-view.scss";
+@import "single-league-view.scss";
 @import "all-components.scss";
 
 .fantasy-league {
@@ -9,6 +10,7 @@
   @include fantasy-league;
   @include topbar;
   @include league-view;
+  @include single-league-view;
   @include all-components;
 }
 
