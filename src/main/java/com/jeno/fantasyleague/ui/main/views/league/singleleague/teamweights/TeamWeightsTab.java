@@ -1,7 +1,13 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.teamweights;
 
+import java.time.LocalDateTime;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.jeno.fantasyleague.model.ContestantWeight;
 import com.jeno.fantasyleague.model.League;
+import com.jeno.fantasyleague.ui.common.field.CustomButton;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.jeno.fantasyleague.util.DateUtil;
 import com.jeno.fantasyleague.util.RxUtil;
@@ -13,11 +19,6 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import io.reactivex.functions.Predicate;
-
-import java.time.LocalDateTime;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class TeamWeightsTab extends HorizontalLayout {
 
@@ -51,9 +52,7 @@ public class TeamWeightsTab extends HorizontalLayout {
 		rightSide.setMargin(false);
 		rightSide.setSpacing(true);
 
-		resetToOriginal = new Button("Reset to original", VaadinIcons.REFRESH);
-		resetToOriginal.addStyleName(ValoTheme.BUTTON_PRIMARY);
-		resetToOriginal.addStyleName(ValoTheme.BUTTON_TINY);
+		resetToOriginal = new CustomButton("Reset to original", VaadinIcons.REFRESH);
 		RxUtil.clicks(resetToOriginal).subscribe(ignored -> teamWeights.stream().forEach(teamWeightBean -> {
 			teamWeightBean.reset();
 			weightLeftField.setValue(getWeightToDistributeString());
@@ -66,9 +65,7 @@ public class TeamWeightsTab extends HorizontalLayout {
 		teamWeightsGrid.weightChanged().subscribe(ignored ->
 			weightLeftField.setValue(getWeightToDistributeString()));
 
-		submit = new Button("Update weights", VaadinIcons.USER_CHECK);
-		submit.addStyleName(ValoTheme.BUTTON_PRIMARY);
-		submit.addStyleName(ValoTheme.BUTTON_TINY);
+		submit = new CustomButton("Update weights", VaadinIcons.USER_CHECK);
 		rightSide.addComponent(submit);
 
 		Label infoLabel = new Label("Changes can be made until " + DateUtil.DATE_TIME_FORMATTER.format(league.getLeague_starting_date()));

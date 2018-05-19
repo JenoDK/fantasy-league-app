@@ -35,11 +35,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(rollbackFor = Exception.class)
 public class FifaWorldCup2018Initializer {
 
+	public static final String ID = "Id";
 	public static final String ROUND_NUMBER = "Round Number";
 	public static final String DATE = "Date";
 	public static final String LOCATION = "Location";
 	public static final String HOME_TEAM = "Home Team";
 	public static final String AWAY_TEAM = "Away Team";
+	public static final String NEXT_GAME = "Next Game";
+
 	@Autowired
 	private FifaWorldCup2018SettingRenderer fifaWorldCup2018SettingRenderer;
 	@Autowired
@@ -58,24 +61,64 @@ public class FifaWorldCup2018Initializer {
 				Arrays.stream(Team.values())
 						.map(team -> createContestant(team, groupsMap, newLeague))
 						.collect(Collectors.toList()));
-		List<Game> addedGames = addGroupStageGames(contestantList, newLeague);
+		List<Game> addedGames = addAllGames(contestantList, newLeague);
 		setLeagueStartDate(newLeague, addedGames);
-		addKnockoutStageGames(newLeague);
 		fifaWorldCup2018SettingRenderer.addDefaultLeagueSettings(newLeague);
 	}
 
-	private List<Game> addKnockoutStageGames(League league) {
-		return gameRepository.saveAll(
-				readCsv("csv/fifa-world-cup-2018-knockoutstage.csv").stream()
-						.map(record -> createKnockoutStage(record, league))
-						.collect(Collectors.toList()));
+	private List<Game> addAllGames(List<Contestant> contestants, League league) {
+		Map<String, GameDto> gameDtos = readCsv("csv/fifa-world-cup-2018-games.csv").stream()
+				.map(record -> createGame(record, contestants, league))
+				.collect(Collectors.toMap(dto -> dto.id, Function.identity()));
+		gameDtos.values().stream()
+				.filter(dto -> dto.nextGameId != null && !dto.nextGameId.isEmpty())
+				.forEach(dto -> dto.game.setNext_game(gameDtos.get(dto.nextGameId).game));
+		return gameRepository.saveAll(gameDtos.values().stream()
+				.map(dto -> dto.game)
+				.collect(Collectors.toList()));
 	}
 
-	private List<Game> addGroupStageGames(List<Contestant> contestants, League league) {
-		return gameRepository.saveAll(
-				readCsv("csv/fifa-world-cup-2018-groupstage.csv").stream()
-						.map(record -> createGroupStageGame(record, contestants, league))
-						.collect(Collectors.toList()));
+	private GameDto createGame(CSVRecord record, List<Contestant> contestants, League league) {
+		String id = record.get(ID);
+		String round = record.get(ROUND_NUMBER);
+		String date = record.get(DATE);
+		String location = record.get(LOCATION);
+		String home_team = record.get(HOME_TEAM);
+		String away_team = record.get(AWAY_TEAM);
+		String nextGameId = record.get(NEXT_GAME);
+
+		Game game = new Game();
+
+		setTeams(contestants, home_team, away_team, game);
+		game.setRound(round);
+		game.setStage(getStage(round).name());
+		game.setLocation(location);
+		game.setGame_date_time(LocalDateTime.parse(date, DateUtil.DATE_TIME_FORMATTER));
+		game.setLeague(league);
+
+		return new GameDto(game, id, nextGameId);
+	}
+
+	private void setTeams(List<Contestant> contestants, String home_team, String away_team, Game game) {
+		Optional<Contestant> homeTeam = contestants.stream()
+				.filter(c -> c.getName().equals(home_team))
+				.findFirst();
+
+		Optional<Contestant> awayTeam = contestants.stream()
+				.filter(c -> c.getName().equals(away_team))
+				.findFirst();
+
+		if (homeTeam.isPresent()) {
+			game.setHome_team(homeTeam.get());
+		} else {
+			game.setHome_team_placeholder(home_team);
+		}
+
+		if (awayTeam.isPresent()) {
+			game.setAway_team(awayTeam.get());
+		} else {
+			game.setAway_team_placeholder(away_team);
+		}
 	}
 
 	private List<CSVRecord> readCsv(String path) {
@@ -89,61 +132,17 @@ public class FifaWorldCup2018Initializer {
 		}
 	}
 
-	private Game createKnockoutStage(CSVRecord record, League league) {
-		String round = record.get(ROUND_NUMBER);
-		String date = record.get(DATE);
-		String location = record.get(LOCATION);
-		String home_team = record.get(HOME_TEAM);
-		String away_team = record.get(AWAY_TEAM);
-
-		Game game = new Game();
-		game.setRound(round);
-		game.setStage(getKnockoutStage(round).name());
-		game.setLocation(location);
-		game.setGame_date_time(LocalDateTime.parse(date, DateUtil.DATE_TIME_FORMATTER));
-		game.setHome_team_placeholder(home_team);
-		game.setAway_team_placeholder(away_team);
-		game.setLeague(league);
-		return game;
-	}
-
-	private FifaWorldCup2018Stages getKnockoutStage(String round) {
+	private FifaWorldCup2018Stages getStage(String round) {
 		if ("Round of 16".equals(round)) {
 			return FifaWorldCup2018Stages.EIGHTH_FINALS;
 		} else if ("Quarter Finals".equals(round)) {
 			return FifaWorldCup2018Stages.QUARTER_FINALS;
 		} else if ("Semi Finals".equals(round)) {
 			return FifaWorldCup2018Stages.SEMI_FINALS;
+		} else if ("Finals".equals(round)) {
+			return FifaWorldCup2018Stages.FINALS;
 		}
-		return FifaWorldCup2018Stages.FINALS;
-	}
-
-	private Game createGroupStageGame(CSVRecord record, List<Contestant> contestants, League league) {
-		String round = record.get(ROUND_NUMBER);
-		String date = record.get(DATE);
-		String location = record.get(LOCATION);
-		String home_team = record.get(HOME_TEAM);
-		String away_team = record.get(AWAY_TEAM);
-
-		Contestant homeTeam = contestants.stream()
-				.filter(c -> c.getName().equals(home_team))
-				.findFirst()
-				.orElseThrow(() -> new TemplateException("Wrong team name for " + home_team));
-
-		Contestant awayTeam = contestants.stream()
-				.filter(c -> c.getName().equals(away_team))
-				.findFirst()
-				.orElseThrow(() -> new TemplateException("Wrong team name for " + away_team));
-
-		Game game = new Game();
-		game.setRound(round);
-		game.setStage(FifaWorldCup2018Stages.GROUP_PHASE.name());
-		game.setLocation(location);
-		game.setGame_date_time(LocalDateTime.parse(date, DateUtil.DATE_TIME_FORMATTER));
-		game.setHome_team(homeTeam);
-		game.setAway_team(awayTeam);
-		game.setLeague(league);
-		return game;
+		return FifaWorldCup2018Stages.GROUP_PHASE;
 	}
 
 	private ContestantGroup createContestantGroup(Group group, League league) {
@@ -237,5 +236,23 @@ public class FifaWorldCup2018Initializer {
 		Group(String groupName) {
 			this.groupName = groupName;
 		}
+
+		public String getGroupName() {
+			return groupName;
+		}
+	}
+
+	private class GameDto {
+
+		private Game game;
+		private String id;
+		private String nextGameId;
+
+		public GameDto(Game game, String id, String nextGameId) {
+			this.game = game;
+			this.id = id;
+			this.nextGameId = nextGameId;
+		}
+
 	}
 }

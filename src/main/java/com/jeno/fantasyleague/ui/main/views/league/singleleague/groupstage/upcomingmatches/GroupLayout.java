@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import com.jeno.fantasyleague.model.ContestantGroup;
 import com.jeno.fantasyleague.model.Game;
 import com.jeno.fantasyleague.model.League;
+import com.jeno.fantasyleague.ui.common.field.CustomButton;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.shared.ui.ContentMode;
@@ -19,6 +20,7 @@ import com.vaadin.ui.themes.ValoTheme;
 
 public class GroupLayout extends VerticalLayout {
 
+
 	public GroupLayout(SingleLeagueServiceProvider singleLeagueService, League league, ContestantGroup group) {
 		super();
 		setSpacing(false);
@@ -29,33 +31,52 @@ public class GroupLayout extends VerticalLayout {
 		GamesGrid gamesGrid = new GamesGrid(league, singleLeagueService);
 		gamesGrid.setItems(getGameBeans(singleLeagueService, league, group));
 
-		Button saveScoreUpdatesButton = new Button("Update scores", VaadinIcons.USER_CHECK);
-		saveScoreUpdatesButton.addStyleName(ValoTheme.BUTTON_PRIMARY);
-		saveScoreUpdatesButton.addStyleName(ValoTheme.BUTTON_TINY);
-		saveScoreUpdatesButton.setVisible(false);
+		Button refreshButton = new CustomButton("Refresh", VaadinIcons.REFRESH);
+		refreshButton.addClickListener(ignored -> {
+			gamesGrid.setItems(getGameBeans(singleLeagueService, league, group));
+		});
+
+		HorizontalLayout titleLayout;
+
+		if (singleLeagueService.loggedInUserIsLeagueAdmin(league)) {
+			titleLayout = createAdminTitleLayout(singleLeagueService, league, group, groupLabel, gamesGrid, refreshButton);
+		} else {
+			titleLayout = createUserTitleLayout(groupLabel, refreshButton);
+		}
+
+		addComponent(titleLayout);
+		addComponent(gamesGrid);
+	}
+
+	private HorizontalLayout createUserTitleLayout(Label groupLabel, Button refreshButton) {
+		HorizontalLayout titleLayout = new HorizontalLayout();
+		titleLayout.setWidth(100, Unit.PERCENTAGE);
+		titleLayout.setSpacing(true);
+		titleLayout.addComponent(groupLabel);
+		titleLayout.addComponent(refreshButton);
+		titleLayout.setComponentAlignment(refreshButton, Alignment.MIDDLE_RIGHT);
+		titleLayout.setExpandRatio(groupLabel, 8);
+		titleLayout.setExpandRatio(refreshButton, 2);
+		return titleLayout;
+	}
+
+	public HorizontalLayout createAdminTitleLayout(SingleLeagueServiceProvider singleLeagueService, League league, ContestantGroup group, Label groupLabel, GamesGrid gamesGrid, Button refreshButton) {
+		Button saveScoreUpdatesButton = new CustomButton("Update scores", VaadinIcons.CHECK_CIRCLE_O);
+		saveScoreUpdatesButton.setEnabled(false);
 		saveScoreUpdatesButton.addClickListener(ignored -> {
 			List<Game> changedGames = gamesGrid.getItems().stream()
 					.filter(GameBean::scoreChangedAndIsValid)
 					.map(GameBean::setTeamScoresAndGetModelItem)
 					.collect(Collectors.toList());
-			if (singleLeagueService.loggedInUserIsLeagueAdmin(league)) {
-				singleLeagueService.getGameService().updateGroupStageGameScores(changedGames);
-				saveScoreUpdatesButton.setVisible(false);
-			} else {
-				Notification.show("Your admin rights have been revoked, please refresh the page");
-			}
+			saveGameScores(singleLeagueService, league, saveScoreUpdatesButton, changedGames);
 		});
+
+
 		gamesGrid.scoreChanged()
 				.map(isValid -> gamesGrid.getItems().stream().anyMatch(GameBean::scoreChangedAndIsValid) && isValid)
-				.subscribe(saveScoreUpdatesButton::setVisible);
+				.subscribe(saveScoreUpdatesButton::setEnabled);
 
-		Button refreshButton = new Button("Refresh", VaadinIcons.REFRESH);
-		refreshButton.addStyleName(ValoTheme.BUTTON_PRIMARY);
-		refreshButton.addStyleName(ValoTheme.BUTTON_TINY);
-		refreshButton.addClickListener(ignored -> {
-			gamesGrid.setItems(getGameBeans(singleLeagueService, league, group));
-			saveScoreUpdatesButton.setVisible(false);
-		});
+		refreshButton.addClickListener(ignored -> saveScoreUpdatesButton.setEnabled(false));
 
 		HorizontalLayout titleLayout = new HorizontalLayout();
 		titleLayout.setWidth(100, Unit.PERCENTAGE);
@@ -66,10 +87,18 @@ public class GroupLayout extends VerticalLayout {
 		titleLayout.setComponentAlignment(refreshButton, Alignment.MIDDLE_RIGHT);
 		titleLayout.setComponentAlignment(saveScoreUpdatesButton, Alignment.MIDDLE_RIGHT);
 		titleLayout.setExpandRatio(groupLabel, 8);
-		titleLayout.setExpandRatio(refreshButton, 1);
+		titleLayout.setExpandRatio(refreshButton, 2);
 		titleLayout.setExpandRatio(saveScoreUpdatesButton, 2);
-		addComponent(titleLayout);
-		addComponent(gamesGrid);
+		return titleLayout;
+	}
+
+	public void saveGameScores(SingleLeagueServiceProvider singleLeagueService, League league, Button saveScoreUpdatesButton, List<Game> changedGames) {
+		if (singleLeagueService.loggedInUserIsLeagueAdmin(league)) {
+			singleLeagueService.getGameService().updateGroupStageGameScores(changedGames);
+			saveScoreUpdatesButton.setEnabled(false);
+		} else {
+			Notification.show("Your admin rights have been revoked, please refresh the page");
+		}
 	}
 
 	private List<GameBean> getGameBeans(SingleLeagueServiceProvider singleLeagueService, League league, ContestantGroup group) {

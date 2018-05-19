@@ -1,8 +1,15 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.users;
 
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import com.google.common.collect.Lists;
 import com.jeno.fantasyleague.model.League;
 import com.jeno.fantasyleague.model.User;
+import com.jeno.fantasyleague.resources.Resources;
+import com.jeno.fantasyleague.ui.common.field.CustomButton;
 import com.jeno.fantasyleague.ui.common.grid.CustomGrid;
 import com.jeno.fantasyleague.ui.common.grid.CustomGridBuilder;
 import com.jeno.fantasyleague.ui.main.broadcast.Broadcaster;
@@ -19,11 +26,6 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
-
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class InviteUserLayout extends VerticalLayout {
 
@@ -71,9 +73,7 @@ public class InviteUserLayout extends VerticalLayout {
 		addComponent(userComboBox);
 		addComponent(usersToInviteGrid);
 
-		Button inviteButton = new Button("Invite Users");
-		inviteButton.addStyleName(ValoTheme.BUTTON_PRIMARY);
-		inviteButton.addStyleName(ValoTheme.BUTTON_TINY);
+		Button inviteButton = new CustomButton("Invite Users");
 		inviteButton.addClickListener(ignored -> {
 			if (singleLeagueServiceProvider.loggedInUserIsLeagueAdmin(league)) {
 				usersToInviteDataProvider.getItems().forEach(
@@ -85,7 +85,7 @@ public class InviteUserLayout extends VerticalLayout {
 				usersToInviteGrid.setItems(Lists.newArrayList());
 				dataProvider.refreshAll();
 			} else {
-				Notification.show("Your admin rights have been revoked, please refresh the page");
+				Notification.show(Resources.getMessage("adminRightsRevoked"));
 			}
 		});
 		addComponent(inviteButton);

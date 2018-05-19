@@ -1,18 +1,25 @@
 package com.jeno.fantasyleague.ui.main.views.league.gridlayout;
 
+import java.util.Map;
+
 import com.jeno.fantasyleague.model.League;
 import com.jeno.fantasyleague.model.enums.Template;
+import com.jeno.fantasyleague.resources.Resources;
+import com.jeno.fantasyleague.ui.common.field.CustomButton;
 import com.jeno.fantasyleague.util.RxUtil;
 import com.jeno.fantasyleague.util.VaadinUtil;
 import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.ThemeResource;
-import com.vaadin.ui.*;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.TextField;
+import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import io.reactivex.Observable;
-
-import java.util.Map;
 
 public class LeagueForm extends HorizontalLayout {
 
@@ -62,9 +69,7 @@ public class LeagueForm extends HorizontalLayout {
 		fieldLayout.addComponent(templateCombobox);
 		addComponent(fieldLayout);
 
-		submit = new Button("Submit", VaadinIcons.USER_CHECK);
-		submit.addStyleName(ValoTheme.BUTTON_PRIMARY);
-		submit.addStyleName(ValoTheme.BUTTON_TINY);
+		submit = new CustomButton(Resources.getMessage("create"), VaadinIcons.USER_CHECK);
 		submit.setClickShortcut(ShortcutAction.KeyCode.ENTER);
 		addComponent(submit);
 

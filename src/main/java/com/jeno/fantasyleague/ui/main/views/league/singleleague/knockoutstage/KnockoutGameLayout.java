@@ -3,19 +3,25 @@ package com.jeno.fantasyleague.ui.main.views.league.singleleague.knockoutstage;
 import java.util.Optional;
 
 import com.jeno.fantasyleague.model.Contestant;
+import com.jeno.fantasyleague.model.League;
+import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.jeno.fantasyleague.util.DateUtil;
 import com.jeno.fantasyleague.util.GridUtil;
 import com.vaadin.shared.ui.ContentMode;
-import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
-public class KnockoutGameLayout extends VerticalLayout {
+public abstract class KnockoutGameLayout extends VerticalLayout {
 
-	public KnockoutGameLayout(KnockoutGameBean game) {
+	protected final SingleLeagueServiceProvider singleLeagueServiceprovider;
+	protected final League league;
+
+	public KnockoutGameLayout(SingleLeagueServiceProvider singleLeagueServiceprovider, League league, KnockoutGameBean game) {
 		super();
+		this.singleLeagueServiceprovider = singleLeagueServiceprovider;
+		this.league = league;
 
 		setWidth(230f, Unit.PIXELS);
 		setMargin(true);
@@ -23,8 +29,8 @@ public class KnockoutGameLayout extends VerticalLayout {
 		addStyleName(ValoTheme.LAYOUT_CARD);
 		addStyleName("bracket-game");
 
-		Component homeTeamComp = createTeamComponent(game.getContestant1(), game.getGame().getHome_team_score());
-		Component awayTeamComp = createTeamComponent(game.getContestant2(), game.getGame().getAway_team_score());
+		HorizontalLayout homeTeamComp = createHomeTeamComponent(game);
+		HorizontalLayout awayTeamComp = createAwayTeamComponent(game);
 
 		String date = DateUtil.DATE_TIME_FORMATTER.format(game.getGame().getGame_date_time());
 		Label infoLabel = new Label(game.getGame().getLocation() + " <br/> " + date, ContentMode.HTML);
@@ -35,13 +41,13 @@ public class KnockoutGameLayout extends VerticalLayout {
 		addComponent(infoLabel);
 	}
 
-	private Component createTeamComponent(Contestant contestant, Integer score) {
+	protected abstract HorizontalLayout createHomeTeamComponent(KnockoutGameBean game);
+
+	protected abstract HorizontalLayout createAwayTeamComponent(KnockoutGameBean game);
+
+	protected HorizontalLayout createTeamComponent(Contestant contestant, String teamPlaceHolder) {
 		return Optional.ofNullable(contestant)
 				.map(GridUtil::createTeamLayout)
-				.map(teamLayout -> {
-					teamLayout.addComponent(new Label(score != null ? score.toString() : "-"));
-					return teamLayout;
-				})
-				.orElse(new HorizontalLayout(new Label("TBD")));
+				.orElse(new HorizontalLayout(new Label(teamPlaceHolder)));
 	}
 }

@@ -58,8 +58,12 @@ public class GameBean {
 	public boolean scoreChangedAndIsValid() {
 		boolean scoreChanged = !Objects.equals(homeTeamScore, game.getHome_team_score())
 				|| !Objects.equals(awayTeamScore, game.getAway_team_score());
-		boolean nonNullValues = Objects.nonNull(homeTeamScore) && Objects.nonNull(awayTeamScore);
+		boolean nonNullValues = scoresAreValid();
 		return scoreChanged && nonNullValues;
+	}
+
+	public boolean scoresAreValid() {
+		return Objects.nonNull(homeTeamScore) && Objects.nonNull(awayTeamScore);
 	}
 
 	public Game setTeamScoresAndGetModelItem() {

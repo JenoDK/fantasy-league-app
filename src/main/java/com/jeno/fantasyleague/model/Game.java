@@ -1,10 +1,19 @@
 package com.jeno.fantasyleague.model;
 
-import com.jeno.fantasyleague.model.audit.UserAudit;
-
-import javax.persistence.*;
-import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.validation.constraints.Size;
+
+import com.jeno.fantasyleague.model.audit.UserAudit;
 
 @Entity
 @Table(name = "game")
@@ -39,6 +48,10 @@ public class Game extends UserAudit {
 	@ManyToOne(targetEntity = Contestant.class, fetch = FetchType.LAZY)
 	@JoinColumn(name = "winner_id")
 	private Contestant winner;
+
+	@ManyToOne(targetEntity = Game.class, fetch = FetchType.LAZY)
+	@JoinColumn(name = "next_game_id")
+	private Game next_game;
 
 	@Size(max = 128)
 	private String location;
@@ -118,6 +131,14 @@ public class Game extends UserAudit {
 
 	public void setWinner(Contestant winner) {
 		this.winner = winner;
+	}
+
+	public Game getNext_game() {
+		return next_game;
+	}
+
+	public void setNext_game(Game next_game) {
+		this.next_game = next_game;
 	}
 
 	public String getLocation() {

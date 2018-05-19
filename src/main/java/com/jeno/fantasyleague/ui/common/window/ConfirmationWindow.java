@@ -1,5 +1,6 @@
 package com.jeno.fantasyleague.ui.common.window;
 
+import com.jeno.fantasyleague.ui.common.field.CustomButton;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.Alignment;
@@ -9,7 +10,6 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
-import com.vaadin.ui.themes.ValoTheme;
 import io.reactivex.functions.Consumer;
 
 public class ConfirmationWindow {
@@ -28,9 +28,7 @@ public class ConfirmationWindow {
 		layout.setMargin(true);
 		layout.setHeight(100, Sizeable.Unit.PERCENTAGE);
 
-		Button yesButton = new Button("Yes", VaadinIcons.CHECK_CIRCLE_O);
-		yesButton.addStyleName(ValoTheme.BUTTON_PRIMARY);
-		yesButton.addStyleName(ValoTheme.BUTTON_TINY);
+		Button yesButton = new CustomButton("Yes", VaadinIcons.CHECK_CIRCLE_O);
 		yesButton.addClickListener(ignored -> {
 			try {
 				onYes.accept(null);
@@ -40,9 +38,7 @@ public class ConfirmationWindow {
 			window.close();
 		});
 
-		Button cancelButton = new Button("Cancel");
-		cancelButton.addStyleName(ValoTheme.BUTTON_PRIMARY);
-		cancelButton.addStyleName(ValoTheme.BUTTON_TINY);
+		Button cancelButton = new CustomButton("Cancel");
 		cancelButton.addClickListener(ignored -> {
 			try {
 				onNo.accept(null);

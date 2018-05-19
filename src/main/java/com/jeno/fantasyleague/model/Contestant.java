@@ -37,6 +37,8 @@ public class Contestant extends UserAudit {
 
 	private Integer points_in_group = 0;
 
+	private Integer goals_in_group = 0;
+
 	public Contestant() {
 	}
 
@@ -102,5 +104,13 @@ public class Contestant extends UserAudit {
 
 	public void setPoints_in_group(Integer points_in_group) {
 		this.points_in_group = points_in_group;
+	}
+
+	public Integer getGoals_in_group() {
+		return goals_in_group;
+	}
+
+	public void setGoals_in_group(Integer goals_in_group) {
+		this.goals_in_group = goals_in_group;
 	}
 }

@@ -2,6 +2,7 @@ package com.jeno.fantasyleague.data.service.leaguetemplates.worldcup2018;
 
 import com.jeno.fantasyleague.model.LeagueSetting;
 import com.jeno.fantasyleague.resources.Resources;
+import com.jeno.fantasyleague.ui.common.field.CustomButton;
 import com.jeno.fantasyleague.ui.common.window.ConfirmationWindow;
 import com.vaadin.data.Binder;
 import com.vaadin.data.converter.StringToIntegerConverter;
@@ -26,9 +27,7 @@ public class SettingsGroupLayout extends VerticalLayout {
 	public SettingsGroupLayout(String group, List<IntegerSettingsBean> groupedLeagueSettings) {
 		this.groupedLeagueSettings = groupedLeagueSettings;
 
-		updateSettingsButton = new Button(Resources.getMessage("updateSettings"), VaadinIcons.USER_CHECK);
-		updateSettingsButton.addStyleName(ValoTheme.BUTTON_PRIMARY);
-		updateSettingsButton.addStyleName(ValoTheme.BUTTON_TINY);
+		updateSettingsButton = new CustomButton(Resources.getMessage("updateSettings"), VaadinIcons.USER_CHECK);
 		updateSettingsButton.addClickListener(ignored -> {
 			ConfirmationWindow.showConfirmationPopup(
 					Resources.getMessage("areYouSure"),

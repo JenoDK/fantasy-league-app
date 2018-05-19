@@ -2,6 +2,7 @@ package com.jeno.fantasyleague.ui.main.views.league.singleleague.users;
 
 import com.jeno.fantasyleague.model.League;
 import com.jeno.fantasyleague.model.User;
+import com.jeno.fantasyleague.ui.common.field.CustomButton;
 import com.jeno.fantasyleague.ui.common.grid.CustomGrid;
 import com.jeno.fantasyleague.ui.common.grid.CustomGridBuilder;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
@@ -10,7 +11,6 @@ import com.vaadin.data.provider.DataProvider;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.renderers.ComponentRenderer;
-import com.vaadin.ui.themes.ValoTheme;
 
 public class UserGrid extends CustomGrid<User> {
 
@@ -23,9 +23,7 @@ public class UserGrid extends CustomGrid<User> {
 	}
 
 	private Button promoteButton(User user, SingleLeagueServiceProvider singleLeagueServiceProvider, League league) {
-		Button promoteDemoteButton = new Button();
-		promoteDemoteButton.addStyleName(ValoTheme.BUTTON_PRIMARY);
-		promoteDemoteButton.addStyleName(ValoTheme.BUTTON_TINY);
+		Button promoteDemoteButton = new CustomButton();
 		changePromoteDemoteButton(user, singleLeagueServiceProvider, league, promoteDemoteButton);
 		promoteDemoteButton.addClickListener(ignored -> {
 			if (singleLeagueServiceProvider.userIsLeagueAdmin(league, user)) {

@@ -140,10 +140,10 @@ public class KnockoutStageTab extends VerticalLayout {
 	private void addFinals(List<KnockoutGameBean> finalsGames) {
 		// Just to be sure, it should be impossible to not have 2 games (for now)
 		if (finalsGames.size() == 2) {
-			bracketLayout.addComponent(new KnockoutGameLayout(finalsGames.get(0)), 6, ROW_START + 7);
-			bracketLayout.addComponent(new KnockoutGameLayout(finalsGames.get(1)), 6, ROW_START + 12);
+			bracketLayout.addComponent(new RestFinalsGameLayout(singleLeagueServiceprovider, league, finalsGames.get(0)), 6, ROW_START + 7);
+			bracketLayout.addComponent(new RestFinalsGameLayout(singleLeagueServiceprovider, league, finalsGames.get(1)), 6, ROW_START + 12);
 		} else if (finalsGames.size() == 1) {
-			bracketLayout.addComponent(new KnockoutGameLayout(finalsGames.get(0)), 6, ROW_START + 7);
+			bracketLayout.addComponent(new RestFinalsGameLayout(singleLeagueServiceprovider, league, finalsGames.get(0)), 6, ROW_START + 7);
 		} else {
 			// Meh...
 		}
@@ -155,8 +155,12 @@ public class KnockoutStageTab extends VerticalLayout {
 			int spaceBetweenRows,
 			int counterStart) {
 		int counter = ROW_START + counterStart;
-		for (KnockoutGameBean eighthGame : games) {
-			bracketLayout.addComponent(new KnockoutGameLayout(eighthGame), column, counter);
+		for (KnockoutGameBean game : games) {
+			if (FifaWorldCup2018Stages.EIGHTH_FINALS.toString().equals(game.getGame().getStage())) {
+				bracketLayout.addComponent(new EightFinalsGameLayout(singleLeagueServiceprovider, league, game), column, counter);
+			} else {
+				bracketLayout.addComponent(new RestFinalsGameLayout(singleLeagueServiceprovider, league, game), column, counter);
+			}
 			counter = counter + spaceBetweenRows;
 		}
 	}

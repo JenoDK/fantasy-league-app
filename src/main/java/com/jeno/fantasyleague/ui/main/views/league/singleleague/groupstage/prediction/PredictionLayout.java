@@ -11,6 +11,7 @@ import com.jeno.fantasyleague.model.ContestantGroup;
 import com.jeno.fantasyleague.model.Game;
 import com.jeno.fantasyleague.model.League;
 import com.jeno.fantasyleague.model.Prediction;
+import com.jeno.fantasyleague.ui.common.field.CustomButton;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.shared.ui.ContentMode;
@@ -34,9 +35,7 @@ public class PredictionLayout extends VerticalLayout {
 		PredictionGrid predictionsGrid = new PredictionGrid();
 		predictionsGrid.setItems(getPredictions(singleLeagueService, league, group));
 
-		Button savePredictionsButton = new Button("Update prediction", VaadinIcons.USER_CHECK);
-		savePredictionsButton.addStyleName(ValoTheme.BUTTON_PRIMARY);
-		savePredictionsButton.addStyleName(ValoTheme.BUTTON_TINY);
+		Button savePredictionsButton = new CustomButton("Update prediction", VaadinIcons.USER_CHECK);
 		savePredictionsButton.setVisible(false);
 		savePredictionsButton.addClickListener(ignored -> {
 			List<Prediction> predictions = predictionsGrid.getItems().stream()

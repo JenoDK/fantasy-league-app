@@ -5,9 +5,9 @@ import com.jeno.fantasyleague.model.Game;
 
 public class KnockoutGameBean {
 
-	private final Contestant contestant2;
-	private final Contestant contestant1;
-	private final Game game;
+	private Game game;
+	private Contestant contestant2;
+	private Contestant contestant1;
 
 	public KnockoutGameBean(Game game, Contestant contestant1, Contestant contestant2) {
 		this.game = game;
@@ -19,8 +19,18 @@ public class KnockoutGameBean {
 		return contestant2;
 	}
 
+	public void setContestant2(Contestant contestant2) {
+		this.contestant2 = contestant2;
+		game.setAway_team(contestant2);
+	}
+
 	public Contestant getContestant1() {
 		return contestant1;
+	}
+
+	public void setContestant1(Contestant contestant1) {
+		this.contestant1 = contestant1;
+		game.setHome_team(contestant1);
 	}
 
 	public Game getGame() {

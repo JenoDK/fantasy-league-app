@@ -1,6 +1,10 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.groupstage.standings;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import com.jeno.fantasyleague.model.ContestantGroup;
+import com.jeno.fantasyleague.ui.common.field.CustomButton;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.shared.ui.ContentMode;
@@ -10,9 +14,6 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
-
-import java.util.Set;
-import java.util.stream.Collectors;
 
 public class GroupStandingsLayout extends VerticalLayout {
 
@@ -27,9 +28,7 @@ public class GroupStandingsLayout extends VerticalLayout {
 		GroupStandingsGrid groupStandingsGrid = new GroupStandingsGrid();
 		groupStandingsGrid.setItems(fetchGroupContestants(singleLeagueService, group));
 
-		Button refreshButton = new Button("Refresh", VaadinIcons.REFRESH);
-		refreshButton.addStyleName(ValoTheme.BUTTON_PRIMARY);
-		refreshButton.addStyleName(ValoTheme.BUTTON_TINY);
+		Button refreshButton = new CustomButton("Refresh", VaadinIcons.REFRESH);
 		refreshButton.addClickListener(ignored ->
 			groupStandingsGrid.setItems(fetchGroupContestants(singleLeagueService, group)));
 
