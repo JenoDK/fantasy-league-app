@@ -32,13 +32,14 @@ public class PredictionGrid extends CustomGrid<PredictionBean> {
 
 	private HorizontalLayout getScoreLayout(PredictionBean predictionBean) {
 		if (LocalDateTime.now().isBefore(predictionBean.getGame().getGame_date_time())) {
-			return GridUtil.getTextFieldScoreLayout(
+			return (HorizontalLayout) GridUtil.getTextFieldScoreLayout(
 					predictionBean,
 					PredictionBean::getHomeTeamScore,
 					PredictionBean::setHomeTeamScore,
 					PredictionBean::getAwayTeamScore,
 					PredictionBean::setAwayTeamScore,
-					scoreChanged);
+					scoreChanged,
+					new HorizontalLayout());
 		} else {
 			HorizontalLayout layout = new HorizontalLayout();
 			layout.addComponent(new Label(GridUtil.getScores(predictionBean.getHomeTeamScore(), predictionBean.getAwayTeamScore())));

@@ -5,7 +5,7 @@
 		.v-gridlayout-slot {
 
 			.bracketplaceholder-top-right {
-				border-radius: 0px 50px 0px 0px;
+				border-radius: 0px 10px 0px 0px;
 				border-top: 1px solid black;
 				border-right: 1px solid black;
 			}
@@ -15,7 +15,7 @@
 			}
 
 			.bracketplaceholder-bottom-right {
-				border-radius: 0px 0px 50px 0px;
+				border-radius: 0px 0px 10px 0px;
 				border-bottom: 1px solid black;
 				border-right: 1px solid black;
 			}
@@ -30,6 +30,10 @@
 
 	.contestantSelection .v-icon + [class*="input"] {
     	padding-left: 55px !important;
+    }
+
+    .winner-selection .v-select-option:nth-child(2) {
+    	margin-top: 20px;
     }
 
 }

@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import com.jeno.fantasyleague.model.ContestantGroup;
 import com.jeno.fantasyleague.model.Game;
 import com.jeno.fantasyleague.model.League;
+import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.ui.common.field.CustomButton;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.vaadin.icons.VaadinIcons;
@@ -61,7 +62,7 @@ public class GroupLayout extends VerticalLayout {
 	}
 
 	public HorizontalLayout createAdminTitleLayout(SingleLeagueServiceProvider singleLeagueService, League league, ContestantGroup group, Label groupLabel, GamesGrid gamesGrid, Button refreshButton) {
-		Button saveScoreUpdatesButton = new CustomButton("Update scores", VaadinIcons.CHECK_CIRCLE_O);
+		Button saveScoreUpdatesButton = new CustomButton(Resources.getMessage("updateScores"), VaadinIcons.CHECK_CIRCLE_O);
 		saveScoreUpdatesButton.setEnabled(false);
 		saveScoreUpdatesButton.addClickListener(ignored -> {
 			List<Game> changedGames = gamesGrid.getItems().stream()
@@ -70,7 +71,6 @@ public class GroupLayout extends VerticalLayout {
 					.collect(Collectors.toList());
 			saveGameScores(singleLeagueService, league, saveScoreUpdatesButton, changedGames);
 		});
-
 
 		gamesGrid.scoreChanged()
 				.map(isValid -> gamesGrid.getItems().stream().anyMatch(GameBean::scoreChangedAndIsValid) && isValid)
@@ -97,7 +97,7 @@ public class GroupLayout extends VerticalLayout {
 			singleLeagueService.getGameService().updateGroupStageGameScores(changedGames);
 			saveScoreUpdatesButton.setEnabled(false);
 		} else {
-			Notification.show("Your admin rights have been revoked, please refresh the page");
+			Notification.show(Resources.getMessage("adminRightsRevoked"));
 		}
 	}
 

@@ -12,12 +12,12 @@ public class RestFinalsGameLayout extends KnockoutGameLayout {
 
 	@Override
 	protected HorizontalLayout createHomeTeamComponent(KnockoutGameBean game) {
-		return createTeamComponent(game.getContestant1(), game.getGame().getHome_team_placeholder());
+		return createTeamComponent(game.getHomeTeam(), game.getGame().getHome_team_placeholder());
 	}
 
 	@Override
 	protected HorizontalLayout createAwayTeamComponent(KnockoutGameBean game) {
-		return createTeamComponent(game.getContestant2(), game.getGame().getAway_team_placeholder());
+		return createTeamComponent(game.getAwayTeam(), game.getGame().getAway_team_placeholder());
 	}
 
 }

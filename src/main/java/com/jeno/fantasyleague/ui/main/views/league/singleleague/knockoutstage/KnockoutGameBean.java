@@ -1,39 +1,104 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.knockoutstage;
 
+import java.util.Objects;
+import java.util.Optional;
+
 import com.jeno.fantasyleague.model.Contestant;
 import com.jeno.fantasyleague.model.Game;
 
 public class KnockoutGameBean {
 
 	private Game game;
-	private Contestant contestant2;
-	private Contestant contestant1;
+	private Contestant awayTeam;
+	private Contestant homeTeam;
+	private Integer homeTeamScore;
+	private Integer awayTeamScore;
+	private Optional<Boolean> homeTeamIsWinner = Optional.empty();
 
-	public KnockoutGameBean(Game game, Contestant contestant1, Contestant contestant2) {
+	public KnockoutGameBean(Game game, Contestant homeTeam, Contestant awayTeam) {
 		this.game = game;
-		this.contestant1 = contestant1;
-		this.contestant2 = contestant2;
+		this.homeTeam = homeTeam;
+		this.awayTeam = awayTeam;
+		homeTeamScore = game.getHome_team_score();
+		awayTeamScore = game.getAway_team_score();
+		homeTeamIsWinner = Optional.ofNullable(game.getWinner())
+				.flatMap(winner -> Optional.ofNullable(homeTeam))
+				.map(home -> home.getId().equals(game.getWinner().getId()));
 	}
 
-	public Contestant getContestant2() {
-		return contestant2;
+	public Contestant getAwayTeam() {
+		return awayTeam;
 	}
 
-	public void setContestant2(Contestant contestant2) {
-		this.contestant2 = contestant2;
-		game.setAway_team(contestant2);
+	public void setAwayTeam(Contestant awayTeam) {
+		this.awayTeam = awayTeam;
+		game.setAway_team(awayTeam);
 	}
 
-	public Contestant getContestant1() {
-		return contestant1;
+	public Contestant getHomeTeam() {
+		return homeTeam;
 	}
 
-	public void setContestant1(Contestant contestant1) {
-		this.contestant1 = contestant1;
-		game.setHome_team(contestant1);
+	public void setHomeTeam(Contestant homeTeam) {
+		this.homeTeam = homeTeam;
+		game.setHome_team(homeTeam);
 	}
 
 	public Game getGame() {
 		return game;
+	}
+
+	public Integer getHomeTeamScore() {
+		return homeTeamScore;
+	}
+
+	public void setHomeTeamScore(Integer homeTeamScore) {
+		this.homeTeamScore = homeTeamScore;
+	}
+
+	public Integer getAwayTeamScore() {
+		return awayTeamScore;
+	}
+
+	public void setAwayTeamScore(Integer awayTeamScore) {
+		this.awayTeamScore = awayTeamScore;
+	}
+
+	public boolean scoresAreValid() {
+		if (scoreNotNullAndEqual()) {
+			return homeTeamIsWinner.isPresent();
+		} else {
+			return Objects.nonNull(homeTeamScore) && Objects.nonNull(awayTeamScore);
+		}
+	}
+
+	public Game setScoresAndGetModelItem() {
+		game.setHome_team_score(homeTeamScore);
+		game.setAway_team_score(awayTeamScore);
+		if (homeTeamScore > awayTeamScore) {
+			game.setWinner(game.getHome_team());
+		} else if (homeTeamScore < awayTeamScore) {
+			game.setWinner(game.getAway_team());
+		} else {
+			if (homeTeamIsWinner.isPresent() && homeTeamIsWinner.get()) {
+				game.setWinner(game.getHome_team());
+			} else {
+				game.setWinner(game.getAway_team());
+			}
+		}
+		return game;
+	}
+
+	public boolean scoreNotNullAndEqual() {
+		return Objects.nonNull(homeTeamScore) && Objects.nonNull(awayTeamScore) && homeTeamScore.equals(awayTeamScore);
+	}
+
+	// In case of equal score this boolean decides the winner
+	public void setHomeTeamIsWinner(boolean homeTeamIsWinner) {
+		this.homeTeamIsWinner = Optional.of(homeTeamIsWinner);
+	}
+
+	public Optional<Boolean> getHomeTeamIsWinner() {
+		return homeTeamIsWinner;
 	}
 }

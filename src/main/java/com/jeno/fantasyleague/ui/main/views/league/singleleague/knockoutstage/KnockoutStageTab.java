@@ -1,8 +1,13 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.knockoutstage;
 
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Maps;
 import com.jeno.fantasyleague.data.service.leaguetemplates.worldcup2018.FifaWorldCup2018Stages;
 import com.jeno.fantasyleague.model.Contestant;
 import com.jeno.fantasyleague.model.League;
@@ -40,10 +45,23 @@ public class KnockoutStageTab extends VerticalLayout {
 		addHeader(Resources.getMessage("semiFinals"), 4);
 		addHeader(Resources.getMessage("finals"), 6);
 
+		ArrayListMultimap<Long, KnockoutGameBean> gamesPerNextId = ArrayListMultimap.create();
 		List<KnockoutGameBean> eighthFinalsGames =
 				fetchGamesByStage(league, FifaWorldCup2018Stages.EIGHTH_FINALS.toString());
+		eighthFinalsGames.forEach(gameBean -> gamesPerNextId.put(gameBean.getGame().getNext_game_fk(), gameBean));
+
+		Map<Long, Integer> quarterGameIdIndex = Maps.newHashMap();
+		eighthFinalsGames.clear();
+		int index = 0;
+		for (Map.Entry<Long, Collection<KnockoutGameBean>> entry : gamesPerNextId.asMap().entrySet()) {
+			quarterGameIdIndex.put(entry.getKey(), index);
+			entry.getValue().forEach(eighthFinalsGames::add);
+			index++;
+		}
 		List<KnockoutGameBean> quarterFinalsGames =
-				fetchGamesByStage(league, FifaWorldCup2018Stages.QUARTER_FINALS.toString());
+				fetchGamesByStage(league, FifaWorldCup2018Stages.QUARTER_FINALS.toString()).stream()
+					.sorted(Comparator.comparingInt(gameBean -> quarterGameIdIndex.get(gameBean.getGame().getId())))
+					.collect(Collectors.toList());
 		List<KnockoutGameBean> semiFinalsGames =
 				fetchGamesByStage(league, FifaWorldCup2018Stages.SEMI_FINALS.toString());
 		List<KnockoutGameBean> finalsGames =

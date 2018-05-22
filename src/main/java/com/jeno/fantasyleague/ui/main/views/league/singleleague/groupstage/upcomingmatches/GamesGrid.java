@@ -6,6 +6,7 @@ import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.jeno.fantasyleague.util.GridUtil;
 import com.vaadin.shared.ui.grid.HeightMode;
 import com.vaadin.ui.Grid;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.renderers.ComponentRenderer;
 import com.vaadin.ui.renderers.LocalDateTimeRenderer;
 import io.reactivex.Observable;
@@ -53,7 +54,8 @@ public class GamesGrid extends Grid<GameBean> {
 					GameBean::setHomeTeamScore,
 					GameBean::getAway_team_score,
 					GameBean::setAwayTeamScore,
-					scoreChanged), new ComponentRenderer())
+					scoreChanged,
+					new HorizontalLayout()), new ComponentRenderer())
 				.setCaption("Score")
 				.setStyleGenerator(item -> "v-align-center");
 		} else {

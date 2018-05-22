@@ -10,6 +10,7 @@ import com.vaadin.data.ValueProvider;
 import com.vaadin.server.Setter;
 import com.vaadin.server.Sizeable;
 import com.vaadin.server.ThemeResource;
+import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
@@ -37,17 +38,31 @@ public class GridUtil {
 		return (teamAScore != null ? teamAScore : " ") + " - " + (teamBScore != null ? teamBScore : " ");
 	}
 
-	public static  <T> HorizontalLayout getTextFieldScoreLayout(
+	public static  <T> AbstractOrderedLayout getTextFieldScoreLayout(
 			T t,
 			ValueProvider<T, Integer> homeTeamGetter,
 			Setter<T, Integer> homeTeamSetter,
 			ValueProvider<T, Integer> awayTeamGetter,
 			Setter<T, Integer> awayTeamSetter,
-			BehaviorSubject<Boolean> scoreChanged) {
-		HorizontalLayout layout = new HorizontalLayout();
+			BehaviorSubject<Boolean> scoreChanged,
+			AbstractOrderedLayout layout) {
+		return getTextFieldScoreLayout(t, homeTeamGetter, homeTeamSetter, awayTeamGetter, awayTeamSetter, scoreChanged, layout, true);
+	}
+
+	public static  <T> AbstractOrderedLayout getTextFieldScoreLayout(
+			T t,
+			ValueProvider<T, Integer> homeTeamGetter,
+			Setter<T, Integer> homeTeamSetter,
+			ValueProvider<T, Integer> awayTeamGetter,
+			Setter<T, Integer> awayTeamSetter,
+			BehaviorSubject<Boolean> scoreChanged,
+			AbstractOrderedLayout layout,
+			boolean addLabelBetween) {
 		Binder<T> binder = new Binder<>();
 		layout.addComponent(createScoreField(t, binder, homeTeamGetter, homeTeamSetter, scoreChanged));
-		layout.addComponent(new Label("-"));
+		if (addLabelBetween) {
+			layout.addComponent(new Label("-"));
+		}
 		layout.addComponent(createScoreField(t, binder, awayTeamGetter, awayTeamSetter, scoreChanged));
 		binder.addValueChangeListener(ignored -> {
 			BinderValidationStatus<T> status = binder.validate();

@@ -49,9 +49,15 @@ public class Game extends UserAudit {
 	@JoinColumn(name = "winner_id")
 	private Contestant winner;
 
+	@Column(name = "winner_id", insertable = false, updatable = false)
+	private Long winner_fk;
+
 	@ManyToOne(targetEntity = Game.class, fetch = FetchType.LAZY)
 	@JoinColumn(name = "next_game_id")
 	private Game next_game;
+
+	@Column(name = "next_game_id", insertable = false, updatable = false)
+	private Long next_game_fk;
 
 	@Size(max = 128)
 	private String location;
@@ -133,12 +139,20 @@ public class Game extends UserAudit {
 		this.winner = winner;
 	}
 
+	public Long getWinner_fk() {
+		return winner_fk;
+	}
+
 	public Game getNext_game() {
 		return next_game;
 	}
 
 	public void setNext_game(Game next_game) {
 		this.next_game = next_game;
+	}
+
+	public Long getNext_game_fk() {
+		return next_game_fk;
 	}
 
 	public String getLocation() {

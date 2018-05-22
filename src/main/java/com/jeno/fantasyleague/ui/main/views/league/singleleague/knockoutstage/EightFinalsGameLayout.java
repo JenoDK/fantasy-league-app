@@ -28,16 +28,16 @@ public class EightFinalsGameLayout extends KnockoutGameLayout {
 		return createTeamComponent(
 				game,
 				game.getGame().getHome_team_placeholder(),
-				game.getContestant1(),
-				contestant -> game.setContestant1(contestant));
+				game.getHomeTeam(),
+				contestant -> game.setHomeTeam(contestant));
 	}
 
 	@Override
 	protected HorizontalLayout createAwayTeamComponent(KnockoutGameBean game) {
 		return createTeamComponent(
 				game, game.getGame().getAway_team_placeholder(),
-				game.getContestant2(),
-				contestant -> game.setContestant2(contestant));
+				game.getAwayTeam(),
+				contestant -> game.setAwayTeam(contestant));
 	}
 
 	private HorizontalLayout createTeamComponent(
@@ -63,7 +63,7 @@ public class EightFinalsGameLayout extends KnockoutGameLayout {
 		contestantCombobox.setTextInputAllowed(false);
 		contestantCombobox.addFocusListener(ignored -> dataProvider.refreshAll());
 		contestantCombobox.setDataProvider(dataProvider);
-		contestantCombobox.setItemCaptionGenerator(contestant -> contestant.getName());
+		contestantCombobox.setItemCaptionGenerator(Contestant::getName);
 		contestantCombobox.setItemIconGenerator(contestant -> new ThemeResource(contestant.getIcon_path()));
 		contestantCombobox.addValueChangeListener(event -> {
 			if (singleLeagueServiceprovider.loggedInUserIsLeagueAdmin(league)) {
