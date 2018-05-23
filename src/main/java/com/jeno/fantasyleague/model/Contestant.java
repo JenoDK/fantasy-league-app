@@ -1,10 +1,19 @@
 package com.jeno.fantasyleague.model;
 
-import com.jeno.fantasyleague.model.audit.UserAudit;
-
-import javax.persistence.*;
+import javax.persistence.Basic;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+
+import com.jeno.fantasyleague.model.audit.UserAudit;
 
 @Entity
 @Table(name = "contestant")
@@ -34,10 +43,6 @@ public class Contestant extends UserAudit {
 	private ContestantGroup contestant_group;
 
 	private Integer power_index;
-
-	private Integer points_in_group = 0;
-
-	private Integer goals_in_group = 0;
 
 	public Contestant() {
 	}
@@ -98,19 +103,4 @@ public class Contestant extends UserAudit {
 		this.power_index = power_index;
 	}
 
-	public Integer getPoints_in_group() {
-		return points_in_group;
-	}
-
-	public void setPoints_in_group(Integer points_in_group) {
-		this.points_in_group = points_in_group;
-	}
-
-	public Integer getGoals_in_group() {
-		return goals_in_group;
-	}
-
-	public void setGoals_in_group(Integer goals_in_group) {
-		this.goals_in_group = goals_in_group;
-	}
 }

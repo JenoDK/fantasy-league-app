@@ -4,15 +4,20 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Maps;
 import com.jeno.fantasyleague.data.service.leaguetemplates.worldcup2018.FifaWorldCup2018Stages;
 import com.jeno.fantasyleague.model.Contestant;
+import com.jeno.fantasyleague.model.Game;
 import com.jeno.fantasyleague.model.League;
+import com.jeno.fantasyleague.model.Prediction;
 import com.jeno.fantasyleague.resources.Resources;
+import com.jeno.fantasyleague.ui.common.field.CustomButton;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
@@ -40,6 +45,24 @@ public class KnockoutStageTab extends VerticalLayout {
 		bracketLayout = new GridLayout(7, ROW_START + 16);
 		bracketLayout.addStyleName("bracket-gridlayout");
 
+		fillInBracket(league);
+
+
+		Panel gridLayoutPanel = new Panel();
+		gridLayoutPanel.setContent(bracketLayout);
+		gridLayoutPanel.addStyleName("no-visual-panel");
+
+		CustomButton refreshButton = new CustomButton(Resources.getMessage("refresh"), VaadinIcons.REFRESH);
+		refreshButton.addClickListener(ignored -> {
+			bracketLayout.removeAllComponents();
+			fillInBracket(league);
+		});
+
+		addComponent(refreshButton);
+		addComponent(gridLayoutPanel);
+	}
+
+	public void fillInBracket(League league) {
 		addHeader(Resources.getMessage("roundOf16"), 0);
 		addHeader(Resources.getMessage("quarterFinals"), 2);
 		addHeader(Resources.getMessage("semiFinals"), 4);
@@ -75,12 +98,6 @@ public class KnockoutStageTab extends VerticalLayout {
 		addSemiFinalsLines();
 
 		addFinals(finalsGames);
-
-
-		Panel gridLayoutPanel = new Panel();
-		gridLayoutPanel.setContent(bracketLayout);
-		gridLayoutPanel.addStyleName("no-visual-panel");
-		addComponent(gridLayoutPanel);
 	}
 
 	private void addHeader(String title, int column) {
@@ -144,13 +161,16 @@ public class KnockoutStageTab extends VerticalLayout {
 	}
 
 	public List<KnockoutGameBean> fetchGamesByStage(League league, String stage) {
-		return singleLeagueServiceprovider.getGameRepository().findByLeagueAndStage(league,stage).stream()
+		List<Game> games = singleLeagueServiceprovider.getGameRepository().findByLeagueAndStage(league, stage);
+		Map<Long, Prediction> predictionToGameIdMap = singleLeagueServiceprovider.getLoggedInUserPredictions(games).stream()
+				.collect(Collectors.toMap(prediction -> prediction.getGame_fk(), Function.identity()));
+		return games.stream()
 				.map(game -> {
-					Contestant contestant1 = game.getHome_team_fk() != null ?
+					Contestant homeTeam = game.getHome_team_fk() != null ?
 							singleLeagueServiceprovider.getContestantRepository().findById(game.getHome_team_fk()).get() : null;
-					Contestant contestant2 = game.getAway_team_fk() != null ?
+					Contestant awayTeam = game.getAway_team_fk() != null ?
 							singleLeagueServiceprovider.getContestantRepository().findById(game.getAway_team_fk()).get() : null;
-					return new KnockoutGameBean(game, contestant1, contestant2);
+					return new KnockoutGameBean(game, homeTeam, awayTeam, predictionToGameIdMap.get(game.getId()));
 				})
 				.collect(Collectors.toList());
 	}

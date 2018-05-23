@@ -6,6 +6,7 @@ import java.util.stream.Stream;
 
 import com.jeno.fantasyleague.data.service.leaguetemplates.worldcup2018.FifaWorldCup2018Initializer;
 import com.jeno.fantasyleague.model.Contestant;
+import com.jeno.fantasyleague.model.Game;
 import com.jeno.fantasyleague.model.League;
 import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
@@ -68,8 +69,11 @@ public class EightFinalsGameLayout extends KnockoutGameLayout {
 		contestantCombobox.addValueChangeListener(event -> {
 			if (singleLeagueServiceprovider.loggedInUserIsLeagueAdmin(league)) {
 				contestantConsumer.accept(event.getValue());
-				singleLeagueServiceprovider.getGameRepository().saveAndFlush(game.getGame());
+				Game updatedGame = singleLeagueServiceprovider.getGameRepository().saveAndFlush(game.getGame());
 				dataProvider.refreshAll();
+				if (updatedGame.getHome_team() != null && updatedGame.getAway_team() != null && scoreWrapper != null) {
+					scoreWrapper.setEnabled(true);
+				}
 			} else {
 				Notification.show(Resources.getMessage("adminRightsRevoked"));
 			}

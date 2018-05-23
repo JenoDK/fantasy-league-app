@@ -4,17 +4,25 @@ import com.jeno.fantasyleague.model.Contestant;
 
 public class GroupTeamBean {
 
-	private Contestant contestant;
+	private final Contestant contestant;
+	private final Integer goalsInGroup;
+	private final Integer pointsInGroup;
 
-	public GroupTeamBean(Contestant contestant) {
+	public GroupTeamBean(Contestant contestant, Integer pointsInGroup, Integer goalsInGroup) {
 		this.contestant = contestant;
+		this.pointsInGroup = pointsInGroup;
+		this.goalsInGroup = goalsInGroup;
 	}
 
 	public Contestant getContestant() {
 		return contestant;
 	}
 
-	public Integer getPoints_in_group() {
-		return contestant.getPoints_in_group();
+	public Integer getGoalsInGroup() {
+		return goalsInGroup;
+	}
+
+	public Integer getPointsInGroup() {
+		return pointsInGroup;
 	}
 }

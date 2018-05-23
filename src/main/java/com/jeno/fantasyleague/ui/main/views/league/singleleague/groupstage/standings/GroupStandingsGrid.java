@@ -20,11 +20,11 @@ public class GroupStandingsGrid extends CustomGrid<GroupTeamBean> {
 				.setCaption(Resources.getMessage("team"))
 				.setId("team");
 		Column<GroupTeamBean, Integer> pointsColumn =
-			addColumn(teamBean -> teamBean.getPoints_in_group())
+			addColumn(teamBean -> teamBean.getPointsInGroup())
 				.setCaption(Resources.getMessage("points"))
 				.setId("points");
 		Column<GroupTeamBean, Integer> totalGoalsColumn =
-			addColumn(teamBean -> teamBean.getContestant().getGoals_in_group())
+			addColumn(teamBean -> teamBean.getGoalsInGroup())
 				.setCaption(Resources.getMessage("totalGoals"))
 				.setId("goals");
 		setSortOrder(new GridSortOrderBuilder().thenDesc(pointsColumn));

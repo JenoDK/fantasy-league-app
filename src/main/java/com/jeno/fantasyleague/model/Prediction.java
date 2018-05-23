@@ -2,6 +2,7 @@ package com.jeno.fantasyleague.model;
 
 import com.jeno.fantasyleague.model.audit.UserAudit;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -22,6 +23,9 @@ public class Prediction extends UserAudit {
 	@ManyToOne(targetEntity = Game.class, fetch = FetchType.LAZY)
 	@JoinColumn(nullable = false, name = "game_id")
 	private Game game;
+
+	@Column(name = "game_id", insertable = false, updatable = false)
+	private Long game_fk;
 
 	@ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
 	@JoinColumn(nullable = false, name = "user_id")
@@ -53,6 +57,10 @@ public class Prediction extends UserAudit {
 
 	public void setGame(Game game) {
 		this.game = game;
+	}
+
+	public Long getGame_fk() {
+		return game_fk;
 	}
 
 	public User getUser() {

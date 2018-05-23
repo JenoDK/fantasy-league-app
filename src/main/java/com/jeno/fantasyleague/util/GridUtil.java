@@ -44,7 +44,7 @@ public class GridUtil {
 			Setter<T, Integer> homeTeamSetter,
 			ValueProvider<T, Integer> awayTeamGetter,
 			Setter<T, Integer> awayTeamSetter,
-			BehaviorSubject<Boolean> scoreChanged,
+			BehaviorSubject<T> scoreChanged,
 			AbstractOrderedLayout layout) {
 		return getTextFieldScoreLayout(t, homeTeamGetter, homeTeamSetter, awayTeamGetter, awayTeamSetter, scoreChanged, layout, true);
 	}
@@ -55,28 +55,26 @@ public class GridUtil {
 			Setter<T, Integer> homeTeamSetter,
 			ValueProvider<T, Integer> awayTeamGetter,
 			Setter<T, Integer> awayTeamSetter,
-			BehaviorSubject<Boolean> scoreChanged,
+			BehaviorSubject<T> scoreChanged,
 			AbstractOrderedLayout layout,
 			boolean addLabelBetween) {
 		Binder<T> binder = new Binder<>();
-		layout.addComponent(createScoreField(t, binder, homeTeamGetter, homeTeamSetter, scoreChanged));
+		layout.addComponent(createScoreField(t, binder, homeTeamGetter, homeTeamSetter));
 		if (addLabelBetween) {
 			layout.addComponent(new Label("-"));
 		}
-		layout.addComponent(createScoreField(t, binder, awayTeamGetter, awayTeamSetter, scoreChanged));
+		layout.addComponent(createScoreField(t, binder, awayTeamGetter, awayTeamSetter));
 		binder.addValueChangeListener(ignored -> {
 			BinderValidationStatus<T> status = binder.validate();
 			if (status.isOk()) {
-				scoreChanged.onNext(true);
-			} else {
-				scoreChanged.onNext(false);
+				scoreChanged.onNext(t);
 			}
 		});
 		binder.setBean(t);
 		return layout;
 	}
 
-	private static <T> TextField createScoreField(T t, Binder<T> binder, ValueProvider<T, Integer> getter, Setter<T, Integer> setter, BehaviorSubject<Boolean> scoreChanged) {
+	private static <T> TextField createScoreField(T t, Binder<T> binder, ValueProvider<T, Integer> getter, Setter<T, Integer> setter) {
 		TextField field = new TextField();
 		field.setWidth(30, Sizeable.Unit.PIXELS);
 		field.addStyleName("v-slot-ignore-error-indicator");

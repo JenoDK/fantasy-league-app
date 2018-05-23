@@ -113,8 +113,6 @@
             <column name="league_id" type="BIGINT"/>
             <column name="contestantgroup_id" type="BIGINT"/>
             <column name="power_index" type="TINYINT"/>
-            <column name="points_in_group" type="TINYINT"/>
-            <column name="goals_in_group" type="TINYINT"/>
             <column name="created_at" type="datetime"/>
             <column name="updated_at" type="datetime"/>
             <column name="created_by" type="BIGINT"/>

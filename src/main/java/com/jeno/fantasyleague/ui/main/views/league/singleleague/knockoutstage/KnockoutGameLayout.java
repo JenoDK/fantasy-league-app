@@ -1,16 +1,15 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.knockoutstage;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import com.jeno.fantasyleague.model.Contestant;
 import com.jeno.fantasyleague.model.Game;
 import com.jeno.fantasyleague.model.League;
 import com.jeno.fantasyleague.resources.Resources;
-import com.jeno.fantasyleague.ui.common.field.CustomButton;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.jeno.fantasyleague.util.DateUtil;
 import com.jeno.fantasyleague.util.GridUtil;
-import com.vaadin.icons.VaadinIcons;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.HorizontalLayout;
@@ -23,10 +22,12 @@ import io.reactivex.subjects.BehaviorSubject;
 
 public abstract class KnockoutGameLayout extends VerticalLayout {
 
-	private final BehaviorSubject<Boolean> scoreChanged = BehaviorSubject.create();
+	private final BehaviorSubject<KnockoutGameBean> scoreChanged = BehaviorSubject.create();
 
 	protected final SingleLeagueServiceProvider singleLeagueServiceprovider;
 	protected final League league;
+
+	protected VerticalLayout scoreWrapper;
 
 	public KnockoutGameLayout(SingleLeagueServiceProvider singleLeagueServiceprovider, League league, KnockoutGameBean game) {
 		super();
@@ -46,7 +47,7 @@ public abstract class KnockoutGameLayout extends VerticalLayout {
 		teamWrapper.addComponent(createHomeTeamComponent(game));
 		teamWrapper.addComponent(createAwayTeamComponent(game));
 
-		VerticalLayout scoreWrapper = new VerticalLayout();
+		scoreWrapper = new VerticalLayout();
 		if (singleLeagueServiceprovider.loggedInUserIsLeagueAdmin(league)) {
 			GridUtil.getTextFieldScoreLayout(
 					game,
@@ -67,6 +68,10 @@ public abstract class KnockoutGameLayout extends VerticalLayout {
 		}
 		scoreWrapper.setMargin(false);
 
+		if (Objects.isNull(game.getGame().getHome_team()) || Objects.isNull(game.getGame().getAway_team())) {
+			scoreWrapper.setEnabled(false);
+		}
+
 		VerticalLayout winnerWrapper = new VerticalLayout();
 		winnerWrapper.setMargin(false);
 		winnerWrapper.setVisible(game.scoreNotNullAndEqual());
@@ -79,12 +84,10 @@ public abstract class KnockoutGameLayout extends VerticalLayout {
 		}
 		winnerSelection.addValueChangeListener(event -> {
 			game.setHomeTeamIsWinner("homeTeam".equals(event.getValue()));
-			scoreChanged.onNext(true);
+			updateKnockoutGame(singleLeagueServiceprovider, league, game.setScoresAndGetModelItem());
 		});
 		winnerSelection.setEnabled(singleLeagueServiceprovider.loggedInUserIsLeagueAdmin(league));
 		winnerWrapper.addComponent(winnerSelection);
-
-		scoreChanged.subscribe(valid -> winnerWrapper.setVisible(valid && game.scoreNotNullAndEqual()));
 
 		wrapper.addComponent(teamWrapper);
 		wrapper.addComponent(scoreWrapper);
@@ -98,35 +101,20 @@ public abstract class KnockoutGameLayout extends VerticalLayout {
 		addComponent(wrapper);
 
 		if (singleLeagueServiceprovider.loggedInUserIsLeagueAdmin(league)) {
-			HorizontalLayout bottomWrapper = new HorizontalLayout();
-			bottomWrapper.setMargin(false);
-
-			CustomButton updateScores = new CustomButton(Resources.getMessage("updateScores"), VaadinIcons.CHECK_CIRCLE_O);
-			updateScores.setEnabled(false);
-			updateScores.addClickListener(ignored -> {
-				Game gameModelItem = game.setScoresAndGetModelItem();
-				if (singleLeagueServiceprovider.loggedInUserIsLeagueAdmin(league)) {
-					singleLeagueServiceprovider.getGameService().updateKnockoutStageScore(gameModelItem);
-					updateScores.setEnabled(false);
-				} else {
-					Notification.show(Resources.getMessage("adminRightsRevoked"));
-				}
-			});
-
 			scoreChanged
-					.map(isValid -> isValid && game.scoresAreValid())
-					.subscribe(updateScores::setEnabled);
-
-			bottomWrapper.addComponent(infoLabel);
-			bottomWrapper.addComponent(updateScores);
-			bottomWrapper.setComponentAlignment(infoLabel, Alignment.MIDDLE_LEFT);
-			bottomWrapper.setComponentAlignment(updateScores, Alignment.MIDDLE_RIGHT);
-
-			addComponent(bottomWrapper);
-		} else {
-			addComponent(infoLabel);
+					.map(KnockoutGameBean::setScoresAndGetModelItem)
+					.subscribe(gameBean -> updateKnockoutGame(singleLeagueServiceprovider, league, gameBean));
+			scoreChanged.subscribe(gameBean -> winnerWrapper.setVisible(gameBean.scoreNotNullAndEqual()));
 		}
+		addComponent(infoLabel);
+	}
 
+	public void updateKnockoutGame(SingleLeagueServiceProvider singleLeagueServiceprovider, League league, Game gameBean) {
+		if (singleLeagueServiceprovider.loggedInUserIsLeagueAdmin(league)) {
+			singleLeagueServiceprovider.getGameService().updateKnockoutStageScore(gameBean);
+		} else {
+			Notification.show(Resources.getMessage("adminRightsRevoked"));
+		}
 	}
 
 	protected abstract HorizontalLayout createHomeTeamComponent(KnockoutGameBean game);

@@ -7,7 +7,6 @@ import java.util.stream.Stream;
 
 import com.jeno.fantasyleague.data.repository.ContestantRepository;
 import com.jeno.fantasyleague.data.repository.GameRepository;
-import com.jeno.fantasyleague.model.Contestant;
 import com.jeno.fantasyleague.model.Game;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -24,7 +23,7 @@ public class GameServiceImpl implements GameService {
 
 	@Override
 	public void updateGroupStageGameScores(List<Game> games) {
-		games.stream().forEach(this::distributePointsAndUpdateGame);
+		games.stream().forEach(this::setWinner);
 		gameRepository.saveAll(games);
 		contestantRepository.saveAll(games.stream()
 				.flatMap(game -> Stream.of(game.getHome_team(), game.getAway_team()))
@@ -32,8 +31,8 @@ public class GameServiceImpl implements GameService {
 	}
 
 	@Override
-	public void updateKnockoutStageScore(Game game) {
-		gameRepository.saveAndFlush(game);
+	public Game updateKnockoutStageScore(Game game) {
+		Game updated = gameRepository.saveAndFlush(game);
 		Optional<Game> nextGameOptional = gameRepository.findById(game.getNext_game_fk());
 		if (game.getWinner() != null && nextGameOptional.isPresent()) {
 			Game nextGame = nextGameOptional.get();
@@ -57,27 +56,16 @@ public class GameServiceImpl implements GameService {
 			}
 			gameRepository.saveAndFlush(nextGame);
 		}
+		return updated;
 	}
 
-	private void distributePointsAndUpdateGame(Game game) {
-		Contestant homeTeam = game.getHome_team();
+	private void setWinner(Game game) {
 		Integer homeScore = game.getHome_team_score();
-		Contestant awayTeam = game.getAway_team();
 		Integer awayScore = game.getAway_team_score();
-		homeTeam.setGoals_in_group(homeTeam.getGoals_in_group() + homeScore);
-		awayTeam.setGoals_in_group(awayTeam.getGoals_in_group() + awayScore);
-		// Home won
 		if (homeScore > awayScore) {
-			homeTeam.setPoints_in_group(homeTeam.getPoints_in_group() + 3);
-			game.setWinner(homeTeam);
-		// Draw
-		} else if (homeScore == awayScore) {
-			homeTeam.setPoints_in_group(homeTeam.getPoints_in_group() + 1);
-			awayTeam.setPoints_in_group(homeTeam.getPoints_in_group() + 1);
-		// Away won
-		} else {
-			awayTeam.setPoints_in_group(homeTeam.getPoints_in_group() + 3);
-			game.setWinner(awayTeam);
+			game.setWinner(game.getHome_team());
+		} else if (homeScore < awayScore) {
+			game.setWinner(game.getAway_team());
 		}
 	}
 }
