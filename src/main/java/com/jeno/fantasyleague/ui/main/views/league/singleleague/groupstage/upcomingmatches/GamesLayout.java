@@ -42,7 +42,13 @@ public class GamesLayout extends VerticalLayout {
 		gamesGrid.setItems(getGameBeans(singleLeagueService, league, group));
 
 		gamesGrid.predictionChanged()
-				.filter(gameBean -> LocalDateTime.now().isBefore(gameBean.getGame_date_time()))
+				.filter(gameBean -> {
+					boolean isInTime = LocalDateTime.now().isBefore(gameBean.getGame_date_time());
+					if (!isInTime) {
+						Notification.show(Resources.getMessage("toLateToUpdatePrediction"), Notification.Type.WARNING_MESSAGE);
+					}
+					return isInTime;
+				})
 				.map(GameBean::setPredictionsAndGetModelItem)
 				.subscribe(prediction -> singleLeagueService.getPredictionRepository().saveAndFlush(prediction));
 
@@ -59,7 +65,7 @@ public class GamesLayout extends VerticalLayout {
 		if (singleLeagueService.loggedInUserIsLeagueAdmin(league)) {
 			singleLeagueService.getGameService().updateGroupStageGameScores(changedGames);
 		} else {
-			Notification.show(Resources.getMessage("adminRightsRevoked"));
+			Notification.show(Resources.getMessage("adminRightsRevoked"), Notification.Type.WARNING_MESSAGE);
 		}
 	}
 

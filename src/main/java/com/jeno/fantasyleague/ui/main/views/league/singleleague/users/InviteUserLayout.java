@@ -85,7 +85,7 @@ public class InviteUserLayout extends VerticalLayout {
 				usersToInviteGrid.setItems(Lists.newArrayList());
 				dataProvider.refreshAll();
 			} else {
-				Notification.show(Resources.getMessage("adminRightsRevoked"));
+				Notification.show(Resources.getMessage("adminRightsRevoked"), Notification.Type.WARNING_MESSAGE);
 			}
 		});
 		addComponent(inviteButton);

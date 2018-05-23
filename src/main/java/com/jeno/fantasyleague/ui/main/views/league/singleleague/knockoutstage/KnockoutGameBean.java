@@ -1,29 +1,45 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.knockoutstage;
 
-import java.util.Objects;
 import java.util.Optional;
 
 import com.jeno.fantasyleague.model.Contestant;
 import com.jeno.fantasyleague.model.Game;
+import com.jeno.fantasyleague.model.Prediction;
 
 public class KnockoutGameBean {
 
 	private Game game;
+	private Prediction prediction;
+
 	private Contestant awayTeam;
 	private Contestant homeTeam;
+
 	private Integer homeTeamScore;
 	private Integer awayTeamScore;
 	private Optional<Boolean> homeTeamIsWinner = Optional.empty();
 
-	public KnockoutGameBean(Game game, Contestant homeTeam, Contestant awayTeam) {
+	private Integer homeTeamPrediction;
+	private Integer awayTeamPrediction;
+	private Optional<Boolean> homeTeamPredictionIsWinner = Optional.empty();
+
+	public KnockoutGameBean(Game game, Contestant homeTeam, Contestant awayTeam, Prediction prediction) {
 		this.game = game;
+		this.prediction = prediction;
+
 		this.homeTeam = homeTeam;
 		this.awayTeam = awayTeam;
+
 		homeTeamScore = game.getHome_team_score();
 		awayTeamScore = game.getAway_team_score();
 		homeTeamIsWinner = Optional.ofNullable(game.getWinner())
 				.flatMap(winner -> Optional.ofNullable(homeTeam))
 				.map(home -> home.getId().equals(game.getWinner().getId()));
+
+		homeTeamPrediction = prediction.getHome_team_score();
+		awayTeamPrediction = prediction.getAway_team_score();
+		homeTeamPredictionIsWinner = Optional.ofNullable(prediction.getWinner())
+				.flatMap(winner -> Optional.ofNullable(homeTeam))
+				.map(home -> home.getId().equals(prediction.getWinner().getId()));
 	}
 
 	public Contestant getAwayTeam() {
@@ -64,15 +80,41 @@ public class KnockoutGameBean {
 		this.awayTeamScore = awayTeamScore;
 	}
 
-	public boolean scoresAreValid() {
-		if (scoreNotNullAndEqual()) {
-			return homeTeamIsWinner.isPresent();
-		} else {
-			return Objects.nonNull(homeTeamScore) && Objects.nonNull(awayTeamScore);
-		}
+	// In case of equal score this boolean decides the winner
+	public void setHomeTeamIsWinner(boolean homeTeamIsWinner) {
+		this.homeTeamIsWinner = Optional.of(homeTeamIsWinner);
 	}
 
-	public Game setScoresAndGetModelItem() {
+	public Optional<Boolean> getHomeTeamIsWinner() {
+		return homeTeamIsWinner;
+	}
+
+	public Integer getHomeTeamPrediction() {
+		return homeTeamPrediction;
+	}
+
+	public void setHomeTeamPrediction(Integer homeTeamPrediction) {
+		this.homeTeamPrediction = homeTeamPrediction;
+	}
+
+	public Integer getAwayTeamPrediction() {
+		return awayTeamPrediction;
+	}
+
+	public void setAwayTeamPrediction(Integer awayTeamPrediction) {
+		this.awayTeamPrediction = awayTeamPrediction;
+	}
+
+	// In case of equal score this boolean decides the winner
+	public void setHomeTeamPredictionIsWinner(boolean homeTeamPredictionIsWinner) {
+		this.homeTeamPredictionIsWinner = Optional.of(homeTeamPredictionIsWinner);
+	}
+
+	public Optional<Boolean> getHomeTeamPredictionIsWinner() {
+		return homeTeamPredictionIsWinner;
+	}
+
+	public Game setScoresAndGetGameModelItem() {
 		game.setHome_team_score(homeTeamScore);
 		game.setAway_team_score(awayTeamScore);
 		if (homeTeamScore > awayTeamScore) {
@@ -89,16 +131,20 @@ public class KnockoutGameBean {
 		return game;
 	}
 
-	public boolean scoreNotNullAndEqual() {
-		return Objects.nonNull(homeTeamScore) && Objects.nonNull(awayTeamScore) && homeTeamScore.equals(awayTeamScore);
-	}
-
-	// In case of equal score this boolean decides the winner
-	public void setHomeTeamIsWinner(boolean homeTeamIsWinner) {
-		this.homeTeamIsWinner = Optional.of(homeTeamIsWinner);
-	}
-
-	public Optional<Boolean> getHomeTeamIsWinner() {
-		return homeTeamIsWinner;
+	public Prediction setScoresAndGetPredictionModelItem() {
+		prediction.setHome_team_score(homeTeamPrediction);
+		prediction.setAway_team_score(awayTeamPrediction);
+		if (homeTeamPrediction > awayTeamPrediction) {
+			prediction.setWinner(homeTeam);
+		} else if (homeTeamPrediction < awayTeamPrediction) {
+			prediction.setWinner(awayTeam);
+		} else {
+			if (homeTeamPredictionIsWinner.isPresent() && homeTeamPredictionIsWinner.get()) {
+				prediction.setWinner(homeTeam);
+			} else {
+				prediction.setWinner(awayTeam);
+			}
+		}
+		return prediction;
 	}
 }

@@ -75,7 +75,7 @@ public class EightFinalsGameLayout extends KnockoutGameLayout {
 					scoreWrapper.setEnabled(true);
 				}
 			} else {
-				Notification.show(Resources.getMessage("adminRightsRevoked"));
+				Notification.show(Resources.getMessage("adminRightsRevoked"), Notification.Type.WARNING_MESSAGE);
 			}
 		});
 		if (possibleContestant != null) {
