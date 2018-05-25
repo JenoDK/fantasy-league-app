@@ -43,7 +43,7 @@ public class GamesLayout extends VerticalLayout {
 
 		gamesGrid.predictionChanged()
 				.filter(gameBean -> {
-					boolean isInTime = LocalDateTime.now().isBefore(gameBean.getGame_date_time());
+					boolean isInTime = LocalDateTime.now().isBefore(league.getLeague_starting_date());
 					if (!isInTime) {
 						Notification.show(Resources.getMessage("toLateToUpdatePrediction"), Notification.Type.WARNING_MESSAGE);
 					}

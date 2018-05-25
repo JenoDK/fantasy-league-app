@@ -2,15 +2,12 @@ package com.jeno.fantasyleague.ui.main.views.league.singleleague.knockoutstage;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.Optional;
 
-import com.jeno.fantasyleague.model.Contestant;
 import com.jeno.fantasyleague.model.Game;
 import com.jeno.fantasyleague.model.League;
 import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.jeno.fantasyleague.util.DateUtil;
-import com.jeno.fantasyleague.util.GridUtil;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
@@ -113,9 +110,4 @@ public abstract class KnockoutGameLayout extends VerticalLayout {
 
 	protected abstract HorizontalLayout createAwayTeamComponent(KnockoutGameBean game);
 
-	protected HorizontalLayout createTeamComponent(Contestant contestant, String teamPlaceHolder) {
-		return Optional.ofNullable(contestant)
-				.map(GridUtil::createTeamLayout)
-				.orElse(new HorizontalLayout(new Label(teamPlaceHolder)));
-	}
 }

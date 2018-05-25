@@ -12,8 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
 
-@UIScope
-@SpringView(name = State.StateUrlConstants.HOME)
+//@UIScope
+//@SpringView(name = State.StateUrlConstants.HOME)
 public class HomeView extends VerticalLayout implements View {
 
     @Autowired

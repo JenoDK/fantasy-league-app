@@ -10,6 +10,7 @@ import com.jeno.fantasyleague.model.Game;
 import com.jeno.fantasyleague.model.League;
 import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
+import com.jeno.fantasyleague.util.GridUtil;
 import com.vaadin.data.provider.CallbackDataProvider;
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.server.ThemeResource;
@@ -51,7 +52,7 @@ public class EightFinalsGameLayout extends KnockoutGameLayout {
 			ComboBox<Contestant> contestantCombobox = getContestantComboBox(game, placeHolder, possibleContestant, contestantConsumer);
 			return new HorizontalLayout(contestantCombobox);
 		} else {
-			return createTeamComponent(possibleContestant, placeHolder);
+			return GridUtil.createTeamLayout(possibleContestant, placeHolder);
 		}
 	}
 

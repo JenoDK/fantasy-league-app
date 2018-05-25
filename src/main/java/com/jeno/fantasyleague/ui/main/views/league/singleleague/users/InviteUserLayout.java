@@ -56,11 +56,13 @@ public class InviteUserLayout extends VerticalLayout {
 						}),
 						""))
 			.build();
+		usersToInviteGrid.setAdjustHeightDynamically(false);
 
 		ComboBox<User> userComboBox = new ComboBox<>("Select user");
 		userComboBox.addStyleName(ValoTheme.COMBOBOX_SMALL);
 		userComboBox.setItemCaptionGenerator(user -> user.getUsername());
 		userComboBox.setDataProvider(dataProvider);
+		userComboBox.addFocusListener(ignored -> dataProvider.refreshAll());
 		userComboBox.addValueChangeListener(event -> {
 			if (event.getValue() != null) {
 				usersToInviteGrid.addItem(event.getValue());
@@ -76,7 +78,7 @@ public class InviteUserLayout extends VerticalLayout {
 		Button inviteButton = new CustomButton("Invite Users");
 		inviteButton.addClickListener(ignored -> {
 			if (singleLeagueServiceProvider.loggedInUserIsLeagueAdmin(league)) {
-				usersToInviteDataProvider.getItems().forEach(
+				usersToInviteGrid.getItems().forEach(
 						user -> {
 							Broadcaster.broadcast(
 									user.getId(),

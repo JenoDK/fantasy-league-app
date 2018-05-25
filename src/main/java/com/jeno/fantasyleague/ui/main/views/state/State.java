@@ -1,14 +1,14 @@
 package com.jeno.fantasyleague.ui.main.views.state;
 
-import com.jeno.fantasyleague.util.Images;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.jeno.fantasyleague.util.Images;
+
 public enum State {
 
-    HOME(StateUrlConstants.HOME, "Home", true, Images.Icons.HOME_ICON, 0),
+//    HOME(StateUrlConstants.HOME, "Home", true, Images.Icons.HOME_ICON, 0),
     LEAGUE(StateUrlConstants.LEAGUE, "League", true, Images.Icons.LEAGUE_ICON, 0),
     PROFILE(StateUrlConstants.PROFILE, "Profile", false, 20);
 
@@ -63,7 +63,7 @@ public enum State {
 
         public static final String HOME = "";
         public static final String PROFILE = "profile";
-        public static final String LEAGUE = "league";
+        public static final String LEAGUE = "";
 
         private StateUrlConstants() {
         }

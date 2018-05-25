@@ -2,6 +2,7 @@ package com.jeno.fantasyleague.ui.main.views.league.singleleague.knockoutstage;
 
 import com.jeno.fantasyleague.model.League;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
+import com.jeno.fantasyleague.util.GridUtil;
 import com.vaadin.ui.HorizontalLayout;
 
 public class RestFinalsGameLayout extends KnockoutGameLayout {
@@ -12,12 +13,12 @@ public class RestFinalsGameLayout extends KnockoutGameLayout {
 
 	@Override
 	protected HorizontalLayout createHomeTeamComponent(KnockoutGameBean game) {
-		return createTeamComponent(game.getHomeTeam(), game.getGame().getHome_team_placeholder());
+		return GridUtil.createTeamLayout(game.getHomeTeam(), game.getGame().getHome_team_placeholder());
 	}
 
 	@Override
 	protected HorizontalLayout createAwayTeamComponent(KnockoutGameBean game) {
-		return createTeamComponent(game.getAwayTeam(), game.getGame().getAway_team_placeholder());
+		return GridUtil.createTeamLayout(game.getAwayTeam(), game.getGame().getAway_team_placeholder());
 	}
 
 }

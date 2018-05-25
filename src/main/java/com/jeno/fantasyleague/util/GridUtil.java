@@ -1,5 +1,7 @@
 package com.jeno.fantasyleague.util;
 
+import java.util.Optional;
+
 import com.jeno.fantasyleague.model.Contestant;
 import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.ui.common.field.NonNullValidator;
@@ -21,6 +23,12 @@ import io.reactivex.subjects.BehaviorSubject;
 public class GridUtil {
 
 	private GridUtil() {
+	}
+
+	public static HorizontalLayout createTeamLayout(Contestant contestant, String teamPlaceHolder) {
+		return Optional.ofNullable(contestant)
+				.map(GridUtil::createTeamLayout)
+				.orElse(new HorizontalLayout(new Label(teamPlaceHolder)));
 	}
 
 	public static HorizontalLayout createTeamLayout(Contestant contestant) {

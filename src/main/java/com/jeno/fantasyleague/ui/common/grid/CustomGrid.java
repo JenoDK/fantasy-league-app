@@ -46,8 +46,8 @@ public class CustomGrid<T> extends Grid<T> {
 		}
 	}
 
-	public List<T> getItems() {
-		return listDataproviderItems;
+	public Collection<T> getItems() {
+		return getListDataProvider().getItems();
 	}
 
 	public void removeItem(T itemToRemove) {

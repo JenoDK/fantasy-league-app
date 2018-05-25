@@ -26,10 +26,10 @@ public class AllUserResultsForGameLayout extends VerticalLayout {
 		stageLabel.addStyleName(ValoTheme.LABEL_TINY);
 
 		HorizontalLayout gameWrapper = new HorizontalLayout();
-		gameWrapper.addComponent(GridUtil.createTeamLayout(bean.getHome_team()));
+		gameWrapper.addComponent(GridUtil.createTeamLayout(bean.getHome_team(), bean.getGame().getHome_team_placeholder()));
 		gameWrapper.addComponent(new Label(
 				OverviewUtil.getScoreWithWinner(bean.getGameHome_team_score(), bean.getGameAway_team_score(), bean.getGameHomeTeamWon())));
-		gameWrapper.addComponent(GridUtil.createTeamLayout(bean.getAway_team()));
+		gameWrapper.addComponent(GridUtil.createTeamLayout(bean.getAway_team(), bean.getGame().getAway_team_placeholder()));
 
 		Label dateTimeLabel = new Label(DateUtil.DATE_TIME_FORMATTER.format(bean.getGame().getGame_date_time()));
 		dateTimeLabel.addStyleName(ValoTheme.LABEL_TINY);
