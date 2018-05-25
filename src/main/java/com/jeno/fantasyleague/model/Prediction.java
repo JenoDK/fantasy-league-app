@@ -36,6 +36,9 @@ public class Prediction extends UserAudit {
 	@JoinColumn(name = "winner_id")
 	private Contestant winner;
 
+	@Column(name = "winner_id", insertable = false, updatable = false)
+	private Long winner_fk;
+
 	private Integer home_team_score;
 
 	private Integer away_team_score;
@@ -77,6 +80,10 @@ public class Prediction extends UserAudit {
 
 	public void setWinner(Contestant winner) {
 		this.winner = winner;
+	}
+
+	public Long getWinner_fk() {
+		return winner_fk;
 	}
 
 	public Integer getHome_team_score() {

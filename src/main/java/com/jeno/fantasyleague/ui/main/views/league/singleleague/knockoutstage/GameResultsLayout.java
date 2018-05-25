@@ -50,10 +50,6 @@ public class GameResultsLayout extends HorizontalLayout {
 			scoreWrapper.setComponentAlignment(awayTeamScoreLabel, Alignment.MIDDLE_CENTER);
 		}
 
-		if (Objects.isNull(bean.getGame().getHome_team()) || Objects.isNull(bean.getGame().getAway_team())) {
-			scoreWrapper.setEnabled(false);
-		}
-
 		VerticalLayout winnerWrapper = new VerticalLayout();
 		winnerWrapper.setMargin(false);
 		winnerWrapper.setVisible(scoreNotNullAndEqual(bean, homeTeamGetter, awayTeamGetter));

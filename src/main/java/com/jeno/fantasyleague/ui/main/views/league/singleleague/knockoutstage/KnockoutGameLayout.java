@@ -1,6 +1,7 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.knockoutstage;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Optional;
 
 import com.jeno.fantasyleague.model.Contestant;
@@ -66,6 +67,11 @@ public abstract class KnockoutGameLayout extends VerticalLayout {
 				KnockoutGameBean::getHomeTeamPredictionIsWinner,
 				KnockoutGameBean::setHomeTeamPredictionIsWinner);
 		predictionWrapper.setCaption(Resources.getMessage("predictions"));
+
+		if (Objects.isNull(game.getGame().getHome_team()) || Objects.isNull(game.getGame().getAway_team())) {
+			scoreWrapper.setEnabled(false);
+			predictionWrapper.setEnabled(false);
+		}
 
 		wrapper.addComponent(teamWrapper);
 		wrapper.addComponent(scoreWrapper);

@@ -1,5 +1,8 @@
 package com.jeno.fantasyleague.ui.common.grid;
 
+import java.util.Collection;
+import java.util.List;
+
 import com.google.common.collect.Lists;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.shared.ui.grid.HeightMode;
@@ -10,13 +13,11 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.renderers.ComponentRenderer;
 
-import java.util.Collection;
-import java.util.List;
-
 public class CustomGrid<T> extends Grid<T> {
 
 	private CustomGridBuilder<T> builder;
 	private List<T> listDataproviderItems = Lists.newArrayList();
+	private boolean adjustHeightDynamically = true;
 
 	public CustomGrid(CustomGridBuilder<T> builder) {
 		this();
@@ -40,7 +41,9 @@ public class CustomGrid<T> extends Grid<T> {
 	public void setItems(Collection<T> items) {
 		super.setItems(items);
 		this.listDataproviderItems = Lists.newArrayList(items);
-		setHeight(36f * (items.size() + 1), Unit.PIXELS);
+		if (adjustHeightDynamically) {
+			setHeight(36f * (items.size() + 1), Unit.PIXELS);
+		}
 	}
 
 	public List<T> getItems() {
@@ -80,12 +83,15 @@ public class CustomGrid<T> extends Grid<T> {
 			addColumn(value.valueProvider)
 					.setId(key)
 					.setCaption(value.caption));
-		builder.iconColumns.forEach((key, value) ->
-			addColumn(t -> createIconColumnComponent(value.valueProvider.apply(t)), new ComponentRenderer())
-					.setId(key)
-					.setStyleGenerator(item -> "icon-column")
-					.setWidth(50)
-					.setCaption(value.caption));
+		builder.iconColumns.values().forEach(this::addIconColumn);
+	}
+
+	public Column<T, Component> addIconColumn(CustomGridBuilder.ColumnProvider<T, CustomGridBuilder.IconColumnValue> value) {
+		return addColumn(t -> createIconColumnComponent(value.valueProvider.apply(t)), new ComponentRenderer())
+				.setId(value.id)
+				.setStyleGenerator(item -> "icon-column")
+				.setWidth(50)
+				.setCaption(value.caption);
 	}
 
 	private Component createIconColumnComponent(CustomGridBuilder.IconColumnValue iconColumnValue) {
@@ -104,4 +110,7 @@ public class CustomGrid<T> extends Grid<T> {
 		return layout;
 	}
 
+	public void setAdjustHeightDynamically(boolean adjustHeightDynamically) {
+		this.adjustHeightDynamically = adjustHeightDynamically;
+	}
 }

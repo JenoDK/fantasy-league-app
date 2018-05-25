@@ -1,9 +1,12 @@
 package com.jeno.fantasyleague.data.service.leaguetemplates.worldcup2018;
 
+import java.util.Map;
+
 import com.jeno.fantasyleague.data.service.leaguetemplates.LeagueSettingRenderer;
 import com.jeno.fantasyleague.data.service.leaguetemplates.LeagueTemplateService;
 import com.jeno.fantasyleague.data.service.leaguetemplates.TemplateException;
 import com.jeno.fantasyleague.model.League;
+import com.jeno.fantasyleague.model.Prediction;
 import com.jeno.fantasyleague.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,8 +27,13 @@ public class FifaWorldCup2018Service implements LeagueTemplateService {
 	}
 
 	@Override
-	public double calculateUserScore(League league, User user) {
-		return fifaWorldCup2018ScoreHelper.calculateUserScore(league, user);
+	public Map<FifaWorldCup2018Stages, Double> calculateTotalUserScore(League league, User user) {
+		return fifaWorldCup2018ScoreHelper.calculateTotalUserScore(league, user);
+	}
+
+	@Override
+	public double calculateScoreOfPrediction(League league, Prediction prediction, User user) {
+		return fifaWorldCup2018ScoreHelper.calculateScoreOfPrediction(league, prediction, user);
 	}
 
 	@Override

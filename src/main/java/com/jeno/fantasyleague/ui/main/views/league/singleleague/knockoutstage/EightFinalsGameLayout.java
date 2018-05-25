@@ -73,6 +73,7 @@ public class EightFinalsGameLayout extends KnockoutGameLayout {
 				dataProvider.refreshAll();
 				if (updatedGame.getHome_team() != null && updatedGame.getAway_team() != null && scoreWrapper != null) {
 					scoreWrapper.setEnabled(true);
+					predictionWrapper.setEnabled(true);
 				}
 			} else {
 				Notification.show(Resources.getMessage("adminRightsRevoked"), Notification.Type.WARNING_MESSAGE);

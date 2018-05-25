@@ -1,6 +1,7 @@
 package com.jeno.fantasyleague.ui.main.views.league;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -15,6 +16,7 @@ import com.jeno.fantasyleague.data.repository.UserNotificationRepository;
 import com.jeno.fantasyleague.data.security.SecurityHolder;
 import com.jeno.fantasyleague.data.service.email.ApplicationEmailService;
 import com.jeno.fantasyleague.data.service.leaguetemplates.LeagueTemplateService;
+import com.jeno.fantasyleague.data.service.leaguetemplates.worldcup2018.FifaWorldCup2018Stages;
 import com.jeno.fantasyleague.data.service.repo.contestant.ContestantService;
 import com.jeno.fantasyleague.data.service.repo.game.GameService;
 import com.jeno.fantasyleague.data.service.repo.league.LeagueService;
@@ -121,6 +123,10 @@ public class SingleLeagueServiceProvider {
 		return contestantWeightRepository.findByUserAndLeagueAndJoinContestant(securityHolder.getUser(), league);
 	}
 
+	public User getLoggedInUser() {
+		return securityHolder.getUser();
+	}
+
 	public boolean loggedInUserIsLeagueCreator(League league) {
 		return league.getCreatedBy().getId().equals(securityHolder.getUser().getId());
 	}
@@ -158,8 +164,16 @@ public class SingleLeagueServiceProvider {
 		return beanFactory.getBean(league.getTemplate().getTemplateServiceBeanName(), LeagueTemplateService.class);
 	}
 
-	public double getUserLeagueScore(League league) {
-		return leagueService.getLeagueScoreForUser(league, securityHolder.getUser());
+	public Map<FifaWorldCup2018Stages, Double> getUserLeagueScore(League league, User user) {
+		return leagueService.getTotalLeagueScoreForUser(league, user);
+	}
+
+	public double getUserLeaguePredictionScore(League league, Prediction prediction) {
+		return leagueService.getPredictionScoreForUser(league, prediction, securityHolder.getUser());
+	}
+
+	public double getLeaguePredictionScoreForUser(League league, Prediction prediction, User user) {
+		return leagueService.getPredictionScoreForUser(league, prediction, user);
 	}
 
 	public ApplicationEmailService getEmailService() {

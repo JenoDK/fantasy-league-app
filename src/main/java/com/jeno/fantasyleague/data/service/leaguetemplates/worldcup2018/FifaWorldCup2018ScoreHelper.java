@@ -1,8 +1,10 @@
 package com.jeno.fantasyleague.data.service.leaguetemplates.worldcup2018;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
+import com.google.common.collect.Maps;
 import com.jeno.fantasyleague.data.repository.ContestantWeightRepository;
 import com.jeno.fantasyleague.data.repository.LeagueSettingRepository;
 import com.jeno.fantasyleague.data.repository.PredictionRepository;
@@ -24,12 +26,24 @@ public class FifaWorldCup2018ScoreHelper {
 	@Autowired
 	private LeagueSettingRepository leagueSettingRepository;
 
-	public double calculateUserScore(League league, User user) {
+	public Map<FifaWorldCup2018Stages, Double> calculateTotalUserScore(League league, User user) {
 		List<Prediction> predictionsWithJoinedGames = predictionRepository.findByLeagueAndUserAndJoinGames(league, user);
 		List<ContestantWeight> weights = contestantWeightRepository.findByUserAndLeagueAndJoinContestant(user, league);
-		return predictionsWithJoinedGames.stream()
-				.mapToDouble(prediction -> calculateScoreOfPrediction(prediction, league, weights))
-				.sum();
+		Map<FifaWorldCup2018Stages, Double> scorePerStage = Maps.newHashMap();
+		predictionsWithJoinedGames.forEach(prediction -> {
+			FifaWorldCup2018Stages stage = FifaWorldCup2018Stages.valueOf(prediction.getGame().getStage());
+			double scoreForPrediction = calculateScoreOfPrediction(prediction, league, weights);
+			if (scorePerStage.containsKey(stage)) {
+				scorePerStage.put(stage, scorePerStage.get(stage) + scoreForPrediction);
+			} else {
+				scorePerStage.put(stage, scoreForPrediction);
+			}
+		});
+		return scorePerStage;
+	}
+
+	public double calculateScoreOfPrediction(League league, Prediction prediction, User user) {
+		return calculateScoreOfPrediction(prediction, league, contestantWeightRepository.findByUserAndLeagueAndJoinContestant(user, league));
 	}
 
 	private double calculateScoreOfPrediction(Prediction prediction, League league, List<ContestantWeight> weights) {
@@ -58,14 +72,13 @@ public class FifaWorldCup2018ScoreHelper {
 			float totalScore = gameScore;
 
 			if (Objects.nonNull(prediction.getGame().getWinner())) {
-				Integer userWeightForWinner = weights.stream()
-						.filter(weight -> weight.getContestant().getId().equals(prediction.getGame().getWinner().getId()))
+				ContestantWeight contestantWeight = weights.stream()
+						.filter(weight -> weight.getContestant().getId().equals(prediction.getGame().getWinner_fk()))
 						.findFirst()
-						.map(ContestantWeight::getWeight)
 						.get();
 
-				float powerIndexCoef = 1f / (prediction.getGame().getWinner().getPower_index() / 100f);
-				float userWeightCoef = 1f + (userWeightForWinner / 100f);
+				float powerIndexCoef = 1f / (contestantWeight.getContestant().getPower_index() / 100f);
+				float userWeightCoef = 1f + (contestantWeight.getWeight() / 100f);
 				totalScore = totalScore * powerIndexCoef * userWeightCoef;
 			}
 

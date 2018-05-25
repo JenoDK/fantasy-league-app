@@ -8,7 +8,7 @@ import com.jeno.fantasyleague.ui.main.views.league.singleleague.knockoutstage.Kn
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.leaguesettings.LeagueSettingsTab;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.teamweights.TeamWeightsTab;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.users.UsersTab;
-import com.jeno.fantasyleague.ui.main.views.league.singleleague.userscores.UserScoresTab;
+import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.UserScoresTab;
 import com.jeno.fantasyleague.util.RxUtil;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.shared.ui.ContentMode;
@@ -41,10 +41,10 @@ public class SingleLeagueView extends VerticalLayout {
 		tabSheet = new LazyTabSheet();
 		tabSheet.addLazyTab("groupStageTab", "Group Stage", () -> new GroupStageTab(league, singleLeagueServiceprovider));
 		tabSheet.addLazyTab("knockoutStageTab", "Knockout Stage", () -> new KnockoutStageTab(league, singleLeagueServiceprovider));
-		tabSheet.addLazyTab("usersTab", "Users", () -> new UsersTab(league, singleLeagueServiceprovider));
 		tabSheet.addLazyTab("teamWeightsTab", "My Team Weights", () -> new TeamWeightsTab(league, singleLeagueServiceprovider));
-		tabSheet.addLazyTab("usersScoreTab", "User Scores", () -> new UserScoresTab(league, singleLeagueServiceprovider));
+		tabSheet.addLazyTab("overview", "Overview", () -> new UserScoresTab(league, singleLeagueServiceprovider));
 		if (singleLeagueServiceprovider.loggedInUserIsLeagueCreator(league)) {
+			tabSheet.addLazyTab("usersTab", "Users", () -> new UsersTab(league, singleLeagueServiceprovider));
 			tabSheet.addLazyTab("leagueSettingsTab", "League Settings", () -> new LeagueSettingsTab(league, singleLeagueServiceprovider));
 		}
 

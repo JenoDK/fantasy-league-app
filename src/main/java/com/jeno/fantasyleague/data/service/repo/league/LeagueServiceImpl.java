@@ -1,10 +1,14 @@
 package com.jeno.fantasyleague.data.service.repo.league;
 
+import java.util.Map;
+
 import com.jeno.fantasyleague.data.repository.LeagueRepository;
 import com.jeno.fantasyleague.data.service.leaguetemplates.LeagueTemplateService;
+import com.jeno.fantasyleague.data.service.leaguetemplates.worldcup2018.FifaWorldCup2018Stages;
 import com.jeno.fantasyleague.data.service.repo.contestantweight.ContestantWeightService;
 import com.jeno.fantasyleague.data.service.repo.prediction.PredictionService;
 import com.jeno.fantasyleague.model.League;
+import com.jeno.fantasyleague.model.Prediction;
 import com.jeno.fantasyleague.model.User;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,10 +51,17 @@ public class LeagueServiceImpl implements LeagueService {
 	}
 
 	@Override
-	public double getLeagueScoreForUser(League league, User user) {
+	public Map<FifaWorldCup2018Stages, Double> getTotalLeagueScoreForUser(League league, User user) {
 		// Run template bean
 		LeagueTemplateService templateServiceBean = beanFactory.getBean(league.getTemplate().getTemplateServiceBeanName(), LeagueTemplateService.class);
-		return templateServiceBean.calculateUserScore(league, user);
+		return templateServiceBean.calculateTotalUserScore(league, user);
+	}
+
+	@Override
+	public double getPredictionScoreForUser(League league, Prediction prediction, User user) {
+		// Run template bean
+		LeagueTemplateService templateServiceBean = beanFactory.getBean(league.getTemplate().getTemplateServiceBeanName(), LeagueTemplateService.class);
+		return templateServiceBean.calculateScoreOfPrediction(league, prediction, user);
 	}
 
 }
