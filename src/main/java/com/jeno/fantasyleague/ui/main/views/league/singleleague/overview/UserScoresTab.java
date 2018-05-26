@@ -25,12 +25,18 @@ import io.reactivex.Observable;
 
 public class UserScoresTab extends VerticalLayout {
 
+	private final SingleLeagueServiceProvider singleLeagueServiceprovider;
+	private final League league;
+
 	public UserScoresTab(League league, SingleLeagueServiceProvider singleLeagueServiceprovider) {
 		super();
 		setMargin(true);
 		setSizeFull();
 
-		List<UserTotalScoreBean> scoreBeans = fetchTotalScores(league, singleLeagueServiceprovider);
+		this.singleLeagueServiceprovider = singleLeagueServiceprovider;
+		this.league = league;
+
+		List<UserTotalScoreBean> scoreBeans = fetchTotalScores();
 		UserTotalScoreGrid totalScoreGrid = new UserTotalScoreGrid(scoreBeans);
 		totalScoreGrid.setWidth(100, Unit.PERCENTAGE);
 
@@ -52,29 +58,29 @@ public class UserScoresTab extends VerticalLayout {
 						.closable(true)
 						.resizable(true)
 						.setHeight(500)
-						.setWidth(520)
+						.setWidth(550)
 						.build()
 						.show());
 
 		totalScoreGrid.addItemClickListener(event ->
-				setPredictionScoreItems(fetchPredictionScores(league, singleLeagueServiceprovider, event.getItem().getUser()), gridPerStageMap));
+				setPredictionScoreItems(fetchPredictionScores(event.getItem().getUser()), gridPerStageMap));
 		scoreBeans.stream()
 				.filter(bean -> singleLeagueServiceprovider.getLoggedInUser().getId().equals(bean.getUser().getId()))
 				.findFirst()
 				.ifPresent(totalScoreGrid::select);
-		setPredictionScoreItems(fetchPredictionScores(league, singleLeagueServiceprovider, singleLeagueServiceprovider.getLoggedInUser()), gridPerStageMap);
+		setPredictionScoreItems(fetchPredictionScores(singleLeagueServiceprovider.getLoggedInUser()), gridPerStageMap);
 
 		Button refreshButton = new Button(VaadinIcons.REFRESH);
 		refreshButton.addStyleName(ValoTheme.BUTTON_TINY);
 		refreshButton.addStyleName(ValoTheme.BUTTON_ICON_ONLY);
 		refreshButton.addClickListener(ignored -> {
-			List<UserTotalScoreBean> scores = fetchTotalScores(league, singleLeagueServiceprovider);
+			List<UserTotalScoreBean> scores = fetchTotalScores();
 			totalScoreGrid.setItems(scores);
 			scores.stream()
 					.filter(bean -> singleLeagueServiceprovider.getLoggedInUser().getId().equals(bean.getUser().getId()))
 					.findFirst()
 					.ifPresent(totalScoreGrid::select);
-			setPredictionScoreItems(fetchPredictionScores(league, singleLeagueServiceprovider, singleLeagueServiceprovider.getLoggedInUser()), gridPerStageMap);
+			setPredictionScoreItems(fetchPredictionScores(singleLeagueServiceprovider.getLoggedInUser()), gridPerStageMap);
 		});
 
 		addComponent(refreshButton);
@@ -88,7 +94,7 @@ public class UserScoresTab extends VerticalLayout {
 		beansPerStage.asMap().entrySet().forEach(entry -> gridPerStageMap.get(entry.getKey()).setItems(entry.getValue()));
 	}
 
-	private List<UserPredictionScoreBean> fetchPredictionScores(League league, SingleLeagueServiceProvider singleLeagueServiceprovider, User user) {
+	private List<UserPredictionScoreBean> fetchPredictionScores(User user) {
 		Map<Long, Contestant> contestantMap = singleLeagueServiceprovider.getContestantRepository().findByLeague(league).stream()
 				.collect(Collectors.toMap(Contestant::getId, Function.identity()));
 		return singleLeagueServiceprovider.getPredictionRepository().findByLeagueAndUserAndJoinGames(league, user).stream()
@@ -102,7 +108,7 @@ public class UserScoresTab extends VerticalLayout {
 				.collect(Collectors.toList());
 	}
 
-	public List<UserTotalScoreBean> fetchTotalScores(League league, SingleLeagueServiceProvider singleLeagueServiceprovider) {
+	public List<UserTotalScoreBean> fetchTotalScores() {
 		return singleLeagueServiceprovider.getLeagueRepository().fetchLeagueUsers(league.getId()).stream()
 				.map(user -> new UserTotalScoreBean(user, singleLeagueServiceprovider.getUserLeagueScore(league, user)))
 				.collect(Collectors.toList());

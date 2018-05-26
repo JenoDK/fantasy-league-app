@@ -48,7 +48,7 @@ public class UserPredictionScoresGrid extends CustomGrid<UserPredictionScoreBean
 				.setCaption("Team B");
 		addColumn(bean -> OverviewUtil.getPredictionColumn(
 						bean.getPredictionHome_team_score(),
-						bean.getGameAway_team_score(),
+						bean.getPredictionAway_team_score(),
 						bean.getPredictionHomeTeamWon(),
 						bean.predictionIsHidden(),
 						bean.getPredictionHiddenUntil()))

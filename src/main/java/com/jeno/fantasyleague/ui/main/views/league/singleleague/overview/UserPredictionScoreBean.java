@@ -1,5 +1,6 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.overview;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import com.jeno.fantasyleague.data.service.leaguetemplates.worldcup2018.FifaWorldCup2018Stages;
@@ -49,6 +50,7 @@ public class UserPredictionScoreBean {
 
 	public Optional<Boolean> getGameHomeTeamWon() {
 		return Optional.ofNullable(getHome_team())
+				.filter(ignored -> Objects.nonNull(prediction.getGame().getWinner()))
 				.map(Contestant::getId)
 				.map(id -> id.equals(prediction.getGame().getWinner_fk()));
 	}
@@ -63,6 +65,7 @@ public class UserPredictionScoreBean {
 
 	public Optional<Boolean> getPredictionHomeTeamWon() {
 		return Optional.ofNullable(getHome_team())
+				.filter(ignored -> Objects.nonNull(prediction.getWinner()))
 				.map(Contestant::getId)
 				.map(id -> id.equals(prediction.getWinner_fk()));
 	}

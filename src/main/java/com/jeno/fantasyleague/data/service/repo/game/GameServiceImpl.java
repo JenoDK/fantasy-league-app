@@ -23,7 +23,7 @@ public class GameServiceImpl implements GameService {
 
 	@Override
 	public void updateGroupStageGameScores(List<Game> games) {
-		games.stream().forEach(this::setWinner);
+		games.stream().forEach(this::setGroupStageWinner);
 		gameRepository.saveAll(games);
 		contestantRepository.saveAll(games.stream()
 				.flatMap(game -> Stream.of(game.getHome_team(), game.getAway_team()))
@@ -59,13 +59,15 @@ public class GameServiceImpl implements GameService {
 		return updated;
 	}
 
-	private void setWinner(Game game) {
+	private void setGroupStageWinner(Game game) {
 		Integer homeScore = game.getHome_team_score();
 		Integer awayScore = game.getAway_team_score();
 		if (homeScore > awayScore) {
 			game.setWinner(game.getHome_team());
 		} else if (homeScore < awayScore) {
 			game.setWinner(game.getAway_team());
+		} else {
+			game.setWinner(null);
 		}
 	}
 }

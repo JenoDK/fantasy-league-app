@@ -139,10 +139,14 @@ public class KnockoutGameBean {
 		} else if (homeTeamPrediction < awayTeamPrediction) {
 			prediction.setWinner(awayTeam);
 		} else {
-			if (homeTeamPredictionIsWinner.isPresent() && homeTeamPredictionIsWinner.get()) {
-				prediction.setWinner(homeTeam);
+			if (homeTeamPredictionIsWinner.isPresent()) {
+				if (homeTeamPredictionIsWinner.get()) {
+					prediction.setWinner(homeTeam);
+				} else {
+					prediction.setWinner(awayTeam);
+				}
 			} else {
-				prediction.setWinner(awayTeam);
+				prediction.setWinner(null);
 			}
 		}
 		return prediction;

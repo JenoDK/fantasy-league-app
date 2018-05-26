@@ -98,6 +98,8 @@ public class GameBean {
 			prediction.setWinner(game.getHome_team());
 		} else if (homeTeamPrediction < awayTeamPrediction) {
 			prediction.setWinner(game.getAway_team());
+		} else {
+			prediction.setWinner(null);
 		}
 		return prediction;
 	}
