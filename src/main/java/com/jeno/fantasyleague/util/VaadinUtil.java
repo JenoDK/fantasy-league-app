@@ -1,16 +1,24 @@
 package com.jeno.fantasyleague.util;
 
+import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
+
 import com.google.common.collect.Maps;
-import com.vaadin.data.*;
+import com.vaadin.data.BeanValidationBinder;
+import com.vaadin.data.Binder;
+import com.vaadin.data.ValidationResult;
+import com.vaadin.data.Validator;
+import com.vaadin.data.ValueContext;
 import com.vaadin.server.ErrorMessage;
 import com.vaadin.server.UserError;
 import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinServletRequest;
 import com.vaadin.shared.ui.ErrorLevel;
-import com.vaadin.ui.*;
-
-import java.util.Map;
-import java.util.Optional;
+import com.vaadin.ui.AbstractComponent;
+import com.vaadin.ui.AbstractField;
+import com.vaadin.ui.PasswordField;
+import com.vaadin.ui.UI;
 
 public class VaadinUtil {
 
@@ -68,6 +76,17 @@ public class VaadinUtil {
 	public static void logout() {
 		String logoutUrl = VaadinService.getCurrentRequest().getContextPath() + "/logout";
 		UI.getCurrent().getPage().setLocation(logoutUrl);
+	}
+
+	public static Locale findLocale() {
+		Locale l = null;
+		if (l == null && UI.getCurrent() != null) {
+			l = UI.getCurrent().getLocale();
+		}
+		if (l == null) {
+			l = Locale.getDefault();
+		}
+		return l;
 	}
 
 }

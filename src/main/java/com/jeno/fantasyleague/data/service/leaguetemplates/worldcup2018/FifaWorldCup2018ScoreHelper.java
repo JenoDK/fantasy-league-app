@@ -77,15 +77,22 @@ public class FifaWorldCup2018ScoreHelper {
 						.findFirst()
 						.get();
 
-				float powerIndexCoef = 1f / (contestantWeight.getContestant().getPower_index() / 100f);
+				float powerIndexCoef = (1f / (contestantWeight.getContestant().getPower_index() / 100f)) * findPowerIndexMultiplier(league);
 				float userWeightCoef = 1f + (contestantWeight.getWeight() / 100f);
-				totalScore = totalScore * powerIndexCoef * userWeightCoef;
+				totalScore = totalScore * userWeightCoef + powerIndexCoef;
 			}
 
 			return totalScore;
 		} else {
 			return 0f;
 		}
+	}
+
+	public Float findPowerIndexMultiplier(League league) {
+		return leagueSettingRepository.findByLeagueAndName(league, FifaWorldCup2018SettingRenderer.POWER_INDEX_MULTIPLIER)
+				.map(LeagueSetting::getValue)
+				.map(value -> Float.valueOf(value))
+				.get();
 	}
 
 	public Integer findAllCorrectSetting(League league, FifaWorldCup2018Stages stage) {
