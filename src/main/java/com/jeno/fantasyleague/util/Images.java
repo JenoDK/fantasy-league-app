@@ -8,6 +8,7 @@ public class Images {
 	public static final String DEFAULT_PROFILE_PICTURE = "images/default_profile_picture.png";
 	public static final String NOTIFICATION = "images/notification.png";
 	public static final String NOTIFICATION_ACTIVE = "images/notification_active.png";
+	public static final String DEFAULT_LEAGUE_BANNER = "images/default_league_banner.jpg";
 
 	public class Icons {
 		public static final String HOME_ICON = "images/icons/home_icon.png";

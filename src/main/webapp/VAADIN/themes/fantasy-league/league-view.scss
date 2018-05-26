@@ -24,6 +24,31 @@
 
         }
 
+        .league-view-topbar {
+        	.league-picture {
+        		border-radius: 4px;
+				border: 1px solid #c5c5c5;
+				border-top-color: #c5c5c5;
+				border-bottom-color: #bcbcbc;
+        	}
+        	.v-caption-tiny-upload {
+        		display: none;
+        	}
+        	.v-upload.tiny-upload .v-button {
+				height: 37px;
+				width: 37px;
+				background-image: url("images/icons/upload_image.png");
+				background-repeat: no-repeat;
+				background-size: 27px 27px;
+				background-color: transparent;
+				background-position: center;
+
+				.v-button-caption {
+					color: transparent;
+				}
+        	}
+        }
+
     }
 
 }

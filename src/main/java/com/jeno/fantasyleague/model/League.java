@@ -4,6 +4,7 @@ import com.google.common.collect.Sets;
 import com.jeno.fantasyleague.model.audit.UserAudit;
 import com.jeno.fantasyleague.model.enums.Template;
 
+import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -13,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
@@ -34,6 +36,10 @@ public class League extends UserAudit {
 	private String name;
 
 	private String description;
+
+	@Lob
+	@Basic(fetch = FetchType.LAZY)
+	private byte[] league_picture;
 
 	@NotNull
 	@Enumerated(EnumType.STRING)
@@ -78,6 +84,14 @@ public class League extends UserAudit {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public byte[] getLeague_picture() {
+		return league_picture;
+	}
+
+	public void setLeague_picture(byte[] league_picture) {
+		this.league_picture = league_picture;
 	}
 
 	public Template getTemplate() {

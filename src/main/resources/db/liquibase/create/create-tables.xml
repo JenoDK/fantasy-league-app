@@ -93,6 +93,7 @@
             </column>
             <column name="name" type="VARCHAR(32)"/>
             <column name="description" type="LONGTEXT"/>
+            <column name="league_picture" type="LONGBLOB"/>
             <column name="template" type="VARCHAR(32)"/>
             <column name="league_starting_date" type="datetime"/>
             <column name="created_at" type="datetime"/>

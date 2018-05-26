@@ -1,14 +1,15 @@
 package com.jeno.fantasyleague.util;
 
-import com.jeno.fantasyleague.model.User;
-import com.vaadin.server.Resource;
-import com.vaadin.server.StreamResource;
-import com.vaadin.server.ThemeResource;
-
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+
+import com.jeno.fantasyleague.model.League;
+import com.jeno.fantasyleague.model.User;
+import com.vaadin.server.Resource;
+import com.vaadin.server.StreamResource;
+import com.vaadin.server.ThemeResource;
 
 public class ImageUtil {
 
@@ -19,6 +20,16 @@ public class ImageUtil {
 					"profile_picture.png");
 		} else {
 			return new ThemeResource(Images.DEFAULT_PROFILE_PICTURE);
+		}
+	}
+
+	public static Resource getLeaguePictureResource(League league) {
+		if (league.getLeague_picture() != null) {
+			return new StreamResource(
+					() -> new ByteArrayInputStream(league.getLeague_picture()),
+					"league_banner.png");
+		} else {
+			return new ThemeResource(Images.DEFAULT_LEAGUE_BANNER);
 		}
 	}
 

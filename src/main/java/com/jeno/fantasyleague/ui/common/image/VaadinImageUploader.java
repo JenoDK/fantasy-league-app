@@ -1,12 +1,5 @@
 package com.jeno.fantasyleague.ui.common.image;
 
-import com.google.common.collect.Sets;
-import com.jeno.fantasyleague.util.ImageUtil;
-import com.vaadin.ui.Upload;
-import io.reactivex.Observable;
-import io.reactivex.subjects.BehaviorSubject;
-
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -16,18 +9,36 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Set;
 
+import javax.imageio.ImageIO;
+
+import com.google.common.collect.Sets;
+import com.jeno.fantasyleague.util.ImageUtil;
+import com.vaadin.ui.Upload;
+import io.reactivex.Observable;
+import io.reactivex.subjects.BehaviorSubject;
+
 public class VaadinImageUploader implements Upload.Receiver, Upload.SucceededListener, Upload.StartedListener {
 
 	private static final Set<String> ALLOWED_TYPES = Sets.newHashSet("image/png", "image/jpeg", "image/gif");
 	private static final long MAX_SIZE_IN_KB = 10000000;
 
 	private final BehaviorSubject<File> imageResized = BehaviorSubject.create();
-	private final int maxSizeOfResizedPicture;
+	private final int maxWidthOfResizedPicture;
+	private final int maxHeightOfResizedPicture;
+	private final boolean circle;
 
 	private File file;
 
 	public VaadinImageUploader(int maxSizeOfResizedPicture) {
-		this.maxSizeOfResizedPicture = maxSizeOfResizedPicture;
+		this.maxWidthOfResizedPicture = maxSizeOfResizedPicture;
+		this.maxHeightOfResizedPicture = maxSizeOfResizedPicture;
+		this.circle = true;
+	}
+
+	public VaadinImageUploader(int maxWidthOfResizedPicture, int maxHeightOfResizedPicture) {
+		this.maxWidthOfResizedPicture = maxWidthOfResizedPicture;
+		this.maxHeightOfResizedPicture = maxHeightOfResizedPicture;
+		this.circle = false;
 	}
 
 	@Override
@@ -45,9 +56,11 @@ public class VaadinImageUploader implements Upload.Receiver, Upload.SucceededLis
 	@Override
 	public void uploadSucceeded(Upload.SucceededEvent event) {
 		try {
-			BufferedImage resized = ImageUtil.resizeImage(ImageIO.read(file), maxSizeOfResizedPicture, maxSizeOfResizedPicture);
-			BufferedImage circle = ImageUtil.cropToCircleShaped(resized, maxSizeOfResizedPicture);
-			ImageIO.write(circle, "PNG", file);
+			BufferedImage resized = ImageUtil.resizeImage(ImageIO.read(file), maxWidthOfResizedPicture, maxHeightOfResizedPicture);
+			if (circle) {
+				resized = ImageUtil.cropToCircleShaped(resized, maxWidthOfResizedPicture);
+			}
+			ImageIO.write(resized, "PNG", file);
 		} catch (IOException e) {
 			throw new ImageUploadException("Could not rescale image", e);
 		}
