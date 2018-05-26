@@ -52,20 +52,8 @@ public class FifaWorldCup2018SettingRenderer implements LeagueSettingRenderer {
 
 		Accordion scorePerPhaseAccordion = new Accordion();
 
-		ArrayListMultimap<FifaWorldCup2018Stages, LeagueSetting> leagueSettingPerGroup = ArrayListMultimap.create();
-		for (LeagueSetting leagueSetting : allLeagueSettings) {
-			if (leagueSetting.getName().contains(FifaWorldCup2018Stages.GROUP_PHASE.getName())) {
-				leagueSettingPerGroup.put(FifaWorldCup2018Stages.GROUP_PHASE, leagueSetting);
-			} else if (leagueSetting.getName().contains(FifaWorldCup2018Stages.EIGHTH_FINALS.getName())) {
-				leagueSettingPerGroup.put(FifaWorldCup2018Stages.EIGHTH_FINALS, leagueSetting);
-			} else if (leagueSetting.getName().contains(FifaWorldCup2018Stages.QUARTER_FINALS.getName())) {
-				leagueSettingPerGroup.put(FifaWorldCup2018Stages.QUARTER_FINALS, leagueSetting);
-			} else if (leagueSetting.getName().contains(FifaWorldCup2018Stages.SEMI_FINALS.getName())) {
-				leagueSettingPerGroup.put(FifaWorldCup2018Stages.SEMI_FINALS, leagueSetting);
-			} else if (leagueSetting.getName().contains(FifaWorldCup2018Stages.FINALS.getName())) {
-				leagueSettingPerGroup.put(FifaWorldCup2018Stages.FINALS, leagueSetting);
-			}
-		}
+		ArrayListMultimap<FifaWorldCup2018Stages, LeagueSetting> leagueSettingPerGroup =
+				FifaWorldCup2018Util.getLeagueSettingsPerStage(allLeagueSettings);
 		leagueSettingPerGroup.keySet().stream()
 				.sorted(Comparator.comparing(FifaWorldCup2018Stages::getSeq))
 				.forEach(stage -> {
