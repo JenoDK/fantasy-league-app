@@ -1,5 +1,10 @@
 package com.jeno.fantasyleague.ui.common.image;
 
+import java.io.File;
+import java.util.Optional;
+
+import com.jeno.fantasyleague.model.User;
+import com.jeno.fantasyleague.util.ImageUtil;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.FileResource;
 import com.vaadin.shared.ui.ContentMode;
@@ -8,9 +13,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Upload;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
-
-import java.io.File;
-import java.util.Optional;
+import io.reactivex.Observable;
 
 public class ImageUploadWithPlaceholder extends VerticalLayout {
 
@@ -24,6 +27,11 @@ public class ImageUploadWithPlaceholder extends VerticalLayout {
 	public ImageUploadWithPlaceholder() {
 		super();
 		initLayout();
+	}
+
+	public ImageUploadWithPlaceholder(User user) {
+		this();
+		imageLayout.setSource(ImageUtil.getUserProfilePictureResource(user));
 	}
 
 	private void initLayout() {
@@ -71,6 +79,10 @@ public class ImageUploadWithPlaceholder extends VerticalLayout {
 
 	public Optional<File> getImage() {
 		return currentImage;
+	}
+
+	public Observable<File> imageUploadedAndResized() {
+		return receiver.imageResized();
 	}
 
 }
