@@ -1,8 +1,10 @@
 package com.jeno.fantasyleague.ui.main.views.league.gridlayout;
 
 import com.jeno.fantasyleague.model.League;
+import com.jeno.fantasyleague.util.ImageUtil;
 import com.jeno.fantasyleague.util.RxUtil;
 import com.vaadin.shared.ui.ContentMode;
+import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import io.reactivex.Observable;
 
@@ -20,8 +22,16 @@ public class ExistingLeagueGridComponent extends AbstractLeagueGridComponent {
 	private void createLeagueComponent(League league) {
 		addStyleName("existing");
 		Label name = new Label(league.getName(), ContentMode.HTML);
-		Label description = new Label(league.getDescription(), ContentMode.HTML);
-		addComponents(name, description);
+		addComponent(name);
+
+		Image leagueImage = new Image();
+		leagueImage.setWidth(100, Unit.PERCENTAGE);
+		leagueImage.setHeight(100, Unit.PERCENTAGE);
+		leagueImage.setSource(ImageUtil.getLeaguePictureResource(league));
+		addComponent(leagueImage);
+
+		setExpandRatio(name, 1);
+		setExpandRatio(leagueImage, 4);
 	}
 
 	public Observable<League> click() {

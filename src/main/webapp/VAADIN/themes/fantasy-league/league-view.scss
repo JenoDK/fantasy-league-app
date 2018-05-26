@@ -25,7 +25,11 @@
         }
 
         .league-view-topbar {
+        	.back-to-leagues-view {
+        		margin-bottom: 13px;
+        	}
         	.league-picture {
+        		max-height: 180px;
         		border-radius: 4px;
 				border: 1px solid #c5c5c5;
 				border-top-color: #c5c5c5;
