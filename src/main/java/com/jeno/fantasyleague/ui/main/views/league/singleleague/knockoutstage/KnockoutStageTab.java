@@ -19,6 +19,7 @@ import com.jeno.fantasyleague.ui.common.field.CustomButton;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
@@ -52,7 +53,9 @@ public class KnockoutStageTab extends VerticalLayout {
 		gridLayoutPanel.setContent(bracketLayout);
 		gridLayoutPanel.addStyleName("no-visual-panel");
 
-		CustomButton refreshButton = new CustomButton(Resources.getMessage("refresh"), VaadinIcons.REFRESH);
+		Button refreshButton = new Button(VaadinIcons.REFRESH);
+		refreshButton.addStyleName(ValoTheme.BUTTON_TINY);
+		refreshButton.addStyleName(ValoTheme.BUTTON_ICON_ONLY);
 		refreshButton.addClickListener(ignored -> {
 			bracketLayout.removeAllComponents();
 			fillInBracket(league);

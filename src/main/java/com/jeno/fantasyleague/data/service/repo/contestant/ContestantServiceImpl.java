@@ -27,7 +27,7 @@ public class ContestantServiceImpl implements ContestantService {
 
 	@Override
 	public List<Contestant> getPossibleContestantsFromGroupStage(FifaWorldCup2018Initializer.Group group, League league) {
-		Optional<ContestantGroup> groupOptional = contestantGroupRepository.findByName(group.getGroupName());
+		Optional<ContestantGroup> groupOptional = contestantGroupRepository.findByNameAndLeague(group.getGroupName(), league);
 		return groupOptional
 				.map(group1 -> contestantGroupRepository.fetchGroupContestants(group1.getId()).stream()
 						// Team not yet in eighth finals
