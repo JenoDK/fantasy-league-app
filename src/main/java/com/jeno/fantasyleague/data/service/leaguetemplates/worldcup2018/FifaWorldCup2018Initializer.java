@@ -1,8 +1,8 @@
 package com.jeno.fantasyleague.data.service.leaguetemplates.worldcup2018;
 
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -123,7 +123,7 @@ public class FifaWorldCup2018Initializer {
 
 	private List<CSVRecord> readCsv(String path) {
 		try {
-			Reader in = new FileReader(new ClassPathResource(path).getFile());
+			Reader in = new InputStreamReader(new ClassPathResource(path).getInputStream());
 			return Lists.newArrayList(CSVFormat.RFC4180.withHeader().parse(in));
 		} catch (FileNotFoundException e) {
 			throw new TemplateException("CSV file for FIFA World Cup 2018 not found", e);
