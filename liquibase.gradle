@@ -4,7 +4,7 @@ configurations {
 
 //loading properties file.
 Properties devProps = new Properties()
-devProps.load(new FileInputStream("src/main/resources/application-dev.properties"))
+devProps.load(new FileInputStream("src/main/resources/application.properties"))
 
 task liquibaseGenerateChangeLog(type: JavaExec) {
     group = "liquibase"
