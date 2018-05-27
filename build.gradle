@@ -17,7 +17,7 @@ apply plugin: 'io.spring.dependency-management'
 apply from: 'liquibase.gradle'
 
 group = 'com.jeno'
-version = '0.0.1-SNAPSHOT'
+version = '1.0.0'
 sourceCompatibility = 1.8
 
 repositories {
@@ -59,3 +59,13 @@ dependencyManagement {
 		mavenBom "com.vaadin:vaadin-bom:${vaadinVersion}"
 	}
 }
+
+task stage(dependsOn: ['build', 'clean'])
+build.mustRunAfter clean
+
+task copyToLib(type: Copy) {
+	into "$buildDir/lib"
+	from(configurations.compile)
+}
+
+stage.dependsOn(copyToLib)
