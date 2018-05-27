@@ -1,8 +1,17 @@
 package com.jeno.fantasyleague.config;
 
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import com.jeno.fantasyleague.data.security.SecurityHolder;
 import com.jeno.fantasyleague.model.User;
 import com.jeno.fantasyleague.resources.Resources;
+import com.jeno.fantasyleague.ui.main.MainUI;
+import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.ServiceException;
 import com.vaadin.server.SessionExpiredException;
 import com.vaadin.server.VaadinRequest;
@@ -12,12 +21,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-
+@WebServlet(asyncSupported = true)
 @Component("vaadinServlet")
+@VaadinServletConfiguration(productionMode = false, ui = MainUI.class, closeIdleSessions = true)
 public class CustomVaadinServlet extends SpringVaadinServlet {
 
 	@Autowired
