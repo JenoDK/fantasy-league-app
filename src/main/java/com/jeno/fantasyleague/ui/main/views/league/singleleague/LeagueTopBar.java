@@ -34,9 +34,7 @@ public class LeagueTopBar extends VerticalLayout {
 		setSizeFull();
 		addStyleName("league-view-topbar");
 
-		int width = (int) getWidth();
-		int height = (int) getHeight();
-		receiver = new VaadinImageUploader(width, height);
+		receiver = new VaadinImageUploader();
 		receiver.imageResized()
 				.map(FileResource::new)
 				.subscribe(fileResource -> imageLayout.setSource(fileResource));

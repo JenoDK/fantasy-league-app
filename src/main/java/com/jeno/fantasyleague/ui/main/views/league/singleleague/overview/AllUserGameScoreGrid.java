@@ -1,6 +1,7 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.overview;
 
 import java.util.List;
+import java.util.Objects;
 
 import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.ui.common.grid.CustomGrid;
@@ -35,7 +36,8 @@ public class AllUserGameScoreGrid extends CustomGrid<UserPredictionForGameBean> 
 				.setCaption("Prediction")
 				.setStyleGenerator(item -> {
 					String baseStyle = "v-align-center";
-					if (item.isPredictionIsHiddenForUser()) {
+					if (item.isPredictionIsHiddenForUser() ||
+							(Objects.isNull(item.getHomePrediction()) || Objects.isNull(item.getAwayPrediction()))) {
 						baseStyle = baseStyle + " grid-cell-tiny-text";
 					}
 					return baseStyle;

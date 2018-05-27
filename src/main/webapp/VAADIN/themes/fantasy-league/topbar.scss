@@ -12,6 +12,10 @@
 
         .v-menubar-menuitem-menu-state-item {
 
+        	&.profile-item .v-icon {
+				margin-right: 10px;
+        	}
+
             border: 0px;
             height: 60px;
             padding: 0 10px;

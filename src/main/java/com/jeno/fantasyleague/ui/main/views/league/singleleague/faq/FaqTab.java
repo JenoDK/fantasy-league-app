@@ -24,7 +24,7 @@ import com.vaadin.ui.VerticalLayout;
 
 public class FaqTab extends VerticalLayout {
 
-	public static final String SCORE_CALCULATION = "%s * (1 + %s/100) + (1/(%s/100)) * %s";
+	public static final String SCORE_CALCULATION = "%s * (1 + %s/100) * (1 + %s/100)";
 
 	private final League league;
 	private final SingleLeagueServiceProvider singleLeagueServiceProvider;
@@ -64,11 +64,10 @@ public class FaqTab extends VerticalLayout {
 		calcLayout.setMargin(false);
 
 		calcLayout.addComponent(
-				new Label("Earned points = " + String.format(SCORE_CALCULATION, "r", "w", "p", "q"), ContentMode.HTML));
+				new Label("Earned points = " + String.format(SCORE_CALCULATION, "r", "w", "p"), ContentMode.HTML));
 		calcLayout.addComponent(new Label("r: " + Resources.getMessage("matchResultFromTableBelow")));
 		calcLayout.addComponent(new Label("w: " + Resources.getMessage("teamWeight")));
 		calcLayout.addComponent(new Label("p: " + Resources.getMessage("teamPowerIndex")));
-		calcLayout.addComponent(new Label("q: " + Resources.getMessage("modifierForPowerIndex", findCurrentPowerIndexMultiplier())));
 
 		return calcLayout;
 	}

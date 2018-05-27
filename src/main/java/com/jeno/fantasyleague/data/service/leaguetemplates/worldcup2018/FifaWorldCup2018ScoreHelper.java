@@ -77,9 +77,9 @@ public class FifaWorldCup2018ScoreHelper {
 						.findFirst()
 						.get();
 
-				float powerIndexCoef = (1f / (contestantWeight.getContestant().getPower_index() / 100f)) * findPowerIndexMultiplier(league);
+				float powerIndexCoef = 1f + (contestantWeight.getContestant().getPower_index() / 100f);
 				float userWeightCoef = 1f + (contestantWeight.getWeight() / 100f);
-				totalScore = totalScore * userWeightCoef + powerIndexCoef;
+				totalScore = totalScore * userWeightCoef * powerIndexCoef;
 			}
 
 			return totalScore;

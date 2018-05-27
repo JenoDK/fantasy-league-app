@@ -28,7 +28,7 @@ public class ProfileView extends VerticalLayout implements View {
 
     @PostConstruct
     void init() {
-        addComponent(new Label("I could have been a profile view, but my developer was to lazy.<br/><br/>" +
+        addComponent(new Label("Hi " + securityHolder.getUser().getUsername() + ", I could have been a profile view, but my developer was to lazy.<br/><br/>" +
                 "Ok maybe I'll just let you adjust your profile picture...", ContentMode.HTML));
 
         User currentUser = securityHolder.getUser();

@@ -34,7 +34,9 @@ public class OverviewUtil {
 			Optional<Boolean> homeTeamWonOptional,
 			boolean isHidden,
 			String predictionHiddenUtil) {
-		if (isHidden) {
+		if (Objects.isNull(homeTeamScore) || Objects.isNull(awayTeamScore)) {
+			return Resources.getMessage("predictionIsIncomplete");
+		} else if (isHidden) {
 			return Resources.getMessage("hiddenUntil") + predictionHiddenUtil;
 		} else {
 			return getScoreWithWinner(homeTeamScore, awayTeamScore, homeTeamWonOptional);

@@ -25,19 +25,29 @@ public class VaadinImageUploader implements Upload.Receiver, Upload.SucceededLis
 	private final BehaviorSubject<File> imageResized = BehaviorSubject.create();
 	private final int maxWidthOfResizedPicture;
 	private final int maxHeightOfResizedPicture;
+	private final boolean needsResize;
 	private final boolean circle;
 
 	private File file;
 
+	public VaadinImageUploader() {
+		this.maxWidthOfResizedPicture = 0;
+		this.maxHeightOfResizedPicture = 0;
+		this.needsResize = false;
+		this.circle = false;
+	}
+
 	public VaadinImageUploader(int maxSizeOfResizedPicture) {
 		this.maxWidthOfResizedPicture = maxSizeOfResizedPicture;
 		this.maxHeightOfResizedPicture = maxSizeOfResizedPicture;
+		this.needsResize = true;
 		this.circle = true;
 	}
 
 	public VaadinImageUploader(int maxWidthOfResizedPicture, int maxHeightOfResizedPicture) {
 		this.maxWidthOfResizedPicture = maxWidthOfResizedPicture;
 		this.maxHeightOfResizedPicture = maxHeightOfResizedPicture;
+		this.needsResize = true;
 		this.circle = false;
 	}
 
@@ -56,11 +66,14 @@ public class VaadinImageUploader implements Upload.Receiver, Upload.SucceededLis
 	@Override
 	public void uploadSucceeded(Upload.SucceededEvent event) {
 		try {
-			BufferedImage resized = ImageUtil.resizeImage(ImageIO.read(file), maxWidthOfResizedPicture, maxHeightOfResizedPicture);
-			if (circle) {
-				resized = ImageUtil.cropToCircleShaped(resized, maxWidthOfResizedPicture);
+			BufferedImage image = ImageIO.read(file);
+			if (needsResize) {
+				image = ImageUtil.resizeImage(ImageIO.read(file), maxWidthOfResizedPicture, maxHeightOfResizedPicture);
 			}
-			ImageIO.write(resized, "PNG", file);
+			if (circle) {
+				image = ImageUtil.cropToCircleShaped(image, maxWidthOfResizedPicture);
+			}
+			ImageIO.write(image, "PNG", file);
 		} catch (IOException e) {
 			throw new ImageUploadException("Could not rescale image", e);
 		}

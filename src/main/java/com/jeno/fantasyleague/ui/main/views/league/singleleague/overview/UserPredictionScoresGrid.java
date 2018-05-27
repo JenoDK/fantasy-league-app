@@ -1,7 +1,10 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.overview;
 
+import java.util.Objects;
+
 import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.ui.common.grid.CustomGrid;
+import com.jeno.fantasyleague.util.DateUtil;
 import com.jeno.fantasyleague.util.GridUtil;
 import com.vaadin.data.provider.GridSortOrderBuilder;
 import com.vaadin.icons.VaadinIcons;
@@ -46,6 +49,9 @@ public class UserPredictionScoresGrid extends CustomGrid<UserPredictionScoreBean
 				},
 				new ComponentRenderer())
 				.setCaption("Team B");
+		Column<UserPredictionScoreBean, String> dateColumn =
+				addColumn(item -> DateUtil.DATE_TIME_FORMATTER.format(item.getGame().getGame_date_time()))
+						.setCaption("Date");
 		addColumn(bean -> OverviewUtil.getPredictionColumn(
 						bean.getPredictionHome_team_score(),
 						bean.getPredictionAway_team_score(),
@@ -55,7 +61,8 @@ public class UserPredictionScoresGrid extends CustomGrid<UserPredictionScoreBean
 				.setCaption("Prediction")
 				.setStyleGenerator(item -> {
 					String baseStyle = "v-align-center";
-					if (item.predictionIsHidden()) {
+					if (item.predictionIsHidden() ||
+							(Objects.isNull(item.getPredictionHome_team_score()) || Objects.isNull(item.getGameAway_team_score()))) {
 						baseStyle = baseStyle + " grid-cell-tiny-text";
 					}
 					return baseStyle;
@@ -68,7 +75,7 @@ public class UserPredictionScoresGrid extends CustomGrid<UserPredictionScoreBean
 				.setCaption("")
 				.setId("seeAllResultsButton")
 				.setWidth(70);
-		setSortOrder(new GridSortOrderBuilder().thenDesc(userScoreColumn));
+		setSortOrder(new GridSortOrderBuilder().thenDesc(userScoreColumn).thenAsc(dateColumn));
 	}
 
 	private Button createViewAllResultsButton(UserPredictionScoreBean bean) {

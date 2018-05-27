@@ -45,10 +45,10 @@ public class FifaWorldCup2018SettingRenderer implements LeagueSettingRenderer {
 
 		List<LeagueSetting> allLeagueSettings = leagueSettingRepository.findByLeague(league);
 
-		addPowerIndexMultiplierField(layout, allLeagueSettings.stream()
-				.filter(setting -> POWER_INDEX_MULTIPLIER.equals(setting.getName()))
-				.findFirst()
-				.get());
+//		addPowerIndexMultiplierField(layout, allLeagueSettings.stream()
+//				.filter(setting -> POWER_INDEX_MULTIPLIER.equals(setting.getName()))
+//				.findFirst()
+//				.get());
 
 		Accordion scorePerPhaseAccordion = new Accordion();
 
@@ -85,7 +85,7 @@ public class FifaWorldCup2018SettingRenderer implements LeagueSettingRenderer {
 				.bind(PositiveDoubleBean::getNumber, PositiveDoubleBean::setNumber);
 		powerIndexModifier.addStyleName(ValoTheme.TEXTFIELD_TINY);
 		powerIndexModifier.setWidthUndefined();
-		powerIndexModifier.setCaption(Resources.getMessage("modifierForPowerIndex"));
+		powerIndexModifier.setCaption(Resources.getMessage("powerIndexMultiplier"));
 		binder.addValueChangeListener(ignored ->
 			updateSettingsButton.setVisible(binder.validate().isOk()));
 		binder.setBean(bean);
