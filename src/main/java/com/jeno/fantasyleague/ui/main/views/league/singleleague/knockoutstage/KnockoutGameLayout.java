@@ -92,6 +92,9 @@ public abstract class KnockoutGameLayout extends VerticalLayout {
 					} else {
 						Notification.show(Resources.getMessage("toLateToUpdatePrediction"), Notification.Type.WARNING_MESSAGE);
 					}
+					if (prediction.getHome_team_score().equals(prediction.getAway_team_score()) && Objects.isNull(prediction.getWinner())) {
+						Notification.show("Be sure to select a winner", Notification.Type.WARNING_MESSAGE);
+					}
 				});
 
 
