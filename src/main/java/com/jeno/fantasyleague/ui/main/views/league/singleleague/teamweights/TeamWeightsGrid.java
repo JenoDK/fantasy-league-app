@@ -8,6 +8,7 @@ import com.jeno.fantasyleague.util.DecimalUtil;
 import com.jeno.fantasyleague.util.GridUtil;
 import com.vaadin.data.Binder;
 import com.vaadin.data.provider.ListDataProvider;
+import com.vaadin.data.validator.IntegerRangeValidator;
 import com.vaadin.shared.ui.grid.HeightMode;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.TextField;
@@ -18,7 +19,7 @@ import io.reactivex.subjects.BehaviorSubject;
 
 public class TeamWeightsGrid extends Grid<TeamWeightBean> {
 
-	private final BehaviorSubject<Object> weightChanged = BehaviorSubject.create();
+	private final BehaviorSubject<TeamWeightChangedBean> weightChanged = BehaviorSubject.create();
 
 	public TeamWeightsGrid(League league, ListDataProvider<TeamWeightBean> dataProvider) {
 		super();
@@ -50,15 +51,35 @@ public class TeamWeightsGrid extends Grid<TeamWeightBean> {
 		Binder<TeamWeightBean> binder = new Binder<>(TeamWeightBean.class);
 		binder.forField(field)
 				.withConverter(new StringToPositiveIntegerConverter(0, "Must enter a positive number"))
+//				.withValidator(new IntegerRangeValidator("Must enter a vlaue between 0 and 10", 0, 10))
 				.bind(TeamWeightBean::getStocksPurchased, TeamWeightBean::setStocksPurchased);
 		binder.setBean(weight);
-		binder.addValueChangeListener(ignored -> weightChanged.onNext(ignored.getValue()));
+		binder.addStatusChangeListener(status -> weightChanged.onNext(new TeamWeightChangedBean(weight, status.getBinder().isValid())));
 		weight.changes().subscribe(newBean -> binder.setBean(newBean));
 		field.addStyleName(ValoTheme.TEXTFIELD_TINY);
 		return field;
 	}
 
-	public Observable<Object> weightChanged() {
+	public Observable<TeamWeightChangedBean> weightChanged() {
 		return weightChanged;
+	}
+
+	public class TeamWeightChangedBean {
+
+		private final TeamWeightBean bean;
+		private final boolean valid;
+
+		public TeamWeightChangedBean(TeamWeightBean bean, boolean valid) {
+			this.bean = bean;
+			this.valid = valid;
+		}
+
+		public TeamWeightBean getBean() {
+			return bean;
+		}
+
+		public boolean isValid() {
+			return valid;
+		}
 	}
 }

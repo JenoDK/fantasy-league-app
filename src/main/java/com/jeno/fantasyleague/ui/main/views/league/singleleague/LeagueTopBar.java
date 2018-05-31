@@ -50,7 +50,6 @@ public class LeagueTopBar extends VerticalLayout {
 
 		imageLayout = new Image();
 		imageLayout.addStyleName("league-picture");
-		imageLayout.setSizeFull();
 		imageLayout.setSource(ImageUtil.getLeaguePictureResource(league));
 
 		HorizontalLayout titleLayout = new HorizontalLayout();
@@ -70,6 +69,7 @@ public class LeagueTopBar extends VerticalLayout {
 
 		addComponent(titleLayout);
 		addComponent(imageLayout);
+		setComponentAlignment(imageLayout, Alignment.MIDDLE_CENTER);
 	}
 
 	public Observable<File> imageUploadedAndResized() {

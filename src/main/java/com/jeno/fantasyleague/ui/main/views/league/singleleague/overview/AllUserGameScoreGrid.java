@@ -1,8 +1,10 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.overview;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 
+import com.jeno.fantasyleague.model.User;
 import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.ui.common.grid.CustomGrid;
 import com.jeno.fantasyleague.ui.common.grid.CustomGridBuilder;
@@ -11,8 +13,11 @@ import com.vaadin.data.provider.GridSortOrderBuilder;
 
 public class AllUserGameScoreGrid extends CustomGrid<UserPredictionForGameBean> {
 
-	public AllUserGameScoreGrid(List<UserPredictionForGameBean> items) {
+	private final User loggedInUser;
+
+	public AllUserGameScoreGrid(List<UserPredictionForGameBean> items, User loggedInUser) {
 		super();
+		this.loggedInUser = loggedInUser;
 		initColumns();
 
 		setItems(items);
@@ -24,7 +29,7 @@ public class AllUserGameScoreGrid extends CustomGrid<UserPredictionForGameBean> 
 						"userIcon",
 						bean -> new CustomGridBuilder.IconColumnValue(ImageUtil.getUserProfilePictureResource(bean.getUser())),
 						""));
-		addColumn(bean -> bean.getUser().getUsername())
+		addColumn(bean -> bean.getUser().getUsername() + (bean.getUser().getId().equals(loggedInUser.getId()) ? " (You)" : ""))
 				.setCaption(Resources.getMessage("username"))
 				.setId("userName");
 		addColumn(bean -> OverviewUtil.getPredictionColumn(
@@ -42,7 +47,7 @@ public class AllUserGameScoreGrid extends CustomGrid<UserPredictionForGameBean> 
 					}
 					return baseStyle;
 				});
-		Column<UserPredictionForGameBean, String> userScoreColumn =
+		Column<UserPredictionForGameBean, BigDecimal> userScoreColumn =
 				addColumn(bean -> OverviewUtil.getScoreFormatted(bean.getScore()))
 						.setCaption(Resources.getMessage("totalScore"))
 						.setId("totalScore");

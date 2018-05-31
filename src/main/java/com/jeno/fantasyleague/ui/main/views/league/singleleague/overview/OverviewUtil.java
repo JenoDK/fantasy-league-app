@@ -56,8 +56,8 @@ public class OverviewUtil {
 				.orElse(GridUtil.getScores(homeTeamScore, awayTeamScore));
 	}
 
-	public static String getScoreFormatted(double score) {
-		return new BigDecimal(score).setScale(2, BigDecimal.ROUND_HALF_UP).toEngineeringString();
+	public static BigDecimal getScoreFormatted(double score) {
+		return new BigDecimal(score).setScale(2, BigDecimal.ROUND_HALF_UP);
 	}
 
 }

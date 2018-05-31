@@ -1,6 +1,7 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.overview;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -40,12 +41,14 @@ public class AllUserResultsForGameLayout extends VerticalLayout {
 						prediction,
 						singleLeagueServiceprovider.getLeaguePredictionScoreForUser(league, prediction, prediction.getUser()),
 						Optional.ofNullable(bean.getHome_team())
+								.filter(ignored -> Objects.nonNull(prediction.getWinner()))
 								.map(Contestant::getId)
 								.map(id -> id.equals(prediction.getWinner_fk())),
 						OverviewUtil.isHiddenForUser(singleLeagueServiceprovider.getLoggedInUser(), league, prediction),
 						bean.getPredictionHiddenUntil()))
 				.collect(Collectors.toList());
-		AllUserGameScoreGrid grid = new AllUserGameScoreGrid(items);
+		AllUserGameScoreGrid grid = new AllUserGameScoreGrid(items, singleLeagueServiceprovider.getLoggedInUser());
+		grid.setWidth(90, Unit.PERCENTAGE);
 
 		VerticalLayout wrapper = new VerticalLayout();
 		wrapper.setMargin(false);

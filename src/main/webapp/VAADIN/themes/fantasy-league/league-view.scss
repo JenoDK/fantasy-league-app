@@ -1,3 +1,12 @@
+@mixin league-picture-box {
+	max-width: 100%;
+	padding: 5px;
+	border-radius: 4px;
+	border: 1px solid #c5c5c5;
+	border-top-color: #c5c5c5;
+	border-bottom-color: #bcbcbc;
+}
+
 @mixin league-view {
 
     .league-view {
@@ -17,6 +26,11 @@
                     cursor: pointer;
                 }
 
+                .league-picture {
+                	max-height: 90px;
+                	@include league-picture-box;
+                }
+
                 .add-new-form {
                     padding: 0 8 8 0px;
                 }
@@ -30,10 +44,7 @@
         	}
         	.league-picture {
         		max-height: 180px;
-        		border-radius: 4px;
-				border: 1px solid #c5c5c5;
-				border-top-color: #c5c5c5;
-				border-bottom-color: #bcbcbc;
+        		@include league-picture-box;
         	}
         	.v-caption-tiny-upload {
         		display: none;

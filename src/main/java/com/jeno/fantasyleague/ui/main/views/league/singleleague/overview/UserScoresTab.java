@@ -30,6 +30,7 @@ public class UserScoresTab extends VerticalLayout {
 
 	public UserScoresTab(League league, SingleLeagueServiceProvider singleLeagueServiceprovider) {
 		super();
+		addStyleName("overview-tab");
 		setMargin(true);
 		setSizeFull();
 
@@ -37,10 +38,11 @@ public class UserScoresTab extends VerticalLayout {
 		this.league = league;
 
 		List<UserTotalScoreBean> scoreBeans = fetchTotalScores();
-		UserTotalScoreGrid totalScoreGrid = new UserTotalScoreGrid(scoreBeans);
+		UserTotalScoreGrid totalScoreGrid = new UserTotalScoreGrid(scoreBeans, singleLeagueServiceprovider.getLoggedInUser());
 		totalScoreGrid.setWidth(100, Unit.PERCENTAGE);
 
 		Accordion predictionScoresLayout = new Accordion();
+		predictionScoresLayout.addStyleName("darker-tabcolor");
 
 		Map<FifaWorldCup2018Stages, UserPredictionScoresGrid> gridPerStageMap = Maps.newHashMap();
 		Arrays.stream(FifaWorldCup2018Stages.values())
@@ -58,7 +60,7 @@ public class UserScoresTab extends VerticalLayout {
 						.closable(true)
 						.resizable(true)
 						.setHeight(500)
-						.setWidth(550)
+						.setWidth(700)
 						.build()
 						.show());
 

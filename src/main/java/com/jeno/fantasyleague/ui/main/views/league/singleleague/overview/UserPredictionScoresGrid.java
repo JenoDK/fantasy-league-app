@@ -1,5 +1,6 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.overview;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 import com.jeno.fantasyleague.resources.Resources;
@@ -23,7 +24,7 @@ public class UserPredictionScoresGrid extends CustomGrid<UserPredictionScoreBean
 		super();
 		setWidth(100, Unit.PERCENTAGE);
 		initColumns();
-		setAdjustHeightDynamically(false);
+//		setAdjustHeightDynamically(false);
 	}
 
 	private void initColumns() {
@@ -67,7 +68,7 @@ public class UserPredictionScoresGrid extends CustomGrid<UserPredictionScoreBean
 					}
 					return baseStyle;
 				});
-		Column<UserPredictionScoreBean, String> userScoreColumn =
+		Column<UserPredictionScoreBean, BigDecimal> userScoreColumn =
 				addColumn(bean -> OverviewUtil.getScoreFormatted(bean.getPredictionScore()))
 						.setCaption(Resources.getMessage("pointsEarned"))
 						.setId("predictionScore");

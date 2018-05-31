@@ -25,8 +25,7 @@ public class ExistingLeagueGridComponent extends AbstractLeagueGridComponent {
 		addComponent(name);
 
 		Image leagueImage = new Image();
-		leagueImage.setWidth(100, Unit.PERCENTAGE);
-		leagueImage.setHeight(100, Unit.PERCENTAGE);
+		leagueImage.addStyleName("league-picture");
 		leagueImage.setSource(ImageUtil.getLeaguePictureResource(league));
 		addComponent(leagueImage);
 
