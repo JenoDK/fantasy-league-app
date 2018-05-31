@@ -1,5 +1,7 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.teamweights;
 
+import static com.jeno.fantasyleague.ui.main.views.league.singleleague.teamweights.TeamWeightBean.COSMETICAL_PRICE_MODIFIER;
+
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
@@ -10,6 +12,7 @@ import com.jeno.fantasyleague.model.League;
 import com.jeno.fantasyleague.ui.common.field.CustomButton;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.jeno.fantasyleague.util.DateUtil;
+import com.jeno.fantasyleague.util.DecimalUtil;
 import com.jeno.fantasyleague.util.RxUtil;
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.icons.VaadinIcons;
@@ -65,7 +68,7 @@ public class TeamWeightsTab extends HorizontalLayout {
 		teamWeightsGrid.weightChanged().subscribe(ignored ->
 			weightLeftField.setValue(getWeightToDistributeString()));
 
-		submit = new CustomButton("Update weights", VaadinIcons.USER_CHECK);
+		submit = new CustomButton("Buy", VaadinIcons.DOLLAR);
 		rightSide.addComponent(submit);
 
 		Label infoLabel = new Label("Changes can be made until " + DateUtil.DATE_TIME_FORMATTER.format(league.getLeague_starting_date()));
@@ -93,18 +96,18 @@ public class TeamWeightsTab extends HorizontalLayout {
 	}
 
 	public String getWeightToDistributeString() {
-		return "Weight to distribute: " + getWeightToDistribute();
+		return "Balance: $" + DecimalUtil.getTwoDecimalsThousandSeperator(getWeightToDistribute());
 	}
 
 	public Predicate<Button.ClickEvent> distributedCorrectly() {
 		return ignored -> {
-			boolean allDistributed = getWeightToDistribute() == 0;
-			if (!allDistributed) {
-				setError("Please distribute 100 points");
+			boolean didNotExceedLimit = getWeightToDistribute() >= 0;
+			if (!didNotExceedLimit) {
+				setError("Cannot exceed balance");
 			} else {
 				errorLabel.setVisible(false);
 			}
-			return allDistributed;
+			return didNotExceedLimit;
 		};
 	}
 
@@ -114,11 +117,11 @@ public class TeamWeightsTab extends HorizontalLayout {
 		errorLabel.setVisible(true);
 	}
 
-	public Integer getWeightToDistribute() {
-		int sumOfDistributedWeight = teamWeights.stream()
-				.mapToInt(TeamWeightBean::getWeight)
+	public Double getWeightToDistribute() {
+		Double sumOfDistributedWeight = teamWeights.stream()
+				.mapToDouble(TeamWeightBean::getPricePayed)
 				.sum();
-		return 100 - sumOfDistributedWeight;
+		return (100d - Math.round(sumOfDistributedWeight)) * COSMETICAL_PRICE_MODIFIER;
 	}
 
 	public List<ContestantWeight> getConestantWeights() {

@@ -1,7 +1,10 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.teamweights;
 
+import java.time.LocalDateTime;
+
 import com.jeno.fantasyleague.model.League;
 import com.jeno.fantasyleague.ui.common.field.StringToPositiveIntegerConverter;
+import com.jeno.fantasyleague.util.DecimalUtil;
 import com.jeno.fantasyleague.util.GridUtil;
 import com.vaadin.data.Binder;
 import com.vaadin.data.provider.ListDataProvider;
@@ -12,8 +15,6 @@ import com.vaadin.ui.renderers.ComponentRenderer;
 import com.vaadin.ui.themes.ValoTheme;
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
-
-import java.time.LocalDateTime;
 
 public class TeamWeightsGrid extends Grid<TeamWeightBean> {
 
@@ -35,9 +36,11 @@ public class TeamWeightsGrid extends Grid<TeamWeightBean> {
 				.setCaption("Team");
 		addColumn(TeamWeightBean::getPowerIndex)
 				.setCaption("Power Index");
+		addColumn(bean -> "$" + DecimalUtil.getTwoDecimalsThousandSeperator(bean.getShareCost()))
+				.setCaption("Stock price");
 		addColumn(teamWeight -> createWeightField(league, teamWeight), new ComponentRenderer())
 				.setWidth(150)
-				.setCaption("Weight");
+				.setCaption("Stocks purchased");
 	}
 
 	private TextField createWeightField(League league, TeamWeightBean weight) {
@@ -47,7 +50,7 @@ public class TeamWeightsGrid extends Grid<TeamWeightBean> {
 		Binder<TeamWeightBean> binder = new Binder<>(TeamWeightBean.class);
 		binder.forField(field)
 				.withConverter(new StringToPositiveIntegerConverter(0, "Must enter a positive number"))
-				.bind(TeamWeightBean::getWeight, TeamWeightBean::setWeight);
+				.bind(TeamWeightBean::getStocksPurchased, TeamWeightBean::setStocksPurchased);
 		binder.setBean(weight);
 		binder.addValueChangeListener(ignored -> weightChanged.onNext(ignored.getValue()));
 		weight.changes().subscribe(newBean -> binder.setBean(newBean));

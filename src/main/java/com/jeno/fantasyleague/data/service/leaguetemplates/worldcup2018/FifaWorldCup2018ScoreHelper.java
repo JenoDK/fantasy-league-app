@@ -77,9 +77,8 @@ public class FifaWorldCup2018ScoreHelper {
 						.findFirst()
 						.get();
 
-				float powerIndexCoef = 1f + (1f - (contestantWeight.getContestant().getPower_index() / 100f));
-				float userWeightCoef = 1f + (contestantWeight.getWeight() / 100f);
-				totalScore = totalScore * userWeightCoef * powerIndexCoef;
+				float userWeightCoef = 1f + (contestantWeight.getWeight() / 10f);
+				totalScore = totalScore * userWeightCoef;
 			} else {
 				ContestantWeight homeTeamWeight = weights.stream()
 						.filter(weight -> weight.getContestant().getId().equals(prediction.getGame().getHome_team_fk()))
@@ -90,15 +89,11 @@ public class FifaWorldCup2018ScoreHelper {
 						.findFirst()
 						.get();
 
-				float homeTeamPowerIndex = 1f + (1f - (homeTeamWeight.getContestant().getPower_index() / 100f));
-				float awayTeamPowerIndex = 1f + (1f - (awayTeamWeight.getContestant().getPower_index() / 100f));
-				float averagePowerIndex = (homeTeamPowerIndex + awayTeamPowerIndex) / 2;
-
-				float homeTeamWeightValue = 1f + (homeTeamWeight.getWeight() / 100f);
-				float awayTeamWeightValue = 1f + (awayTeamWeight.getWeight() / 100f);
+				float homeTeamWeightValue = 1f + (homeTeamWeight.getWeight() / 10f);
+				float awayTeamWeightValue = 1f + (awayTeamWeight.getWeight() / 10f);
 				float averageWeightValue = (homeTeamWeightValue + awayTeamWeightValue) / 2;
 
-				totalScore = totalScore * averageWeightValue * averagePowerIndex;
+				totalScore = totalScore * averageWeightValue;
 			}
 
 			return totalScore;

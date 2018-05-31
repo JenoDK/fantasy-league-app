@@ -62,7 +62,7 @@ public class UserPredictionScoresGrid extends CustomGrid<UserPredictionScoreBean
 				.setStyleGenerator(item -> {
 					String baseStyle = "v-align-center";
 					if (item.predictionIsHidden() ||
-							(Objects.isNull(item.getPredictionHome_team_score()) || Objects.isNull(item.getGameAway_team_score()))) {
+							(Objects.isNull(item.getPredictionHome_team_score()) || Objects.isNull(item.getPredictionAway_team_score()))) {
 						baseStyle = baseStyle + " grid-cell-tiny-text";
 					}
 					return baseStyle;

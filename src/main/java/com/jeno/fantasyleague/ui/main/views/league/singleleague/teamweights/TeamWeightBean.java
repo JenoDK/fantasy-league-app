@@ -7,45 +7,57 @@ import io.reactivex.subjects.BehaviorSubject;
 
 public class TeamWeightBean {
 
+	public static final Integer COSMETICAL_PRICE_MODIFIER = 1000000;
+
 	private final BehaviorSubject<TeamWeightBean> changes = BehaviorSubject.create();
 
 	private ContestantWeight contestantWeight;
-	private Integer weight;
+	private Double shareCost;
+	private Integer stocksPurchased;
 
 	public TeamWeightBean(ContestantWeight contestantWeight) {
 		this.contestantWeight = contestantWeight;
-		this.weight = contestantWeight.getWeight();
+		this.shareCost = contestantWeight.getContestant().getPower_index().doubleValue() / 10d;
+		this.stocksPurchased = contestantWeight.getWeight();
 	}
 
 	public Contestant getContestant() {
 		return contestantWeight.getContestant();
 	}
 
-	public Integer getWeight() {
-		return weight != null ? weight : 0;
+	public Integer getStocksPurchased() {
+		return stocksPurchased != null ? stocksPurchased : 0;
 	}
 
-	public void setWeight(Integer weight) {
-		this.weight = weight;
+	public void setStocksPurchased(Integer stocksPruchased) {
+		this.stocksPurchased = stocksPruchased;
 	}
 
 	public Integer getPowerIndex() {
 		return contestantWeight.getContestant().getPower_index();
 	}
 
+	public Double getShareCost() {
+		return shareCost * COSMETICAL_PRICE_MODIFIER;
+	}
+
 	public ContestantWeight setWeightAndContestantWeight() {
-		contestantWeight.setWeight(weight);
+		contestantWeight.setWeight(stocksPurchased);
 		return contestantWeight;
 	}
 
 	public void reset() {
-		if (contestantWeight.getWeight() != weight) {
-			setWeight(contestantWeight.getWeight());
+		if (contestantWeight.getWeight() != stocksPurchased) {
+			setStocksPurchased(contestantWeight.getWeight());
 			changes.onNext(this);
 		}
 	}
 
 	public Observable<TeamWeightBean> changes() {
 		return changes;
+	}
+
+	public double getPricePayed() {
+		return stocksPurchased * shareCost;
 	}
 }
