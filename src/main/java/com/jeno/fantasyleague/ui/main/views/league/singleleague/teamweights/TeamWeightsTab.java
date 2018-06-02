@@ -53,11 +53,11 @@ public class TeamWeightsTab extends VerticalLayout {
 			boolean exceedsLimit = getWeightToDistribute() < 0;
 			boolean isInTime = LocalDateTime.now().isBefore(league.getLeague_starting_date());
 			balanceLabel.setValue(getWeightToDistributeString());
-			if (exceedsLimit) {
+			if (!isInTime) {
+				Notification.show(Resources.getMessage("cannotPurchaseStock", DateUtil.DATE_TIME_FORMATTER.format(league.getLeague_starting_date())), Notification.Type.WARNING_MESSAGE);
+			} else if (exceedsLimit) {
 				Notification.show(Resources.getMessage("cannotExceedBalanceLimit"), Notification.Type.WARNING_MESSAGE);
 				balanceLabel.addStyleName("red");
-			} else if (!isInTime) {
-				Notification.show(Resources.getMessage("cannotPurchaseStock", DateUtil.DATE_TIME_FORMATTER.format(league.getLeague_starting_date())), Notification.Type.WARNING_MESSAGE);
 			} else if (beanChanged.isValid()) {
 				singleLeagueServiceprovider.getContestantWeightRepository().saveAndFlush(beanChanged.getBean().setWeightAndContestantWeight());
 				balanceLabel.removeStyleName("red");

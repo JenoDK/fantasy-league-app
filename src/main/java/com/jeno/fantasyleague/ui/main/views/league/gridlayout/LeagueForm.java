@@ -40,7 +40,7 @@ public class LeagueForm extends HorizontalLayout {
 	private void initBinder() {
 		binder.forField(nameField).bind("name");
 		binder.forField(templateCombobox).bind("template");
-		binder.setBean(new League());
+		reset();
 	}
 
 	private void initLayout() {
@@ -89,6 +89,8 @@ public class LeagueForm extends HorizontalLayout {
 	}
 
 	public void reset() {
-		binder.setBean(new League());
+		League bean = new League();
+		bean.setTemplate(Template.FIFA_WORLD_CUP_2018);
+		binder.setBean(bean);
 	}
 }

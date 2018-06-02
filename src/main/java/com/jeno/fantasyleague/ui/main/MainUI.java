@@ -8,9 +8,11 @@ import com.jeno.fantasyleague.ui.main.views.accessdenied.AccessDeniedView;
 import com.jeno.fantasyleague.ui.main.views.error.ErrorView;
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
+import com.vaadin.annotations.Title;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.shared.communication.PushMode;
+import com.vaadin.shared.ui.ui.Transport;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.ui.Panel;
@@ -20,7 +22,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @SpringUI
 @Theme("fantasy-league")
-@Push(value = PushMode.AUTOMATIC)
+@Title("Fantasy League")
+@Push(value = PushMode.AUTOMATIC, transport = Transport.LONG_POLLING)
 public class MainUI extends UI implements Broadcaster.BroadcastListener {
 
     @Autowired

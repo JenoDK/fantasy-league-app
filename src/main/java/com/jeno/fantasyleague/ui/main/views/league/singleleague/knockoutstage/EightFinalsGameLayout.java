@@ -2,9 +2,9 @@ package com.jeno.fantasyleague.ui.main.views.league.singleleague.knockoutstage;
 
 import java.time.LocalDateTime;
 import java.util.function.Consumer;
-import java.util.stream.Stream;
 
 import com.jeno.fantasyleague.data.service.leaguetemplates.worldcup2018.FifaWorldCup2018Initializer;
+import com.jeno.fantasyleague.data.service.repo.game.GameServiceImpl;
 import com.jeno.fantasyleague.model.Contestant;
 import com.jeno.fantasyleague.model.Game;
 import com.jeno.fantasyleague.model.League;
@@ -57,7 +57,7 @@ public class EightFinalsGameLayout extends KnockoutGameLayout {
 	}
 
 	private ComboBox<Contestant> getContestantComboBox(KnockoutGameBean game, String placeHolder, Contestant possibleContestant, Consumer<Contestant> contestantConsumer) {
-		DataProvider<Contestant, String> dataProvider = getDataProvider(getGroup(placeHolder));
+		DataProvider<Contestant, String> dataProvider = getDataProvider(GameServiceImpl.getGroup(placeHolder).get());
 		ComboBox<Contestant> contestantCombobox = new ComboBox<>();
 		contestantCombobox.addStyleName("contestantSelection");
 		contestantCombobox.addStyleName(ValoTheme.COMBOBOX_SMALL);
@@ -90,13 +90,6 @@ public class EightFinalsGameLayout extends KnockoutGameLayout {
 		return new CallbackDataProvider<>(
 				q -> singleLeagueServiceprovider.getContestantService().getPossibleContestantsFromGroupStage(group, league).stream(),
 				q -> singleLeagueServiceprovider.getContestantService().getPossibleContestantsFromGroupStage(group, league).size());
-	}
-
-	private FifaWorldCup2018Initializer.Group getGroup(String placeHolder) {
-		return Stream.of(FifaWorldCup2018Initializer.Group.values())
-				.filter(group -> placeHolder.contains(group.getGroupName()))
-				.findFirst()
-				.get();
 	}
 
 }
