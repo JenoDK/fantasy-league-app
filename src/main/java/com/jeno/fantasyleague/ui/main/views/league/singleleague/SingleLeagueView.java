@@ -32,9 +32,9 @@ public class SingleLeagueView extends VerticalLayout {
 		setSpacing(false);
 
 		tabSheet = new LazyTabSheet();
+		tabSheet.addLazyTab("teamWeightsTab", "Purchase stocks", () -> new TeamWeightsTab(league, singleLeagueServiceprovider));
 		tabSheet.addLazyTab("groupStageTab", "Group Stage", () -> new GroupStageTab(league, singleLeagueServiceprovider));
 		tabSheet.addLazyTab("knockoutStageTab", "Knockout Stage", () -> new KnockoutStageTab(league, singleLeagueServiceprovider));
-		tabSheet.addLazyTab("teamWeightsTab", "Purchase stocks", () -> new TeamWeightsTab(league, singleLeagueServiceprovider));
 		tabSheet.addLazyTab("overview", "Overview", () -> new UserScoresTab(league, singleLeagueServiceprovider));
 		tabSheet.addLazyTab("fas", "FAQ", () -> new FaqTab(league, singleLeagueServiceprovider));
 		if (singleLeagueServiceprovider.loggedInUserIsLeagueCreator(league)) {

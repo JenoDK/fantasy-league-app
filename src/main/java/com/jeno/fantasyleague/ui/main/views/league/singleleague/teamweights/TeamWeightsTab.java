@@ -80,7 +80,7 @@ public class TeamWeightsTab extends VerticalLayout {
 		Double sumOfDistributedWeight = teamWeights.stream()
 				.mapToDouble(TeamWeightBean::getPricePayed)
 				.sum();
-		return (100d - Math.round(sumOfDistributedWeight)) * COSMETICAL_PRICE_MODIFIER;
+		return (100d - sumOfDistributedWeight) * COSMETICAL_PRICE_MODIFIER;
 	}
 
 }

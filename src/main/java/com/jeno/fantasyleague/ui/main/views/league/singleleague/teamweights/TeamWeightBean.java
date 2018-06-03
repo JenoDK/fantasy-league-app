@@ -7,7 +7,7 @@ import io.reactivex.subjects.BehaviorSubject;
 
 public class TeamWeightBean {
 
-	public static final Integer COSMETICAL_PRICE_MODIFIER = 1000000;
+	public static final Integer COSMETICAL_PRICE_MODIFIER = 100000;
 
 	private final BehaviorSubject<TeamWeightBean> changes = BehaviorSubject.create();
 
