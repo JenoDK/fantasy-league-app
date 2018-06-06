@@ -1,13 +1,16 @@
 package com.jeno.fantasyleague.data.service.leaguetemplates.worldcup2018;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import com.google.common.collect.Maps;
 import com.jeno.fantasyleague.data.repository.ContestantWeightRepository;
 import com.jeno.fantasyleague.data.repository.LeagueSettingRepository;
 import com.jeno.fantasyleague.data.repository.PredictionRepository;
+import com.jeno.fantasyleague.data.service.repo.league.UserLeagueScore;
 import com.jeno.fantasyleague.model.ContestantWeight;
 import com.jeno.fantasyleague.model.League;
 import com.jeno.fantasyleague.model.LeagueSetting;
@@ -26,10 +29,11 @@ public class FifaWorldCup2018ScoreHelper {
 	@Autowired
 	private LeagueSettingRepository leagueSettingRepository;
 
-	public Map<FifaWorldCup2018Stages, Double> calculateTotalUserScore(League league, User user) {
+	public UserLeagueScore calculateTotalUserScore(League league, User user) {
 		List<Prediction> predictionsWithJoinedGames = predictionRepository.findByLeagueAndUserAndJoinGames(league, user);
 		List<ContestantWeight> weights = contestantWeightRepository.findByUserAndLeagueAndJoinContestant(user, league);
 		Map<FifaWorldCup2018Stages, Double> scorePerStage = Maps.newHashMap();
+		Map<LocalDateTime, Double> scorePerDate = Maps.newHashMap();
 		predictionsWithJoinedGames.forEach(prediction -> {
 			FifaWorldCup2018Stages stage = FifaWorldCup2018Stages.valueOf(prediction.getGame().getStage());
 			double scoreForPrediction = calculateScoreOfPrediction(prediction, league, weights);
@@ -38,8 +42,22 @@ public class FifaWorldCup2018ScoreHelper {
 			} else {
 				scorePerStage.put(stage, scoreForPrediction);
 			}
+			LocalDateTime gameDate = prediction.getGame().getGame_date_time();
+			if (scorePerDate.containsKey(gameDate)) {
+				scorePerDate.put(gameDate, scorePerDate.get(gameDate) + scoreForPrediction);
+			} else {
+				scorePerDate.put(gameDate, scoreForPrediction);
+			}
 		});
-		return scorePerStage;
+		double score = 0d;
+		for (LocalDateTime localDateTime : scorePerDate.keySet().stream()
+				.sorted(LocalDateTime::compareTo)
+				.collect(Collectors.toList())) {
+			Double scoreFromDate = scorePerDate.get(localDateTime);
+			score += scoreFromDate;
+			scorePerDate.put(localDateTime, score);
+		}
+		return new UserLeagueScore(user, scorePerStage, scorePerDate);
 	}
 
 	public double calculateScoreOfPrediction(League league, Prediction prediction, User user) {

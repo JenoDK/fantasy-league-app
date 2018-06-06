@@ -1,7 +1,6 @@
 package com.jeno.fantasyleague.ui.main.views.league;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -17,10 +16,10 @@ import com.jeno.fantasyleague.data.repository.UserNotificationRepository;
 import com.jeno.fantasyleague.data.security.SecurityHolder;
 import com.jeno.fantasyleague.data.service.email.ApplicationEmailService;
 import com.jeno.fantasyleague.data.service.leaguetemplates.LeagueTemplateService;
-import com.jeno.fantasyleague.data.service.leaguetemplates.worldcup2018.FifaWorldCup2018Stages;
 import com.jeno.fantasyleague.data.service.repo.contestant.ContestantService;
 import com.jeno.fantasyleague.data.service.repo.game.GameService;
 import com.jeno.fantasyleague.data.service.repo.league.LeagueService;
+import com.jeno.fantasyleague.data.service.repo.league.UserLeagueScore;
 import com.jeno.fantasyleague.data.service.repo.user.UserService;
 import com.jeno.fantasyleague.model.ContestantWeight;
 import com.jeno.fantasyleague.model.Game;
@@ -167,7 +166,7 @@ public class SingleLeagueServiceProvider {
 		return beanFactory.getBean(league.getTemplate().getTemplateServiceBeanName(), LeagueTemplateService.class);
 	}
 
-	public Map<FifaWorldCup2018Stages, Double> getUserLeagueScore(League league, User user) {
+	public UserLeagueScore getUserLeagueScore(League league, User user) {
 		return leagueService.getTotalLeagueScoreForUser(league, user);
 	}
 

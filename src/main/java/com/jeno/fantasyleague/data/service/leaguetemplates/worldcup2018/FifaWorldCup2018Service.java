@@ -1,10 +1,9 @@
 package com.jeno.fantasyleague.data.service.leaguetemplates.worldcup2018;
 
-import java.util.Map;
-
 import com.jeno.fantasyleague.data.service.leaguetemplates.LeagueSettingRenderer;
 import com.jeno.fantasyleague.data.service.leaguetemplates.LeagueTemplateService;
 import com.jeno.fantasyleague.data.service.leaguetemplates.TemplateException;
+import com.jeno.fantasyleague.data.service.repo.league.UserLeagueScore;
 import com.jeno.fantasyleague.model.League;
 import com.jeno.fantasyleague.model.Prediction;
 import com.jeno.fantasyleague.model.User;
@@ -27,7 +26,7 @@ public class FifaWorldCup2018Service implements LeagueTemplateService {
 	}
 
 	@Override
-	public Map<FifaWorldCup2018Stages, Double> calculateTotalUserScore(League league, User user) {
+	public UserLeagueScore calculateTotalUserScore(League league, User user) {
 		return fifaWorldCup2018ScoreHelper.calculateTotalUserScore(league, user);
 	}
 

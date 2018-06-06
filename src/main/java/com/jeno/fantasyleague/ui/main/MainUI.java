@@ -6,9 +6,12 @@ import com.jeno.fantasyleague.ui.main.broadcast.Broadcaster;
 import com.jeno.fantasyleague.ui.main.navigation.TopBar;
 import com.jeno.fantasyleague.ui.main.views.accessdenied.AccessDeniedView;
 import com.jeno.fantasyleague.ui.main.views.error.ErrorView;
+import com.vaadin.addon.charts.ChartOptions;
+import com.vaadin.addon.charts.themes.VaadinTheme;
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
+import com.vaadin.annotations.Widgetset;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.shared.communication.PushMode;
@@ -23,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @SpringUI
 @Theme("fantasy-league")
 @Title("Fantasy League")
+@Widgetset("AppWidgetset")
 @Push(value = PushMode.AUTOMATIC, transport = Transport.LONG_POLLING)
 public class MainUI extends UI implements Broadcaster.BroadcastListener {
 
@@ -64,6 +68,9 @@ public class MainUI extends UI implements Broadcaster.BroadcastListener {
 
         // Register to receive broadcasts
         Broadcaster.register(securityHolder.getUser().getId(), this);
+
+        // Set Charts theme for the current UI
+        ChartOptions.get().setTheme(new VaadinTheme());
     }
 
     // Must also unregister when the UI expires

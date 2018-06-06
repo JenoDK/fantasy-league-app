@@ -1,10 +1,7 @@
 package com.jeno.fantasyleague.data.service.repo.league;
 
-import java.util.Map;
-
 import com.jeno.fantasyleague.data.repository.LeagueRepository;
 import com.jeno.fantasyleague.data.service.leaguetemplates.LeagueTemplateService;
-import com.jeno.fantasyleague.data.service.leaguetemplates.worldcup2018.FifaWorldCup2018Stages;
 import com.jeno.fantasyleague.data.service.repo.contestantweight.ContestantWeightService;
 import com.jeno.fantasyleague.data.service.repo.prediction.PredictionService;
 import com.jeno.fantasyleague.model.League;
@@ -51,7 +48,7 @@ public class LeagueServiceImpl implements LeagueService {
 	}
 
 	@Override
-	public Map<FifaWorldCup2018Stages, Double> getTotalLeagueScoreForUser(League league, User user) {
+	public UserLeagueScore getTotalLeagueScoreForUser(League league, User user) {
 		// Run template bean
 		LeagueTemplateService templateServiceBean = beanFactory.getBean(league.getTemplate().getTemplateServiceBeanName(), LeagueTemplateService.class);
 		return templateServiceBean.calculateTotalUserScore(league, user);
