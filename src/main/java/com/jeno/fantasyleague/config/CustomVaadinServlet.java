@@ -40,7 +40,9 @@ public class CustomVaadinServlet extends SpringVaadinServlet {
 			}
 			Resources.set(loadResources());
 		} catch (SessionExpiredException | ServiceException e) {
-			throw new ServletException(e);
+			if (!(e instanceof SessionExpiredException)) {
+				throw new ServletException(e);
+			}
 		}
 		super.service(request, response);
 	}
