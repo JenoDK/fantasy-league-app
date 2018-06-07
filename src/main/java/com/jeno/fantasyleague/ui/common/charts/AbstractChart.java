@@ -31,6 +31,10 @@ public abstract class AbstractChart extends Chart {
 		setData();
 	}
 
+	public boolean needsShowing(String name) {
+		return seriesShownPerId.containsKey(name) && seriesShownPerId.get(name);
+	}
+
 	public Set<String> getIdsWithSeriesShown() {
 		return seriesShownPerId.entrySet().stream()
 				.filter(entry -> entry.getValue())

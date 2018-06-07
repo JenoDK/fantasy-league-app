@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Lists;
 import com.jeno.fantasyleague.data.service.leaguetemplates.worldcup2018.FifaWorldCup2018Stages;
 import com.jeno.fantasyleague.model.User;
 import com.jeno.fantasyleague.resources.Resources;
@@ -32,6 +33,7 @@ public class TotalUserScoresChart extends AbstractChart {
 
 	private List<UserTotalScoreBean> scoreBeans;
 	private User loggedInUser;
+	private List<String> userNames = Lists.newArrayList();
 
 	public TotalUserScoresChart(List<UserTotalScoreBean> scoreBeans, User loggedInUser) {
 		super(ChartType.COLUMN);
@@ -78,11 +80,11 @@ public class TotalUserScoresChart extends AbstractChart {
 	}
 
 	private void initData() {
-		Set<String> userNames = scoreBeans.stream()
-				.sorted(Comparator.comparingDouble(UserTotalScoreBean::getTotalScore))
+		userNames = scoreBeans.stream()
+				.sorted(Comparator.comparingDouble(UserTotalScoreBean::getTotalScore).reversed())
 				.map(UserTotalScoreBean::getUser)
 				.map(User::getUsername)
-				.collect(Collectors.toSet());
+				.collect(Collectors.toList());
 		Set<String> topFive = userNames.stream()
 				.limit(5)
 				.collect(Collectors.toSet());
@@ -92,13 +94,15 @@ public class TotalUserScoresChart extends AbstractChart {
 
 	@Override
 	protected void setData() {
-		Set<String> namesToShow = getIdsWithSeriesShown();
+		List<String> namesToShow = userNames.stream()
+				.filter(this::needsShowing)
+				.collect(Collectors.toList());
 		conf.getxAxis().setCategories(namesToShow.stream().toArray(String[]::new));
 
 		ArrayListMultimap<FifaWorldCup2018Stages, Number> perStageUserScoresMap = ArrayListMultimap.create();
 		scoreBeans.stream()
 				.filter(bean -> namesToShow.contains(bean.getUser().getUsername()))
-				.sorted(Comparator.comparingDouble(UserTotalScoreBean::getTotalScore))
+				.sorted(Comparator.comparingDouble(UserTotalScoreBean::getTotalScore).reversed())
 				.forEach(bean -> {
 					Arrays.stream(FifaWorldCup2018Stages.values())
 							.forEach(stage -> perStageUserScoresMap.put(stage, OverviewUtil.getScoreFormatted(bean.getScore(stage))));
