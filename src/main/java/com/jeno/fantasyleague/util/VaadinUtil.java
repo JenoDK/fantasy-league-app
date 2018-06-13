@@ -55,22 +55,26 @@ public class VaadinUtil {
 		errorMap.entrySet().forEach(entry -> {
 			Optional<Binder.Binding<T, ?>> binding = binder.getBinding(entry.getKey());
 			if (binding.isPresent()) {
-				((AbstractComponent) binding.get().getField()).setComponentError(new ErrorMessage() {
-					@Override
-					public ErrorLevel getErrorLevel() {
-						return ErrorLevel.ERROR;
-					}
-
-					@Override
-					public String getFormattedHtmlMessage() {
-						return entry.getValue();
-					}
-				});
+				((AbstractComponent) binding.get().getField()).setComponentError(getComponentError(entry.getValue()));
 			} else {
 				errorsWithoutBinding.put(entry.getKey(), entry.getValue());
 			}
 		});
 		return errorsWithoutBinding;
+	}
+
+	public static ErrorMessage getComponentError(String msg) {
+		return new ErrorMessage() {
+			@Override
+			public ErrorLevel getErrorLevel() {
+				return ErrorLevel.ERROR;
+			}
+
+			@Override
+			public String getFormattedHtmlMessage() {
+				return msg;
+			}
+		};
 	}
 
 	public static void logout() {

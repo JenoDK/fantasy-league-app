@@ -1,5 +1,8 @@
 package com.jeno.fantasyleague.data.dao;
 
+import java.util.Map;
+import java.util.Optional;
+
 import com.google.common.collect.Sets;
 import com.jeno.fantasyleague.data.repository.RoleRepository;
 import com.jeno.fantasyleague.data.repository.UserRepository;
@@ -8,8 +11,6 @@ import com.jeno.fantasyleague.model.RoleName;
 import com.jeno.fantasyleague.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.Map;
 
 @Component
 public class UserDao extends AbstractDao<User, UserRepository> {
@@ -20,15 +21,29 @@ public class UserDao extends AbstractDao<User, UserRepository> {
 	private CustomBCryptPasswordEncoder passwordEncoder;
 
 	@Override
-	protected void validateAdd(User ser, Map<String, String> errorMap) {
-		if (repository.existsByEmail(ser.getEmail())) {
+	protected void validateAdd(User user, Map<String, String> errorMap) {
+		if (repository.existsByEmail(user.getEmail())) {
 			errorMap.put("email", "Email has been used before");
 		}
-		if (repository.findByUsername(ser.getUsername()).isPresent()) {
+		if (repository.findByUsername(user.getUsername()).isPresent()) {
 			errorMap.put("username", "Username has been used before");
 		}
 
-		super.validateAdd(ser, errorMap);
+		super.validateAdd(user, errorMap);
+	}
+
+	@Override
+	protected void validateUpdate(User user, Map<String, String> errorMap) {
+		Optional<User> emailExistsUser = repository.findByEmail(user.getEmail());
+		if (emailExistsUser.isPresent() && !emailExistsUser.get().getId().equals(user.getId())) {
+			errorMap.put("email", "Email has been used before");
+		}
+		Optional<User> usernameExistsUser = repository.findByUsername(user.getUsername());
+		if (usernameExistsUser.isPresent() && !usernameExistsUser.get().getId().equals(user.getId())) {
+			errorMap.put("username", "Username has been used before");
+		}
+
+		super.validateUpdate(user, errorMap);
 	}
 
 	@Override
