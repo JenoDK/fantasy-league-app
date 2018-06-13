@@ -54,6 +54,10 @@
         	border-left	: 1px solid #c5c5c5;
     	}
 
+		.v-slot-chart-user-selection {
+			overflow-x: auto;
+		}
+
     	.has-selection-section {
         	border-radius: 4px;
         	border: 1px solid #c5c5c5;
