@@ -2,6 +2,7 @@ package com.jeno.fantasyleague.ui.main.views.league.singleleague.teamweights;
 
 import static com.jeno.fantasyleague.ui.main.views.league.singleleague.teamweights.TeamWeightBean.COSMETICAL_PRICE_MODIFIER;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
@@ -50,7 +51,7 @@ public class TeamWeightsTab extends VerticalLayout {
 
 		teamWeightsGrid.weightChanged()
 				.subscribe(beanChanged -> {
-			boolean exceedsLimit = getWeightToDistribute() < 0;
+			boolean exceedsLimit = getWeightToDistribute().compareTo(BigDecimal.ZERO) == -1;
 			boolean isInTime = LocalDateTime.now().isBefore(league.getLeague_starting_date());
 			balanceLabel.setValue(getWeightToDistributeString());
 			if (!isInTime) {
@@ -76,11 +77,11 @@ public class TeamWeightsTab extends VerticalLayout {
 		return VaadinIcons.WALLET.getHtml() + "   $" + DecimalUtil.getTwoDecimalsThousandSeperator(getWeightToDistribute());
 	}
 
-	public Double getWeightToDistribute() {
-		Double sumOfDistributedWeight = teamWeights.stream()
-				.mapToDouble(TeamWeightBean::getPricePayed)
-				.sum();
-		return (100d - sumOfDistributedWeight) * COSMETICAL_PRICE_MODIFIER;
+	public BigDecimal getWeightToDistribute() {
+		BigDecimal sumOfDistributedWeight = teamWeights.stream()
+				.map(TeamWeightBean::getPricePayed)
+				.reduce(BigDecimal.ZERO, BigDecimal::add);
+		return BigDecimal.valueOf(100).subtract(sumOfDistributedWeight).multiply(COSMETICAL_PRICE_MODIFIER);
 	}
 
 }
