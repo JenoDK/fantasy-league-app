@@ -31,7 +31,7 @@ public class UserTotalScoreGrid extends CustomGrid<UserTotalScoreBean> {
 						"userIcon",
 						userTotalScoreBean -> new CustomGridBuilder.IconColumnValue(ImageUtil.getUserProfilePictureResource(userTotalScoreBean.getUser())),
 						""));
-		addColumn(userTotalScoreBean -> userTotalScoreBean.getUser().getUsername() + (userTotalScoreBean.getUser().getId().equals(loggedInUser.getId()) ? " (You)" : ""))
+		addColumn(userTotalScoreBean -> getUserInfoColumn(userTotalScoreBean))
 				.setCaption(Resources.getMessage("username"))
 				.setId("userName");
 		Arrays.stream(FifaWorldCup2018Stages.values())
@@ -46,6 +46,12 @@ public class UserTotalScoreGrid extends CustomGrid<UserTotalScoreBean> {
 						.setCaption(Resources.getMessage("totalScore"))
 						.setId("totalScore");
 		setSortOrder(new GridSortOrderBuilder().thenDesc(userScoreColumn));
+	}
+
+	private String getUserInfoColumn(UserTotalScoreBean userTotalScoreBean) {
+		return userTotalScoreBean.getUser().getUsername() +
+				(userTotalScoreBean.getUser().getId().equals(loggedInUser.getId()) ? " (You)" : "") +
+				" - " + userTotalScoreBean.getUser().getName();
 	}
 
 }
