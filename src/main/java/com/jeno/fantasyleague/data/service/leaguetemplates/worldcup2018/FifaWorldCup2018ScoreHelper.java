@@ -78,13 +78,20 @@ public class FifaWorldCup2018ScoreHelper {
 			if (Objects.equals(gameHomeScore, predictionHomeScore) && Objects.equals(gameAwayScore, predictionAwayScore)) {
 				gameScore = findAllCorrectSetting(league, stage);
 			// Wrong score, correct result
-			} else if (Objects.nonNull(prediction.getWinner()) &&
-					Objects.nonNull(prediction.getGame().getWinner()) &&
-					Objects.equals(prediction.getWinner().getId(), prediction.getGame().getWinner().getId())) {
-				gameScore = findWrongScoreSetting(league, stage);
-			// All wrong
 			} else {
-				gameScore = findAllWrongSetting(league, stage);
+				boolean correctWinner = Objects.nonNull(prediction.getWinner()) &&
+						Objects.nonNull(prediction.getGame().getWinner()) &&
+						Objects.equals(prediction.getWinner().getId(), prediction.getGame().getWinner().getId());
+
+				boolean equalsButWrongScoreForGroupStage =
+						FifaWorldCup2018Stages.GROUP_PHASE.toString().equals(prediction.getGame().getStage()) &&
+						Objects.equals(gameHomeScore, gameAwayScore) && Objects.equals(predictionHomeScore, predictionAwayScore);
+				if (correctWinner || equalsButWrongScoreForGroupStage) {
+					gameScore = findWrongScoreSetting(league, stage);
+				// All wrong
+				} else {
+					gameScore = findAllWrongSetting(league, stage);
+				}
 			}
 
 			float totalScore = gameScore;
