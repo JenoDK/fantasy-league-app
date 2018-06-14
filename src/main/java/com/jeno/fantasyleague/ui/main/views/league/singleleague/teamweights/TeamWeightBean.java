@@ -23,6 +23,10 @@ public class TeamWeightBean {
 		this.stocksPurchased = contestantWeight.getWeight();
 	}
 
+	public ContestantWeight getContestantWeight() {
+		return contestantWeight;
+	}
+
 	public Contestant getContestant() {
 		return contestantWeight.getContestant();
 	}
