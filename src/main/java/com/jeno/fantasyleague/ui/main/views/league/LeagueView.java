@@ -8,6 +8,8 @@ import com.jeno.fantasyleague.annotation.SpringUIScope;
 import com.jeno.fantasyleague.model.League;
 import com.jeno.fantasyleague.ui.main.views.league.gridlayout.LeagueGridLayout;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.SingleLeagueView;
+import com.vaadin.ui.Panel;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import io.reactivex.Observable;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +63,8 @@ public class LeagueView {
         singleLeagieView = new SingleLeagueView(league, singleLeagueServiceProvider);
         singleLeagieView.backToLeaguesView().subscribe(ignored -> showLeagueGridLayout());
         layout.addComponent(singleLeagieView);
+        // Get view panel and reset scroll
+	    ((Panel) ((VerticalLayout) UI.getCurrent().getContent()).getComponent(1)).setScrollTop(0);
     }
 
     private void showLeagueGridLayout() {
