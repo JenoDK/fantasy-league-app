@@ -1,12 +1,14 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.overview;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.jeno.fantasyleague.data.service.leaguetemplates.worldcup2018.FifaWorldCup2018Stages;
 import com.jeno.fantasyleague.model.Contestant;
+import com.jeno.fantasyleague.model.ContestantWeight;
 import com.jeno.fantasyleague.model.League;
 import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
@@ -20,7 +22,10 @@ import com.vaadin.ui.themes.ValoTheme;
 
 public class AllUserResultsForGameLayout extends VerticalLayout {
 
-	public AllUserResultsForGameLayout(League league, UserPredictionScoreBean bean, SingleLeagueServiceProvider singleLeagueServiceprovider) {
+	public AllUserResultsForGameLayout(
+			League league,
+			UserPredictionScoreBean bean,
+			SingleLeagueServiceProvider singleLeagueServiceprovider) {
 		super();
 
 		Label stageLabel = new Label(Resources.getMessage(FifaWorldCup2018Stages.valueOf(bean.getGame().getStage()).getName()));
@@ -35,11 +40,20 @@ public class AllUserResultsForGameLayout extends VerticalLayout {
 		Label dateTimeLabel = new Label(DateUtil.DATE_TIME_FORMATTER.format(bean.getGame().getGame_date_time()));
 		dateTimeLabel.addStyleName(ValoTheme.LABEL_TINY);
 
+		Map<Long, Integer> homeTeamWeights = singleLeagueServiceprovider.getContestantWeightRepository()
+				.findByContestantAndLeague(bean.getHome_team(), league).stream()
+				.collect(Collectors.toMap(ContestantWeight::getUser_fk, ContestantWeight::getWeight));
+		Map<Long, Integer> awayTeamWeights = singleLeagueServiceprovider.getContestantWeightRepository()
+				.findByContestantAndLeague(bean.getAway_team(), league).stream()
+				.collect(Collectors.toMap(ContestantWeight::getUser_fk, ContestantWeight::getWeight));
+
 		List<UserPredictionForGameBean> items = singleLeagueServiceprovider.getPredictionRepository().findByGameAndJoinUsersAndJoinGames(bean.getGame()).stream()
 				.map(prediction -> new UserPredictionForGameBean(
 						prediction.getUser(),
 						prediction,
 						singleLeagueServiceprovider.getLeaguePredictionScoreForUser(league, prediction, prediction.getUser()),
+						homeTeamWeights.get(prediction.getUser().getId()),
+						awayTeamWeights.get(prediction.getUser().getId()),
 						Optional.ofNullable(bean.getHome_team())
 								.filter(ignored -> Objects.nonNull(prediction.getWinner()))
 								.map(Contestant::getId)
@@ -47,7 +61,7 @@ public class AllUserResultsForGameLayout extends VerticalLayout {
 						OverviewUtil.isHiddenForUser(singleLeagueServiceprovider.getLoggedInUser(), league, prediction),
 						bean.getPredictionHiddenUntil()))
 				.collect(Collectors.toList());
-		AllUserGameScoreGrid grid = new AllUserGameScoreGrid(items, singleLeagueServiceprovider.getLoggedInUser());
+		AllUserGameScoreGrid grid = new AllUserGameScoreGrid(bean.getHome_team(), bean.getAway_team(), items, singleLeagueServiceprovider.getLoggedInUser());
 		grid.setWidth(90, Unit.PERCENTAGE);
 
 		VerticalLayout wrapper = new VerticalLayout();

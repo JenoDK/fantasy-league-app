@@ -59,6 +59,7 @@ public class UsersScoreProgressionChart extends AbstractChart {
 
 		XAxis xAxis = new XAxis();
 		xAxis.setType(AxisType.DATETIME);
+		xAxis.getDateTimeLabelFormats().setDay("%e %b %Y");
 		conf.addxAxis(xAxis);
 
 		YAxis yAxis = new YAxis();
@@ -81,6 +82,7 @@ public class UsersScoreProgressionChart extends AbstractChart {
 					DataSeries serie = new DataSeries(username);
 					Map<LocalDateTime, Double> scoresPerDate = bean.getScoresPerDate();
 					List<DataSeriesItem> items = scoresPerDate.keySet().stream()
+							.filter(localDateTime -> LocalDateTime.now().isAfter(localDateTime))
 							.sorted(LocalDateTime::compareTo)
 							.map(localDateTime -> new DataSeriesItem(
 									localDateTime.atZone(ZoneId.systemDefault()).toInstant(),

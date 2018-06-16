@@ -1,5 +1,6 @@
 package com.jeno.fantasyleague.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -21,9 +22,15 @@ public class ContestantWeight {
 	@JoinColumn(nullable = false, name = "contestant_id")
 	private Contestant contestant;
 
+	@Column(name = "contestant_id", insertable = false, updatable = false)
+	private Long contestant_fk;
+
 	@ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
 	@JoinColumn(nullable = false, name = "user_id")
 	private User user;
+
+	@Column(name = "user_id", insertable = false, updatable = false)
+	private Long user_fk;
 
 	@ManyToOne(targetEntity = League.class, fetch = FetchType.LAZY)
 	@JoinColumn(nullable = false, name = "league_id")
@@ -50,12 +57,20 @@ public class ContestantWeight {
 		this.contestant = contestant;
 	}
 
+	public Long getContestant_fk() {
+		return contestant_fk;
+	}
+
 	public User getUser() {
 		return user;
 	}
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public Long getUser_fk() {
+		return user_fk;
 	}
 
 	public League getLeague() {

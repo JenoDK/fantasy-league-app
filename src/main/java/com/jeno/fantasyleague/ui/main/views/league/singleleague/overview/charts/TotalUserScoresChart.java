@@ -3,7 +3,6 @@ package com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.charts
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.ArrayListMultimap;
@@ -85,10 +84,7 @@ public class TotalUserScoresChart extends AbstractChart {
 				.map(UserTotalScoreBean::getUser)
 				.map(User::getUsername)
 				.collect(Collectors.toList());
-		Set<String> topFive = userNames.stream()
-				.limit(5)
-				.collect(Collectors.toSet());
-		userNames.forEach(name -> seriesShownPerId.put(name, topFive.contains(name)));
+		userNames.forEach(name -> seriesShownPerId.put(name, true));
 		setData();
 	}
 

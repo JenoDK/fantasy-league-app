@@ -7,7 +7,6 @@ import com.jeno.fantasyleague.ui.main.navigation.TopBar;
 import com.jeno.fantasyleague.ui.main.views.accessdenied.AccessDeniedView;
 import com.jeno.fantasyleague.ui.main.views.error.ErrorView;
 import com.vaadin.addon.charts.ChartOptions;
-import com.vaadin.addon.charts.themes.VaadinTheme;
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
@@ -70,7 +69,7 @@ public class MainUI extends UI implements Broadcaster.BroadcastListener {
         Broadcaster.register(securityHolder.getUser().getId(), this);
 
         // Set Charts theme for the current UI
-        ChartOptions.get().setTheme(new VaadinTheme());
+        ChartOptions.get().setTheme(new CustomTheme());
     }
 
     // Must also unregister when the UI expires

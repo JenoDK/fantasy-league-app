@@ -15,13 +15,25 @@ public class UserPredictionForGameBean {
 	private final Optional<Boolean> homeTeamWon;
 	private final boolean predictionIsHiddenForUser;
 	private final String predictionHiddenUntil;
+	private final Integer homeTeamWeight;
+	private final Integer awayTeamWeight;
 
-	public UserPredictionForGameBean(User user, Prediction prediction, double score, Optional<Boolean> homeTeamWon, boolean predictionIsHiddenForUser, String predictionHiddenUntil) {
+	public UserPredictionForGameBean(
+			User user,
+			Prediction prediction,
+			double score,
+			Integer homeTeamWeight,
+			Integer awayTeamWeight,
+			Optional<Boolean> homeTeamWon,
+			boolean predictionIsHiddenForUser,
+			String predictionHiddenUntil) {
 		this.user = user;
 		this.prediction = prediction;
 		this.homePrediction = prediction.getHome_team_score();
 		this.awayPrediction = prediction.getAway_team_score();
 		this.score = score;
+		this.homeTeamWeight = homeTeamWeight;
+		this.awayTeamWeight = awayTeamWeight;
 		this.homeTeamWon = homeTeamWon;
 		this.predictionIsHiddenForUser = predictionIsHiddenForUser;
 		this.predictionHiddenUntil = predictionHiddenUntil;
@@ -45,6 +57,14 @@ public class UserPredictionForGameBean {
 
 	public double getScore() {
 		return score;
+	}
+
+	public Integer getHomeTeamWeight() {
+		return homeTeamWeight;
+	}
+
+	public Integer getAwayTeamWeight() {
+		return awayTeamWeight;
 	}
 
 	public Optional<Boolean> getHomeTeamWon() {

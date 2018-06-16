@@ -13,6 +13,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.jeno.fantasyleague.data.service.leaguetemplates.worldcup2018.FifaWorldCup2018Stages;
 import com.jeno.fantasyleague.model.Contestant;
+import com.jeno.fantasyleague.model.ContestantWeight;
 import com.jeno.fantasyleague.model.League;
 import com.jeno.fantasyleague.model.User;
 import com.jeno.fantasyleague.resources.Resources;
@@ -80,8 +81,8 @@ public class UserScoresTab extends VerticalLayout {
 							new AllUserResultsForGameLayout(league, bean, singleLeagueServiceprovider))
 						.closable(true)
 						.resizable(true)
-						.setHeight(500)
-						.setWidth(700)
+						.setHeight(700)
+						.setWidth(900)
 						.build()
 						.show());
 
@@ -132,11 +133,16 @@ public class UserScoresTab extends VerticalLayout {
 	private List<UserPredictionScoreBean> fetchPredictionScores(User user) {
 		Map<Long, Contestant> contestantMap = singleLeagueServiceprovider.getContestantRepository().findByLeague(league).stream()
 				.collect(Collectors.toMap(Contestant::getId, Function.identity()));
+		Map<Long, Integer> weightsForUserPerContestant =
+				singleLeagueServiceprovider.getContestantWeightRepository().findByUserAndLeague(user, league).stream()
+						.collect(Collectors.toMap(ContestantWeight::getContestant_fk, ContestantWeight::getWeight));
 		return singleLeagueServiceprovider.getPredictionRepository().findByLeagueAndUserAndJoinGames(league, user).stream()
 				.map(prediction -> new UserPredictionScoreBean(
 						prediction,
 						contestantMap.get(prediction.getGame().getHome_team_fk()),
 						contestantMap.get(prediction.getGame().getAway_team_fk()),
+						weightsForUserPerContestant.get(prediction.getGame().getHome_team_fk()),
+						weightsForUserPerContestant.get(prediction.getGame().getAway_team_fk()),
 						singleLeagueServiceprovider.getLeaguePredictionScoreForUser(league, prediction, user),
 						OverviewUtil.isHiddenForUser(singleLeagueServiceprovider.getLoggedInUser(), league, prediction),
 						league))

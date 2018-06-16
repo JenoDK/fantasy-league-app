@@ -15,14 +15,26 @@ public class UserPredictionScoreBean {
 	private final Prediction prediction;
 	private final Contestant homeTeam;
 	private final Contestant awayTeam;
+	private final Integer homeTeamWeight;
+	private final Integer awayTeamWeight;
 	private final double predictionScore;
 	private final boolean predictionIsHidden;
 	private final League league;
 
-	public UserPredictionScoreBean(Prediction prediction, Contestant homeTeam, Contestant awayTeam, double predictionScore, boolean predictionIsHidden, League league) {
+	public UserPredictionScoreBean(
+			Prediction prediction,
+			Contestant homeTeam,
+			Contestant awayTeam,
+			Integer homeTeamWeight,
+			Integer awayTeamWeight,
+			double predictionScore,
+			boolean predictionIsHidden,
+			League league) {
 		this.prediction = prediction;
 		this.homeTeam = homeTeam;
 		this.awayTeam = awayTeam;
+		this.homeTeamWeight = homeTeamWeight;
+		this.awayTeamWeight = awayTeamWeight;
 		this.predictionScore = predictionScore;
 		this.predictionIsHidden = predictionIsHidden;
 		this.league = league;
@@ -38,6 +50,14 @@ public class UserPredictionScoreBean {
 
 	public Contestant getAway_team() {
 		return awayTeam;
+	}
+
+	public Integer getHomeTeamWeight() {
+		return homeTeamWeight;
+	}
+
+	public Integer getAwayTeamWeight() {
+		return awayTeamWeight;
 	}
 
 	public Integer getGameHome_team_score() {

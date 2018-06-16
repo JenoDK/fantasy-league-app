@@ -6,11 +6,9 @@ import java.util.Objects;
 import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.ui.common.grid.CustomGrid;
 import com.jeno.fantasyleague.util.DateUtil;
-import com.jeno.fantasyleague.util.GridUtil;
 import com.vaadin.data.provider.GridSortOrderBuilder;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.renderers.ComponentRenderer;
 import com.vaadin.ui.themes.ValoTheme;
 import io.reactivex.Observable;
@@ -29,25 +27,19 @@ public class UserPredictionScoresGrid extends CustomGrid<UserPredictionScoreBean
 
 	private void initColumns() {
 		addColumn(
-				userPredictionScoreBean -> {
-					if (userPredictionScoreBean.getHome_team() != null) {
-						return GridUtil.createTeamLayout(userPredictionScoreBean.getHome_team());
-					} else {
-						return new Label(userPredictionScoreBean.getGame().getHome_team_placeholder());
-					}
-				},
+				userPredictionScoreBean -> OverviewUtil.getTeamComponent(
+						userPredictionScoreBean.getHome_team(),
+						userPredictionScoreBean.getGame().getHome_team_placeholder(),
+						userPredictionScoreBean.getHomeTeamWeight()),
 				new ComponentRenderer())
 				.setCaption("Team A");
 		addColumn(bean -> OverviewUtil.getScoreWithWinner(bean.getGameHome_team_score(), bean.getGameAway_team_score(), bean.getGameHomeTeamWon()))
 				.setCaption("Score")
 				.setStyleGenerator(item -> "v-align-center");
-		addColumn(userPredictionScoreBean -> {
-					if (userPredictionScoreBean.getAway_team() != null) {
-						return GridUtil.createTeamLayout(userPredictionScoreBean.getAway_team());
-					} else {
-						return new Label(userPredictionScoreBean.getGame().getAway_team_placeholder());
-					}
-				},
+		addColumn(userPredictionScoreBean -> OverviewUtil.getTeamComponent(
+						userPredictionScoreBean.getAway_team(),
+						userPredictionScoreBean.getGame().getAway_team_placeholder(),
+						userPredictionScoreBean.getAwayTeamWeight()),
 				new ComponentRenderer())
 				.setCaption("Team B");
 		Column<UserPredictionScoreBean, String> dateColumn =
@@ -76,7 +68,7 @@ public class UserPredictionScoresGrid extends CustomGrid<UserPredictionScoreBean
 				.setCaption("")
 				.setId("seeAllResultsButton")
 				.setWidth(70);
-		setSortOrder(new GridSortOrderBuilder().thenDesc(userScoreColumn).thenAsc(dateColumn));
+		setSortOrder(new GridSortOrderBuilder().thenAsc(dateColumn));
 	}
 
 	private Button createViewAllResultsButton(UserPredictionScoreBean bean) {

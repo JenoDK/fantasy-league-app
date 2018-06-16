@@ -2,6 +2,7 @@ package com.jeno.fantasyleague.data.repository;
 
 import java.util.List;
 
+import com.jeno.fantasyleague.model.Contestant;
 import com.jeno.fantasyleague.model.ContestantWeight;
 import com.jeno.fantasyleague.model.League;
 import com.jeno.fantasyleague.model.User;
@@ -20,5 +21,9 @@ public interface ContestantWeightRepository extends JpaRepository<ContestantWeig
 	List<ContestantWeight> findByUserAndLeagueAndJoinContestant(
 			@Param("user") User user,
 			@Param("league") League league);
+
+	List<ContestantWeight> findByUserAndLeague(User user, League league);
+
+	List<ContestantWeight> findByContestantAndLeague(Contestant contestant, League league);
 
 }

@@ -6,11 +6,17 @@ import java.util.Objects;
 import java.util.Optional;
 
 import com.jeno.fantasyleague.data.service.leaguetemplates.worldcup2018.FifaWorldCup2018Stages;
+import com.jeno.fantasyleague.model.Contestant;
 import com.jeno.fantasyleague.model.League;
 import com.jeno.fantasyleague.model.Prediction;
 import com.jeno.fantasyleague.model.User;
 import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.util.GridUtil;
+import com.vaadin.shared.ui.ContentMode;
+import com.vaadin.ui.AbstractComponent;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.themes.ValoTheme;
 
 public class OverviewUtil {
 
@@ -58,6 +64,20 @@ public class OverviewUtil {
 
 	public static BigDecimal getScoreFormatted(double score) {
 		return new BigDecimal(score).setScale(2, BigDecimal.ROUND_HALF_UP);
+	}
+
+	public static AbstractComponent getTeamComponent(Contestant team, String placeholder, Integer teamWeight) {
+		if (team != null) {
+			HorizontalLayout teamLayout = GridUtil.createTeamLayout(team);
+			if (teamWeight != null && teamWeight > 0) {
+				Label stocksLabel = new Label(" - <b>Stocks: " + teamWeight + "</b>", ContentMode.HTML);
+				stocksLabel.addStyleName(ValoTheme.LABEL_LIGHT);
+				teamLayout.addComponent(stocksLabel);
+			}
+			return teamLayout;
+		} else {
+			return new Label(placeholder);
+		}
 	}
 
 }
