@@ -93,7 +93,7 @@ public class FifaWorldCup2018Initializer {
 		game.setRound(round);
 		game.setStage(getStage(round).name());
 		game.setLocation(location);
-		game.setGame_date_time(LocalDateTime.parse(date, DateUtil.DATE_TIME_FORMATTER));
+		game.setGameDateTime(LocalDateTime.parse(date, DateUtil.DATE_TIME_FORMATTER));
 		game.setLeague(league);
 
 		return new GameDto(game, id, nextGameId);
@@ -164,7 +164,7 @@ public class FifaWorldCup2018Initializer {
 
 	private void setLeagueStartDate(League newLeague, List<Game> addedGames) {
 		Optional<LocalDateTime> earliestGameDate = addedGames.stream()
-				.map(Game::getGame_date_time)
+				.map(Game::getGameDateTime)
 				.min(LocalDateTime::compareTo);
 		if (earliestGameDate.isPresent()) {
 			newLeague.setLeague_starting_date(earliestGameDate.get());

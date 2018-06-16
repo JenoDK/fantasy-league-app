@@ -55,7 +55,7 @@ public abstract class KnockoutGameLayout extends VerticalLayout {
 		scoreWrapper.setCaption(Resources.getMessage("scores"));
 
 		predictionWrapper = new GameResultsLayout(
-				LocalDateTime.now().isBefore(game.getGame().getGame_date_time()),
+				LocalDateTime.now().isBefore(game.getGame().getGameDateTime()),
 				game,
 				KnockoutGameBean::getHomeTeamPrediction,
 				KnockoutGameBean::setHomeTeamPrediction,
@@ -74,7 +74,7 @@ public abstract class KnockoutGameLayout extends VerticalLayout {
 		wrapper.addComponent(scoreWrapper);
 		wrapper.addComponent(predictionWrapper);
 
-		String date = DateUtil.DATE_TIME_FORMATTER.format(game.getGame().getGame_date_time());
+		String date = DateUtil.DATE_TIME_FORMATTER.format(game.getGame().getGameDateTime());
 		Label infoLabel = new Label(game.getGame().getLocation() + " <br/> " + date, ContentMode.HTML);
 		infoLabel.addStyleName(ValoTheme.LABEL_TINY);
 		infoLabel.setWidth(150f, Unit.PIXELS);
@@ -87,7 +87,7 @@ public abstract class KnockoutGameLayout extends VerticalLayout {
 		predictionWrapper.scoreChanged()
 				.map(KnockoutGameBean::setScoresAndGetPredictionModelItem)
 				.subscribe(prediction -> {
-					if (LocalDateTime.now().isBefore(game.getGame().getGame_date_time())) {
+					if (LocalDateTime.now().isBefore(game.getGame().getGameDateTime())) {
 						singleLeagueServiceprovider.getPredictionRepository().saveAndFlush(prediction);
 					} else {
 						Notification.show(Resources.getMessage("toLateToUpdatePrediction"), Notification.Type.WARNING_MESSAGE);

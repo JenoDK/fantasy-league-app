@@ -47,7 +47,7 @@ public class EightFinalsGameLayout extends KnockoutGameLayout {
 			String placeHolder,
 			Contestant possibleContestant,
 			Consumer<Contestant> contestantConsumer) {
-		if (LocalDateTime.now().isBefore(game.getGame().getGame_date_time()) &&
+		if (LocalDateTime.now().isBefore(game.getGame().getGameDateTime()) &&
 				singleLeagueServiceprovider.loggedInUserIsLeagueAdmin(league)) {
 			ComboBox<Contestant> contestantCombobox = getContestantComboBox(game, placeHolder, possibleContestant, contestantConsumer);
 			return new HorizontalLayout(contestantCombobox);

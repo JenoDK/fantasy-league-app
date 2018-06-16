@@ -46,7 +46,7 @@ public class GameBean {
 	}
 
 	public LocalDateTime getGame_date_time() {
-		return game.getGame_date_time();
+		return game.getGameDateTime();
 	}
 
 	public Integer getHome_team_score() {

@@ -37,7 +37,7 @@ public class AllUserResultsForGameLayout extends VerticalLayout {
 				OverviewUtil.getScoreWithWinner(bean.getGameHome_team_score(), bean.getGameAway_team_score(), bean.getGameHomeTeamWon())));
 		gameWrapper.addComponent(GridUtil.createTeamLayout(bean.getAway_team(), bean.getGame().getAway_team_placeholder()));
 
-		Label dateTimeLabel = new Label(DateUtil.DATE_TIME_FORMATTER.format(bean.getGame().getGame_date_time()));
+		Label dateTimeLabel = new Label(DateUtil.DATE_TIME_FORMATTER.format(bean.getGame().getGameDateTime()));
 		dateTimeLabel.addStyleName(ValoTheme.LABEL_TINY);
 
 		Map<Long, Integer> homeTeamWeights = singleLeagueServiceprovider.getContestantWeightRepository()

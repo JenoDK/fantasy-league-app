@@ -62,7 +62,8 @@ public class Game extends UserAudit {
 	@Size(max = 128)
 	private String location;
 
-	private LocalDateTime game_date_time;
+	@Column(name = "game_date_time")
+	private LocalDateTime gameDateTime;
 
 	private String round;
 
@@ -163,12 +164,12 @@ public class Game extends UserAudit {
 		this.location = location;
 	}
 
-	public LocalDateTime getGame_date_time() {
-		return game_date_time;
+	public LocalDateTime getGameDateTime() {
+		return gameDateTime;
 	}
 
-	public void setGame_date_time(LocalDateTime game_date_time) {
-		this.game_date_time = game_date_time;
+	public void setGameDateTime(LocalDateTime gameDateTime) {
+		this.gameDateTime = gameDateTime;
 	}
 
 	public String getRound() {

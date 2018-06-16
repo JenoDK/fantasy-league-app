@@ -11,7 +11,6 @@ public abstract class AbstractLeagueGridComponent extends VerticalLayout {
 
 	private void initLayout() {
 		setSpacing(false);
-		setHeight(150f, Unit.PIXELS);
 		setWidth("100%");
 		addStyleName("league-grid-component");
 	}

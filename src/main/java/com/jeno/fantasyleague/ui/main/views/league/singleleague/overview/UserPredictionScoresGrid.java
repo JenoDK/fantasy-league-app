@@ -22,7 +22,6 @@ public class UserPredictionScoresGrid extends CustomGrid<UserPredictionScoreBean
 		super();
 		setWidth(100, Unit.PERCENTAGE);
 		initColumns();
-//		setAdjustHeightDynamically(false);
 	}
 
 	private void initColumns() {
@@ -43,7 +42,7 @@ public class UserPredictionScoresGrid extends CustomGrid<UserPredictionScoreBean
 				new ComponentRenderer())
 				.setCaption("Team B");
 		Column<UserPredictionScoreBean, String> dateColumn =
-				addColumn(item -> DateUtil.DATE_TIME_FORMATTER.format(item.getGame().getGame_date_time()))
+				addColumn(item -> DateUtil.DATE_TIME_FORMATTER.format(item.getGame().getGameDateTime()))
 						.setCaption("Date");
 		addColumn(bean -> OverviewUtil.getPredictionColumn(
 						bean.getPredictionHome_team_score(),

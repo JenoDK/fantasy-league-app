@@ -102,7 +102,7 @@ public class UserPredictionScoreBean {
 		if (FifaWorldCup2018Stages.GROUP_PHASE.toString().equals(prediction.getGame().getStage())) {
 			return DateUtil.DATE_TIME_FORMATTER.format(league.getLeague_starting_date());
 		} else {
-			return DateUtil.DATE_TIME_FORMATTER.format(prediction.getGame().getGame_date_time());
+			return DateUtil.DATE_TIME_FORMATTER.format(prediction.getGame().getGameDateTime());
 		}
 	}
 }

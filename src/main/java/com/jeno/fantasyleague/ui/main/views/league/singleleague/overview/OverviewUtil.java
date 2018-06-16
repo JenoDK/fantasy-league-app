@@ -30,7 +30,7 @@ public class OverviewUtil {
 		if (FifaWorldCup2018Stages.GROUP_PHASE.toString().equals(prediction.getGame().getStage())) {
 			return LocalDateTime.now().isBefore(league.getLeague_starting_date());
 		} else {
-			return LocalDateTime.now().isBefore(prediction.getGame().getGame_date_time());
+			return LocalDateTime.now().isBefore(prediction.getGame().getGameDateTime());
 		}
 	}
 

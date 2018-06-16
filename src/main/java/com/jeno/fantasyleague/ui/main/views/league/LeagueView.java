@@ -1,5 +1,9 @@
 package com.jeno.fantasyleague.ui.main.views.league;
 
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+
 import com.jeno.fantasyleague.annotation.SpringUIScope;
 import com.jeno.fantasyleague.model.League;
 import com.jeno.fantasyleague.ui.main.views.league.gridlayout.LeagueGridLayout;
@@ -7,9 +11,6 @@ import com.jeno.fantasyleague.ui.main.views.league.singleleague.SingleLeagueView
 import com.vaadin.ui.VerticalLayout;
 import io.reactivex.Observable;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import javax.annotation.PostConstruct;
-import java.util.List;
 
 @SpringUIScope
 public class LeagueView {
@@ -24,11 +25,12 @@ public class LeagueView {
     @PostConstruct
     void init() {
         layout = new VerticalLayout();
+	    layout.setId("league-view-id");
         layout.removeAllComponents();
         layout.setSpacing(false);
         layout.addStyleName("league-view");
 
-        leagueGridLayout = new LeagueGridLayout();
+        leagueGridLayout = new LeagueGridLayout(singleLeagueServiceProvider);
         leagueGridLayout.setSizeFull();
         leagueGridLayout.clickedLeague().subscribe(this::viewLeague);
         layout.addComponent(leagueGridLayout);

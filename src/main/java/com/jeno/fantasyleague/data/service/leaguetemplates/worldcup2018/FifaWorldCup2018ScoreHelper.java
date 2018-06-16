@@ -42,7 +42,7 @@ public class FifaWorldCup2018ScoreHelper {
 			} else {
 				scorePerStage.put(stage, scoreForPrediction);
 			}
-			LocalDateTime gameDate = prediction.getGame().getGame_date_time();
+			LocalDateTime gameDate = prediction.getGame().getGameDateTime();
 			if (scorePerDate.containsKey(gameDate)) {
 				scorePerDate.put(gameDate, scorePerDate.get(gameDate) + scoreForPrediction);
 			} else {

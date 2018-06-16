@@ -17,12 +17,12 @@
 
             .league-grid-component {
                 padding: 10px;
-                border: 1px solid #d5d5d5;
+                border: 2px solid #929292;
                 border-radius: 3px;
                 box-shadow: 5px 10px #d5d5d5;
 
                 &.existing:hover {
-                    background-color: rgba(186, 186, 186, 0.1);
+                    background-color: rgba(168, 168, 168, 0.1);
                     cursor: pointer;
                 }
 

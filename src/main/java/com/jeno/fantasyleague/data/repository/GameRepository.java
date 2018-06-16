@@ -1,5 +1,6 @@
 package com.jeno.fantasyleague.data.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.jeno.fantasyleague.model.ContestantGroup;
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Repository;
 public interface GameRepository extends JpaRepository<Game, Long>, JpaSpecificationExecutor<Game> {
 
 	List<Game> findByLeague(League league);
+
+	List<Game> findByLeagueAndGameDateTimeBetween(League league, LocalDateTime date1, LocalDateTime date2);
 
 	@Query("SELECT g FROM Game g " +
 			"INNER JOIN FETCH g.home_team ht " +
