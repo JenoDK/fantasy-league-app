@@ -17,7 +17,7 @@ public interface GameRepository extends JpaRepository<Game, Long>, JpaSpecificat
 
 	List<Game> findByLeague(League league);
 
-	List<Game> findByLeagueAndGameDateTimeBetween(League league, LocalDateTime date1, LocalDateTime date2);
+	List<Game> findByLeagueAndGameDateTimeGreaterThan(League league, LocalDateTime date);
 
 	@Query("SELECT g FROM Game g " +
 			"INNER JOIN FETCH g.home_team ht " +

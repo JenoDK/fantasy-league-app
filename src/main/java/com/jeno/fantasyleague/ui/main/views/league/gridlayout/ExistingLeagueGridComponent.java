@@ -1,6 +1,7 @@
 package com.jeno.fantasyleague.ui.main.views.league.gridlayout;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -75,8 +76,10 @@ public class ExistingLeagueGridComponent extends AbstractLeagueGridComponent {
 
 	private List<UserPredictionScoreBean> getUpcomingMatches() {
 		LocalDateTime date1 = LocalDateTime.now().minusMinutes(90);
-		LocalDateTime date2 = LocalDateTime.now().plusDays(1);
-		List<Game> games = singleLeagueServiceProvider.getGameRepository().findByLeagueAndGameDateTimeBetween(league, date1, date2);
+		List<Game> games = singleLeagueServiceProvider.getGameRepository().findByLeagueAndGameDateTimeGreaterThan(league, date1).stream()
+				.sorted(Comparator.comparing(Game::getGameDateTime))
+				.limit(4)
+				.collect(Collectors.toList());
 		Map<Long, Prediction> predictions = singleLeagueServiceProvider.getPredictionRepository()
 					.findByLeagueAndUserAndJoinGames(league, singleLeagueServiceProvider.getLoggedInUser()).stream()
 				.collect(Collectors.toMap(Prediction::getGame_fk, Function.identity()));
