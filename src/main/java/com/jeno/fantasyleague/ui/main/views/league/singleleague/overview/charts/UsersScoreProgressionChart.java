@@ -16,13 +16,17 @@ import com.vaadin.addon.charts.model.AxisType;
 import com.vaadin.addon.charts.model.ChartType;
 import com.vaadin.addon.charts.model.DataSeries;
 import com.vaadin.addon.charts.model.DataSeriesItem;
+import com.vaadin.addon.charts.model.HorizontalAlign;
 import com.vaadin.addon.charts.model.Hover;
+import com.vaadin.addon.charts.model.LayoutDirection;
+import com.vaadin.addon.charts.model.Legend;
 import com.vaadin.addon.charts.model.Marker;
 import com.vaadin.addon.charts.model.MarkerSymbolEnum;
-import com.vaadin.addon.charts.model.PlotOptionsArea;
+import com.vaadin.addon.charts.model.PlotOptionsLine;
 import com.vaadin.addon.charts.model.Series;
 import com.vaadin.addon.charts.model.States;
 import com.vaadin.addon.charts.model.Title;
+import com.vaadin.addon.charts.model.VerticalAlign;
 import com.vaadin.addon.charts.model.XAxis;
 import com.vaadin.addon.charts.model.YAxis;
 
@@ -35,7 +39,7 @@ public class UsersScoreProgressionChart extends AbstractChart {
 	public UsersScoreProgressionChart(
 			List<UserTotalScoreBean> beans,
 			User loggedInUser) {
-		super(ChartType.AREA);
+		super(ChartType.LINE);
 		this.beans = beans;
 		this.loggedInUser = loggedInUser;
 
@@ -45,16 +49,12 @@ public class UsersScoreProgressionChart extends AbstractChart {
 	private void initChartConfig() {
 		conf = getConfiguration();
 		conf.setTitle(new Title("User scores"));
+		conf.getTooltip()
+				.setFormatter(
+						"'<b>'+ this.series.name +'</b><br/>'+ Highcharts.dateFormat('%e. %b %H:%M', this.x) +': '+ this.y +' points'");
 
-		PlotOptionsArea plotOptions = new PlotOptionsArea();
-		Marker marker = new Marker();
-		marker.setEnabled(false);
-		marker.setSymbol(MarkerSymbolEnum.CIRCLE);
-		marker.setRadius(2);
-		States states = new States();
-		states.setHover(new Hover(true));
-		marker.setStates(states);
-		plotOptions.setMarker(marker);
+		PlotOptionsLine plotOptions = new PlotOptionsLine();
+		plotOptions.getDataLabels().setEnabled(true);
 		conf.setPlotOptions(plotOptions);
 
 		XAxis xAxis = new XAxis();
@@ -66,6 +66,14 @@ public class UsersScoreProgressionChart extends AbstractChart {
 		yAxis.setMin(0);
 		yAxis.setTitle(new AxisTitle("Points"));
 		conf.addyAxis(yAxis);
+
+		Legend legend = conf.getLegend();
+		legend.setLayout(LayoutDirection.VERTICAL);
+		legend.setAlign(HorizontalAlign.RIGHT);
+		legend.setVerticalAlign(VerticalAlign.TOP);
+		legend.setX(-10d);
+		legend.setY(100d);
+		legend.setBorderWidth(0);
 
 		initData();
 	}

@@ -156,9 +156,16 @@ public class UserScoresTab extends VerticalLayout {
 	}
 
 	public List<UserTotalScoreBean> fetchTotalScores() {
-		return singleLeagueServiceprovider.getUserLeagueScores(league).stream()
+		List<UserTotalScoreBean> beans = singleLeagueServiceprovider.getUserLeagueScores(league).stream()
 				.map(userLeagueScore -> new UserTotalScoreBean(userLeagueScore))
+				.sorted(Comparator.comparing(UserTotalScoreBean::getTotalScore).reversed())
 				.collect(Collectors.toList());
+		int position = 1;
+		for (UserTotalScoreBean bean : beans) {
+			bean.setPosition(position);
+			position += 1;
+		}
+		return beans;
 	}
 
 }

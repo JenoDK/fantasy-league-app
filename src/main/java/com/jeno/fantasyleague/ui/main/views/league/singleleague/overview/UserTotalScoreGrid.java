@@ -26,6 +26,8 @@ public class UserTotalScoreGrid extends CustomGrid<UserTotalScoreBean> {
 	}
 
 	private void initColumns() {
+		addColumn(bean -> bean.getPosition())
+				.setWidth(60);
 		addIconColumn(
 				new CustomGridBuilder.ColumnProvider<>(
 						"userIcon",

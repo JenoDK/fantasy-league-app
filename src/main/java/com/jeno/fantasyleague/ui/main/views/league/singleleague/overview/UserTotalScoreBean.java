@@ -13,6 +13,7 @@ public class UserTotalScoreBean {
 	private final User user;
 	private final Map<FifaWorldCup2018Stages, Double> scores;
 	private final Map<LocalDateTime, Double> scoresPerDate;
+	private int position = 0;
 
 	public UserTotalScoreBean(UserLeagueScore userLeagueScore) {
 		this.user = userLeagueScore.getUser();
@@ -36,4 +37,11 @@ public class UserTotalScoreBean {
 		return scores.get(stage);
 	}
 
+	public void setPosition(int position) {
+		this.position = position;
+	}
+
+	public int getPosition() {
+		return position;
+	}
 }

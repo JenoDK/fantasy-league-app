@@ -53,7 +53,7 @@ public class ExistingLeagueGridComponent extends AbstractLeagueGridComponent {
 		addComponent(leagueImage);
 
 		UserPredictionScoresGrid upcomingMatchesGrid = new UserPredictionScoresGrid();
-		upcomingMatchesGrid.setCaption("Upcoming matches");
+		upcomingMatchesGrid.setCaption("Upcoming/recent matches");
 		upcomingMatchesGrid.setItems(getUpcomingMatches());
 		upcomingMatchesGrid.viewAllResultsClicked().subscribe(bean -> new PopupWindow.Builder(
 				"All scores",
@@ -75,10 +75,10 @@ public class ExistingLeagueGridComponent extends AbstractLeagueGridComponent {
 	}
 
 	private List<UserPredictionScoreBean> getUpcomingMatches() {
-		LocalDateTime date1 = LocalDateTime.now().minusMinutes(90);
+		LocalDateTime date1 = LocalDateTime.now().minusHours(12);
 		List<Game> games = singleLeagueServiceProvider.getGameRepository().findByLeagueAndGameDateTimeGreaterThan(league, date1).stream()
 				.sorted(Comparator.comparing(Game::getGameDateTime))
-				.limit(4)
+				.limit(5)
 				.collect(Collectors.toList());
 		Map<Long, Prediction> predictions = singleLeagueServiceProvider.getPredictionRepository()
 					.findByLeagueAndUserAndJoinGames(league, singleLeagueServiceProvider.getLoggedInUser()).stream()
