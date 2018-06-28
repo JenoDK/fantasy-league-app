@@ -14,10 +14,10 @@ public class UserTotalScoreBean {
 	private final Map<FifaWorldCup2018Stages, Double> scores;
 	private final Map<LocalDateTime, Double> scoresPerDate;
 
-	public UserTotalScoreBean(User user, UserLeagueScore scores) {
-		this.user = user;
-		this.scores = scores.getScoresPerStage();
-		this.scoresPerDate = scores.getScoresPerDate();
+	public UserTotalScoreBean(UserLeagueScore userLeagueScore) {
+		this.user = userLeagueScore.getUser();
+		this.scores = userLeagueScore.getScoresPerStage();
+		this.scoresPerDate = userLeagueScore.getScoresPerDate();
 	}
 
 	public User getUser() {

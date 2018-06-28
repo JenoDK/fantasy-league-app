@@ -22,6 +22,11 @@ public interface ContestantWeightRepository extends JpaRepository<ContestantWeig
 			@Param("user") User user,
 			@Param("league") League league);
 
+	@Query("SELECT cw FROM ContestantWeight cw " +
+			"INNER JOIN FETCH cw.contestant c " +
+			"WHERE cw.league = :league")
+	List<ContestantWeight> findByLeagueAndJoinContestant(@Param("league") League league);
+
 	List<ContestantWeight> findByUserAndLeague(User user, League league);
 
 	List<ContestantWeight> findByContestantAndLeague(Contestant contestant, League league);

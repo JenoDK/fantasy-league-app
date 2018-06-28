@@ -15,6 +15,7 @@ import com.jeno.fantasyleague.data.service.leaguetemplates.worldcup2018.FifaWorl
 import com.jeno.fantasyleague.model.Contestant;
 import com.jeno.fantasyleague.model.ContestantWeight;
 import com.jeno.fantasyleague.model.League;
+import com.jeno.fantasyleague.model.Prediction;
 import com.jeno.fantasyleague.model.User;
 import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.ui.common.window.PopupWindow;
@@ -133,25 +134,30 @@ public class UserScoresTab extends VerticalLayout {
 	private List<UserPredictionScoreBean> fetchPredictionScores(User user) {
 		Map<Long, Contestant> contestantMap = singleLeagueServiceprovider.getContestantRepository().findByLeague(league).stream()
 				.collect(Collectors.toMap(Contestant::getId, Function.identity()));
+		List<ContestantWeight> contestantWeights = singleLeagueServiceprovider.getContestantWeightRepository().findByUserAndLeague(user, league);
 		Map<Long, Integer> weightsForUserPerContestant =
-				singleLeagueServiceprovider.getContestantWeightRepository().findByUserAndLeague(user, league).stream()
+				contestantWeights.stream()
 						.collect(Collectors.toMap(ContestantWeight::getContestant_fk, ContestantWeight::getWeight));
-		return singleLeagueServiceprovider.getPredictionRepository().findByLeagueAndUserAndJoinGames(league, user).stream()
+		List<Prediction> predictionsWithJoinedGames =
+				singleLeagueServiceprovider.getPredictionRepository().findByLeagueAndUserAndJoinGames(league, user);
+		Map<Long, Double> scorePerPredictionMap =
+				singleLeagueServiceprovider.getLeaguePredictionScoresForUser(league, predictionsWithJoinedGames, contestantWeights, user);
+		return predictionsWithJoinedGames.stream()
 				.map(prediction -> new UserPredictionScoreBean(
 						prediction,
 						contestantMap.get(prediction.getGame().getHome_team_fk()),
 						contestantMap.get(prediction.getGame().getAway_team_fk()),
 						weightsForUserPerContestant.get(prediction.getGame().getHome_team_fk()),
 						weightsForUserPerContestant.get(prediction.getGame().getAway_team_fk()),
-						singleLeagueServiceprovider.getLeaguePredictionScoreForUser(league, prediction, user),
+						scorePerPredictionMap.get(prediction.getId()),
 						OverviewUtil.isHiddenForUser(singleLeagueServiceprovider.getLoggedInUser(), league, prediction),
 						league))
 				.collect(Collectors.toList());
 	}
 
 	public List<UserTotalScoreBean> fetchTotalScores() {
-		return singleLeagueServiceprovider.getLeagueRepository().fetchLeagueUsers(league.getId()).stream()
-				.map(user -> new UserTotalScoreBean(user, singleLeagueServiceprovider.getUserLeagueScore(league, user)))
+		return singleLeagueServiceprovider.getUserLeagueScores(league).stream()
+				.map(userLeagueScore -> new UserTotalScoreBean(userLeagueScore))
 				.collect(Collectors.toList());
 	}
 

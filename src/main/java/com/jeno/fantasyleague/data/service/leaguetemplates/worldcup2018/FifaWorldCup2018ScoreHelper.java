@@ -4,10 +4,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Maps;
 import com.jeno.fantasyleague.data.repository.ContestantWeightRepository;
+import com.jeno.fantasyleague.data.repository.LeagueRepository;
 import com.jeno.fantasyleague.data.repository.LeagueSettingRepository;
 import com.jeno.fantasyleague.data.repository.PredictionRepository;
 import com.jeno.fantasyleague.data.service.repo.league.UserLeagueScore;
@@ -27,16 +30,35 @@ public class FifaWorldCup2018ScoreHelper {
 	@Autowired
 	private PredictionRepository predictionRepository;
 	@Autowired
+	private LeagueRepository leagueRepository;
+	@Autowired
 	private LeagueSettingRepository leagueSettingRepository;
 
-	public UserLeagueScore calculateTotalUserScore(League league, User user) {
-		List<Prediction> predictionsWithJoinedGames = predictionRepository.findByLeagueAndUserAndJoinGames(league, user);
-		List<ContestantWeight> weights = contestantWeightRepository.findByUserAndLeagueAndJoinContestant(user, league);
+	public List<UserLeagueScore> calculateTotalUserScores(League league) {
+		ArrayListMultimap<Long, Prediction> predictionsPerUser = ArrayListMultimap.create();
+		ArrayListMultimap<Long, ContestantWeight> contestantWeightsPerUser = ArrayListMultimap.create();
+		List<User> leagueUsers = leagueRepository.fetchLeagueUsers(league.getId());
+		Map<String, LeagueSetting> settingMap = leagueSettingRepository.findByLeague(league).stream()
+				.collect(Collectors.toMap(LeagueSetting::getName, Function.identity()));
+		predictionRepository.findByLeagueAndJoinGames(league).stream()
+				.forEach(prediction -> predictionsPerUser.put(prediction.getUser_fk(), prediction));
+		contestantWeightRepository.findByLeagueAndJoinContestant(league).stream()
+				.forEach(contestantWeight -> contestantWeightsPerUser.put(contestantWeight.getUser_fk(), contestantWeight));
+		return leagueUsers.stream()
+				.map(user -> createUserLeagueScore(user, settingMap, predictionsPerUser.get(user.getId()), contestantWeightsPerUser.get(user.getId())))
+				.collect(Collectors.toList());
+	}
+
+	private UserLeagueScore createUserLeagueScore(
+			User user,
+			Map<String, LeagueSetting> settingMap,
+			List<Prediction> predictions,
+			List<ContestantWeight> contestantWeights) {
 		Map<FifaWorldCup2018Stages, Double> scorePerStage = Maps.newHashMap();
 		Map<LocalDateTime, Double> scorePerDate = Maps.newHashMap();
-		predictionsWithJoinedGames.forEach(prediction -> {
+		predictions.forEach(prediction -> {
 			FifaWorldCup2018Stages stage = FifaWorldCup2018Stages.valueOf(prediction.getGame().getStage());
-			double scoreForPrediction = calculateScoreOfPrediction(prediction, league, weights);
+			double scoreForPrediction = calculateScoreOfPrediction(prediction, settingMap, contestantWeights);
 			if (scorePerStage.containsKey(stage)) {
 				scorePerStage.put(stage, scorePerStage.get(stage) + scoreForPrediction);
 			} else {
@@ -61,10 +83,26 @@ public class FifaWorldCup2018ScoreHelper {
 	}
 
 	public double calculateScoreOfPrediction(League league, Prediction prediction, User user) {
-		return calculateScoreOfPrediction(prediction, league, contestantWeightRepository.findByUserAndLeagueAndJoinContestant(user, league));
+		Map<String, LeagueSetting> settingMap = leagueSettingRepository.findByLeague(league).stream()
+				.collect(Collectors.toMap(LeagueSetting::getName, Function.identity()));
+		return calculateScoreOfPrediction(prediction, settingMap, contestantWeightRepository.findByUserAndLeagueAndJoinContestant(user, league));
 	}
 
-	private double calculateScoreOfPrediction(Prediction prediction, League league, List<ContestantWeight> weights) {
+	public Map<Long, Double> calculateScoresForUser(
+			League league,
+			List<Prediction> predictionsWithJoinedGames,
+			List<ContestantWeight> contestantWeights,
+			User user) {
+		Map<String, LeagueSetting> settingMap = leagueSettingRepository.findByLeague(league).stream()
+				.collect(Collectors.toMap(LeagueSetting::getName, Function.identity()));
+		return predictionsWithJoinedGames.stream()
+				.collect(Collectors.toMap(Prediction::getId, prediction -> calculateScoreOfPrediction(prediction, settingMap, contestantWeights)));
+	}
+
+	private double calculateScoreOfPrediction(
+			Prediction prediction,
+			Map<String, LeagueSetting> settingMap,
+			List<ContestantWeight> weights) {
 		Integer gameHomeScore = prediction.getGame().getHome_team_score();
 		Integer gameAwayScore = prediction.getGame().getAway_team_score();
 		Integer predictionHomeScore = prediction.getHome_team_score();
@@ -76,7 +114,7 @@ public class FifaWorldCup2018ScoreHelper {
 			Integer gameScore;
 			// Correct score
 			if (Objects.equals(gameHomeScore, predictionHomeScore) && Objects.equals(gameAwayScore, predictionAwayScore)) {
-				gameScore = findAllCorrectSetting(league, stage);
+				gameScore = findAllCorrectSetting(settingMap, stage);
 			// Wrong score, correct result
 			} else {
 				boolean correctWinner = Objects.nonNull(prediction.getWinner()) &&
@@ -87,10 +125,10 @@ public class FifaWorldCup2018ScoreHelper {
 						FifaWorldCup2018Stages.GROUP_PHASE.toString().equals(prediction.getGame().getStage()) &&
 						Objects.equals(gameHomeScore, gameAwayScore) && Objects.equals(predictionHomeScore, predictionAwayScore);
 				if (correctWinner || equalsButWrongScoreForGroupStage) {
-					gameScore = findWrongScoreSetting(league, stage);
+					gameScore = findWrongScoreSetting(settingMap, stage);
 				// All wrong
 				} else {
-					gameScore = findAllWrongSetting(league, stage);
+					gameScore = findAllWrongSetting(settingMap, stage);
 				}
 			}
 
@@ -134,23 +172,16 @@ public class FifaWorldCup2018ScoreHelper {
 				.get();
 	}
 
-	public Integer findAllCorrectSetting(League league, FifaWorldCup2018Stages stage) {
-		return findSetting(league, stage, FifaWorldCup2018SettingRenderer.ALL_CORRECT);
+	public Integer findAllCorrectSetting(Map<String, LeagueSetting> leagueSettings, FifaWorldCup2018Stages stage) {
+		return Integer.valueOf(leagueSettings.get(stage.getName() + FifaWorldCup2018SettingRenderer.ALL_CORRECT).getValue());
 	}
 
-	public Integer findWrongScoreSetting(League league, FifaWorldCup2018Stages stage) {
-		return findSetting(league, stage, FifaWorldCup2018SettingRenderer.WRONG_SCORE);
+	public Integer findWrongScoreSetting(Map<String, LeagueSetting> leagueSettings, FifaWorldCup2018Stages stage) {
+		return Integer.valueOf(leagueSettings.get(stage.getName() + FifaWorldCup2018SettingRenderer.WRONG_SCORE).getValue());
 	}
 
-	public Integer findAllWrongSetting(League league, FifaWorldCup2018Stages stage) {
-		return findSetting(league, stage, FifaWorldCup2018SettingRenderer.ALL_WRONG);
-	}
-
-	public Integer findSetting(League league, FifaWorldCup2018Stages stage, String type) {
-		return leagueSettingRepository.findByLeagueAndName(league, stage.getName() + type)
-				.map(LeagueSetting::getValue)
-				.map(value -> Integer.valueOf(value))
-				.get();
+	public Integer findAllWrongSetting(Map<String, LeagueSetting> leagueSettings, FifaWorldCup2018Stages stage) {
+		return Integer.valueOf(leagueSettings.get(stage.getName() + FifaWorldCup2018SettingRenderer.ALL_WRONG).getValue());
 	}
 
 }

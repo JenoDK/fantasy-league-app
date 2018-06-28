@@ -31,6 +31,9 @@ public class Prediction extends UserAudit {
 	@JoinColumn(nullable = false, name = "user_id")
 	private User user;
 
+	@Column(name = "user_id", insertable = false, updatable = false)
+	private Long user_fk;
+
 	// In case of equal scores sometimes you still want to assign a winner (penalties f.e.)
 	@ManyToOne(targetEntity = Contestant.class, fetch = FetchType.LAZY)
 	@JoinColumn(name = "winner_id")
@@ -72,6 +75,10 @@ public class Prediction extends UserAudit {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public Long getUser_fk() {
+		return user_fk;
 	}
 
 	public Contestant getWinner() {

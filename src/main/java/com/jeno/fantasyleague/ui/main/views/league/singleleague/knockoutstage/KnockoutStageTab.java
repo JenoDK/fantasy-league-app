@@ -231,12 +231,14 @@ public class KnockoutStageTab extends VerticalLayout {
 		List<Game> games = singleLeagueServiceprovider.getGameRepository().findByLeague(league);
 		Map<Long, Prediction> predictionToGameIdMap = singleLeagueServiceprovider.getLoggedInUserPredictions(games).stream()
 				.collect(Collectors.toMap(prediction -> prediction.getGame_fk(), Function.identity()));
+		Map<Long, Contestant> contestantMap = singleLeagueServiceprovider.getContestantRepository().findByLeague(league).stream()
+				.collect(Collectors.toMap(Contestant::getId, Function.identity()));
 		return games.stream()
 				.map(game -> {
 					Contestant homeTeam = game.getHome_team_fk() != null ?
-							singleLeagueServiceprovider.getContestantRepository().findById(game.getHome_team_fk()).get() : null;
+							contestantMap.get(game.getHome_team_fk()) : null;
 					Contestant awayTeam = game.getAway_team_fk() != null ?
-							singleLeagueServiceprovider.getContestantRepository().findById(game.getAway_team_fk()).get() : null;
+							contestantMap.get(game.getAway_team_fk()) : null;
 					return new KnockoutGameBean(game, homeTeam, awayTeam, predictionToGameIdMap.get(game.getId()));
 				})
 				.collect(Collectors.toList());

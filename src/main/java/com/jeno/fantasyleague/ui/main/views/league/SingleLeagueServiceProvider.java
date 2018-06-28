@@ -1,6 +1,7 @@
 package com.jeno.fantasyleague.ui.main.views.league;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -166,8 +167,8 @@ public class SingleLeagueServiceProvider {
 		return beanFactory.getBean(league.getTemplate().getTemplateServiceBeanName(), LeagueTemplateService.class);
 	}
 
-	public UserLeagueScore getUserLeagueScore(League league, User user) {
-		return leagueService.getTotalLeagueScoreForUser(league, user);
+	public List<UserLeagueScore> getUserLeagueScores(League league) {
+		return leagueService.getTotalLeagueScores(league);
 	}
 
 	public double getUserLeaguePredictionScore(League league, Prediction prediction) {
@@ -176,6 +177,14 @@ public class SingleLeagueServiceProvider {
 
 	public double getLeaguePredictionScoreForUser(League league, Prediction prediction, User user) {
 		return leagueService.getPredictionScoreForUser(league, prediction, user);
+	}
+
+	public Map<Long, Double> getLeaguePredictionScoresForUser(
+			League league,
+			List<Prediction> predictionsWithJoinedGames,
+			List<ContestantWeight> contestantWeights,
+			User user) {
+		return leagueService.getPredictionScoresForUser(league, predictionsWithJoinedGames, contestantWeights, user);
 	}
 
 	public ApplicationEmailService getEmailService() {

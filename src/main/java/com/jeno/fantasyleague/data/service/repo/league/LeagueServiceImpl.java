@@ -1,9 +1,13 @@
 package com.jeno.fantasyleague.data.service.repo.league;
 
+import java.util.List;
+import java.util.Map;
+
 import com.jeno.fantasyleague.data.repository.LeagueRepository;
 import com.jeno.fantasyleague.data.service.leaguetemplates.LeagueTemplateService;
 import com.jeno.fantasyleague.data.service.repo.contestantweight.ContestantWeightService;
 import com.jeno.fantasyleague.data.service.repo.prediction.PredictionService;
+import com.jeno.fantasyleague.model.ContestantWeight;
 import com.jeno.fantasyleague.model.League;
 import com.jeno.fantasyleague.model.Prediction;
 import com.jeno.fantasyleague.model.User;
@@ -48,10 +52,9 @@ public class LeagueServiceImpl implements LeagueService {
 	}
 
 	@Override
-	public UserLeagueScore getTotalLeagueScoreForUser(League league, User user) {
-		// Run template bean
+	public List<UserLeagueScore> getTotalLeagueScores(League league) {
 		LeagueTemplateService templateServiceBean = beanFactory.getBean(league.getTemplate().getTemplateServiceBeanName(), LeagueTemplateService.class);
-		return templateServiceBean.calculateTotalUserScore(league, user);
+		return templateServiceBean.calculateTotalUserScores(league);
 	}
 
 	@Override
@@ -59,6 +62,16 @@ public class LeagueServiceImpl implements LeagueService {
 		// Run template bean
 		LeagueTemplateService templateServiceBean = beanFactory.getBean(league.getTemplate().getTemplateServiceBeanName(), LeagueTemplateService.class);
 		return templateServiceBean.calculateScoreOfPrediction(league, prediction, user);
+	}
+
+	@Override
+	public Map<Long, Double> getPredictionScoresForUser(
+			League league,
+			List<Prediction> predictionsWithJoinedGames,
+			List<ContestantWeight> contestantWeights,
+			User user) {
+		LeagueTemplateService templateServiceBean = beanFactory.getBean(league.getTemplate().getTemplateServiceBeanName(), LeagueTemplateService.class);
+		return templateServiceBean.calculateScoresForUser(league, predictionsWithJoinedGames, contestantWeights, user);
 	}
 
 }

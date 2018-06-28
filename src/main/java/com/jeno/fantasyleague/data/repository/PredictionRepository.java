@@ -27,4 +27,9 @@ public interface PredictionRepository extends JpaRepository<Prediction, Long> {
 			"WHERE g.league = :league " +
 			"AND p.user = :user")
 	List<Prediction> findByLeagueAndUserAndJoinGames(@Param("league") League league, @Param("user") User user);
+
+	@Query("SELECT p FROM Prediction p " +
+			"INNER JOIN FETCH p.game g " +
+			"WHERE g.league = :league")
+	List<Prediction> findByLeagueAndJoinGames(@Param("league") League league);
 }

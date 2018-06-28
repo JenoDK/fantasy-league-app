@@ -1,9 +1,15 @@
 package com.jeno.fantasyleague.data.service.leaguetemplates.custom;
 
+import java.util.List;
+import java.util.Map;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.jeno.fantasyleague.data.service.leaguetemplates.LeagueSettingRenderer;
 import com.jeno.fantasyleague.data.service.leaguetemplates.LeagueTemplateService;
 import com.jeno.fantasyleague.data.service.leaguetemplates.TemplateException;
 import com.jeno.fantasyleague.data.service.repo.league.UserLeagueScore;
+import com.jeno.fantasyleague.model.ContestantWeight;
 import com.jeno.fantasyleague.model.League;
 import com.jeno.fantasyleague.model.Prediction;
 import com.jeno.fantasyleague.model.User;
@@ -25,13 +31,18 @@ public class CustomTemplateService implements LeagueTemplateService {
 	}
 
 	@Override
-	public UserLeagueScore calculateTotalUserScore(League league, User user) {
-		return null;
+	public List<UserLeagueScore> calculateTotalUserScores(League league) {
+		return Lists.newArrayList();
 	}
 
 	@Override
 	public double calculateScoreOfPrediction(League league, Prediction prediction, User user) {
 		return 0;
+	}
+
+	@Override
+	public Map<Long, Double> calculateScoresForUser(League league, List<Prediction> predictionsWithJoinedGames, List<ContestantWeight> contestantWeights, User user) {
+		return Maps.newHashMap();
 	}
 
 }
