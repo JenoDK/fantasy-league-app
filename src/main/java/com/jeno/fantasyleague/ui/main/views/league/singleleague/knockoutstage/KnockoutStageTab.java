@@ -1,21 +1,24 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.knockoutstage;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.jeno.fantasyleague.data.service.leaguetemplates.worldcup2018.FifaWorldCup2018Stages;
 import com.jeno.fantasyleague.model.Contestant;
 import com.jeno.fantasyleague.model.Game;
 import com.jeno.fantasyleague.model.League;
 import com.jeno.fantasyleague.model.Prediction;
 import com.jeno.fantasyleague.resources.Resources;
-import com.jeno.fantasyleague.ui.common.field.CustomButton;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.Alignment;
@@ -71,36 +74,97 @@ public class KnockoutStageTab extends VerticalLayout {
 		addHeader(Resources.getMessage("semiFinals"), 4);
 		addHeader(Resources.getMessage("finals"), 6);
 
-		ArrayListMultimap<Long, KnockoutGameBean> gamesPerNextId = ArrayListMultimap.create();
-		List<KnockoutGameBean> eighthFinalsGames =
-				fetchGamesByStage(league, FifaWorldCup2018Stages.EIGHTH_FINALS.toString());
-		eighthFinalsGames.forEach(gameBean -> gamesPerNextId.put(gameBean.getGame().getNext_game_fk(), gameBean));
+		Map<Long, KnockoutGameBean> knockoutGameBeans = fetchLeagueGames(league).stream()
+				.collect(Collectors.toMap(bean -> bean.getGame().getId(), Function.identity()));
+		List<TwoGamesWithNextId> gamesWithNextIdList = getTwoGamesWithNextIdObjects(knockoutGameBeans.values());
+		TwoGamesWithNextId start = gamesWithNextIdList.stream()
+				.filter(twoGames -> FifaWorldCup2018Stages.EIGHTH_FINALS.toString().equals(twoGames.getStage()))
+				.sorted(Comparator.comparing(TwoGamesWithNextId::getEarliestDate))
+				.findFirst()
+				.get();
+		ArrayListMultimap<String, KnockoutGameBean> gamesPerStage = ArrayListMultimap.create();
+		Set<Long> addedGameIds = Sets.newHashSet();
 
-		Map<Long, Integer> quarterGameIdIndex = Maps.newHashMap();
-		eighthFinalsGames.clear();
-		int index = 0;
-		for (Map.Entry<Long, Collection<KnockoutGameBean>> entry : gamesPerNextId.asMap().entrySet()) {
-			quarterGameIdIndex.put(entry.getKey(), index);
-			entry.getValue().forEach(eighthFinalsGames::add);
-			index++;
-		}
-		List<KnockoutGameBean> quarterFinalsGames =
-				fetchGamesByStage(league, FifaWorldCup2018Stages.QUARTER_FINALS.toString()).stream()
-					.sorted(Comparator.comparingInt(gameBean -> quarterGameIdIndex.get(gameBean.getGame().getId())))
-					.collect(Collectors.toList());
-		List<KnockoutGameBean> semiFinalsGames =
-				fetchGamesByStage(league, FifaWorldCup2018Stages.SEMI_FINALS.toString());
-		List<KnockoutGameBean> finalsGames =
-				fetchGamesByStage(league, FifaWorldCup2018Stages.FINALS.toString());
+		addGame(gamesPerStage, addedGameIds, start.firstBean);
+		addGame(gamesPerStage, addedGameIds, start.secondBean);
+		goForward(gamesPerStage, addedGameIds, gamesWithNextIdList, knockoutGameBeans, start);
 
-		addRowsToColumn(eighthFinalsGames, 0, 2, 0);
+		addRowsToColumn(gamesPerStage.get(FifaWorldCup2018Stages.EIGHTH_FINALS.toString()), 0, 2, 0);
 		addEighthFinalsLines();
-		addRowsToColumn(quarterFinalsGames, 2, 4, 1);
+		addRowsToColumn(gamesPerStage.get(FifaWorldCup2018Stages.QUARTER_FINALS.toString()), 2, 4, 1);
 		addQuarterFinalsLines();
-		addRowsToColumn(semiFinalsGames, 4, 8, 3);
+		addRowsToColumn(gamesPerStage.get(FifaWorldCup2018Stages.SEMI_FINALS.toString()), 4, 8, 3);
 		addSemiFinalsLines();
 
-		addFinals(finalsGames);
+		addFinals(gamesPerStage.get(FifaWorldCup2018Stages.FINALS.toString()));
+	}
+
+	private void goForward(
+			ArrayListMultimap<String, KnockoutGameBean> gamesPerStage,
+			Set<Long> addedGameIds,
+			List<TwoGamesWithNextId> gamesWithNextIdList,
+			Map<Long, KnockoutGameBean> knockoutGameBeans,
+			TwoGamesWithNextId toEvaluate) {
+		Optional<TwoGamesWithNextId> optionalTwoGamesWithNextId = gamesWithNextIdList.stream()
+				.filter(twoGamesWithNextId -> twoGamesWithNextId.getMatchingBean(toEvaluate.nextGameId).isPresent())
+				.findFirst();
+		if (optionalTwoGamesWithNextId.isPresent()) {
+			TwoGamesWithNextId twoGamesWithNextId = optionalTwoGamesWithNextId.get();
+			KnockoutGameBean matchingNextGame = twoGamesWithNextId.getMatchingBean(toEvaluate.nextGameId).get();
+			addGame(gamesPerStage, addedGameIds, matchingNextGame);
+			KnockoutGameBean otherGame = twoGamesWithNextId.firstBean.getGame().getId().equals(matchingNextGame.getGame().getId()) ?
+					twoGamesWithNextId.secondBean :
+					twoGamesWithNextId.firstBean;
+			addGame(gamesPerStage, addedGameIds, otherGame);
+			goBackward(gamesPerStage, addedGameIds, gamesWithNextIdList, knockoutGameBeans, otherGame);
+			goForward(gamesPerStage, addedGameIds, gamesWithNextIdList, knockoutGameBeans, twoGamesWithNextId);
+		} else {
+			addGame(gamesPerStage, addedGameIds, knockoutGameBeans.get(toEvaluate.nextGameId));
+		}
+	}
+
+	private void goBackward(
+			ArrayListMultimap<String,KnockoutGameBean> gamesPerStage,
+			Set<Long> addedGameIds,
+			List<TwoGamesWithNextId> gamesWithNextIdList,
+			Map<Long,KnockoutGameBean> knockoutGameBeans,
+			KnockoutGameBean otherGame) {
+		Optional<TwoGamesWithNextId> optionalTwoGamesWithNextId = gamesWithNextIdList.stream()
+				.filter(twoGamesWithNextId -> twoGamesWithNextId.nextGameId.equals(otherGame.getGame().getId()))
+				.findFirst();
+		optionalTwoGamesWithNextId.ifPresent(twoGamesWithNextId -> {
+			addGame(gamesPerStage, addedGameIds, twoGamesWithNextId.firstBean);
+			addGame(gamesPerStage, addedGameIds, twoGamesWithNextId.secondBean);
+			goBackward(gamesPerStage, addedGameIds, gamesWithNextIdList, knockoutGameBeans, twoGamesWithNextId.firstBean);
+			goBackward(gamesPerStage, addedGameIds, gamesWithNextIdList, knockoutGameBeans, twoGamesWithNextId.secondBean);
+		});
+	}
+
+	private void addGame(ArrayListMultimap<String, KnockoutGameBean> gamesPerStage, Set<Long> addedGameIds, KnockoutGameBean bean) {
+		Long gameId = bean.getGame().getId();
+		if (!addedGameIds.contains(gameId)) {
+			addedGameIds.add(gameId);
+			gamesPerStage.put(bean.getGame().getStage(), bean);
+		}
+	}
+
+	public List<TwoGamesWithNextId> getTwoGamesWithNextIdObjects(Collection<KnockoutGameBean> knockoutGameBeans) {
+		ArrayListMultimap<Long, KnockoutGameBean> gamesPerNextId = ArrayListMultimap.create();
+		knockoutGameBeans.stream()
+				.filter(bean -> Objects.nonNull(bean.getGame().getNext_game_fk()))
+				.forEach(bean -> gamesPerNextId.put(bean.getGame().getNext_game_fk(), bean));
+		return gamesPerNextId.asMap().entrySet().stream()
+				.map(entry -> {
+					List<KnockoutGameBean> sortedBeans = entry.getValue().stream()
+							.sorted(Comparator.comparing(bean -> bean.getGame().getGameDateTime()))
+							.collect(Collectors.toList());
+					if (sortedBeans.size() == 2) {
+						return new TwoGamesWithNextId(sortedBeans.get(0), sortedBeans.get(1), entry.getKey());
+					} else {
+						throw new RuntimeException("What, this is impossible");
+					}
+				})
+				.collect(Collectors.toList());
 	}
 
 	private void addHeader(String title, int column) {
@@ -163,8 +227,8 @@ public class KnockoutStageTab extends VerticalLayout {
 		bracketLayout.setComponentAlignment(placeholder, Alignment.BOTTOM_CENTER);
 	}
 
-	public List<KnockoutGameBean> fetchGamesByStage(League league, String stage) {
-		List<Game> games = singleLeagueServiceprovider.getGameRepository().findByLeagueAndStage(league, stage);
+	public List<KnockoutGameBean> fetchLeagueGames(League league) {
+		List<Game> games = singleLeagueServiceprovider.getGameRepository().findByLeague(league);
 		Map<Long, Prediction> predictionToGameIdMap = singleLeagueServiceprovider.getLoggedInUserPredictions(games).stream()
 				.collect(Collectors.toMap(prediction -> prediction.getGame_fk(), Function.identity()));
 		return games.stream()
@@ -204,6 +268,41 @@ public class KnockoutStageTab extends VerticalLayout {
 			}
 			counter = counter + spaceBetweenRows;
 		}
+	}
+
+	private class TwoGamesWithNextId {
+
+		private final KnockoutGameBean firstBean;
+		private final KnockoutGameBean secondBean;
+		private final Long nextGameId;
+
+		public TwoGamesWithNextId(KnockoutGameBean firstBean, KnockoutGameBean secondBean, Long nextGameId) {
+			this.firstBean = firstBean;
+			this.secondBean = secondBean;
+			this.nextGameId = nextGameId;
+		}
+
+		public String getStage() {
+			if (!firstBean.getGame().getStage().equals(secondBean.getGame().getStage())) {
+				throw new RuntimeException("What???? Impossibru");
+			}
+			return firstBean.getGame().getStage();
+		}
+
+		public LocalDateTime getEarliestDate() {
+			return firstBean.getGame().getGameDateTime();
+		}
+
+		public Optional<KnockoutGameBean> getMatchingBean(Long id) {
+			if (firstBean.getGame().getId().equals(id)) {
+				return Optional.of(firstBean);
+			} else if (secondBean.getGame().getId().equals(id)) {
+				return Optional.of(secondBean);
+			} else {
+				return Optional.empty();
+			}
+		}
+
 	}
 
 }
