@@ -112,15 +112,23 @@ public class FifaWorldCup2018ScoreHelper {
 		if (Objects.nonNull(gameHomeScore) && Objects.nonNull(gameAwayScore) && Objects.nonNull(predictionHomeScore) && Objects.nonNull(predictionAwayScore)) {
 			FifaWorldCup2018Stages stage = FifaWorldCup2018Stages.valueOf(prediction.getGame().getStage());
 			Integer gameScore;
+
+			boolean equalScores = Objects.equals(gameHomeScore, predictionHomeScore) && Objects.equals(gameAwayScore, predictionAwayScore);
+			boolean correctWinner = Objects.nonNull(prediction.getWinner()) &&
+					Objects.nonNull(prediction.getGame().getWinner()) &&
+					Objects.equals(prediction.getWinner().getId(), prediction.getGame().getWinner().getId());
+
+			boolean allCorrect;
+			if (FifaWorldCup2018Stages.GROUP_PHASE.equals(stage)) {
+				allCorrect = equalScores;
+			} else {
+				allCorrect = equalScores && correctWinner;
+			}
 			// Correct score
-			if (Objects.equals(gameHomeScore, predictionHomeScore) && Objects.equals(gameAwayScore, predictionAwayScore)) {
+			if (allCorrect) {
 				gameScore = findAllCorrectSetting(settingMap, stage);
 			// Wrong score, correct result
 			} else {
-				boolean correctWinner = Objects.nonNull(prediction.getWinner()) &&
-						Objects.nonNull(prediction.getGame().getWinner()) &&
-						Objects.equals(prediction.getWinner().getId(), prediction.getGame().getWinner().getId());
-
 				boolean equalsButWrongScoreForGroupStage =
 						FifaWorldCup2018Stages.GROUP_PHASE.toString().equals(prediction.getGame().getStage()) &&
 						Objects.equals(gameHomeScore, gameAwayScore) && Objects.equals(predictionHomeScore, predictionAwayScore);
