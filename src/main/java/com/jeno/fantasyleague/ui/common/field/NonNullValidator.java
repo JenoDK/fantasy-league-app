@@ -1,8 +1,8 @@
 package com.jeno.fantasyleague.ui.common.field;
 
-import com.vaadin.data.ValidationResult;
-import com.vaadin.data.Validator;
-import com.vaadin.data.ValueContext;
+import com.vaadin.flow.data.binder.ValidationResult;
+import com.vaadin.flow.data.binder.Validator;
+import com.vaadin.flow.data.binder.ValueContext;
 
 public class NonNullValidator<T> implements Validator<T> {
 

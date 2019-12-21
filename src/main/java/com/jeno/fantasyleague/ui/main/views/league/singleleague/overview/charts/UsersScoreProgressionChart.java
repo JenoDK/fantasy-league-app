@@ -7,28 +7,24 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.Maps;
-import com.jeno.fantasyleague.model.User;
+import com.jeno.fantasyleague.backend.model.User;
 import com.jeno.fantasyleague.ui.common.charts.AbstractChart;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.OverviewUtil;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.UserTotalScoreBean;
-import com.vaadin.addon.charts.model.AxisTitle;
-import com.vaadin.addon.charts.model.AxisType;
-import com.vaadin.addon.charts.model.ChartType;
-import com.vaadin.addon.charts.model.DataSeries;
-import com.vaadin.addon.charts.model.DataSeriesItem;
-import com.vaadin.addon.charts.model.HorizontalAlign;
-import com.vaadin.addon.charts.model.Hover;
-import com.vaadin.addon.charts.model.LayoutDirection;
-import com.vaadin.addon.charts.model.Legend;
-import com.vaadin.addon.charts.model.Marker;
-import com.vaadin.addon.charts.model.MarkerSymbolEnum;
-import com.vaadin.addon.charts.model.PlotOptionsLine;
-import com.vaadin.addon.charts.model.Series;
-import com.vaadin.addon.charts.model.States;
-import com.vaadin.addon.charts.model.Title;
-import com.vaadin.addon.charts.model.VerticalAlign;
-import com.vaadin.addon.charts.model.XAxis;
-import com.vaadin.addon.charts.model.YAxis;
+import com.vaadin.flow.component.charts.model.AxisTitle;
+import com.vaadin.flow.component.charts.model.AxisType;
+import com.vaadin.flow.component.charts.model.ChartType;
+import com.vaadin.flow.component.charts.model.DataSeries;
+import com.vaadin.flow.component.charts.model.DataSeriesItem;
+import com.vaadin.flow.component.charts.model.HorizontalAlign;
+import com.vaadin.flow.component.charts.model.LayoutDirection;
+import com.vaadin.flow.component.charts.model.Legend;
+import com.vaadin.flow.component.charts.model.PlotOptionsLine;
+import com.vaadin.flow.component.charts.model.Series;
+import com.vaadin.flow.component.charts.model.Title;
+import com.vaadin.flow.component.charts.model.VerticalAlign;
+import com.vaadin.flow.component.charts.model.XAxis;
+import com.vaadin.flow.component.charts.model.YAxis;
 
 public class UsersScoreProgressionChart extends AbstractChart {
 
@@ -73,7 +69,7 @@ public class UsersScoreProgressionChart extends AbstractChart {
 		legend.setVerticalAlign(VerticalAlign.TOP);
 		legend.setX(-10d);
 		legend.setY(100d);
-		legend.setBorderWidth(0);
+		legend.setBorderRadius(0);
 
 		initData();
 	}
@@ -108,7 +104,7 @@ public class UsersScoreProgressionChart extends AbstractChart {
 		conf.setSeries(seriesPerId.values().stream()
 				.filter(serie -> seriesShownPerId.get(serie.getName()))
 				.collect(Collectors.toList()));
-		drawChart(conf);
+		drawChart(true);
 	}
 
 }

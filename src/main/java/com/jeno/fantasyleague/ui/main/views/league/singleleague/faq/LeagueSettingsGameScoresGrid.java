@@ -12,21 +12,21 @@ public class LeagueSettingsGameScoresGrid extends CustomGrid<LeagueSettingsGameS
 
 		initColumns();
 		setItems(items);
-		setWidth(100, Unit.PERCENTAGE);
+		setWidth("100%");
 	}
 
 	private void initColumns() {
 		addColumn(LeagueSettingsGameScoreBean::getStage)
-				.setCaption(Resources.getMessage("stage"))
+				.setHeader(Resources.getMessage("stage"))
 				.setId("stageColumn");
 		addColumn(LeagueSettingsGameScoreBean::getAllCorrect)
-				.setCaption(Resources.getMessage("AllCorrect"))
+				.setHeader(Resources.getMessage("AllCorrect"))
 				.setId("allCorrectColumn");
 		addColumn(LeagueSettingsGameScoreBean::getCorrectResultAndWrongScore)
-				.setCaption(Resources.getMessage("WrongScore"))
+				.setHeader(Resources.getMessage("WrongScore"))
 				.setId("wrongScoreColumn");
 		addColumn(LeagueSettingsGameScoreBean::getAllWrong)
-				.setCaption(Resources.getMessage("AllWrong"))
+				.setHeader(Resources.getMessage("AllWrong"))
 				.setId("allWrongColumn");
 	}
 }

@@ -7,26 +7,24 @@ import java.util.stream.Collectors;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Lists;
-import com.jeno.fantasyleague.data.service.leaguetemplates.worldcup2018.FifaWorldCup2018Stages;
-import com.jeno.fantasyleague.model.User;
+import com.jeno.fantasyleague.backend.data.service.leaguetemplates.worldcup2018.FifaWorldCup2018Stages;
+import com.jeno.fantasyleague.backend.model.User;
 import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.ui.common.charts.AbstractChart;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.OverviewUtil;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.UserTotalScoreBean;
-import com.vaadin.addon.charts.model.AxisTitle;
-import com.vaadin.addon.charts.model.ChartType;
-import com.vaadin.addon.charts.model.DataLabels;
-import com.vaadin.addon.charts.model.ListSeries;
-import com.vaadin.addon.charts.model.PlotOptionsColumn;
-import com.vaadin.addon.charts.model.Series;
-import com.vaadin.addon.charts.model.StackLabels;
-import com.vaadin.addon.charts.model.Stacking;
-import com.vaadin.addon.charts.model.Title;
-import com.vaadin.addon.charts.model.Tooltip;
-import com.vaadin.addon.charts.model.XAxis;
-import com.vaadin.addon.charts.model.YAxis;
-import com.vaadin.addon.charts.model.style.SolidColor;
-import com.vaadin.addon.charts.model.style.Style;
+import com.vaadin.flow.component.charts.model.AxisTitle;
+import com.vaadin.flow.component.charts.model.ChartType;
+import com.vaadin.flow.component.charts.model.DataLabels;
+import com.vaadin.flow.component.charts.model.ListSeries;
+import com.vaadin.flow.component.charts.model.PlotOptionsColumn;
+import com.vaadin.flow.component.charts.model.Series;
+import com.vaadin.flow.component.charts.model.StackLabels;
+import com.vaadin.flow.component.charts.model.Stacking;
+import com.vaadin.flow.component.charts.model.Title;
+import com.vaadin.flow.component.charts.model.Tooltip;
+import com.vaadin.flow.component.charts.model.XAxis;
+import com.vaadin.flow.component.charts.model.YAxis;
 
 public class TotalUserScoresChart extends AbstractChart {
 
@@ -63,10 +61,11 @@ public class TotalUserScoresChart extends AbstractChart {
 		PlotOptionsColumn plotOptions = new PlotOptionsColumn();
 		plotOptions.setStacking(Stacking.NORMAL);
 		DataLabels labels = new DataLabels(true);
-		Style style= new Style();
-		style.setTextShadow("0 0 3px black");
-		labels.setStyle(style);
-		labels.setColor(new SolidColor("white"));
+		// TODO
+//		Style style= new Style();
+//		style.setTextShadow("0 0 3px black");
+//		labels.setStyle(style);
+//		labels.setColor(new SolidColor("white"));
 		plotOptions.setDataLabels(labels);
 		conf.setPlotOptions(plotOptions);
 
@@ -113,6 +112,7 @@ public class TotalUserScoresChart extends AbstractChart {
 				.collect(Collectors.toList());
 		conf.setSeries(series);
 
-		drawChart(conf);
+		// TODO check
+		drawChart(true);
 	}
 }

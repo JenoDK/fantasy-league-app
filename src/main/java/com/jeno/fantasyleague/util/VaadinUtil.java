@@ -5,35 +5,17 @@ import java.util.Map;
 import java.util.Optional;
 
 import com.google.common.collect.Maps;
-import com.vaadin.data.BeanValidationBinder;
-import com.vaadin.data.Binder;
-import com.vaadin.data.ValidationResult;
-import com.vaadin.data.Validator;
-import com.vaadin.data.ValueContext;
-import com.vaadin.server.ErrorMessage;
-import com.vaadin.server.UserError;
-import com.vaadin.server.VaadinService;
-import com.vaadin.server.VaadinServletRequest;
-import com.vaadin.shared.ui.ErrorLevel;
-import com.vaadin.ui.AbstractComponent;
-import com.vaadin.ui.AbstractField;
-import com.vaadin.ui.PasswordField;
-import com.vaadin.ui.UI;
+import com.vaadin.flow.component.HasValidation;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.textfield.PasswordField;
+import com.vaadin.flow.data.binder.BeanValidationBinder;
+import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.binder.ValidationResult;
+import com.vaadin.flow.data.binder.Validator;
+import com.vaadin.flow.server.VaadinService;
+import com.vaadin.flow.server.VaadinServletRequest;
 
 public class VaadinUtil {
-
-	public static void addValidator(AbstractField field, Validator validator) {
-		field.addValueChangeListener(event -> {
-			ValidationResult result = validator.apply(event.getValue(), new ValueContext(field));
-
-			if (result.isError()) {
-				UserError error = new UserError(result.getErrorMessage());
-				field.setComponentError(error);
-			} else {
-				field.setComponentError(null);
-			}
-		});
-	}
 
 	public static Validator<String> getPasswordsMatchValidator(PasswordField passwordField) {
 		return (Validator<String>) (value, context) -> {
@@ -55,26 +37,12 @@ public class VaadinUtil {
 		errorMap.entrySet().forEach(entry -> {
 			Optional<Binder.Binding<T, ?>> binding = binder.getBinding(entry.getKey());
 			if (binding.isPresent()) {
-				((AbstractComponent) binding.get().getField()).setComponentError(getComponentError(entry.getValue()));
+				((HasValidation) binding.get().getField()).setErrorMessage(entry.getValue());
 			} else {
 				errorsWithoutBinding.put(entry.getKey(), entry.getValue());
 			}
 		});
 		return errorsWithoutBinding;
-	}
-
-	public static ErrorMessage getComponentError(String msg) {
-		return new ErrorMessage() {
-			@Override
-			public ErrorLevel getErrorLevel() {
-				return ErrorLevel.ERROR;
-			}
-
-			@Override
-			public String getFormattedHtmlMessage() {
-				return msg;
-			}
-		};
 	}
 
 	public static void logout() {

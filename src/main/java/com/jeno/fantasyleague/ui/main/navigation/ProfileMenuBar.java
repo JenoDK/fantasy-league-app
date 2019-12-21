@@ -1,18 +1,19 @@
 package com.jeno.fantasyleague.ui.main.navigation;
 
+import java.util.Comparator;
+import java.util.List;
+
 import com.google.common.collect.Lists;
-import com.jeno.fantasyleague.model.User;
-import com.jeno.fantasyleague.model.UserNotification;
+import com.jeno.fantasyleague.backend.model.User;
+import com.jeno.fantasyleague.backend.model.UserNotification;
 import com.jeno.fantasyleague.ui.main.NotificationModel;
 import com.jeno.fantasyleague.ui.main.views.state.State;
 import com.jeno.fantasyleague.util.ImageUtil;
 import com.jeno.fantasyleague.util.Images;
 import com.jeno.fantasyleague.util.VaadinUtil;
-import com.vaadin.server.ThemeResource;
-import com.vaadin.ui.MenuBar;
-
-import java.util.Comparator;
-import java.util.List;
+import com.vaadin.flow.component.contextmenu.MenuItem;
+import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.menubar.MenuBar;
 
 public class ProfileMenuBar extends MenuBar {
 
@@ -31,9 +32,8 @@ public class ProfileMenuBar extends MenuBar {
 	}
 
 	private void initLayout(List<UserNotification> userNotifications) {
-		setWidthUndefined();
-		setHeight(60f, Unit.PIXELS);
-		addStyleName("fantasy-league-menubar");
+		setHeight("60px");
+		addClassName("fantasy-league-menubar");
 
 		createNotificationMenuItem();
 		createProfileMenuItem();
@@ -41,58 +41,64 @@ public class ProfileMenuBar extends MenuBar {
 	}
 
 	private void createProfileMenuItem() {
-		MenuItem profileItem = addItem("profile", ImageUtil.getUserProfilePictureResource(user), null);
-		profileItem.setStyleName("menu-state-item profile-item");
+		MenuItem profileItem = addItem("profile", null);
+		// TODO
+//		profileItem.addAsFirst(ImageUtil.getUserProfilePictureImage(user));
+		profileItem.getElement().getClassList().add("menu-state-item profile-item");
 		profileItem.setText(user.getUsername());
-		profileItem.addItem("Profile", item -> getUI().getNavigator().navigateTo(State.PROFILE.getIdentifier()));
-		profileItem.addItem("Logout", item -> VaadinUtil.logout());
+		profileItem.getSubMenu().addItem("Profile", item -> getUI().ifPresent(ui -> ui.navigate(State.PROFILE.getIdentifier())));
+		profileItem.getSubMenu().addItem("Logout", item -> VaadinUtil.logout());
 	}
 
 	private void createNotificationMenuItem() {
-		notificationItem = addItem("notification", new ThemeResource(Images.NOTIFICATION), null);
-		notificationItem.setStyleName("menu-state-item");
+		notificationItem = addItem("notification", null);
+		// TODO
+//		notificationItem.addAsFirst(new ThemeResource(Images.NOTIFICATION));
+		notificationItem.getElement().getClassList().add("menu-state-item");
 		notificationItem.setText("");
 	}
 
 	public void updateNotifications(List<UserNotification> userNotifications) {
 		this.userNotifications = userNotifications;
-		notificationItem.removeChildren();
+		notificationItem.removeAll();
 		userNotifications.stream()
 				.sorted(Comparator.comparing(UserNotification::getCreatedAt))
 				.forEach(this::addNotificationItem);
 		if (!userNotifications.isEmpty()) {
-			notificationItem.setIcon(new ThemeResource(Images.NOTIFICATION_ACTIVE));
+			// TODO
+//			notificationItem.addAsFirst(new ThemeResource(Images.NOTIFICATION_ACTIVE));
 		} else {
-			notificationItem.setIcon(new ThemeResource(Images.NOTIFICATION));
+//			notificationItem.addAsFirst(new ThemeResource(Images.NOTIFICATION));
 		}
 	}
 
 	private void addNotificationItem(UserNotification notification) {
-		MenuBar.MenuItem menuItem = notificationItem.addItem(notification.getMessage(), ImageUtil.getUserProfilePictureResource(notification.getCreatedBy()), item -> {});
-		menuItem.setStyleName("menu-notification-item");
+		MenuItem menuItem = notificationItem.getSubMenu().addItem(notification.getMessage(), item -> {});
+		menuItem.addComponentAsFirst(ImageUtil.getUserProfilePictureImage(notification.getCreatedBy()));
+		menuItem.getElement().getClassList().add("menu-notification-item");
 		if (notification.getNotification_type().isNeedsAccepting()) {
-			MenuBar.MenuItem acceptItem = menuItem.addItem(
+			MenuItem acceptItem = menuItem.getSubMenu().addItem(
 					"Accept",
-					new ThemeResource(Images.Icons.CHECK),
 					ignored -> {
 						notificationModel.notificationAccepted(notification).ifPresent(error -> {
 							// TODO find a way to inform user
 						});
-						notificationItem.removeChild(menuItem);
+						notificationItem.remove(menuItem);
 						// TODO Reload notifications/remove this one ?
 					});
-			MenuBar.MenuItem declineItem = menuItem.addItem(
+			// TODO
+			acceptItem.addComponentAsFirst(new Image(Images.Icons.CHECK, "check"));
+			MenuItem declineItem = menuItem.getSubMenu().addItem(
 					"Decline (not implemented yet)",
-					new ThemeResource(Images.Icons.REMOVE),
 					ignored -> {
 						notificationModel.notificationDeclined(notification).ifPresent(error -> {
 							// TODO find a way to inform user
 						});
-						notificationItem.removeChild(menuItem);
+						notificationItem.remove(menuItem);
 						// TODO Reload notifications/remove this one ?
 					});
-			acceptItem.setStyleName("accept-decline-item");
-			declineItem.setStyleName("accept-decline-item");
+			acceptItem.getElement().getClassList().add("accept-decline-item");
+			declineItem.getElement().getClassList().add("accept-decline-item");
 		}
 	}
 }

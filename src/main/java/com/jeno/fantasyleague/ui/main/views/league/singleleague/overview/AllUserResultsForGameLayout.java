@@ -6,19 +6,17 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.jeno.fantasyleague.data.service.leaguetemplates.worldcup2018.FifaWorldCup2018Stages;
-import com.jeno.fantasyleague.model.Contestant;
-import com.jeno.fantasyleague.model.ContestantWeight;
-import com.jeno.fantasyleague.model.League;
+import com.jeno.fantasyleague.backend.data.service.leaguetemplates.worldcup2018.FifaWorldCup2018Stages;
+import com.jeno.fantasyleague.backend.model.Contestant;
+import com.jeno.fantasyleague.backend.model.ContestantWeight;
+import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.jeno.fantasyleague.util.DateUtil;
 import com.jeno.fantasyleague.util.GridUtil;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.themes.ValoTheme;
+import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 public class AllUserResultsForGameLayout extends VerticalLayout {
 
@@ -29,16 +27,16 @@ public class AllUserResultsForGameLayout extends VerticalLayout {
 		super();
 
 		Label stageLabel = new Label(Resources.getMessage(FifaWorldCup2018Stages.valueOf(bean.getGame().getStage()).getName()));
-		stageLabel.addStyleName(ValoTheme.LABEL_TINY);
+//		stageLabel.addClassName(ValoTheme.LABEL_TINY);
 
 		HorizontalLayout gameWrapper = new HorizontalLayout();
-		gameWrapper.addComponent(GridUtil.createTeamLayout(bean.getHome_team(), bean.getGame().getHome_team_placeholder()));
-		gameWrapper.addComponent(new Label(
+		gameWrapper.add(GridUtil.createTeamLayout(bean.getHome_team(), bean.getGame().getHome_team_placeholder()));
+		gameWrapper.add(new Label(
 				OverviewUtil.getScoreWithWinner(bean.getGameHome_team_score(), bean.getGameAway_team_score(), bean.getGameHomeTeamWon())));
-		gameWrapper.addComponent(GridUtil.createTeamLayout(bean.getAway_team(), bean.getGame().getAway_team_placeholder()));
+		gameWrapper.add(GridUtil.createTeamLayout(bean.getAway_team(), bean.getGame().getAway_team_placeholder()));
 
 		Label dateTimeLabel = new Label(DateUtil.DATE_TIME_FORMATTER.format(bean.getGame().getGameDateTime()));
-		dateTimeLabel.addStyleName(ValoTheme.LABEL_TINY);
+//		dateTimeLabel.addClassName(ValoTheme.LABEL_TINY);
 
 		Map<Long, Integer> homeTeamWeights = singleLeagueServiceprovider.getContestantWeightRepository()
 				.findByContestantAndLeague(bean.getHome_team(), league).stream()
@@ -62,21 +60,21 @@ public class AllUserResultsForGameLayout extends VerticalLayout {
 						bean.getPredictionHiddenUntil()))
 				.collect(Collectors.toList());
 		AllUserGameScoreGrid grid = new AllUserGameScoreGrid(bean.getHome_team(), bean.getAway_team(), items, singleLeagueServiceprovider.getLoggedInUser());
-		grid.setWidth(90, Unit.PERCENTAGE);
+		grid.setWidth("90%");
 
 		VerticalLayout wrapper = new VerticalLayout();
 		wrapper.setMargin(false);
-		wrapper.addComponent(stageLabel);
-		wrapper.addComponent(gameWrapper);
-		wrapper.addComponent(dateTimeLabel);
-		wrapper.setComponentAlignment(stageLabel, Alignment.TOP_CENTER);
-		wrapper.setComponentAlignment(gameWrapper, Alignment.TOP_CENTER);
-		wrapper.setComponentAlignment(dateTimeLabel, Alignment.TOP_CENTER);
+		wrapper.add(stageLabel);
+		wrapper.add(gameWrapper);
+		wrapper.add(dateTimeLabel);
+//		wrapper.setComponentAlignment(stageLabel, Alignment.TOP_CENTER);
+//		wrapper.setComponentAlignment(gameWrapper, Alignment.TOP_CENTER);
+//		wrapper.setComponentAlignment(dateTimeLabel, Alignment.TOP_CENTER);
 
-		addComponent(wrapper);
-		addComponent(grid);
-		setComponentAlignment(wrapper, Alignment.TOP_CENTER);
-		setComponentAlignment(grid, Alignment.TOP_CENTER);
+		add(wrapper);
+		add(grid);
+//		setComponentAlignment(wrapper, Alignment.TOP_CENTER);
+//		setComponentAlignment(grid, Alignment.TOP_CENTER);
 	}
 
 }

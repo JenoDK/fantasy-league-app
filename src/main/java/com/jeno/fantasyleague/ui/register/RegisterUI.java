@@ -1,27 +1,24 @@
 package com.jeno.fantasyleague.ui.register;
 
-import com.jeno.fantasyleague.data.dao.UserDao;
-import com.jeno.fantasyleague.data.dao.ValidationException;
-import com.jeno.fantasyleague.data.service.email.AccountActivationService;
-import com.jeno.fantasyleague.model.User;
-import com.jeno.fantasyleague.ui.RedirectUI;
-import com.jeno.fantasyleague.ui.common.image.ImageUploadWithPlaceholder;
-import com.jeno.fantasyleague.util.VaadinUtil;
-import com.vaadin.annotations.Theme;
-import com.vaadin.annotations.Title;
-import com.vaadin.spring.annotation.SpringUI;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.HorizontalLayout;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-
 import java.io.IOException;
 import java.nio.file.Files;
 
-@SpringUI(path = "/register")
-@Title("Register")
-@Theme("fantasy-league")
+import com.jeno.fantasyleague.backend.data.dao.UserDao;
+import com.jeno.fantasyleague.backend.data.dao.ValidationException;
+import com.jeno.fantasyleague.backend.data.service.email.AccountActivationService;
+import com.jeno.fantasyleague.backend.model.User;
+import com.jeno.fantasyleague.ui.RedirectUI;
+import com.jeno.fantasyleague.ui.common.image.ImageUploadWithPlaceholder;
+import com.jeno.fantasyleague.util.VaadinUtil;
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.router.Route;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+
+@PageTitle("Register")
+@Route(value = "register")
 public class RegisterUI extends RedirectUI {
 
 	@Autowired
@@ -37,7 +34,7 @@ public class RegisterUI extends RedirectUI {
 	private HorizontalLayout middleComponent;
 
 	public RegisterUI() {
-		super("Login", "/login");
+		super("Login", "login");
 	}
 
 	@Override
@@ -50,10 +47,10 @@ public class RegisterUI extends RedirectUI {
 
 		profilePictureUploader = new ImageUploadWithPlaceholder();
 
-		middleComponent.addComponent(form);
-		middleComponent.addComponent(profilePictureUploader);
-		middleComponent.setComponentAlignment(form, Alignment.TOP_RIGHT);
-		middleComponent.setComponentAlignment(profilePictureUploader, Alignment.TOP_LEFT);
+		middleComponent.add(form);
+		middleComponent.add(profilePictureUploader);
+//		middleComponent.setComponentAlignment(form, Alignment.TOP_RIGHT);
+//		middleComponent.setComponentAlignment(profilePictureUploader, Alignment.TOP_LEFT);
 
 		return middleComponent;
 	}

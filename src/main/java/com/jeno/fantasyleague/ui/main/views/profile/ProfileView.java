@@ -1,28 +1,21 @@
 package com.jeno.fantasyleague.ui.main.views.profile;
 
-import java.nio.file.Files;
-import java.util.stream.Collectors;
-
 import javax.annotation.PostConstruct;
 
-import com.jeno.fantasyleague.data.dao.UserDao;
-import com.jeno.fantasyleague.data.dao.ValidationException;
-import com.jeno.fantasyleague.data.security.SecurityHolder;
-import com.jeno.fantasyleague.model.User;
+import com.jeno.fantasyleague.backend.data.dao.UserDao;
+import com.jeno.fantasyleague.backend.data.dao.ValidationException;
+import com.jeno.fantasyleague.security.SecurityHolder;
+import com.jeno.fantasyleague.backend.model.User;
 import com.jeno.fantasyleague.ui.common.image.ImageUploadWithPlaceholder;
 import com.jeno.fantasyleague.ui.main.views.state.State;
-import com.jeno.fantasyleague.util.VaadinUtil;
-import com.vaadin.data.Binder;
-import com.vaadin.navigator.View;
-import com.vaadin.spring.annotation.SpringView;
-import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@UIScope
-@SpringView(name = State.StateUrlConstants.PROFILE)
-public class ProfileView extends VerticalLayout implements View {
+@Route(value = State.StateUrlConstants.PROFILE)
+public class ProfileView extends VerticalLayout {
 
     @Autowired
     private SecurityHolder securityHolder;
@@ -35,7 +28,7 @@ public class ProfileView extends VerticalLayout implements View {
 
         ImageUploadWithPlaceholder uploadLayout = new ImageUploadWithPlaceholder(currentUser);
         uploadLayout.imageUploadedAndResized().subscribe(file -> {
-            currentUser.setProfile_picture(Files.readAllBytes(file.toPath()));
+            currentUser.setProfile_picture(file.readAllBytes());
             userDao.update(currentUser);
         });
 
@@ -52,14 +45,13 @@ public class ProfileView extends VerticalLayout implements View {
                 try {
                     userDao.update(currentUser);
                 } catch (ValidationException e) {
-                    userNameField.setComponentError(
-                            VaadinUtil.getComponentError(e.getErrorMap().values().stream().collect(Collectors.joining(",<br/>"))));
+                    userNameField.setErrorMessage(String.join(",<br/>", e.getErrorMap().values()));
                     currentUser.setUsername(previousUsername);
                 }
             }
         });
-        addComponent(uploadLayout);
-        addComponent(userNameField);
+        add(uploadLayout);
+        add(userNameField);
     }
 
 }

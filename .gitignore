@@ -29,3 +29,7 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+
+### Vaadin stuff ###
+node_modules/
+target/

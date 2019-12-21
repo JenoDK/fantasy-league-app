@@ -5,10 +5,9 @@ import java.util.Set;
 
 import com.google.common.collect.Maps;
 import com.jeno.fantasyleague.ui.common.charts.AbstractChart;
-import com.vaadin.shared.ui.MarginInfo;
-import com.vaadin.ui.CheckBox;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.flow.component.checkbox.Checkbox;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 public class UsersChartLayout extends VerticalLayout {
 
@@ -17,44 +16,44 @@ public class UsersChartLayout extends VerticalLayout {
 	private AbstractChart chart;
 
 	private HorizontalLayout userSelectionLayout;
-	private Map<String, CheckBox> userSelectionsCheckboxes;
+	private Map<String, Checkbox> userSelectionsCheckboxes;
 
 	public UsersChartLayout(Set<String> userNames, Set<String> userNamesToSelectByDefault, AbstractChart chart) {
 		this.userNames = userNames;
 		this.userNamesToSelectByDefault = userNamesToSelectByDefault;
 		this.chart = chart;
-		chart.addStyleName("has-selection-section");
+		chart.addClassName("has-selection-section");
 
 		setMargin(false);
 		setSpacing(false);
 
 		userSelectionLayout = new HorizontalLayout();
-		userSelectionLayout.addStyleName("chart-user-selection");
+		userSelectionLayout.addClassName("chart-user-selection");
 		userSelectionsCheckboxes = Maps.newHashMap();
 		initUserSelectionLayout();
 
-		addComponent(userSelectionLayout);
-		addComponent(chart);
+		add(userSelectionLayout);
+		add(chart);
 	}
 
 	private void initUserSelectionLayout() {
-		userSelectionLayout.removeAllComponents();
+		userSelectionLayout.removeAll();
 		userSelectionsCheckboxes.clear();
 		userNames.stream()
 				.forEach(userName -> {
-					CheckBox checkBox = new CheckBox(userName);
-					checkBox.setValue(userNamesToSelectByDefault.contains(userName));
-					checkBox.addValueChangeListener(event -> {
+					Checkbox Checkbox = new Checkbox(userName);
+					Checkbox.setValue(userNamesToSelectByDefault.contains(userName));
+					Checkbox.addValueChangeListener(event -> {
 						if (event.getValue()) {
 							chart.addSeries(userName);
 						} else {
 							chart.removeSeries(userName);
 						}
 					});
-					userSelectionsCheckboxes.put(userName, checkBox);
+					userSelectionsCheckboxes.put(userName, Checkbox);
 				});
 		userSelectionsCheckboxes.values()
-				.forEach(userSelectionLayout::addComponent);
+				.forEach(userSelectionLayout::add);
 	}
 
 	public void refresh(Set<String> userNames) {

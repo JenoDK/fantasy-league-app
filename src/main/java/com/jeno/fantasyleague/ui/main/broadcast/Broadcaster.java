@@ -1,7 +1,7 @@
 package com.jeno.fantasyleague.ui.main.broadcast;
 
 import com.google.common.collect.ArrayListMultimap;
-import com.jeno.fantasyleague.model.UserNotification;
+import com.jeno.fantasyleague.backend.model.UserNotification;
 
 import java.io.Serializable;
 import java.util.concurrent.ExecutorService;

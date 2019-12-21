@@ -4,11 +4,11 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.jeno.fantasyleague.model.ContestantGroup;
-import com.jeno.fantasyleague.model.League;
+import com.jeno.fantasyleague.backend.model.ContestantGroup;
+import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.groupstage.upcomingmatches.GroupLayout;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 public class GroupStageTab extends VerticalLayout {
 
@@ -21,14 +21,14 @@ public class GroupStageTab extends VerticalLayout {
 				.sorted(Comparator.comparing(ContestantGroup::getName))
 				.collect(Collectors.toList());
 
-		addComponent(createUpcomingMatchesLayout(league, singleLeagueService, groups));
+		add(createUpcomingMatchesLayout(league, singleLeagueService, groups));
 	}
 
 	private VerticalLayout createUpcomingMatchesLayout(League league, SingleLeagueServiceProvider singleLeagueService, List<ContestantGroup> groups) {
 		VerticalLayout upcomingMatchesLayout = new VerticalLayout();
 		upcomingMatchesLayout.setMargin(false);
 		upcomingMatchesLayout.setSpacing(false);
-		groups.forEach(group -> upcomingMatchesLayout.addComponent(new GroupLayout(singleLeagueService, league, group)));
+		groups.forEach(group -> upcomingMatchesLayout.add(new GroupLayout(singleLeagueService, league, group)));
 		return upcomingMatchesLayout;
 	}
 

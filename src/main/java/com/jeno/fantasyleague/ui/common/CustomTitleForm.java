@@ -1,16 +1,13 @@
 package com.jeno.fantasyleague.ui.common;
 
-import com.vaadin.shared.ui.ContentMode;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.FormLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.themes.ValoTheme;
+import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.textfield.TextField;
 
 public class CustomTitleForm extends FormLayout {
 
 	private String title;
 
-	private Label titleLabel;
+	private TextField titleLabel;
 
 	public CustomTitleForm(String title) {
 		this.title = title;
@@ -19,13 +16,9 @@ public class CustomTitleForm extends FormLayout {
 	}
 
 	private void initLayout() {
-		titleLabel = new Label(title, ContentMode.HTML);
-		titleLabel.addStyleName(ValoTheme.LABEL_COLORED);
-		titleLabel.addStyleName(ValoTheme.LABEL_H3);
-		titleLabel.setWidthUndefined();
+		titleLabel = new TextField(title);
 
-		addComponent(titleLabel);
-		setComponentAlignment(titleLabel, Alignment.MIDDLE_CENTER);
+		add(titleLabel);
 	}
 
 }

@@ -5,31 +5,37 @@ import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 
-import com.jeno.fantasyleague.model.League;
-import com.jeno.fantasyleague.model.User;
-import com.vaadin.server.Resource;
-import com.vaadin.server.StreamResource;
-import com.vaadin.server.ThemeResource;
+import com.jeno.fantasyleague.backend.model.League;
+import com.jeno.fantasyleague.backend.model.User;
+import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.server.StreamResource;
 
 public class ImageUtil {
 
-	public static Resource getUserProfilePictureResource(User user) {
+	public static Image getUserProfilePictureImage(User user) {
 		if (user.getProfile_picture() != null) {
-			return new StreamResource(
-					() -> new ByteArrayInputStream(user.getProfile_picture()),
-					"profile_picture.png");
+			return new Image(
+					getUserProfilePictureResource(user),
+					"profile_picture");
 		} else {
-			return new ThemeResource(Images.DEFAULT_PROFILE_PICTURE);
+			return new Image(Images.DEFAULT_PROFILE_PICTURE, "default_profile_picture");
 		}
 	}
 
-	public static Resource getLeaguePictureResource(League league) {
+	public static StreamResource getUserProfilePictureResource(User user) {
+		return new StreamResource(
+				"profile_picture.png",
+				() -> new ByteArrayInputStream(user.getProfile_picture()));
+	}
+
+	public static Image getLeaguePictureResource(League league) {
 		if (league.getLeague_picture() != null) {
-			return new StreamResource(
-					() -> new ByteArrayInputStream(league.getLeague_picture()),
-					"league_banner.png");
+			return new Image(new StreamResource(
+					"league_banner.png",
+					() -> new ByteArrayInputStream(league.getLeague_picture())),
+					"league_banner");
 		} else {
-			return new ThemeResource(Images.DEFAULT_LEAGUE_BANNER);
+			return new Image(Images.DEFAULT_LEAGUE_BANNER, "default_league_banner");
 		}
 	}
 

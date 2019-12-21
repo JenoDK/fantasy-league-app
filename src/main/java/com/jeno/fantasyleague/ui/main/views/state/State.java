@@ -15,7 +15,7 @@ public enum State {
     private String identifier;
     private String name;
     private boolean showInMenuBar;
-    private String iconPath = "";
+    private String icon = "";
     private int seq;
 
     State(String identifier, String name, boolean showInMenuBar, int seq) {
@@ -25,11 +25,11 @@ public enum State {
         this.seq = seq;
     }
 
-    State(String identifier, String name, boolean showInMenuBar, String iconPath, int seq) {
+    State(String identifier, String name, boolean showInMenuBar, String icon, int seq) {
         this.identifier = identifier;
         this.name = name;
         this.showInMenuBar = showInMenuBar;
-        this.iconPath = iconPath;
+        this.icon = icon;
         this.seq = seq;
     }
 
@@ -51,8 +51,8 @@ public enum State {
         return showInMenuBar;
     }
 
-    public String getIconPath() {
-        return iconPath;
+    public String getIcon() {
+        return icon;
     }
 
     public int getSeq() {
@@ -61,9 +61,8 @@ public enum State {
 
     public static class StateUrlConstants {
 
-        public static final String HOME = "";
+        public static final String LEAGUE = "league";
         public static final String PROFILE = "profile";
-        public static final String LEAGUE = "";
 
         private StateUrlConstants() {
         }

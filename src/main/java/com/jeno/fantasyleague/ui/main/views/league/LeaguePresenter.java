@@ -1,9 +1,7 @@
 package com.jeno.fantasyleague.ui.main.views.league;
 
-import com.jeno.fantasyleague.annotation.SpringUIScope;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@SpringUIScope
 public class LeaguePresenter {
 
 	@Autowired
@@ -12,8 +10,8 @@ public class LeaguePresenter {
 	private LeagueModel model;
 
 	public void setupModule(LeagueModule module) {
-		module.removeAllComponents();
-		module.addComponent(view.getLayout());
+		module.removeAll();
+		module.add(view.getLayout());
 
 		view.newLeague().subscribe(model::addLeague);
 

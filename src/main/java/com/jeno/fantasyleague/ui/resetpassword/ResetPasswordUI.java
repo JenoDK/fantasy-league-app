@@ -1,29 +1,30 @@
 package com.jeno.fantasyleague.ui.resetpassword;
 
-import com.jeno.fantasyleague.data.dao.UserDao;
-import com.jeno.fantasyleague.data.dao.ValidationException;
-import com.jeno.fantasyleague.data.repository.PasswordResetTokenRepository;
-import com.jeno.fantasyleague.data.repository.UserRepository;
-import com.jeno.fantasyleague.model.PasswordResetToken;
-import com.jeno.fantasyleague.model.User;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import com.jeno.fantasyleague.backend.data.dao.UserDao;
+import com.jeno.fantasyleague.backend.data.dao.ValidationException;
+import com.jeno.fantasyleague.backend.data.repository.PasswordResetTokenRepository;
+import com.jeno.fantasyleague.backend.data.repository.UserRepository;
+import com.jeno.fantasyleague.backend.model.PasswordResetToken;
+import com.jeno.fantasyleague.backend.model.User;
 import com.jeno.fantasyleague.ui.RedirectUI;
-import com.vaadin.annotations.Theme;
-import com.vaadin.annotations.Title;
-import com.vaadin.server.VaadinRequest;
-import com.vaadin.shared.ui.ContentMode;
-import com.vaadin.spring.annotation.SpringUI;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.themes.ValoTheme;
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.router.BeforeEvent;
+import com.vaadin.flow.router.HasUrlParameter;
+import com.vaadin.flow.router.Location;
+import com.vaadin.flow.router.OptionalParameter;
+import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.router.QueryParameters;
+import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Arrays;
-import java.util.Date;
-
-@SpringUI(path = "/resetPassword")
-@Title("Reset Password")
-@Theme("fantasy-league")
-public class ResetPasswordUI extends RedirectUI {
+@PageTitle("Reset Password")
+@Route("resetPassword")
+public class ResetPasswordUI extends RedirectUI implements HasUrlParameter<String> {
 
 	@Autowired
 	private UserRepository userRepository;
@@ -39,13 +40,17 @@ public class ResetPasswordUI extends RedirectUI {
 	private User user;
 
 	public ResetPasswordUI() {
-		super("Login", "/login");
+		super("Login", "login");
 	}
 
+
 	@Override
-	protected void init(VaadinRequest request) {
+	public void setParameter(BeforeEvent event, @OptionalParameter String parameter) {
+		Location location = event.getLocation();
+		QueryParameters queryParameters = location.getQueryParameters();
+		Map<String, List<String>> parametersMap = queryParameters.getParameters();
 		try {
-			user = processResetPasswordRequest(request);
+			user = processResetPasswordRequest(parametersMap);
 			form = new ResetPasswordForm(user);
 			form.validSubmit().subscribe(newPassword -> {
 				try {
@@ -63,18 +68,17 @@ public class ResetPasswordUI extends RedirectUI {
 			e.printStackTrace();
 			middleComponent = createErrorComponent("Something went wrong, try again later or contact administrator");
 		}
-		super.init(request);
 	}
 
-	private User processResetPasswordRequest(VaadinRequest request) {
-		String[] idParameterValue = request.getParameterMap().get("id");
-		String[] tokenParameterValue = request.getParameterMap().get("token");
+	private User processResetPasswordRequest(Map<String, List<String>> parametersMap) {
+		List<String> idParameterValue = parametersMap.get("id");
+		List<String> tokenParameterValue = parametersMap.get("token");
 
-		String userId = Arrays.stream(idParameterValue)
+		String userId = idParameterValue.stream()
 				.findFirst()
 				.orElseThrow(() -> new InvalidResetPasswordRequest("Missing id parameter in URL"));
 
-		String token = Arrays.stream(tokenParameterValue)
+		String token = tokenParameterValue.stream()
 				.findFirst()
 				.orElseThrow(() -> new InvalidResetPasswordRequest("Missing token parameter in URL"));
 
@@ -106,9 +110,9 @@ public class ResetPasswordUI extends RedirectUI {
 	}
 
 	private Label createErrorComponent(String errorMessage) {
-		errorLabel = new Label("", ContentMode.HTML);
-		errorLabel.setStyleName(ValoTheme.LABEL_FAILURE);
-		errorLabel.setValue(errorMessage);
+		errorLabel = new Label("");
+//		errorLabel.setStyleName(ValoTheme.LABEL_FAILURE);
+//		errorLabel.setValue(errorMessage);
 		return errorLabel;
 	}
 

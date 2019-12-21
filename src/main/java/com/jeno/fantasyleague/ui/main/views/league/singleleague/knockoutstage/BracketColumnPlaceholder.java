@@ -1,6 +1,6 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.knockoutstage;
 
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 public class BracketColumnPlaceholder extends VerticalLayout {
 
@@ -8,13 +8,13 @@ public class BracketColumnPlaceholder extends VerticalLayout {
 		super();
 		setMargin(false);
 		setSpacing(false);
-		setWidth(50f, Unit.PIXELS);
+		setWidth("50px");
 		if (starterLine) {
-			setHeight(80f, Unit.PERCENTAGE);
+			setHeight("80%");
 		} else {
-			setHeight(100f, Unit.PERCENTAGE);
+			setHeight("100%");
 		}
 
-		addStyleName("bracketplaceholder-" + style);
+		addClassName("bracketplaceholder-" + style);
 	}
 }

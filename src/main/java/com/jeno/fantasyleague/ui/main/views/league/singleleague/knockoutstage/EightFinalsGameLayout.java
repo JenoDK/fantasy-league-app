@@ -3,21 +3,19 @@ package com.jeno.fantasyleague.ui.main.views.league.singleleague.knockoutstage;
 import java.time.LocalDateTime;
 import java.util.function.Consumer;
 
-import com.jeno.fantasyleague.data.service.leaguetemplates.worldcup2018.FifaWorldCup2018Initializer;
-import com.jeno.fantasyleague.data.service.repo.game.GameServiceImpl;
-import com.jeno.fantasyleague.model.Contestant;
-import com.jeno.fantasyleague.model.Game;
-import com.jeno.fantasyleague.model.League;
+import com.jeno.fantasyleague.backend.data.service.leaguetemplates.worldcup2018.FifaWorldCup2018Initializer;
+import com.jeno.fantasyleague.backend.data.service.repo.game.GameServiceImpl;
+import com.jeno.fantasyleague.backend.model.Contestant;
+import com.jeno.fantasyleague.backend.model.Game;
+import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.jeno.fantasyleague.util.GridUtil;
-import com.vaadin.data.provider.CallbackDataProvider;
-import com.vaadin.data.provider.DataProvider;
-import com.vaadin.server.ThemeResource;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.themes.ValoTheme;
+import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.data.provider.CallbackDataProvider;
+import com.vaadin.flow.data.provider.DataProvider;
 
 public class EightFinalsGameLayout extends KnockoutGameLayout {
 
@@ -59,14 +57,14 @@ public class EightFinalsGameLayout extends KnockoutGameLayout {
 	private ComboBox<Contestant> getContestantComboBox(KnockoutGameBean game, String placeHolder, Contestant possibleContestant, Consumer<Contestant> contestantConsumer) {
 		DataProvider<Contestant, String> dataProvider = getDataProvider(GameServiceImpl.getGroup(placeHolder).get());
 		ComboBox<Contestant> contestantCombobox = new ComboBox<>();
-		contestantCombobox.addStyleName("contestantSelection");
-		contestantCombobox.addStyleName(ValoTheme.COMBOBOX_SMALL);
+		contestantCombobox.addClassName("contestantSelection");
+//		contestantCombobox.addClassName(ValoTheme.COMBOBOX_SMALL);
 		contestantCombobox.setPlaceholder(placeHolder);
-		contestantCombobox.setTextInputAllowed(false);
+//		contestantCombobox.setTextInputAllowed(false);
 		contestantCombobox.addFocusListener(ignored -> dataProvider.refreshAll());
 		contestantCombobox.setDataProvider(dataProvider);
-		contestantCombobox.setItemCaptionGenerator(Contestant::getName);
-		contestantCombobox.setItemIconGenerator(contestant -> new ThemeResource(contestant.getIcon_path()));
+		contestantCombobox.setItemLabelGenerator(Contestant::getName);
+//		contestantCombobox.setItemIconGenerator(contestant -> new ThemeResource(contestant.getIcon_path()));
 		contestantCombobox.addValueChangeListener(event -> {
 			if (singleLeagueServiceprovider.loggedInUserIsLeagueAdmin(league)) {
 				contestantConsumer.accept(event.getValue());
@@ -77,7 +75,7 @@ public class EightFinalsGameLayout extends KnockoutGameLayout {
 					predictionWrapper.setEnabled(true);
 				}
 			} else {
-				Notification.show(Resources.getMessage("adminRightsRevoked"), Notification.Type.WARNING_MESSAGE);
+				Notification.show(Resources.getMessage("adminRightsRevoked"));
 			}
 		});
 		if (possibleContestant != null) {

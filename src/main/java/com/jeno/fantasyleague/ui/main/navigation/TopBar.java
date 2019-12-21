@@ -1,12 +1,11 @@
 package com.jeno.fantasyleague.ui.main.navigation;
 
-import com.jeno.fantasyleague.model.User;
-import com.jeno.fantasyleague.model.UserNotification;
-import com.jeno.fantasyleague.ui.main.NotificationModel;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.HorizontalLayout;
-
 import java.util.List;
+
+import com.jeno.fantasyleague.backend.model.User;
+import com.jeno.fantasyleague.backend.model.UserNotification;
+import com.jeno.fantasyleague.ui.main.NotificationModel;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
 public class TopBar extends HorizontalLayout {
 
@@ -22,17 +21,14 @@ public class TopBar extends HorizontalLayout {
 	}
 
 	private void initLayout(List<UserNotification> userNotifications, NotificationModel notificationModel) {
-		addStyleName("topbar");
+		addClassName("topbar");
 		setWidth("100%");
-		setHeightUndefined();
 
 		navigationBar = new NavigationBar();
 		profileBar = new ProfileMenuBar(user, userNotifications, notificationModel);
 
-		addComponent(navigationBar);
-		addComponent(profileBar);
-		setComponentAlignment(navigationBar, Alignment.MIDDLE_LEFT);
-		setComponentAlignment(profileBar, Alignment.MIDDLE_RIGHT);
+		add(navigationBar);
+		add(profileBar);
 	}
 
 	public void updateNotifications(List<UserNotification> userNotifications) {

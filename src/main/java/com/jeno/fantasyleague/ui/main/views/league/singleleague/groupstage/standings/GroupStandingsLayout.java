@@ -7,13 +7,12 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.ArrayListMultimap;
-import com.jeno.fantasyleague.data.service.leaguetemplates.worldcup2018.FifaWorldCup2018Stages;
-import com.jeno.fantasyleague.model.Contestant;
-import com.jeno.fantasyleague.model.ContestantGroup;
-import com.jeno.fantasyleague.model.Game;
-import com.jeno.fantasyleague.model.League;
+import com.jeno.fantasyleague.backend.model.Contestant;
+import com.jeno.fantasyleague.backend.model.ContestantGroup;
+import com.jeno.fantasyleague.backend.model.Game;
+import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 public class GroupStandingsLayout extends VerticalLayout {
 
@@ -32,10 +31,10 @@ public class GroupStandingsLayout extends VerticalLayout {
 		setMargin(false);
 
 		groupStandingsGrid = new GroupStandingsGrid();
-		groupStandingsGrid.setWidth(100f, Unit.PERCENTAGE);
+		groupStandingsGrid.setWidth("100%");
 		groupStandingsGrid.setItems(fetchGroupContestants(singleLeagueService, league, group));
 
-		addComponent(groupStandingsGrid);
+		add(groupStandingsGrid);
 	}
 
 	public Set<GroupTeamBean> fetchGroupContestants(SingleLeagueServiceProvider singleLeagueService, League league, ContestantGroup group) {

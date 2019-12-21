@@ -2,8 +2,8 @@ package com.jeno.fantasyleague.ui.main.views.league.singleleague.teamweights;
 
 import java.math.BigDecimal;
 
-import com.jeno.fantasyleague.model.Contestant;
-import com.jeno.fantasyleague.model.ContestantWeight;
+import com.jeno.fantasyleague.backend.model.Contestant;
+import com.jeno.fantasyleague.backend.model.ContestantWeight;
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
 

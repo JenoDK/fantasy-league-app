@@ -1,21 +1,19 @@
 package com.jeno.fantasyleague.ui.resetpassword;
 
-import com.jeno.fantasyleague.model.User;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import com.jeno.fantasyleague.backend.model.User;
 import com.jeno.fantasyleague.ui.common.CustomTitleForm;
 import com.jeno.fantasyleague.util.RxUtil;
 import com.jeno.fantasyleague.util.VaadinUtil;
-import com.vaadin.data.BeanValidationBinder;
-import com.vaadin.event.ShortcutAction;
-import com.vaadin.icons.VaadinIcons;
-import com.vaadin.shared.ui.ContentMode;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.PasswordField;
-import com.vaadin.ui.themes.ValoTheme;
+import com.vaadin.flow.component.Key;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.textfield.PasswordField;
+import com.vaadin.flow.data.binder.BeanValidationBinder;
 import io.reactivex.Observable;
-
-import java.util.Map;
-import java.util.stream.Collectors;
 
 public class ResetPasswordForm extends CustomTitleForm {
 
@@ -43,22 +41,22 @@ public class ResetPasswordForm extends CustomTitleForm {
 	}
 
 	private void initLayout() {
-		setWidthUndefined();
+		setWidth(null);
 
 		passwordField = new PasswordField("Password");
-		passwordField.setIcon(VaadinIcons.PASSWORD);
+		passwordField.setPrefixComponent(VaadinIcon.PASSWORD.create());
 		repeatPasswordField = new PasswordField("Repeat Password");
-		repeatPasswordField.setIcon(VaadinIcons.PASSWORD);
+		repeatPasswordField.setPrefixComponent(VaadinIcon.PASSWORD.create());
 
-		addComponent(passwordField);
-		addComponent(repeatPasswordField);
+		add(passwordField);
+		add(repeatPasswordField);
 
-		submit = new Button("Submit", VaadinIcons.USER_CHECK);
-		submit.setClickShortcut(ShortcutAction.KeyCode.ENTER);
-		addComponent(submit);
+		submit = new Button("Submit", VaadinIcon.USER_CHECK.create());
+		submit.addClickShortcut(Key.ENTER);
+		add(submit);
 
-		errorLabel = new Label("", ContentMode.HTML);
-		addComponent(errorLabel);
+		errorLabel = new Label("");
+		add(errorLabel);
 	}
 
 	public Observable<String> validSubmit() {
@@ -72,8 +70,8 @@ public class ResetPasswordForm extends CustomTitleForm {
 	public void setErrorMap(Map<String, String> errorMap) {
 		Map<String, String> errorsWithoutBinding = VaadinUtil.setErrorMap(binder, errorMap);
 		if (!errorsWithoutBinding.isEmpty()) {
-			errorLabel.setStyleName(ValoTheme.LABEL_FAILURE);
-			errorLabel.setValue(errorMap.values().stream().collect(Collectors.joining("<br/>")));
+//			errorLabel.addClassName(ValoTheme.LABEL_FAILURE);
+			errorLabel.setText(errorMap.values().stream().collect(Collectors.joining("<br/>")));
 		}
 	}
 }

@@ -19,4 +19,5 @@ public class Images {
 		public static final String REMOVE = "images/icons/remove.png";
 		public static final String CHECK = "images/icons/check.png";
 	}
+
 }

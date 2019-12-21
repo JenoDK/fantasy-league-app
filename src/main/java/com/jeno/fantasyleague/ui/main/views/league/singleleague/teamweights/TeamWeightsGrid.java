@@ -2,18 +2,15 @@ package com.jeno.fantasyleague.ui.main.views.league.singleleague.teamweights;
 
 import java.time.LocalDateTime;
 
-import com.jeno.fantasyleague.model.League;
+import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.ui.common.field.StringToPositiveIntegerConverter;
 import com.jeno.fantasyleague.util.DecimalUtil;
 import com.jeno.fantasyleague.util.GridUtil;
-import com.vaadin.data.Binder;
-import com.vaadin.data.provider.ListDataProvider;
-import com.vaadin.data.validator.IntegerRangeValidator;
-import com.vaadin.shared.ui.grid.HeightMode;
-import com.vaadin.ui.Grid;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.renderers.ComponentRenderer;
-import com.vaadin.ui.themes.ValoTheme;
+import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.provider.ListDataProvider;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
 
@@ -26,27 +23,27 @@ public class TeamWeightsGrid extends Grid<TeamWeightBean> {
 		setDataProvider(dataProvider);
 
 		setWidth("100%");
-		setHeightMode(HeightMode.ROW);
-		setHeight(38f * (dataProvider.getItems().size() + 1), Unit.PIXELS);
+		setHeightByRows(true);
+		setHeight((38f * (dataProvider.getItems().size() + 1)) + "px");
 
 		initGrid(league);
 	}
 
 	private void initGrid(League league) {
-		addColumn(teamWeight -> GridUtil.createTeamLayout(teamWeight.getContestant()), new ComponentRenderer())
-				.setCaption("Team");
+		addColumn(new ComponentRenderer<>(teamWeight -> GridUtil.createTeamLayout(teamWeight.getContestant())))
+				.setHeader("Team");
 		addColumn(TeamWeightBean::getPowerIndex)
-				.setCaption("Power Index");
+				.setHeader("Power Index");
 		addColumn(bean -> "$" + DecimalUtil.getTwoDecimalsThousandSeperator(bean.getShareCost()))
-				.setCaption("Stock price");
-		addColumn(teamWeight -> createWeightField(league, teamWeight), new ComponentRenderer())
-				.setWidth(150)
-				.setCaption("Stocks purchased");
+				.setHeader("Stock price");
+		addColumn(new ComponentRenderer<>(teamWeight -> createWeightField(league, teamWeight)))
+				.setWidth("150px")
+				.setHeader("Stocks purchased");
 	}
 
 	private TextField createWeightField(League league, TeamWeightBean weight) {
 		TextField field = new TextField();
-		field.setWidth(100, Unit.PIXELS);
+		field.setWidth("100px");
 		field.setReadOnly(!LocalDateTime.now().isBefore(league.getLeague_starting_date()));
 		Binder<TeamWeightBean> binder = new Binder<>(TeamWeightBean.class);
 		binder.forField(field)
@@ -55,8 +52,8 @@ public class TeamWeightsGrid extends Grid<TeamWeightBean> {
 				.bind(TeamWeightBean::getStocksPurchased, TeamWeightBean::setStocksPurchased);
 		binder.setBean(weight);
 		binder.addStatusChangeListener(status -> weightChanged.onNext(new TeamWeightChangedBean(weight, status.getBinder().isValid())));
-		weight.changes().subscribe(newBean -> binder.setBean(newBean));
-		field.addStyleName(ValoTheme.TEXTFIELD_TINY);
+		weight.changes().subscribe(binder::setBean);
+//		field.addClassName(ValoTheme.TEXTFIELD_TINY);
 		return field;
 	}
 

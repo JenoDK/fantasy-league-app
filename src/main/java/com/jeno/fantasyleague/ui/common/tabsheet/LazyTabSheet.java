@@ -3,22 +3,22 @@ package com.jeno.fantasyleague.ui.common.tabsheet;
 import java.util.Map;
 
 import com.google.common.collect.Maps;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.TabSheet;
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.tabs.Tabs;
 
-public class LazyTabSheet extends TabSheet {
+public class LazyTabSheet extends Tabs {
 
 	Map<String, TabComponentCreationFunction> functions;
 
 	public LazyTabSheet() {
 		functions = Maps.newHashMap();
-		addSelectedTabChangeListener(event -> {
+		addSelectedChangeListener(event -> {
 			if (getSelectedTab() instanceof LazyTabComponent) {
 				LazyTabComponent tabRootComponent = (LazyTabComponent) getSelectedTab();
 				final String id = tabRootComponent.getTabId();
 
 				if (functions.containsKey(id)) {
-					tabRootComponent.addComponent(functions.get(id).createComponent());
+					tabRootComponent.add(functions.get(id).createComponent());
 					functions.remove(id);
 				}
 			}
@@ -29,9 +29,9 @@ public class LazyTabSheet extends TabSheet {
 		if (id == null || id.isEmpty()) {
 			throw new RuntimeException("LazyTabs does not work with tabs without an ID");
 		}
-		LazyTabComponent rootLayout = new LazyTabComponent(id);
+		LazyTabComponent rootLayout = new LazyTabComponent(id, caption);
 		functions.put(id, function);
-		addTab(rootLayout, caption);
+		add(rootLayout);
 	}
 
 	public interface TabComponentCreationFunction {

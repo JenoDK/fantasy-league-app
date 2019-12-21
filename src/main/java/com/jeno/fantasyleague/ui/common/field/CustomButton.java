@@ -1,9 +1,10 @@
 package com.jeno.fantasyleague.ui.common.field;
 
-import com.vaadin.icons.VaadinIcons;
-import com.vaadin.server.Resource;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.themes.ValoTheme;
+import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.ComponentEventListener;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.icon.VaadinIcon;
 
 public class CustomButton extends Button {
 
@@ -17,24 +18,22 @@ public class CustomButton extends Button {
 		initStyles();
 	}
 
-	public CustomButton(String caption, Resource icon) {
+	public CustomButton(String caption, Component icon) {
 		super(caption, icon);
 		initStyles();
 	}
 
-	public CustomButton(String caption, ClickListener listener) {
+	public CustomButton(String caption, ComponentEventListener<ClickEvent<Button>> listener) {
 		super(caption, listener);
 		initStyles();
 	}
 
-	public CustomButton(VaadinIcons icon) {
-		super(icon);
+	public CustomButton(VaadinIcon icon) {
+		super(icon.create());
 		initStyles();
 	}
 
 	private void initStyles() {
-		addStyleName(ValoTheme.BUTTON_PRIMARY);
-		addStyleName(ValoTheme.BUTTON_TINY);
 	}
 
 }

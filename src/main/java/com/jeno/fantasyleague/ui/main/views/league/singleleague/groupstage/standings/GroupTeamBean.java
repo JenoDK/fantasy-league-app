@@ -1,6 +1,6 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.groupstage.standings;
 
-import com.jeno.fantasyleague.model.Contestant;
+import com.jeno.fantasyleague.backend.model.Contestant;
 
 public class GroupTeamBean {
 

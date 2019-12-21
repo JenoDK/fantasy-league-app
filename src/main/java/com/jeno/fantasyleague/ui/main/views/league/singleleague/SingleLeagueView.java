@@ -1,8 +1,6 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague;
 
-import java.nio.file.Files;
-
-import com.jeno.fantasyleague.model.League;
+import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.ui.common.tabsheet.LazyTabSheet;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.faq.FaqTab;
@@ -12,8 +10,9 @@ import com.jeno.fantasyleague.ui.main.views.league.singleleague.leaguesettings.L
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.UserScoresTab;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.teamweights.TeamWeightsTab;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.users.UsersTab;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import io.reactivex.Observable;
 
 public class SingleLeagueView extends VerticalLayout {
@@ -42,16 +41,16 @@ public class SingleLeagueView extends VerticalLayout {
 		}
 
 		topBar = new LeagueTopBar(league);
-		topBar.imageUploadedAndResized().subscribe(file -> {
-			league.setLeague_picture(Files.readAllBytes(file.toPath()));
+		topBar.imageUploadedAndResized().subscribe(byteArrayInputStream -> {
+			league.setLeague_picture(byteArrayInputStream.readAllBytes());
 			singleLeagueServiceprovider.getLeagueRepository().saveAndFlush(league);
 		});
 
-		addComponent(topBar);
-		addComponent(tabSheet);
+		add(topBar);
+		add(tabSheet);
 	}
-	public Observable<Button.ClickEvent> backToLeaguesView() {
-		return topBar.backToLEagues();
+	public Observable<ClickEvent<Button>> backToLeaguesView() {
+		return topBar.backToLeagues();
 	}
 
 }

@@ -1,28 +1,24 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague;
 
-import java.io.File;
+import java.io.ByteArrayInputStream;
 
-import com.jeno.fantasyleague.model.League;
+import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.ui.common.image.VaadinImageUploader;
 import com.jeno.fantasyleague.util.ImageUtil;
 import com.jeno.fantasyleague.util.RxUtil;
-import com.vaadin.icons.VaadinIcons;
-import com.vaadin.server.FileResource;
-import com.vaadin.shared.ui.ContentMode;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Image;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Upload;
-import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.themes.ValoTheme;
+import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.server.StreamResource;
 import io.reactivex.Observable;
 
 public class LeagueTopBar extends VerticalLayout {
 
-	private VaadinImageUploader receiver;
-	private Upload upload;
+	private VaadinImageUploader upload;
 	private Image imageLayout;
 	private Button backToLeaguesView;
 	private Label title;
@@ -32,51 +28,48 @@ public class LeagueTopBar extends VerticalLayout {
 		setMargin(false);
 		setSpacing(false);
 		setSizeFull();
-		addStyleName("league-view-topbar");
+		addClassName("league-view-topbar");
 
-		receiver = new VaadinImageUploader();
-		receiver.imageResized()
-				.map(FileResource::new)
-				.subscribe(fileResource -> imageLayout.setSource(fileResource));
+		upload = new VaadinImageUploader();
+		upload.imageResized()
+				.subscribe(imageInputStream -> imageLayout.setSrc(new StreamResource(
+						upload.getFileName(),
+						() -> imageInputStream)));
 
-		upload = new Upload("", receiver);
-		upload.addStyleName("tiny-upload");
-		upload.setHeight(50, Unit.PIXELS);
-		upload.addFailedListener((Upload.FailedListener) event -> {
+		upload.addClassName("tiny-upload");
+		upload.setHeight("50px");
+		upload.addFailedListener(event -> {
 			// TODO
 		});
-		upload.addStartedListener(receiver);
-		upload.addSucceededListener(receiver);
 
-		imageLayout = new Image();
-		imageLayout.addStyleName("league-picture");
-		imageLayout.setSource(ImageUtil.getLeaguePictureResource(league));
+		imageLayout = ImageUtil.getLeaguePictureResource(league);
+		imageLayout.addClassName("league-picture");
 
 		HorizontalLayout titleLayout = new HorizontalLayout();
-		titleLayout.setWidth(100, Unit.PERCENTAGE);
+		titleLayout.setWidth("100%");
 
-		backToLeaguesView = new Button("Leagues", VaadinIcons.ARROW_CIRCLE_LEFT);
-		backToLeaguesView.addStyleName("back-to-leagues-view");
-		title = new Label(league.getName(), ContentMode.HTML);
-		title.addStyleName(ValoTheme.LABEL_H2);
+		backToLeaguesView = new Button("Leagues", VaadinIcon.ARROW_CIRCLE_LEFT.create());
+		backToLeaguesView.addClassName("back-to-leagues-view");
+		title = new Label(league.getName());
+//		title.addClassName(ValoTheme.LABEL_H2);
 
-		titleLayout.addComponent(backToLeaguesView);
-		titleLayout.addComponent(title);
-		titleLayout.addComponent(upload);
-		titleLayout.setComponentAlignment(backToLeaguesView, Alignment.BOTTOM_LEFT);
-		titleLayout.setComponentAlignment(title, Alignment.TOP_CENTER);
-		titleLayout.setComponentAlignment(upload, Alignment.BOTTOM_RIGHT);
+		titleLayout.add(backToLeaguesView);
+		titleLayout.add(title);
+		titleLayout.add(upload);
+//		titleLayout.setComponentAlignment(backToLeaguesView, Alignment.BOTTOM_LEFT);
+//		titleLayout.setComponentAlignment(title, Alignment.TOP_CENTER);
+//		titleLayout.setComponentAlignment(upload, Alignment.BOTTOM_RIGHT);
 
-		addComponent(titleLayout);
-		addComponent(imageLayout);
-		setComponentAlignment(imageLayout, Alignment.MIDDLE_CENTER);
+		add(titleLayout);
+		add(imageLayout);
+//		setComponentAlignment(imageLayout, Alignment.MIDDLE_CENTER);
 	}
 
-	public Observable<File> imageUploadedAndResized() {
-		return receiver.imageResized();
+	public Observable<ByteArrayInputStream> imageUploadedAndResized() {
+		return upload.imageResized();
 	}
 
-	public Observable<Button.ClickEvent> backToLEagues() {
+	public Observable<ClickEvent<Button>> backToLeagues() {
 		return RxUtil.clicks(backToLeaguesView);
 	}
 }

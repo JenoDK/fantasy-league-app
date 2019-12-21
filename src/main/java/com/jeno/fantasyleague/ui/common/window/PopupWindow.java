@@ -1,40 +1,31 @@
 package com.jeno.fantasyleague.ui.common.window;
 
-import com.vaadin.ui.Component;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.Window;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
+import java.util.function.Function;
 
-public class PopupWindow extends Window {
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.html.Label;
+
+public class PopupWindow extends Dialog {
 
 	public PopupWindow(Builder builder) {
-		super();
+		super(new Label(builder.caption));
 
 		// Size config
 		if(builder.sizeUndefined){
-			this.setSizeUndefined();
+			setSizeUndefined();
 		} else {
-			this.setHeight(builder.pixelHeight, Unit.PIXELS);
-			this.setWidth(builder.pixelWidth, Unit.PIXELS);
+			setHeight(builder.pixelHeight + "px");
+			setWidth(builder.pixelWidth + "px");
 		}
 
-		setClosable(builder.closable);
-		setModal(builder.modal);
-		setResizable(builder.resizable);
-
-		setCaption(builder.caption);
 		setId(builder.id);
 
 		try {
-			setContent(builder.contentGenerator.apply(this));
+			add(builder.contentGenerator.apply(this));
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-	}
-
-	public void show() {
-		UI.getCurrent().addWindow(this);
 	}
 
 	public static class Builder {
@@ -43,36 +34,21 @@ public class PopupWindow extends Window {
 
 		private float pixelHeight = DEFAULT_HEIGHT;
 		private float pixelWidth = 600;
-		private boolean modal = true;
-		private boolean closable = true;
-		private boolean resizable = false;
 		private boolean sizeUndefined = false;
 
 		private final String id;
 		private final String caption;
 
-		private static final Consumer<Window> CLOSE = Window::close;
+		private final Function<Dialog, Component> contentGenerator;
 
-		private final Function<Window, Component> contentGenerator;
-
-		public Builder(String caption, String id, Function<Window, Component> contentGenerator) {
+		public Builder(String caption, String id, Function<Dialog, Component> contentGenerator) {
 			this.caption = caption;
 			this.id = id;
 			this.contentGenerator = contentGenerator;
 		}
 
-		public Builder resizable(boolean resizable) {
-			this.resizable = resizable;
-			return this;
-		}
-
 		public Builder sizeUndefined(boolean sizeUndefined) {
 			this.sizeUndefined = sizeUndefined;
-			return this;
-		}
-
-		public Builder closable(boolean closable) {
-			this.closable = closable;
 			return this;
 		}
 

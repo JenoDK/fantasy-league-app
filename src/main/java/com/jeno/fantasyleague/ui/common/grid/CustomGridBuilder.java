@@ -1,13 +1,12 @@
 package com.jeno.fantasyleague.ui.common.grid;
 
-import com.google.common.collect.Maps;
-import com.vaadin.data.ValueProvider;
-import com.vaadin.data.provider.DataProvider;
-import com.vaadin.server.Resource;
-
-import java.util.Comparator;
 import java.util.Map;
 import java.util.function.Function;
+
+import com.google.common.collect.Maps;
+import com.vaadin.flow.data.provider.DataProvider;
+import com.vaadin.flow.function.ValueProvider;
+import com.vaadin.flow.server.StreamResource;
 
 public class CustomGridBuilder<T> {
 
@@ -49,17 +48,19 @@ public class CustomGridBuilder<T> {
 
 	public static class IconColumnValue {
 
-		protected final Resource resource;
+		protected StreamResource resource;
+		protected String path;
 		protected GridAction iconClickAction;
 
-		public IconColumnValue(Resource resource, GridAction iconClickAction) {
-			this.resource = resource;
+		public IconColumnValue(String path, GridAction iconClickAction) {
+			this.path = path;
 			this.iconClickAction = iconClickAction;
 		}
 
-		public IconColumnValue(Resource resource) {
+		public IconColumnValue(StreamResource resource) {
 			this.resource = resource;
 		}
+
 	}
 
 	public static class ColumnProvider<T, V> {

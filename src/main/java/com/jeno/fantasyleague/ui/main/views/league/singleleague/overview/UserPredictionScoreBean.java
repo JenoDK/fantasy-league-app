@@ -3,11 +3,11 @@ package com.jeno.fantasyleague.ui.main.views.league.singleleague.overview;
 import java.util.Objects;
 import java.util.Optional;
 
-import com.jeno.fantasyleague.data.service.leaguetemplates.worldcup2018.FifaWorldCup2018Stages;
-import com.jeno.fantasyleague.model.Contestant;
-import com.jeno.fantasyleague.model.Game;
-import com.jeno.fantasyleague.model.League;
-import com.jeno.fantasyleague.model.Prediction;
+import com.jeno.fantasyleague.backend.data.service.leaguetemplates.worldcup2018.FifaWorldCup2018Stages;
+import com.jeno.fantasyleague.backend.model.Contestant;
+import com.jeno.fantasyleague.backend.model.Game;
+import com.jeno.fantasyleague.backend.model.League;
+import com.jeno.fantasyleague.backend.model.Prediction;
 import com.jeno.fantasyleague.util.DateUtil;
 
 public class UserPredictionScoreBean {

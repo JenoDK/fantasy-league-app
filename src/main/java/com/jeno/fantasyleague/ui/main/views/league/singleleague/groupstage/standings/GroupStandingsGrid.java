@@ -1,11 +1,12 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.groupstage.standings;
 
+import com.google.common.collect.Lists;
 import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.ui.common.grid.CustomGrid;
 import com.jeno.fantasyleague.util.GridUtil;
-import com.vaadin.data.provider.GridSortOrderBuilder;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.renderers.ComponentRenderer;
+import com.vaadin.flow.component.grid.GridSortOrder;
+import com.vaadin.flow.data.provider.SortDirection;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
 
 public class GroupStandingsGrid extends CustomGrid<GroupTeamBean> {
 
@@ -15,18 +16,15 @@ public class GroupStandingsGrid extends CustomGrid<GroupTeamBean> {
 	}
 
 	private void initGrid() {
-		Column<GroupTeamBean, HorizontalLayout> teamColumn =
-			addColumn(teamBean -> GridUtil.createTeamLayout(teamBean.getContestant()), new ComponentRenderer())
-				.setCaption(Resources.getMessage("team"))
-				.setId("team");
-		Column<GroupTeamBean, Integer> pointsColumn =
-			addColumn(teamBean -> teamBean.getPointsInGroup())
-				.setCaption(Resources.getMessage("points"))
-				.setId("points");
-		Column<GroupTeamBean, Integer> totalGoalsColumn =
-			addColumn(teamBean -> teamBean.getGoalsInGroup())
-				.setCaption(Resources.getMessage("totalGoals"))
-				.setId("goals");
-		setSortOrder(new GridSortOrderBuilder().thenDesc(pointsColumn));
+		Column<GroupTeamBean> teamColumn = addColumn(new ComponentRenderer<>(teamBean -> GridUtil.createTeamLayout(teamBean.getContestant())))
+				.setHeader(Resources.getMessage("team"));
+		Column<GroupTeamBean> pointsColumn = addColumn(GroupTeamBean::getPointsInGroup)
+				.setHeader(Resources.getMessage("points"));
+		Column<GroupTeamBean> totalGoalsColumn = addColumn(GroupTeamBean::getGoalsInGroup)
+				.setHeader(Resources.getMessage("totalGoals"));
+		pointsColumn.setId("points");
+		teamColumn.setId("team");
+		totalGoalsColumn.setId("goals");
+		sort(Lists.newArrayList(new GridSortOrder<>(pointsColumn, SortDirection.DESCENDING)));
 	}
 }

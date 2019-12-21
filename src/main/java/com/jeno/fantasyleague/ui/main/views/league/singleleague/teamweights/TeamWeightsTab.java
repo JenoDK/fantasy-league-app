@@ -9,19 +9,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.jeno.fantasyleague.model.ContestantWeight;
-import com.jeno.fantasyleague.model.League;
+import com.jeno.fantasyleague.backend.model.ContestantWeight;
+import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.jeno.fantasyleague.util.DateUtil;
 import com.jeno.fantasyleague.util.DecimalUtil;
-import com.vaadin.data.provider.DataProvider;
-import com.vaadin.icons.VaadinIcons;
-import com.vaadin.shared.ui.ContentMode;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.themes.ValoTheme;
+import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.data.provider.DataProvider;
 
 public class TeamWeightsTab extends VerticalLayout {
 
@@ -38,14 +36,14 @@ public class TeamWeightsTab extends VerticalLayout {
 		this.league = league;
 		setMargin(true);
 		setSizeFull();
-		addStyleName("teamweights");
+		addClassName("teamweights");
 
 		fetchAndSetTeamWeights();
 		teamWeightsGrid = new TeamWeightsGrid(league, DataProvider.fromStream(teamWeights.stream()));
-		teamWeightsGrid.setWidth(70, Unit.PERCENTAGE);
+		teamWeightsGrid.setWidth("7Opx");
 
 		initRightSide(league, singleLeagueServiceprovider);
-		addComponent(teamWeightsGrid);
+		add(teamWeightsGrid);
 	}
 
 	public void fetchAndSetTeamWeights() {
@@ -56,8 +54,8 @@ public class TeamWeightsTab extends VerticalLayout {
 	}
 
 	public void initRightSide(League league, SingleLeagueServiceProvider singleLeagueServiceprovider) {
-		balanceLabel = new Label(getWeightToDistributeString(getWeightToDistribute()), ContentMode.HTML);
-		balanceLabel.addStyleName("balance-label");
+		balanceLabel = new Label(getWeightToDistributeString(getWeightToDistribute()));
+		balanceLabel.addClassName("balance-label");
 
 		teamWeightsGrid.weightChanged()
 				.subscribe(beanChanged -> {
@@ -75,36 +73,36 @@ public class TeamWeightsTab extends VerticalLayout {
 					BigDecimal serversideWeightWithBeanReplacedToDistribute = getWeightToDistribute(streamWithBeanReplaced);
 					BigDecimal clientSideWeightToDistribute = getWeightToDistribute();
 					if (!serversideWeightWithBeanReplacedToDistribute.equals(clientSideWeightToDistribute)) {
-						Notification.show("Server-side changes were detected, refreshing and then you can try again", Notification.Type.WARNING_MESSAGE);
+						Notification.show("Server-side changes were detected, refreshing and then you can try again");
 						fetchAndSetTeamWeights();
 						teamWeightsGrid.setItems(teamWeights);
-						balanceLabel.setValue(getWeightToDistributeString(getWeightToDistribute(stream)));
+						balanceLabel.setText(getWeightToDistributeString(getWeightToDistribute(stream)));
 					} else {
 						boolean exceedsLimit = clientSideWeightToDistribute.compareTo(BigDecimal.ZERO) == -1;
 						boolean isInTime = LocalDateTime.now().isBefore(league.getLeague_starting_date());
-						balanceLabel.setValue(getWeightToDistributeString(clientSideWeightToDistribute));
+						balanceLabel.setText(getWeightToDistributeString(clientSideWeightToDistribute));
 						if (!isInTime) {
-							Notification.show(Resources.getMessage("cannotPurchaseStock", DateUtil.DATE_TIME_FORMATTER.format(league.getLeague_starting_date())), Notification.Type.WARNING_MESSAGE);
+							Notification.show(Resources.getMessage("cannotPurchaseStock", DateUtil.DATE_TIME_FORMATTER.format(league.getLeague_starting_date())));
 						} else if (exceedsLimit) {
-							Notification.show(Resources.getMessage("cannotExceedBalanceLimit"), Notification.Type.WARNING_MESSAGE);
-							balanceLabel.addStyleName("red");
+							Notification.show(Resources.getMessage("cannotExceedBalanceLimit"));
+							balanceLabel.addClassName("red");
 						} else if (beanChanged.isValid()) {
 							singleLeagueServiceprovider.getContestantWeightRepository().saveAndFlush(beanChanged.getBean().setWeightAndContestantWeight());
-							balanceLabel.removeStyleName("red");
+							balanceLabel.removeClassName("red");
 						}
 					}
 		});
 
 		Label infoLabel = new Label("Changes can be made until " + DateUtil.DATE_TIME_FORMATTER.format(league.getLeague_starting_date()));
-		infoLabel.addStyleName(ValoTheme.LABEL_LIGHT);
-		infoLabel.addStyleName(ValoTheme.LABEL_TINY);
+//		infoLabel.addClassName(ValoTheme.LABEL_LIGHT);
+//		infoLabel.addClassName(ValoTheme.LABEL_TINY);
 
-		addComponent(balanceLabel);
-		addComponent(infoLabel);
+		add(balanceLabel);
+		add(infoLabel);
 	}
 
 	public String getWeightToDistributeString(BigDecimal weightToDistribute) {
-		return VaadinIcons.WALLET.getHtml() + "   $" + DecimalUtil.getTwoDecimalsThousandSeperator(weightToDistribute);
+		return VaadinIcon.WALLET.create().getElement().getOuterHTML() + "   $" + DecimalUtil.getTwoDecimalsThousandSeperator(weightToDistribute);
 	}
 
 	public BigDecimal getWeightToDistribute() {

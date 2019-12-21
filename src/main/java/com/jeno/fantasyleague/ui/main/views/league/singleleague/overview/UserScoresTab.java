@@ -11,23 +11,22 @@ import java.util.stream.Collectors;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.jeno.fantasyleague.data.service.leaguetemplates.worldcup2018.FifaWorldCup2018Stages;
-import com.jeno.fantasyleague.model.Contestant;
-import com.jeno.fantasyleague.model.ContestantWeight;
-import com.jeno.fantasyleague.model.League;
-import com.jeno.fantasyleague.model.Prediction;
-import com.jeno.fantasyleague.model.User;
+import com.jeno.fantasyleague.backend.data.service.leaguetemplates.worldcup2018.FifaWorldCup2018Stages;
+import com.jeno.fantasyleague.backend.model.Contestant;
+import com.jeno.fantasyleague.backend.model.ContestantWeight;
+import com.jeno.fantasyleague.backend.model.League;
+import com.jeno.fantasyleague.backend.model.Prediction;
+import com.jeno.fantasyleague.backend.model.User;
 import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.ui.common.window.PopupWindow;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.charts.TotalUserScoresChart;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.charts.UsersChartLayout;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.charts.UsersScoreProgressionChart;
-import com.vaadin.icons.VaadinIcons;
-import com.vaadin.ui.Accordion;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.themes.ValoTheme;
+import com.vaadin.flow.component.accordion.Accordion;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import io.reactivex.Observable;
 
 public class UserScoresTab extends VerticalLayout {
@@ -37,7 +36,7 @@ public class UserScoresTab extends VerticalLayout {
 
 	public UserScoresTab(League league, SingleLeagueServiceProvider singleLeagueServiceprovider) {
 		super();
-		addStyleName("overview-tab");
+		addClassName("overview-tab");
 		setMargin(true);
 		setSizeFull();
 
@@ -62,10 +61,10 @@ public class UserScoresTab extends VerticalLayout {
 				totalScoresTimelineChart);
 
 		UserTotalScoreGrid totalScoreGrid = new UserTotalScoreGrid(scoreBeans, singleLeagueServiceprovider.getLoggedInUser());
-		totalScoreGrid.setWidth(100, Unit.PERCENTAGE);
+		totalScoreGrid.setWidth("100%");
 
 		Accordion predictionScoresLayout = new Accordion();
-		predictionScoresLayout.addStyleName("darker-tabcolor");
+		predictionScoresLayout.getElement().getClassList().add("darker-tabcolor");
 
 		Map<FifaWorldCup2018Stages, UserPredictionScoresGrid> gridPerStageMap = Maps.newHashMap();
 		Arrays.stream(FifaWorldCup2018Stages.values())
@@ -73,19 +72,19 @@ public class UserScoresTab extends VerticalLayout {
 
 		gridPerStageMap.keySet().stream()
 				.sorted(Comparator.comparingInt(FifaWorldCup2018Stages::getSeq))
-				.forEach(key -> predictionScoresLayout.addTab(gridPerStageMap.get(key), Resources.getMessage(key.getName())));
+				.forEach(key -> predictionScoresLayout.add(Resources.getMessage(key.getName()), gridPerStageMap.get(key)));
 
 		Observable.merge(gridPerStageMap.values().stream().map(UserPredictionScoresGrid::viewAllResultsClicked).collect(Collectors.toSet()))
 				.subscribe(bean -> new PopupWindow.Builder(
 							"All scores",
 							"allScoresWindows", window ->
 							new AllUserResultsForGameLayout(league, bean, singleLeagueServiceprovider))
-						.closable(true)
-						.resizable(true)
+//						.closable(true)
+//						.resizable(true)
 						.setHeight(700)
 						.setWidth(900)
 						.build()
-						.show());
+						.open());
 
 		totalScoreGrid.addItemClickListener(event ->
 				setPredictionScoreItems(fetchPredictionScores(event.getItem().getUser()), gridPerStageMap));
@@ -95,9 +94,9 @@ public class UserScoresTab extends VerticalLayout {
 				.ifPresent(totalScoreGrid::select);
 		setPredictionScoreItems(fetchPredictionScores(singleLeagueServiceprovider.getLoggedInUser()), gridPerStageMap);
 
-		Button refreshButton = new Button(VaadinIcons.REFRESH);
-		refreshButton.addStyleName(ValoTheme.BUTTON_TINY);
-		refreshButton.addStyleName(ValoTheme.BUTTON_ICON_ONLY);
+		Button refreshButton = new Button(VaadinIcon.REFRESH.create());
+//		refreshButton.addClassName(ValoTheme.BUTTON_TINY);
+//		refreshButton.addClassName(ValoTheme.BUTTON_ICON_ONLY);
 		refreshButton.addClickListener(ignored -> {
 			List<UserTotalScoreBean> scores = fetchTotalScores();
 			totalScoreGrid.setItems(scores);
@@ -118,11 +117,11 @@ public class UserScoresTab extends VerticalLayout {
 			setPredictionScoreItems(fetchPredictionScores(singleLeagueServiceprovider.getLoggedInUser()), gridPerStageMap);
 		});
 
-		addComponent(refreshButton);
-		addComponent(totalScoresTimelineChartLayout);
-		addComponent(scoresTimelineChartLayout);
-		addComponent(totalScoreGrid);
-		addComponent(predictionScoresLayout);
+		add(refreshButton);
+		add(totalScoresTimelineChartLayout);
+		add(scoresTimelineChartLayout);
+		add(totalScoreGrid);
+		add(predictionScoresLayout);
 	}
 
 	private void setPredictionScoreItems(List<UserPredictionScoreBean> userPredictionScoreBeans, Map<FifaWorldCup2018Stages, UserPredictionScoresGrid> gridPerStageMap) {

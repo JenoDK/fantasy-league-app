@@ -3,9 +3,9 @@ package com.jeno.fantasyleague.ui.main.views.league.singleleague.groupstage.upco
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-import com.jeno.fantasyleague.model.Contestant;
-import com.jeno.fantasyleague.model.Game;
-import com.jeno.fantasyleague.model.Prediction;
+import com.jeno.fantasyleague.backend.model.Contestant;
+import com.jeno.fantasyleague.backend.model.Game;
+import com.jeno.fantasyleague.backend.model.Prediction;
 
 public class GameBean {
 

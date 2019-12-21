@@ -2,11 +2,10 @@ package com.jeno.fantasyleague.ui.main.views.league.singleleague.overview;
 
 import java.time.LocalDateTime;
 import java.util.Map;
-import java.util.Set;
 
-import com.jeno.fantasyleague.data.service.leaguetemplates.worldcup2018.FifaWorldCup2018Stages;
-import com.jeno.fantasyleague.data.service.repo.league.UserLeagueScore;
-import com.jeno.fantasyleague.model.User;
+import com.jeno.fantasyleague.backend.data.service.leaguetemplates.worldcup2018.FifaWorldCup2018Stages;
+import com.jeno.fantasyleague.backend.data.service.repo.league.UserLeagueScore;
+import com.jeno.fantasyleague.backend.model.User;
 
 public class UserTotalScoreBean {
 

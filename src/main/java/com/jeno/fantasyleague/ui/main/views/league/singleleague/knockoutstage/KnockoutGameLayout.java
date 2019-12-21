@@ -3,17 +3,15 @@ package com.jeno.fantasyleague.ui.main.views.league.singleleague.knockoutstage;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-import com.jeno.fantasyleague.model.Game;
-import com.jeno.fantasyleague.model.League;
+import com.jeno.fantasyleague.backend.model.Game;
+import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.jeno.fantasyleague.util.DateUtil;
-import com.vaadin.shared.ui.ContentMode;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.themes.ValoTheme;
+import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 public abstract class KnockoutGameLayout extends VerticalLayout {
 
@@ -28,20 +26,20 @@ public abstract class KnockoutGameLayout extends VerticalLayout {
 		this.singleLeagueServiceprovider = singleLeagueServiceprovider;
 		this.league = league;
 
-		setWidth(390f, Unit.PIXELS);
+		setWidth("390px");
 		setMargin(true);
 
-		addStyleName(ValoTheme.LAYOUT_CARD);
-		addStyleName("bracket-game");
+//		addClassName(ValoTheme.LAYOUT_CARD);
+		addClassName("bracket-game");
 
 		HorizontalLayout wrapper = new HorizontalLayout();
 
 		VerticalLayout teamWrapper = new VerticalLayout();
-		teamWrapper.setWidth(180f, Unit.PIXELS);
+		teamWrapper.setWidth("180px");
 		teamWrapper.setMargin(false);
-		teamWrapper.setCaption(Resources.getMessage("teams"));
-		teamWrapper.addComponent(createHomeTeamComponent(game));
-		teamWrapper.addComponent(createAwayTeamComponent(game));
+		teamWrapper.add(Resources.getMessage("teams"));
+		teamWrapper.add(createHomeTeamComponent(game));
+		teamWrapper.add(createAwayTeamComponent(game));
 
 		scoreWrapper = new GameResultsLayout(
 				singleLeagueServiceprovider.loggedInUserIsLeagueAdmin(league),
@@ -52,7 +50,7 @@ public abstract class KnockoutGameLayout extends VerticalLayout {
 				KnockoutGameBean::setAwayTeamScore,
 				KnockoutGameBean::getHomeTeamIsWinner,
 				KnockoutGameBean::setHomeTeamIsWinner);
-		scoreWrapper.setCaption(Resources.getMessage("scores"));
+		scoreWrapper.add(Resources.getMessage("scores"));
 
 		predictionWrapper = new GameResultsLayout(
 				LocalDateTime.now().isBefore(game.getGame().getGameDateTime()),
@@ -63,23 +61,23 @@ public abstract class KnockoutGameLayout extends VerticalLayout {
 				KnockoutGameBean::setAwayTeamPrediction,
 				KnockoutGameBean::getHomeTeamPredictionIsWinner,
 				KnockoutGameBean::setHomeTeamPredictionIsWinner);
-		predictionWrapper.setCaption(Resources.getMessage("predictions"));
+		predictionWrapper.add(Resources.getMessage("predictions"));
 
 		if (Objects.isNull(game.getGame().getHome_team()) || Objects.isNull(game.getGame().getAway_team())) {
 			scoreWrapper.setEnabled(false);
 			predictionWrapper.setEnabled(false);
 		}
 
-		wrapper.addComponent(teamWrapper);
-		wrapper.addComponent(scoreWrapper);
-		wrapper.addComponent(predictionWrapper);
+		wrapper.add(teamWrapper);
+		wrapper.add(scoreWrapper);
+		wrapper.add(predictionWrapper);
 
 		String date = DateUtil.DATE_TIME_FORMATTER.format(game.getGame().getGameDateTime());
-		Label infoLabel = new Label(game.getGame().getLocation() + " <br/> " + date, ContentMode.HTML);
-		infoLabel.addStyleName(ValoTheme.LABEL_TINY);
-		infoLabel.setWidth(150f, Unit.PIXELS);
+		Label infoLabel = new Label(game.getGame().getLocation() + " <br/> " + date);
+//		infoLabel.addClassName(ValoTheme.LABEL_TINY);
+		infoLabel.setWidth("150px");
 
-		addComponent(wrapper);
+		add(wrapper);
 
 		scoreWrapper.scoreChanged()
 				.map(KnockoutGameBean::setScoresAndGetGameModelItem)
@@ -90,22 +88,22 @@ public abstract class KnockoutGameLayout extends VerticalLayout {
 					if (LocalDateTime.now().isBefore(game.getGame().getGameDateTime())) {
 						singleLeagueServiceprovider.getPredictionRepository().saveAndFlush(prediction);
 					} else {
-						Notification.show(Resources.getMessage("toLateToUpdatePrediction"), Notification.Type.WARNING_MESSAGE);
+						Notification.show(Resources.getMessage("toLateToUpdatePrediction"));
 					}
 					if (prediction.getHome_team_score().equals(prediction.getAway_team_score()) && Objects.isNull(prediction.getWinner())) {
-						Notification.show("Be sure to select a winner", Notification.Type.WARNING_MESSAGE);
+						Notification.show("Be sure to select a winner");
 					}
 				});
 
 
-		addComponent(infoLabel);
+		add(infoLabel);
 	}
 
 	public void updateKnockoutGame(SingleLeagueServiceProvider singleLeagueServiceprovider, League league, Game gameBean) {
 		if (singleLeagueServiceprovider.loggedInUserIsLeagueAdmin(league)) {
 			singleLeagueServiceprovider.getGameService().updateKnockoutStageScore(gameBean);
 		} else {
-			Notification.show(Resources.getMessage("adminRightsRevoked"), Notification.Type.WARNING_MESSAGE);
+			Notification.show(Resources.getMessage("adminRightsRevoked"));
 		}
 	}
 

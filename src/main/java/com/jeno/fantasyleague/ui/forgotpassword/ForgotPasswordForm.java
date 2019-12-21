@@ -2,21 +2,19 @@ package com.jeno.fantasyleague.ui.forgotpassword;
 
 import com.jeno.fantasyleague.ui.common.CustomTitleForm;
 import com.jeno.fantasyleague.util.RxUtil;
-import com.vaadin.data.BeanValidationBinder;
-import com.vaadin.data.validator.EmailValidator;
-import com.vaadin.icons.VaadinIcons;
-import com.vaadin.shared.ui.ContentMode;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.themes.ValoTheme;
+import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.binder.BeanValidationBinder;
+import com.vaadin.flow.data.validator.EmailValidator;
 import io.reactivex.Observable;
 
 public class ForgotPasswordForm extends CustomTitleForm {
 
 	private Button button;
 	private TextField emailField;
-	private Label errorLabel;
+	private Text errorLabel;
 
 	private BeanValidationBinder<ForgotPasswordBean> binder = new BeanValidationBinder<>(ForgotPasswordBean.class);
 
@@ -35,20 +33,19 @@ public class ForgotPasswordForm extends CustomTitleForm {
 
 	private void initLayout() {
 		emailField = new TextField("Email");
-		emailField.setIcon(VaadinIcons.MAILBOX);
+		emailField.setPrefixComponent(VaadinIcon.MAILBOX.create());
 
-		button = new Button("Reset", VaadinIcons.REFRESH);
+		button = new Button("Reset", VaadinIcon.REFRESH.create());
 
-		errorLabel = new Label("", ContentMode.HTML);
+		errorLabel = new Text("");
 
-		addComponent(emailField);
-		addComponent(button);
-		addComponent(errorLabel);
+		add(emailField);
+		add(button);
+		add(errorLabel);
 	}
 
 	public void setError(String errorMsg) {
-		errorLabel.setStyleName(ValoTheme.LABEL_FAILURE);
-		errorLabel.setValue(errorMsg);
+		errorLabel.setText(errorMsg);
 	}
 
 	public Observable<String> resetPassword() {

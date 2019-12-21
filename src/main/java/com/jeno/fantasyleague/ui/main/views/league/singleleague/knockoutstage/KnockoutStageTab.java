@@ -13,21 +13,14 @@ import java.util.stream.Collectors;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Sets;
-import com.jeno.fantasyleague.data.service.leaguetemplates.worldcup2018.FifaWorldCup2018Stages;
-import com.jeno.fantasyleague.model.Contestant;
-import com.jeno.fantasyleague.model.Game;
-import com.jeno.fantasyleague.model.League;
-import com.jeno.fantasyleague.model.Prediction;
+import com.jeno.fantasyleague.backend.data.service.leaguetemplates.worldcup2018.FifaWorldCup2018Stages;
+import com.jeno.fantasyleague.backend.model.Contestant;
+import com.jeno.fantasyleague.backend.model.Game;
+import com.jeno.fantasyleague.backend.model.League;
+import com.jeno.fantasyleague.backend.model.Prediction;
 import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
-import com.vaadin.icons.VaadinIcons;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.GridLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Panel;
-import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.themes.ValoTheme;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 public class KnockoutStageTab extends VerticalLayout {
 
@@ -36,7 +29,7 @@ public class KnockoutStageTab extends VerticalLayout {
 	private final SingleLeagueServiceProvider singleLeagueServiceprovider;
 	private final League league;
 
-	private GridLayout bracketLayout;
+//	private GridLayout bracketLayout;
 
 	public KnockoutStageTab(League league, SingleLeagueServiceProvider singleLeagueServiceprovider) {
 		this.league = league;
@@ -44,28 +37,28 @@ public class KnockoutStageTab extends VerticalLayout {
 
 		setSpacing(false);
 		setMargin(false);
-		addStyleName("margin-top-10");
+		addClassName("margin-top-10");
 
-		bracketLayout = new GridLayout(7, ROW_START + 16);
-		bracketLayout.addStyleName("bracket-gridlayout");
-
-		fillInBracket(league);
-
-
-		Panel gridLayoutPanel = new Panel();
-		gridLayoutPanel.setContent(bracketLayout);
-		gridLayoutPanel.addStyleName("no-visual-panel");
-
-		Button refreshButton = new Button(VaadinIcons.REFRESH);
-		refreshButton.addStyleName(ValoTheme.BUTTON_TINY);
-		refreshButton.addStyleName(ValoTheme.BUTTON_ICON_ONLY);
-		refreshButton.addClickListener(ignored -> {
-			bracketLayout.removeAllComponents();
-			fillInBracket(league);
-		});
-
-		addComponent(refreshButton);
-		addComponent(gridLayoutPanel);
+//		bracketLayout = new GridLayout(7, ROW_START + 16);
+//		bracketLayout.addClassName("bracket-gridlayout");
+//
+//		fillInBracket(league);
+//
+//
+//		Panel gridLayoutPanel = new Panel();
+//		gridLayoutPanel.setContent(bracketLayout);
+//		gridLayoutPanel.addClassName("no-visual-panel");
+//
+//		Button refreshButton = new Button(VaadinIcon.REFRESH);
+//		refreshButton.addClassName(ValoTheme.BUTTON_TINY);
+//		refreshButton.addClassName(ValoTheme.BUTTON_ICON_ONLY);
+//		refreshButton.addClickListener(ignored -> {
+//			bracketLayout.removeAllComponents();
+//			fillInBracket(league);
+//		});
+//
+//		add(refreshButton);
+//		add(gridLayoutPanel);
 	}
 
 	public void fillInBracket(League league) {
@@ -168,12 +161,12 @@ public class KnockoutStageTab extends VerticalLayout {
 	}
 
 	private void addHeader(String title, int column) {
-		Label headerLabel = new Label(title);
-		headerLabel.setWidth(100f, Unit.PERCENTAGE);
-		headerLabel.addStyleName(ValoTheme.TEXTFIELD_ALIGN_CENTER);
-		headerLabel.addStyleName(ValoTheme.LABEL_H3);
-		headerLabel.addStyleName(ValoTheme.LABEL_COLORED);
-		bracketLayout.addComponent(headerLabel, column, 0);
+//		Label headerLabel = new Label(title);
+//		headerLabel.setWidth(100f, Unit.PERCENTAGE);
+//		headerLabel.addClassName(ValoTheme.TEXTFIELD_ALIGN_CENTER);
+//		headerLabel.addClassName(ValoTheme.LABEL_H3);
+//		headerLabel.addClassName(ValoTheme.LABEL_COLORED);
+//		bracketLayout.add(headerLabel, column, 0);
 	}
 
 	private void addSemiFinalsLines() {
@@ -214,17 +207,17 @@ public class KnockoutStageTab extends VerticalLayout {
 	}
 
 	private void addRightLine(int column, int row) {
-		bracketLayout.addComponent(new BracketColumnPlaceholder("right", false), column, ROW_START + row);
+//		bracketLayout.add(new BracketColumnPlaceholder("right", false), column, ROW_START + row);
 	}
 
 	private void addBottomRightLIne(int column, int row) {
-		bracketLayout.addComponent(new BracketColumnPlaceholder("bottom-right", true), column, ROW_START + row);
+//		bracketLayout.add(new BracketColumnPlaceholder("bottom-right", true), column, ROW_START + row);
 	}
 
 	private void addTopRightLine(int column, int row) {
 		BracketColumnPlaceholder placeholder = new BracketColumnPlaceholder("top-right", true);
-		bracketLayout.addComponent(placeholder, column, ROW_START + row);
-		bracketLayout.setComponentAlignment(placeholder, Alignment.BOTTOM_CENTER);
+//		bracketLayout.add(placeholder, column, ROW_START + row);
+//		bracketLayout.setComponentAlignment(placeholder, Alignment.BOTTOM_CENTER);
 	}
 
 	public List<KnockoutGameBean> fetchLeagueGames(League league) {
@@ -247,10 +240,10 @@ public class KnockoutStageTab extends VerticalLayout {
 	private void addFinals(List<KnockoutGameBean> finalsGames) {
 		// Just to be sure, it should be impossible to not have 2 games (for now)
 		if (finalsGames.size() == 2) {
-			bracketLayout.addComponent(new RestFinalsGameLayout(singleLeagueServiceprovider, league, finalsGames.get(0)), 6, ROW_START + 7);
-			bracketLayout.addComponent(new RestFinalsGameLayout(singleLeagueServiceprovider, league, finalsGames.get(1)), 6, ROW_START + 12);
+//			bracketLayout.add(new RestFinalsGameLayout(singleLeagueServiceprovider, league, finalsGames.get(0)), 6, ROW_START + 7);
+//			bracketLayout.add(new RestFinalsGameLayout(singleLeagueServiceprovider, league, finalsGames.get(1)), 6, ROW_START + 12);
 		} else if (finalsGames.size() == 1) {
-			bracketLayout.addComponent(new RestFinalsGameLayout(singleLeagueServiceprovider, league, finalsGames.get(0)), 6, ROW_START + 7);
+//			bracketLayout.add(new RestFinalsGameLayout(singleLeagueServiceprovider, league, finalsGames.get(0)), 6, ROW_START + 7);
 		} else {
 			// Meh...
 		}
@@ -264,9 +257,9 @@ public class KnockoutStageTab extends VerticalLayout {
 		int counter = ROW_START + counterStart;
 		for (KnockoutGameBean game : games) {
 			if (FifaWorldCup2018Stages.EIGHTH_FINALS.toString().equals(game.getGame().getStage())) {
-				bracketLayout.addComponent(new EightFinalsGameLayout(singleLeagueServiceprovider, league, game), column, counter);
+//				bracketLayout.add(new EightFinalsGameLayout(singleLeagueServiceprovider, league, game), column, counter);
 			} else {
-				bracketLayout.addComponent(new RestFinalsGameLayout(singleLeagueServiceprovider, league, game), column, counter);
+//				bracketLayout.add(new RestFinalsGameLayout(singleLeagueServiceprovider, league, game), column, counter);
 			}
 			counter = counter + spaceBetweenRows;
 		}

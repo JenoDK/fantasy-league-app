@@ -1,24 +1,24 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.users;
 
-import com.jeno.fantasyleague.model.League;
-import com.jeno.fantasyleague.model.User;
+import com.jeno.fantasyleague.backend.model.League;
+import com.jeno.fantasyleague.backend.model.User;
 import com.jeno.fantasyleague.ui.common.field.CustomButton;
 import com.jeno.fantasyleague.ui.common.grid.CustomGrid;
 import com.jeno.fantasyleague.ui.common.grid.CustomGridBuilder;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.jeno.fantasyleague.util.ImageUtil;
-import com.vaadin.data.provider.DataProvider;
-import com.vaadin.icons.VaadinIcons;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.renderers.ComponentRenderer;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.data.provider.DataProvider;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
 
 public class UserGrid extends CustomGrid<User> {
 
 	public UserGrid(DataProvider<User, ?> dataProvider, SingleLeagueServiceProvider singleLeagueServiceProvider, League league) {
 		super(getDefaultUserGridBuilder(dataProvider));
 		if (singleLeagueServiceProvider.loggedInUserIsLeagueCreator(league)) {
-			addColumn(user -> promoteButton(user, singleLeagueServiceProvider, league), new ComponentRenderer())
-					.setWidth(130);
+			addColumn(new ComponentRenderer<>(user -> promoteButton(user, singleLeagueServiceProvider, league)))
+					.setWidth("130px");
 		}
 	}
 
@@ -33,7 +33,7 @@ public class UserGrid extends CustomGrid<User> {
 			}
 			changePromoteDemoteButton(user, singleLeagueServiceProvider, league, promoteDemoteButton);
 		});
-		promoteDemoteButton.setWidth(100, Unit.PIXELS);
+		promoteDemoteButton.setWidth("100px");
 		if (league.getCreatedBy().getId().equals(user.getId())) {
 			promoteDemoteButton.setVisible(false);
 		}
@@ -42,15 +42,15 @@ public class UserGrid extends CustomGrid<User> {
 
 	private void changePromoteDemoteButton(User user, SingleLeagueServiceProvider singleLeagueServiceProvider, League league, Button promoteButton) {
 		if (singleLeagueServiceProvider.userIsLeagueAdmin(league, user)) {
-			promoteButton.setCaption("Demote");
-			promoteButton.setIcon(VaadinIcons.ARROW_CIRCLE_DOWN);
+			promoteButton.setText("Demote");
+			promoteButton.setIcon(VaadinIcon.ARROW_CIRCLE_DOWN.create());
 		} else {
-			promoteButton.setCaption("Promote");
-			promoteButton.setIcon(VaadinIcons.ARROW_CIRCLE_UP);
+			promoteButton.setText("Promote");
+			promoteButton.setIcon(VaadinIcon.ARROW_CIRCLE_UP.create());
 		}
 	}
 
-	public static CustomGridBuilder getDefaultUserGridBuilder(DataProvider<User, ?> dataProvider) {
+	public static CustomGridBuilder<User> getDefaultUserGridBuilder(DataProvider<User, ?> dataProvider) {
 		return new CustomGridBuilder<>(dataProvider, User::getId)
 				.withTextColumn(
 						new CustomGridBuilder.ColumnProvider<>(
@@ -60,7 +60,7 @@ public class UserGrid extends CustomGrid<User> {
 				.withIconColumn(
 						new CustomGridBuilder.ColumnProvider<User, CustomGridBuilder.IconColumnValue>(
 								"iconColumn",
-								user -> new CustomGridBuilder.IconColumnValue(ImageUtil.getUserProfilePictureResource(user)),
+								user -> new CustomGridBuilder.IconColumnValue(ImageUtil.getUserProfilePictureResource((User) user)),
 								""))
 				.withColumnOrder("iconColumn", "usernameColumn");
 	}

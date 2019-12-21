@@ -1,20 +1,20 @@
 package com.jeno.fantasyleague.ui.register;
 
-import com.jeno.fantasyleague.model.User;
+import java.util.Map;
+
+import com.jeno.fantasyleague.backend.model.User;
 import com.jeno.fantasyleague.ui.common.CustomTitleForm;
 import com.jeno.fantasyleague.util.RxUtil;
 import com.jeno.fantasyleague.util.VaadinUtil;
-import com.vaadin.data.BeanValidationBinder;
-import com.vaadin.data.validator.EmailValidator;
-import com.vaadin.event.ShortcutAction;
-import com.vaadin.icons.VaadinIcons;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Link;
-import com.vaadin.ui.PasswordField;
-import com.vaadin.ui.TextField;
+import com.vaadin.flow.component.Key;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.Anchor;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.textfield.PasswordField;
+import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.binder.BeanValidationBinder;
+import com.vaadin.flow.data.validator.EmailValidator;
 import io.reactivex.Observable;
-
-import java.util.Map;
 
 public class RegisterUserForm extends CustomTitleForm {
 
@@ -24,7 +24,7 @@ public class RegisterUserForm extends CustomTitleForm {
 	private PasswordField passwordField;
 	private PasswordField repeatPasswordField;
 
-	private Link forgotPasswordLink;
+	private Anchor forgotPasswordLink;
 
 	private Button submit;
 
@@ -50,32 +50,30 @@ public class RegisterUserForm extends CustomTitleForm {
 	}
 
 	private void initLayout() {
-		setWidthUndefined();
-
 		nameField = new TextField("Name");
-		nameField.setIcon(VaadinIcons.USER);
+		nameField.setPrefixComponent(VaadinIcon.USER.create());
 
 		userNameField = new TextField("Username");
-		userNameField.setIcon(VaadinIcons.CLIPBOARD_USER);
+		userNameField.setPrefixComponent(VaadinIcon.CLIPBOARD_USER.create());
 
 		emailField = new TextField("Email");
-		emailField.setIcon(VaadinIcons.MAILBOX);
+		emailField.setPrefixComponent(VaadinIcon.MAILBOX.create());
 
 		passwordField = new PasswordField("Password");
-		passwordField.setIcon(VaadinIcons.PASSWORD);
+		passwordField.setPrefixComponent(VaadinIcon.PASSWORD.create());
 
 		repeatPasswordField = new PasswordField("Repeat Password");
-		repeatPasswordField.setIcon(VaadinIcons.PASSWORD);
+		repeatPasswordField.setPrefixComponent(VaadinIcon.PASSWORD.create());
 
-		addComponent(nameField);
-		addComponent(userNameField);
-		addComponent(emailField);
-		addComponent(passwordField);
-		addComponent(repeatPasswordField);
+		add(nameField);
+		add(userNameField);
+		add(emailField);
+		add(passwordField);
+		add(repeatPasswordField);
 
-		submit = new Button("Submit", VaadinIcons.USER_CHECK);
-		submit.setClickShortcut(ShortcutAction.KeyCode.ENTER);
-		addComponent(submit);
+		submit = new Button("Submit", VaadinIcon.USER_CHECK.create());
+		submit.addClickShortcut(Key.ENTER);
+		add(submit);
 	}
 
 	public Observable<User> validSubmit() {

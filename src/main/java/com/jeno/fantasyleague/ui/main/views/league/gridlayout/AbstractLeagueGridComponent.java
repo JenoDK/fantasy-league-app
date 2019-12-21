@@ -1,6 +1,6 @@
 package com.jeno.fantasyleague.ui.main.views.league.gridlayout;
 
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 public abstract class AbstractLeagueGridComponent extends VerticalLayout {
 
@@ -12,7 +12,7 @@ public abstract class AbstractLeagueGridComponent extends VerticalLayout {
 	private void initLayout() {
 		setSpacing(false);
 		setWidth("100%");
-		addStyleName("league-grid-component");
+		addClassName("league-grid-component");
 	}
 
 }

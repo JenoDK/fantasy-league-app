@@ -4,17 +4,13 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import com.jeno.fantasyleague.annotation.SpringUIScope;
-import com.jeno.fantasyleague.model.League;
+import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.ui.main.views.league.gridlayout.LeagueGridLayout;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.SingleLeagueView;
-import com.vaadin.ui.Panel;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import io.reactivex.Observable;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@SpringUIScope
 public class LeagueView {
 
     @Autowired
@@ -28,14 +24,14 @@ public class LeagueView {
     void init() {
         layout = new VerticalLayout();
 	    layout.setId("league-view-id");
-        layout.removeAllComponents();
+        layout.removeAll();
         layout.setSpacing(false);
-        layout.addStyleName("league-view");
+        layout.addClassName("league-view");
 
         leagueGridLayout = new LeagueGridLayout(singleLeagueServiceProvider);
         leagueGridLayout.setSizeFull();
         leagueGridLayout.clickedLeague().subscribe(this::viewLeague);
-        layout.addComponent(leagueGridLayout);
+        layout.add(leagueGridLayout);
     }
 
     public VerticalLayout getLayout() {
@@ -59,16 +55,14 @@ public class LeagueView {
     }
 
     private void viewLeague(League league) {
-        layout.removeAllComponents();
+        layout.removeAll();
         singleLeagieView = new SingleLeagueView(league, singleLeagueServiceProvider);
         singleLeagieView.backToLeaguesView().subscribe(ignored -> showLeagueGridLayout());
-        layout.addComponent(singleLeagieView);
-        // Get view panel and reset scroll
-	    ((Panel) ((VerticalLayout) UI.getCurrent().getContent()).getComponent(1)).setScrollTop(0);
+        layout.add(singleLeagieView);
     }
 
     private void showLeagueGridLayout() {
-        layout.removeAllComponents();
-        layout.addComponent(leagueGridLayout);
+        layout.removeAll();
+        layout.add(leagueGridLayout);
     }
 }

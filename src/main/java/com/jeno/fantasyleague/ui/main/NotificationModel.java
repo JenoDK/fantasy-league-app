@@ -1,13 +1,13 @@
 package com.jeno.fantasyleague.ui.main;
 
-import com.jeno.fantasyleague.data.service.notificationtypes.NotificationException;
-import com.jeno.fantasyleague.data.service.notificationtypes.NotificationTypeService;
-import com.jeno.fantasyleague.model.UserNotification;
-import com.vaadin.spring.annotation.SpringComponent;
+import java.util.Optional;
+
+import com.jeno.fantasyleague.backend.data.service.notificationtypes.NotificationException;
+import com.jeno.fantasyleague.backend.data.service.notificationtypes.NotificationTypeService;
+import com.jeno.fantasyleague.backend.model.UserNotification;
+import com.vaadin.flow.spring.annotation.SpringComponent;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.Optional;
 
 @SpringComponent
 public class NotificationModel {

@@ -2,8 +2,8 @@ package com.jeno.fantasyleague.ui.main.views.league.singleleague.overview;
 
 import java.util.Optional;
 
-import com.jeno.fantasyleague.model.Prediction;
-import com.jeno.fantasyleague.model.User;
+import com.jeno.fantasyleague.backend.model.Prediction;
+import com.jeno.fantasyleague.backend.model.User;
 
 public class UserPredictionForGameBean {
 

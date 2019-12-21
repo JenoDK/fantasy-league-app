@@ -1,6 +1,6 @@
 package com.jeno.fantasyleague.ui.register;
 
-import com.jeno.fantasyleague.model.User;
+import com.jeno.fantasyleague.backend.model.User;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;

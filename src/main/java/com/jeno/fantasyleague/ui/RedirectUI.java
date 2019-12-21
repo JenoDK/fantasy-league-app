@@ -1,13 +1,14 @@
 package com.jeno.fantasyleague.ui;
 
-import com.vaadin.icons.VaadinIcons;
-import com.vaadin.server.Page;
-import com.vaadin.server.VaadinRequest;
-import com.vaadin.shared.ui.ContentMode;
-import com.vaadin.ui.*;
-import com.vaadin.ui.themes.ValoTheme;
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
-public abstract class RedirectUI extends UI {
+public abstract class RedirectUI extends Div {
 
 	private final String redirectButtonText;
 	private final String redirectPath;
@@ -18,49 +19,48 @@ public abstract class RedirectUI extends UI {
 	public RedirectUI(String redirectButtonText, String redirectPath) {
 		this.redirectButtonText = redirectButtonText;
 		this.redirectPath = redirectPath;
+
+		initLayout();
 	}
 
-	@Override
-	protected void init(VaadinRequest request) {
-		setSizeFull();
-
+	protected void initLayout() {
 		mainLayout = new VerticalLayout();
 		mainLayout.setSizeFull();
 
-		redirectButton = new Button(redirectButtonText, VaadinIcons.ARROW_CIRCLE_LEFT);
-		redirectButton.addClickListener(ignored -> Page.getCurrent().setLocation(redirectPath));
+		redirectButton = new Button(redirectButtonText, VaadinIcon.ARROW_CIRCLE_LEFT.create());
+		redirectButton.addClickListener(ignored -> UI.getCurrent().navigate(redirectPath));
 
 		Component middleComponent = getMiddleComponent();
 
-		mainLayout.addComponent(redirectButton);
-		mainLayout.addComponent(middleComponent);
-		mainLayout.setComponentAlignment(redirectButton, Alignment.TOP_LEFT);
-		mainLayout.setExpandRatio(redirectButton, 1f);
-		mainLayout.setComponentAlignment(middleComponent, Alignment.MIDDLE_CENTER);
-		mainLayout.setExpandRatio(middleComponent, 9f);
+		mainLayout.add(redirectButton);
+		mainLayout.add(middleComponent);
+//		mainLayout.setComponentAlignment(redirectButton, Alignment.TOP_LEFT);
+		mainLayout.setFlexGrow(1, redirectButton);
+//		mainLayout.setComponentAlignment(middleComponent, Alignment.MIDDLE_CENTER);
+		mainLayout.setFlexGrow(9, middleComponent);
 
-		setContent(mainLayout);
+		add(mainLayout);
 	}
 
 	protected abstract Component getMiddleComponent();
 
 	protected void actionSuccessful(String successMessage) {
-		mainLayout.removeAllComponents();
+		mainLayout.removeAll();
 
 		VerticalLayout successLayout = new VerticalLayout();
-		successLayout.setHeightUndefined();
+		successLayout.setHeight(null);
 
-		Label successLabel = new Label(successMessage, ContentMode.HTML);
-		successLabel.addStyleName(ValoTheme.LABEL_LARGE);
-		successLabel.addStyleName(ValoTheme.LABEL_SUCCESS);
+		Label successLabel = new Label(successMessage);
+//		successLabel.addClassName(ValoTheme.LABEL_LARGE);
+//		successLabel.addClassName(ValoTheme.LABEL_SUCCESS);
 
-		successLayout.addComponent(successLabel);
-		successLayout.addComponent(redirectButton);
-		successLayout.setComponentAlignment(successLabel, Alignment.MIDDLE_CENTER);
-		successLayout.setComponentAlignment(redirectButton, Alignment.MIDDLE_CENTER);
+		successLayout.add(successLabel);
+		successLayout.add(redirectButton);
+//		successLayout.setComponentAlignment(successLabel, Alignment.MIDDLE_CENTER);
+//		successLayout.setComponentAlignment(redirectButton, Alignment.MIDDLE_CENTER);
 
-		mainLayout.addComponent(successLayout);
-		mainLayout.setComponentAlignment(successLayout, Alignment.MIDDLE_CENTER);
+		mainLayout.add(successLayout);
+//		mainLayout.setComponentAlignment(successLayout, Alignment.MIDDLE_CENTER);
 	}
 
 }

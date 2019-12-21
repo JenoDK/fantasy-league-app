@@ -2,23 +2,20 @@ package com.jeno.fantasyleague.ui.main.views.league.gridlayout;
 
 import java.util.Map;
 
-import com.jeno.fantasyleague.model.League;
-import com.jeno.fantasyleague.model.enums.Template;
+import com.jeno.fantasyleague.backend.model.League;
+import com.jeno.fantasyleague.backend.model.enums.Template;
 import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.ui.common.field.CustomButton;
 import com.jeno.fantasyleague.util.RxUtil;
 import com.jeno.fantasyleague.util.VaadinUtil;
-import com.vaadin.data.BeanValidationBinder;
-import com.vaadin.event.ShortcutAction;
-import com.vaadin.icons.VaadinIcons;
-import com.vaadin.server.ThemeResource;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.themes.ValoTheme;
+import com.vaadin.flow.component.Key;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.binder.BeanValidationBinder;
 import io.reactivex.Observable;
 
 public class LeagueForm extends HorizontalLayout {
@@ -44,7 +41,7 @@ public class LeagueForm extends HorizontalLayout {
 	}
 
 	private void initLayout() {
-		addStyleNames("add-new-form");
+		addClassNames("add-new-form");
 		setSizeFull();
 		setMargin(false);
 		setSpacing(false);
@@ -54,26 +51,27 @@ public class LeagueForm extends HorizontalLayout {
 		fieldLayout.setSpacing(true);
 
 		nameField = new TextField();
-		nameField.addStyleName(ValoTheme.TEXTFIELD_TINY);
+//		nameField.addClassName(ValoTheme.TEXTFIELD_TINY);
 		nameField.setPlaceholder("Name");
 
 		templateCombobox = new ComboBox<>();
-		templateCombobox.addStyleName("no-required-indicator");
-		templateCombobox.addStyleName(ValoTheme.COMBOBOX_TINY);
+		templateCombobox.addClassName("no-required-indicator");
+//		templateCombobox.addClassName(ValoTheme.COMBOBOX_TINY);
 		templateCombobox.setPlaceholder("Template");
 		templateCombobox.setItems(Template.values());
-		templateCombobox.setItemCaptionGenerator(Template::getName);
-		templateCombobox.setItemIconGenerator(temp -> new ThemeResource(temp.getIconPath()));
+		templateCombobox.setItemLabelGenerator(Template::getName);
+		// TODO
+//		templateCombobox.setItemIconGenerator(temp -> new ThemeResource(temp.getIconPath()));
 
-		fieldLayout.addComponent(nameField);
-		fieldLayout.addComponent(templateCombobox);
-		addComponent(fieldLayout);
+		fieldLayout.add(nameField);
+		fieldLayout.add(templateCombobox);
+		add(fieldLayout);
 
-		submit = new CustomButton(Resources.getMessage("create"), VaadinIcons.USER_CHECK);
-		submit.setClickShortcut(ShortcutAction.KeyCode.ENTER);
-		addComponent(submit);
+		submit = new CustomButton(Resources.getMessage("create"), VaadinIcon.USER_CHECK.create());
+		submit.addClickShortcut(Key.ENTER);
+		add(submit);
 
-		setComponentAlignment(submit, Alignment.BOTTOM_RIGHT);
+//		setComponentAlignment(submit, Alignment.BOTTOM_RIGHT);
 	}
 
 	public Observable<League> validSubmit() {

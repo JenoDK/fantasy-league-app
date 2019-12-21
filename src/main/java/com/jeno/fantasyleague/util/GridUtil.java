@@ -2,22 +2,18 @@ package com.jeno.fantasyleague.util;
 
 import java.util.Optional;
 
-import com.jeno.fantasyleague.model.Contestant;
+import com.jeno.fantasyleague.backend.model.Contestant;
 import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.ui.common.field.NonNullValidator;
 import com.jeno.fantasyleague.ui.common.field.StringToPositiveIntegerConverter;
-import com.vaadin.data.Binder;
-import com.vaadin.data.BinderValidationStatus;
-import com.vaadin.data.ValueProvider;
-import com.vaadin.server.Setter;
-import com.vaadin.server.Sizeable;
-import com.vaadin.server.ThemeResource;
-import com.vaadin.ui.AbstractOrderedLayout;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Image;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.themes.ValoTheme;
+import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.binder.BinderValidationStatus;
+import com.vaadin.flow.data.binder.Setter;
+import com.vaadin.flow.function.ValueProvider;
 import io.reactivex.subjects.BehaviorSubject;
 
 public class GridUtil {
@@ -34,11 +30,11 @@ public class GridUtil {
 	public static HorizontalLayout createTeamLayout(Contestant contestant) {
 		HorizontalLayout layout = new HorizontalLayout();
 		Image icon = new Image();
-		icon.setWidth(42f, Sizeable.Unit.PIXELS);
-		icon.setHeight(28f, Sizeable.Unit.PIXELS);
-		icon.setSource(new ThemeResource(contestant.getIcon_path()));
+		icon.setWidth("42px");
+		icon.setHeight("28px");
+		icon.setSrc(contestant.getIcon_path());
 		Label teamName = new Label(contestant.getName());
-		layout.addComponents(icon, teamName);
+		layout.add(icon, teamName);
 		return layout;
 	}
 
@@ -46,32 +42,32 @@ public class GridUtil {
 		return (teamAScore != null ? teamAScore : " ") + " - " + (teamBScore != null ? teamBScore : " ");
 	}
 
-	public static  <T> AbstractOrderedLayout getTextFieldScoreLayout(
+	public static  <T> HorizontalLayout getTextFieldScoreLayout(
 			T t,
 			ValueProvider<T, Integer> homeTeamGetter,
 			Setter<T, Integer> homeTeamSetter,
 			ValueProvider<T, Integer> awayTeamGetter,
 			Setter<T, Integer> awayTeamSetter,
 			BehaviorSubject<T> scoreChanged,
-			AbstractOrderedLayout layout) {
+			HorizontalLayout layout) {
 		return getTextFieldScoreLayout(t, homeTeamGetter, homeTeamSetter, awayTeamGetter, awayTeamSetter, scoreChanged, layout, true);
 	}
 
-	public static  <T> AbstractOrderedLayout getTextFieldScoreLayout(
+	public static  <T> HorizontalLayout getTextFieldScoreLayout(
 			T t,
 			ValueProvider<T, Integer> homeTeamGetter,
 			Setter<T, Integer> homeTeamSetter,
 			ValueProvider<T, Integer> awayTeamGetter,
 			Setter<T, Integer> awayTeamSetter,
 			BehaviorSubject<T> scoreChanged,
-			AbstractOrderedLayout layout,
+			HorizontalLayout layout,
 			boolean addLabelBetween) {
 		Binder<T> binder = new Binder<>();
-		layout.addComponent(createPositiveIntegerTextField(t, binder, homeTeamGetter, homeTeamSetter));
+		layout.add(createPositiveIntegerTextField(t, binder, homeTeamGetter, homeTeamSetter));
 		if (addLabelBetween) {
-			layout.addComponent(new Label("-"));
+			layout.add(new Label("-"));
 		}
-		layout.addComponent(createPositiveIntegerTextField(t, binder, awayTeamGetter, awayTeamSetter));
+		layout.add(createPositiveIntegerTextField(t, binder, awayTeamGetter, awayTeamSetter));
 		binder.addValueChangeListener(ignored -> {
 			BinderValidationStatus<T> status = binder.validate();
 			if (status.isOk()) {
@@ -84,14 +80,14 @@ public class GridUtil {
 
 	public static <T> TextField createPositiveIntegerTextField(T t, Binder<T> binder, ValueProvider<T, Integer> getter, Setter<T, Integer> setter) {
 		TextField field = new TextField();
-		field.setWidth(30, Sizeable.Unit.PIXELS);
-		field.addStyleName("v-slot-ignore-error-indicator");
+		field.setWidth("30px");
+		field.addClassName("v-slot-ignore-error-indicator");
 		binder.forField(field)
 				.withNullRepresentation(" ")
 				.withConverter(new StringToPositiveIntegerConverter(null, Resources.getMessage("error.positiveNumber")))
 				.withValidator(new NonNullValidator(Resources.getMessage("error.cannotBeNull")))
 				.bind(getter, setter);
-		field.addStyleName(ValoTheme.TEXTFIELD_TINY);
+//		field.addClassName(ValoTheme.TEXTFIELD_TINY);
 		return field;
 	}
 }

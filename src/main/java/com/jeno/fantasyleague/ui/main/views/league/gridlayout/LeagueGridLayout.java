@@ -5,13 +5,13 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.Maps;
-import com.jeno.fantasyleague.model.League;
+import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
-import com.vaadin.ui.GridLayout;
+import com.vaadin.flow.component.board.Board;
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
 
-public class LeagueGridLayout extends GridLayout {
+public class LeagueGridLayout extends Board {
 
 	private final BehaviorSubject<League> clickedLeague = BehaviorSubject.create();
 
@@ -20,18 +20,19 @@ public class LeagueGridLayout extends GridLayout {
 	private Map<Long, ExistingLeagueGridComponent> leagueMap = Maps.newHashMap();
 
 	public LeagueGridLayout(SingleLeagueServiceProvider singleLeagueServiceProvider) {
-		super(1, 1);
-		this.singleLeagueServiceProvider = singleLeagueServiceProvider;
-		setSpacing(true);
-		addStyleName("league-grid-layout");
-
-		newLeagueComponent = new NewLeagueGridComponent();
-		addComponent(newLeagueComponent);
+		// TODO
+//		super(1, 1);
+//		this.singleLeagueServiceProvider = singleLeagueServiceProvider;
+//		setSpacing(true);
+//		addClassName("league-grid-layout");
+//
+//		newLeagueComponent = new NewLeagueGridComponent();
+//		add(newLeagueComponent);
 	}
 
 	public void setLeagues(List<League> leagues) {
-		removeAllComponents();
-		addComponent(newLeagueComponent);
+		removeAll();
+		add(newLeagueComponent);
 
 		leagueMap.putAll(leagues.stream()
 			.collect(Collectors.toMap(League::getId, league -> new ExistingLeagueGridComponent(league, singleLeagueServiceProvider))));
@@ -49,7 +50,7 @@ public class LeagueGridLayout extends GridLayout {
 
 	private void addLeagueComponent(ExistingLeagueGridComponent value) {
 		value.click().subscribe(clickedLeague::onNext);
-		addComponent(value);
+		add(value);
 	}
 
 	public Observable<League> newLeague() {

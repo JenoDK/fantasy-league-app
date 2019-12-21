@@ -2,18 +2,17 @@ package com.jeno.fantasyleague.ui.main.views.league.singleleague.leaguesettings;
 
 import java.util.List;
 
-import com.jeno.fantasyleague.data.service.email.ApplicationEmailService;
-import com.jeno.fantasyleague.model.User;
+import com.jeno.fantasyleague.backend.data.service.email.ApplicationEmailService;
+import com.jeno.fantasyleague.backend.model.User;
 import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.ui.common.field.CustomButton;
 import com.jeno.fantasyleague.ui.common.window.PopupWindow;
-import com.vaadin.server.UserError;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.RichTextArea;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Window;
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.richtexteditor.RichTextEditor;
+import com.vaadin.flow.component.textfield.TextField;
 
 public class SendMailPopupWindow {
 
@@ -27,35 +26,34 @@ public class SendMailPopupWindow {
 
 	public void show() {
 		new PopupWindow.Builder(
-					Resources.getMessage("sendMail"),
-				"sendLeagueMailWindow",
-				window -> createLayout(window))
-				.closable(true)
-				.resizable(true)
+							Resources.getMessage("sendMail"),
+						"sendLeagueMailWindow",
+						this::createLayout)
+//				.closable(true)
+//				.resizable(true)
 				.setHeight(500)
 				.setWidth(520)
 				.build()
-				.show();
+				.open();
 	}
 
-	private Component createLayout(Window window) {
+	private Component createLayout(Dialog window) {
 		VerticalLayout layout = new VerticalLayout();
 		TextField subjectField = new TextField(Resources.getMessage("subject"));
-		RichTextArea body = new RichTextArea(Resources.getMessage("body"));
+		RichTextEditor body = new RichTextEditor(Resources.getMessage("body"));
 		body.setSizeFull();
-		body.setResponsive(true);
 		Button sendMail = new CustomButton(Resources.getMessage("sendMail"));
 		sendMail.addClickListener(ignored -> {
 			if (subjectField.getValue() == null || subjectField.getValue().isEmpty()) {
-				subjectField.setComponentError(new UserError(Resources.getMessage("error.notEmpty")));
+				subjectField.setErrorMessage(Resources.getMessage("error.notEmpty"));
 			} else {
 				leagueUsers.forEach(user -> emailService.sendEmail(subjectField.getValue(), body.getValue(), user));
 				window.close();
 			}
 		});
-		layout.addComponent(subjectField);
-		layout.addComponent(body);
-		layout.addComponent(sendMail);
+		layout.add(subjectField);
+		layout.add(body);
+		layout.add(sendMail);
 		return layout;
 	}
 }

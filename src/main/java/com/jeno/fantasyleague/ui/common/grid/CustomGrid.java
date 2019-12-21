@@ -1,22 +1,17 @@
 package com.jeno.fantasyleague.ui.common.grid;
 
 import java.util.Collection;
-import java.util.List;
 
-import com.google.common.collect.Lists;
-import com.vaadin.data.provider.ListDataProvider;
-import com.vaadin.shared.ui.grid.HeightMode;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.Grid;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Image;
-import com.vaadin.ui.renderers.ComponentRenderer;
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.data.provider.ListDataProvider;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
 
 public class CustomGrid<T> extends Grid<T> {
 
 	private CustomGridBuilder<T> builder;
-	private List<T> listDataproviderItems = Lists.newArrayList();
 	private boolean adjustHeightDynamically = true;
 
 	public CustomGrid(CustomGridBuilder<T> builder) {
@@ -26,23 +21,20 @@ public class CustomGrid<T> extends Grid<T> {
 		setDataProvider(builder.dataProvider);
 		buildColumns(builder);
 		if (builder.columnOrder.length > 0) {
-			setColumnOrder(builder.columnOrder);
+			setColumns(builder.columnOrder);
 		}
 	}
 
 	public CustomGrid() {
 		super();
-		setRowHeight(36);
-		setHeightByRows(5);
-		setHeightMode(HeightMode.ROW);
+		setHeightByRows(true);
 	}
 
 	@Override
 	public void setItems(Collection<T> items) {
 		super.setItems(items);
-		this.listDataproviderItems = Lists.newArrayList(items);
 		if (adjustHeightDynamically) {
-			setHeight(36f * (items.size() + 1), Unit.PIXELS);
+			setHeight((36f * (items.size() + 1)) + "px");
 		}
 	}
 
@@ -81,32 +73,36 @@ public class CustomGrid<T> extends Grid<T> {
 	private void buildColumns(CustomGridBuilder<T> builder) {
 		builder.textColumns.forEach((key, value) ->
 			addColumn(value.valueProvider)
-					.setId(key)
-					.setCaption(value.caption));
+					.setHeader(value.caption)
+					.setId(key));
 		builder.iconColumns.values().forEach(this::addIconColumn);
 	}
 
-	public Column<T, Component> addIconColumn(CustomGridBuilder.ColumnProvider<T, CustomGridBuilder.IconColumnValue> value) {
-		return addColumn(t -> createIconColumnComponent(value.valueProvider.apply(t)), new ComponentRenderer())
-				.setId(value.id)
-				.setStyleGenerator(item -> "icon-column")
-				.setWidth(50)
-				.setCaption(value.caption);
+	public Column addIconColumn(CustomGridBuilder.ColumnProvider<T, CustomGridBuilder.IconColumnValue> value) {
+		Column<T> column = addColumn(new ComponentRenderer<>(t -> createIconColumnComponent(value.valueProvider.apply(t))))
+				.setClassNameGenerator(item -> "icon-column")
+				.setWidth("50px")
+				.setHeader(value.caption);
+		column.setId(value.id);
+		return column;
 	}
 
 	private Component createIconColumnComponent(CustomGridBuilder.IconColumnValue iconColumnValue) {
 		HorizontalLayout layout = new HorizontalLayout();
 		layout.setSizeFull();
 		Image icon = new Image();
-		icon.setWidth(30f, Unit.PIXELS);
-		icon.setHeight(30f, Unit.PIXELS);
-		icon.setSource(iconColumnValue.resource);
+		icon.setWidth("30px");
+		icon.setHeight("30px");
+		if (iconColumnValue.resource != null) {
+			icon.setSrc(iconColumnValue.resource);
+		} else if (iconColumnValue.path != null) {
+			icon.setSrc(iconColumnValue.path);
+		}
 		if (iconColumnValue.iconClickAction != null) {
-			icon.addStyleName("cursor-hover-pointer");
+			icon.addClassName("cursor-hover-pointer");
 			icon.addClickListener(ignored -> iconColumnValue.iconClickAction.perform(this));
 		}
-		layout.addComponents(icon);
-		layout.setComponentAlignment(icon, Alignment.MIDDLE_CENTER);
+		layout.add(icon);
 		return layout;
 	}
 

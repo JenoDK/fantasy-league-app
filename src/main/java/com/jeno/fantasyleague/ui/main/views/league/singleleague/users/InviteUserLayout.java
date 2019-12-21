@@ -6,8 +6,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.google.common.collect.Lists;
-import com.jeno.fantasyleague.model.League;
-import com.jeno.fantasyleague.model.User;
+import com.jeno.fantasyleague.backend.model.League;
+import com.jeno.fantasyleague.backend.model.User;
 import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.ui.common.field.CustomButton;
 import com.jeno.fantasyleague.ui.common.grid.CustomGrid;
@@ -15,17 +15,14 @@ import com.jeno.fantasyleague.ui.common.grid.CustomGridBuilder;
 import com.jeno.fantasyleague.ui.main.broadcast.Broadcaster;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.jeno.fantasyleague.util.Images;
-import com.vaadin.data.provider.CallbackDataProvider;
-import com.vaadin.data.provider.DataProvider;
-import com.vaadin.data.provider.ListDataProvider;
-import com.vaadin.server.ThemeResource;
-import com.vaadin.shared.ui.ContentMode;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.themes.ValoTheme;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.data.provider.CallbackDataProvider;
+import com.vaadin.flow.data.provider.DataProvider;
+import com.vaadin.flow.data.provider.ListDataProvider;
 
 public class InviteUserLayout extends VerticalLayout {
 
@@ -33,9 +30,9 @@ public class InviteUserLayout extends VerticalLayout {
 		super();
 		setMargin(false);
 
-		Label inviteUsers = new Label("Invite Users", ContentMode.HTML);
-		inviteUsers.addStyleName(ValoTheme.LABEL_H3);
-		addComponent(inviteUsers);
+		Label inviteUsers = new Label("Invite Users");
+//		inviteUsers.addClassName(ValoTheme.LABEL_H3);
+		add(inviteUsers);
 
 		Set<Long> usersToExcludeIds =  usersToExclude.stream()
 				.map(User::getId)
@@ -44,23 +41,23 @@ public class InviteUserLayout extends VerticalLayout {
 		DataProvider<User, String> dataProvider = getAddUserComboboxDataProvider(singleLeagueServiceProvider, usersToExcludeIds);
 
 		ListDataProvider<User> usersToInviteDataProvider = DataProvider.fromStream(Stream.empty());
-		CustomGridBuilder usersToInviteGridBuilder = UserGrid.getDefaultUserGridBuilder(usersToInviteDataProvider);
+		CustomGridBuilder<User> usersToInviteGridBuilder = UserGrid.getDefaultUserGridBuilder(usersToInviteDataProvider);
 		CustomGrid<User> usersToInviteGrid = usersToInviteGridBuilder
 			.withIconColumn(
-				new CustomGridBuilder.ColumnProvider<User, CustomGridBuilder.IconColumnValue>(
-						"removeColumn",
-						user -> new CustomGridBuilder.IconColumnValue(new ThemeResource(Images.Icons.REMOVE), grid -> {
-							grid.removeItem(user);
-							usersToExcludeIds.remove(user.getId());
-							dataProvider.refreshAll();
-						}),
-						""))
+					new CustomGridBuilder.ColumnProvider<>(
+							"removeColumn",
+							user -> new CustomGridBuilder.IconColumnValue(Images.Icons.REMOVE, grid -> {
+								grid.removeItem(user);
+								usersToExcludeIds.remove(user.getId());
+								dataProvider.refreshAll();
+							}),
+							""))
 			.build();
 		usersToInviteGrid.setAdjustHeightDynamically(false);
 
 		ComboBox<User> userComboBox = new ComboBox<>("Select user");
-		userComboBox.addStyleName(ValoTheme.COMBOBOX_SMALL);
-		userComboBox.setItemCaptionGenerator(user -> user.getUsername());
+//		userComboBox.addClassName(ValoTheme.COMBOBOX_SMALL);
+		userComboBox.setItemLabelGenerator(User::getUsername);
 		userComboBox.setDataProvider(dataProvider);
 		userComboBox.addFocusListener(ignored -> dataProvider.refreshAll());
 		userComboBox.addValueChangeListener(event -> {
@@ -72,8 +69,8 @@ public class InviteUserLayout extends VerticalLayout {
 			}
 		});
 
-		addComponent(userComboBox);
-		addComponent(usersToInviteGrid);
+		add(userComboBox);
+		add(usersToInviteGrid);
 
 		Button inviteButton = new CustomButton("Invite Users");
 		inviteButton.addClickListener(ignored -> {
@@ -87,10 +84,10 @@ public class InviteUserLayout extends VerticalLayout {
 				usersToInviteGrid.setItems(Lists.newArrayList());
 				dataProvider.refreshAll();
 			} else {
-				Notification.show(Resources.getMessage("adminRightsRevoked"), Notification.Type.WARNING_MESSAGE);
+				Notification.show(Resources.getMessage("adminRightsRevoked"));
 			}
 		});
-		addComponent(inviteButton);
+		add(inviteButton);
 	}
 
 	public CallbackDataProvider<User, String> getAddUserComboboxDataProvider(SingleLeagueServiceProvider singleLeagueServiceProvider, Set<Long> existingUserIds) {

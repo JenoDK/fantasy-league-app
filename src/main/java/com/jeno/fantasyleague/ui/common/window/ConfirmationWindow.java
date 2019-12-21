@@ -1,34 +1,30 @@
 package com.jeno.fantasyleague.ui.common.window;
 
 import com.jeno.fantasyleague.ui.common.field.CustomButton;
-import com.vaadin.icons.VaadinIcons;
-import com.vaadin.server.Sizeable;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Window;
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import io.reactivex.functions.Consumer;
 
 public class ConfirmationWindow {
 
 	public static void showConfirmationPopup(String caption, String confirmText, Consumer<Void> onYes, Consumer<Void> onNo) {
 		new PopupWindow.Builder(caption, "confirmationWindow", window -> createConfirmationLayout(confirmText, onYes, onNo, window))
-				.closable(true)
 				.setHeight(200)
 				.setWidth(350)
 				.build()
-				.show();
+				.open();
 	}
 
-	public static Component createConfirmationLayout(String confirmText, Consumer<Void> onYes, Consumer<Void> onNo, Window window) {
+	public static Component createConfirmationLayout(String confirmText, Consumer<Void> onYes, Consumer<Void> onNo, Dialog window) {
 		VerticalLayout layout = new VerticalLayout();
 		layout.setMargin(true);
-		layout.setHeight(100, Sizeable.Unit.PERCENTAGE);
+		layout.setHeight("100%");
 
-		Button yesButton = new CustomButton("Yes", VaadinIcons.CHECK_CIRCLE_O);
+		Button yesButton = new CustomButton("Yes");
 		yesButton.addClickListener(ignored -> {
 			try {
 				onYes.accept(null);
@@ -49,15 +45,11 @@ public class ConfirmationWindow {
 		});
 
 		HorizontalLayout buttonLayout = new HorizontalLayout();
-		buttonLayout.setWidth(100, Sizeable.Unit.PERCENTAGE);
-		buttonLayout.addComponent(yesButton);
-		buttonLayout.addComponent(cancelButton);
-		buttonLayout.setComponentAlignment(yesButton, Alignment.MIDDLE_LEFT);
-		buttonLayout.setComponentAlignment(cancelButton, Alignment.MIDDLE_RIGHT);
+		buttonLayout.setWidth("100%");
+		buttonLayout.add(yesButton, cancelButton);
 
-		layout.addComponent(new Label(confirmText));
-		layout.addComponent(buttonLayout);
-		layout.setComponentAlignment(buttonLayout, Alignment.BOTTOM_CENTER);
+		layout.add(new Text(confirmText));
+		layout.add(buttonLayout);
 
 		return layout;
 	}

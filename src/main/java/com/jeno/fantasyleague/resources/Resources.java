@@ -1,13 +1,13 @@
 package com.jeno.fantasyleague.resources;
 
-import com.vaadin.spring.annotation.SpringComponent;
+import java.util.Locale;
+
+import com.vaadin.flow.spring.annotation.SpringComponent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.context.support.ResourceBundleMessageSource;
-
-import java.util.Locale;
 
 @SpringComponent
 public class Resources {

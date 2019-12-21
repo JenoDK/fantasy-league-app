@@ -1,87 +1,61 @@
 package com.jeno.fantasyleague.ui.main;
 
-import com.jeno.fantasyleague.data.security.SecurityHolder;
-import com.jeno.fantasyleague.model.UserNotification;
+import com.jeno.fantasyleague.security.SecurityHolder;
+import com.jeno.fantasyleague.backend.model.UserNotification;
 import com.jeno.fantasyleague.ui.main.broadcast.Broadcaster;
 import com.jeno.fantasyleague.ui.main.navigation.TopBar;
-import com.jeno.fantasyleague.ui.main.views.accessdenied.AccessDeniedView;
-import com.jeno.fantasyleague.ui.main.views.error.ErrorView;
-import com.vaadin.addon.charts.ChartOptions;
-import com.vaadin.annotations.Push;
-import com.vaadin.annotations.Theme;
-import com.vaadin.annotations.Title;
-import com.vaadin.annotations.Widgetset;
-import com.vaadin.navigator.Navigator;
-import com.vaadin.server.VaadinRequest;
-import com.vaadin.shared.communication.PushMode;
-import com.vaadin.shared.ui.ui.Transport;
-import com.vaadin.spring.annotation.SpringUI;
-import com.vaadin.spring.navigator.SpringViewProvider;
-import com.vaadin.ui.Panel;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.flow.component.AttachEvent;
+import com.vaadin.flow.component.DetachEvent;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.page.Push;
+import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.router.Route;
+import com.vaadin.flow.shared.communication.PushMode;
+import com.vaadin.flow.shared.ui.Transport;
+import com.vaadin.flow.theme.Theme;
+import com.vaadin.flow.theme.lumo.Lumo;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@SpringUI
-@Theme("fantasy-league")
-@Title("Fantasy League")
-@Widgetset("AppWidgetset")
+@Theme(Lumo.class)
+@PageTitle("Fantasy League")
+@Route("main")
 @Push(value = PushMode.AUTOMATIC, transport = Transport.LONG_POLLING)
-public class MainUI extends UI implements Broadcaster.BroadcastListener {
+public class MainUI extends VerticalLayout implements Broadcaster.BroadcastListener {
 
-    @Autowired
-    private SpringViewProvider viewProvider;
-    @Autowired
-    private SecurityHolder securityHolder;
-    @Autowired
-    private NotificationModel notificationModel;
+	@Autowired
+	private SecurityHolder securityHolder;
+	@Autowired
+	private NotificationModel notificationModel;
 
-    private TopBar topBar;
+	private TopBar topBar;
 
-    @Override
-    protected void init(VaadinRequest request) {
-        final VerticalLayout root = new VerticalLayout();
-        root.addStyleName("main-layout");
-        root.setSpacing(false);
-        root.setMargin(false);
-        root.setSizeFull();
-        setContent(root);
+	public MainUI() {
+		addClassName("main-layout");
+		setSpacing(false);
+		setMargin(false);
+		setSizeFull();
 
-        topBar = new TopBar(securityHolder.getUser(), securityHolder.getUserNotifications(), notificationModel);
-        root.addComponent(topBar);
+		topBar = new TopBar(securityHolder.getUser(), securityHolder.getUserNotifications(), notificationModel);
+		add(topBar);
+	}
 
-        // View container, navigation results go in here
-        final Panel viewContainer = new Panel();
-        viewContainer.addStyleName("view-container");
-        viewContainer.setSizeFull();
-        root.addComponent(viewContainer);
-        root.setExpandRatio(viewContainer, 1.0f);
+	@Override
+	protected void onAttach(AttachEvent attachEvent) {
+		// Register to receive broadcasts
+		Broadcaster.register(securityHolder.getUser().getId(), this);
+		super.onAttach(attachEvent);
+	}
 
-        // If access is refused, show this (bean class of type View needs to be passed in)
-        viewProvider.setAccessDeniedViewClass(AccessDeniedView.class);
+	@Override
+	protected void onDetach(DetachEvent detachEvent) {
+		Broadcaster.unregister(securityHolder.getUser().getId(), this);
+		super.onDetach(detachEvent);
+	}
 
-        Navigator navigator = new Navigator(this, viewContainer);
-        // View for when no view matching navigation is found
-        navigator.setErrorView(new ErrorView());
-        navigator.addProvider(viewProvider);
-
-        // Register to receive broadcasts
-        Broadcaster.register(securityHolder.getUser().getId(), this);
-
-        // Set Charts theme for the current UI
-        ChartOptions.get().setTheme(new CustomTheme());
-    }
-
-    // Must also unregister when the UI expires
-    @Override
-    public void detach() {
-        Broadcaster.unregister(securityHolder.getUser().getId(), this);
-        super.detach();
-    }
-
-    @Override
-    public void receiveBroadcast(UserNotification notification) {
-        access(() -> topBar.updateNotifications(securityHolder.getUserNotifications()));
-    }
+	@Override
+	public void receiveBroadcast(UserNotification notification) {
+		UI.getCurrent().access(() -> topBar.updateNotifications(securityHolder.getUserNotifications()));
+	}
 
 }

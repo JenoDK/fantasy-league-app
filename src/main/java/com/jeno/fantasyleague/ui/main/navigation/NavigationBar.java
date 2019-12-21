@@ -1,10 +1,11 @@
 package com.jeno.fantasyleague.ui.main.navigation;
 
-import com.jeno.fantasyleague.ui.main.views.state.State;
-import com.vaadin.server.ThemeResource;
-import com.vaadin.ui.MenuBar;
-
 import java.util.Comparator;
+
+import com.jeno.fantasyleague.ui.main.views.state.State;
+import com.vaadin.flow.component.contextmenu.MenuItem;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.menubar.MenuBar;
 
 public class NavigationBar extends MenuBar {
 
@@ -13,9 +14,9 @@ public class NavigationBar extends MenuBar {
 	}
 
 	private void initLayout() {
-		setWidthUndefined();
-		setHeight(60f, Unit.PIXELS);
-		addStyleName("fantasy-league-menubar");
+		setWidthFull();
+		setHeight("60px");
+		addClassName("fantasy-league-menubar");
 
 		State.getMenuItems().stream()
 				.sorted(Comparator.comparing(State::getSeq))
@@ -25,9 +26,9 @@ public class NavigationBar extends MenuBar {
 	private void addMenuBarItem(State state) {
 		MenuItem item = addItem(
 				state.getName(),
-				new ThemeResource(state.getIconPath()),
-				selectedItem -> getUI().getNavigator().navigateTo(state.getIdentifier()));
-		item.setStyleName("menu-state-item");
+				selectedItem -> getUI().ifPresent(ui -> ui.navigate(state.getIdentifier())));
+		item.addComponentAsFirst(new Icon("lumo", state.getIcon()));
+		item.getElement().getClassList().add("menu-state-item");
 		item.setText("");
 	}
 

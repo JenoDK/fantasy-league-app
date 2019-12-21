@@ -1,9 +1,9 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.knockoutstage;
 
-import com.jeno.fantasyleague.model.League;
+import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.jeno.fantasyleague.util.GridUtil;
-import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
 public class RestFinalsGameLayout extends KnockoutGameLayout {
 

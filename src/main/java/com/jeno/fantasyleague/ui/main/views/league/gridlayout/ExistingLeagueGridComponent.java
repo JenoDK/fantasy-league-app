@@ -7,11 +7,11 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import com.jeno.fantasyleague.model.Contestant;
-import com.jeno.fantasyleague.model.ContestantWeight;
-import com.jeno.fantasyleague.model.Game;
-import com.jeno.fantasyleague.model.League;
-import com.jeno.fantasyleague.model.Prediction;
+import com.jeno.fantasyleague.backend.model.Contestant;
+import com.jeno.fantasyleague.backend.model.ContestantWeight;
+import com.jeno.fantasyleague.backend.model.Game;
+import com.jeno.fantasyleague.backend.model.League;
+import com.jeno.fantasyleague.backend.model.Prediction;
 import com.jeno.fantasyleague.ui.common.window.PopupWindow;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.AllUserResultsForGameLayout;
@@ -20,11 +20,8 @@ import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.UserPre
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.UserPredictionScoresGrid;
 import com.jeno.fantasyleague.util.ImageUtil;
 import com.jeno.fantasyleague.util.RxUtil;
-import com.vaadin.shared.ui.ContentMode;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Image;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.themes.ValoTheme;
+import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.html.Label;
 import io.reactivex.Observable;
 
 public class ExistingLeagueGridComponent extends AbstractLeagueGridComponent {
@@ -42,36 +39,36 @@ public class ExistingLeagueGridComponent extends AbstractLeagueGridComponent {
 	}
 
 	private void createLeagueComponent(League league) {
-		addStyleName("existing");
-		Label name = new Label(league.getName(), ContentMode.HTML);
-		name.addStyleName(ValoTheme.LABEL_H3);
-		addComponent(name);
+		addClassName("existing");
+		Label name = new Label(league.getName());
+//		name.addClassName(ValoTheme.LABEL_H3);
+		add(name);
 
-		Image leagueImage = new Image();
-		leagueImage.addStyleName("league-picture");
-		leagueImage.setSource(ImageUtil.getLeaguePictureResource(league));
-		addComponent(leagueImage);
+		Image leagueImage = ImageUtil.getLeaguePictureResource(league);
+		leagueImage.addClassName("league-picture");
+		add(leagueImage);
 
 		UserPredictionScoresGrid upcomingMatchesGrid = new UserPredictionScoresGrid();
-		upcomingMatchesGrid.setCaption("Upcoming/recent matches");
+		// TODO
+//		upcomingMatchesGrid.setCaption("Upcoming/recent matches");
 		upcomingMatchesGrid.setItems(getUpcomingMatches());
 		upcomingMatchesGrid.viewAllResultsClicked().subscribe(bean -> new PopupWindow.Builder(
 				"All scores",
 				"allScoresWindows", window ->
 				new AllUserResultsForGameLayout(league, bean, singleLeagueServiceProvider))
-				.closable(true)
-				.resizable(true)
+//				.closable(true)
+//				.resizable(true)
 				.setHeight(700)
 				.setWidth(900)
 				.build()
-				.show());
-		addComponent(upcomingMatchesGrid);
+				.open());
+		add(upcomingMatchesGrid);
 
-		setExpandRatio(name, 1);
-		setExpandRatio(leagueImage, 4);
-		setExpandRatio(upcomingMatchesGrid, 6);
-		setComponentAlignment(name, Alignment.TOP_CENTER);
-		setComponentAlignment(leagueImage, Alignment.TOP_CENTER);
+//		setExpandRatio(name, 1);
+//		setExpandRatio(leagueImage, 4);
+//		setExpandRatio(upcomingMatchesGrid, 6);
+//		setComponentAlignment(name, Alignment.TOP_CENTER);
+//		setComponentAlignment(leagueImage, Alignment.TOP_CENTER);
 	}
 
 	private List<UserPredictionScoreBean> getUpcomingMatches() {

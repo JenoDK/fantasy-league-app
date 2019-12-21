@@ -1,24 +1,17 @@
 package com.jeno.fantasyleague.ui.main.views.error;
 
-import com.vaadin.navigator.View;
-import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.themes.ValoTheme;
+import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
-public class ErrorView extends VerticalLayout implements View {
+public class ErrorView extends VerticalLayout {
 
 	private Label message;
 
 	public ErrorView() {
 		setMargin(true);
 		message = new Label("Please click one of the buttons at the top of the screen.");
-		addComponent(message);
-		message.addStyleName(ValoTheme.LABEL_COLORED);
-	}
-
-	@Override
-	public void enter(ViewChangeListener.ViewChangeEvent event) {
+		add(message);
+//		message.addClassName(ValoTheme.LABEL_COLORED);
 	}
 
 }

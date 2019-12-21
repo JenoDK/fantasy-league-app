@@ -4,13 +4,12 @@ import java.util.Objects;
 import java.util.Optional;
 
 import com.jeno.fantasyleague.util.GridUtil;
-import com.vaadin.data.ValueProvider;
-import com.vaadin.server.Setter;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.RadioButtonGroup;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
+import com.vaadin.flow.data.binder.Setter;
+import com.vaadin.flow.function.ValueProvider;
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
 
@@ -29,7 +28,7 @@ public class GameResultsLayout extends HorizontalLayout {
 			Setter<KnockoutGameBean, Boolean> winnerSetter) {
 		super();
 
-		VerticalLayout scoreWrapper = new VerticalLayout();
+		HorizontalLayout scoreWrapper = new HorizontalLayout();
 		scoreWrapper.setMargin(false);
 		if (editable) {
 			GridUtil.getTextFieldScoreLayout(
@@ -44,19 +43,19 @@ public class GameResultsLayout extends HorizontalLayout {
 		} else {
 			Label homeTeamScoreLabel = new Label(homeTeamGetter.apply(bean) != null ? homeTeamGetter.apply(bean).toString() : "-");
 			Label awayTeamScoreLabel = new Label(awayTeamGetter.apply(bean) != null ? awayTeamGetter.apply(bean).toString() : "-");
-			scoreWrapper.addComponent(homeTeamScoreLabel);
-			scoreWrapper.addComponent(awayTeamScoreLabel);
-			scoreWrapper.setComponentAlignment(homeTeamScoreLabel, Alignment.MIDDLE_CENTER);
-			scoreWrapper.setComponentAlignment(awayTeamScoreLabel, Alignment.MIDDLE_CENTER);
+			scoreWrapper.add(homeTeamScoreLabel);
+			scoreWrapper.add(awayTeamScoreLabel);
+//			scoreWrapper.setComponentAlignment(homeTeamScoreLabel, Alignment.MIDDLE_CENTER);
+//			scoreWrapper.setComponentAlignment(awayTeamScoreLabel, Alignment.MIDDLE_CENTER);
 		}
 
 		VerticalLayout winnerWrapper = new VerticalLayout();
 		winnerWrapper.setMargin(false);
 		winnerWrapper.setVisible(scoreNotNullAndEqual(bean, homeTeamGetter, awayTeamGetter));
 		RadioButtonGroup<String> winnerSelection = new RadioButtonGroup<>();
-		winnerSelection.addStyleName("winner-selection");
+		winnerSelection.addClassName("winner-selection");
 		winnerSelection.setItems("homeTeam", "awayTeam");
-		winnerSelection.setItemCaptionGenerator(ignored -> "");
+//		winnerSelection.setItemCaptionGenerator(ignored -> "");
 		if (winnerGetter.apply(bean).isPresent()) {
 			winnerSelection.setValue(winnerGetter.apply(bean).get() ? "homeTeam" : "awayTeam");
 		}
@@ -65,12 +64,12 @@ public class GameResultsLayout extends HorizontalLayout {
 			scoreChanged.onNext(bean);
 		});
 		winnerSelection.setEnabled(editable);
-		winnerWrapper.addComponent(winnerSelection);
+		winnerWrapper.add(winnerSelection);
 
 		scoreChanged.subscribe(gameBean -> winnerWrapper.setVisible(scoreNotNullAndEqual(bean, homeTeamGetter, awayTeamGetter)));
 
-		addComponent(scoreWrapper);
-		addComponent(winnerWrapper);
+		add(scoreWrapper);
+		add(winnerWrapper);
 	}
 
 	public boolean scoreNotNullAndEqual(KnockoutGameBean bean, ValueProvider<KnockoutGameBean, Integer> homeTeamGetter, ValueProvider<KnockoutGameBean, Integer> awayTeamGetter) {

@@ -1,8 +1,8 @@
 package com.jeno.fantasyleague.ui.common.field;
 
-import com.vaadin.data.Result;
-import com.vaadin.data.ValueContext;
-import com.vaadin.data.converter.StringToIntegerConverter;
+import com.vaadin.flow.data.binder.Result;
+import com.vaadin.flow.data.binder.ValueContext;
+import com.vaadin.flow.data.converter.StringToIntegerConverter;
 
 public class StringToPositiveIntegerConverter extends StringToIntegerConverter {
 
@@ -18,10 +18,11 @@ public class StringToPositiveIntegerConverter extends StringToIntegerConverter {
 	public Result<Integer> convertToModel(String value, ValueContext context) {
 		return super.convertToModel(value, context).flatMap(result -> {
 			if (result == null || result < 0) {
-				return Result.error(getErrorMessage());
+				return Result.error(getErrorMessage(context));
 			} else {
 				return Result.ok(result);
 			}
 		});
 	}
+
 }

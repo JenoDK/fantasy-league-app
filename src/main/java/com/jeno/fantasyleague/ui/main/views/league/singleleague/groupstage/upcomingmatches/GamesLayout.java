@@ -8,16 +8,14 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
-import com.jeno.fantasyleague.model.ContestantGroup;
-import com.jeno.fantasyleague.model.Game;
-import com.jeno.fantasyleague.model.League;
+import com.jeno.fantasyleague.backend.model.ContestantGroup;
+import com.jeno.fantasyleague.backend.model.Game;
+import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
-import com.vaadin.shared.ui.ContentMode;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.themes.ValoTheme;
+import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 public class GamesLayout extends VerticalLayout {
 
@@ -35,8 +33,8 @@ public class GamesLayout extends VerticalLayout {
 		setSpacing(true);
 		setMargin(false);
 
-		Label groupLabel = new Label(group.getName(), ContentMode.HTML);
-		groupLabel.addStyleName(ValoTheme.LABEL_H2);
+		Label groupLabel = new Label(group.getName());
+//		groupLabel.addClassName(ValoTheme.LABEL_H2);
 
 		gamesGrid = new GamesGrid(league, singleLeagueService);
 		gamesGrid.setItems(getGameBeans(singleLeagueService, league, group));
@@ -45,7 +43,7 @@ public class GamesLayout extends VerticalLayout {
 				.filter(gameBean -> {
 					boolean isInTime = LocalDateTime.now().isBefore(league.getLeague_starting_date());
 					if (!isInTime) {
-						Notification.show(Resources.getMessage("toLateToUpdatePrediction"), Notification.Type.WARNING_MESSAGE);
+						Notification.show(Resources.getMessage("toLateToUpdatePrediction"));
 					}
 					return isInTime;
 				})
@@ -58,14 +56,14 @@ public class GamesLayout extends VerticalLayout {
 					.subscribe(gameBean -> saveGameScores(singleLeagueService, league, Lists.newArrayList(gameBean)));
 		}
 
-		addComponent(gamesGrid);
+		add(gamesGrid);
 	}
 
 	public void saveGameScores(SingleLeagueServiceProvider singleLeagueService, League league, List<Game> changedGames) {
 		if (singleLeagueService.loggedInUserIsLeagueAdmin(league)) {
 			singleLeagueService.getGameService().updateGroupStageGameScores(changedGames);
 		} else {
-			Notification.show(Resources.getMessage("adminRightsRevoked"), Notification.Type.WARNING_MESSAGE);
+			Notification.show(Resources.getMessage("adminRightsRevoked"));
 		}
 	}
 
