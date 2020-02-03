@@ -10,10 +10,10 @@ import javax.imageio.ImageIO;
 
 import com.google.common.collect.Sets;
 import com.jeno.fantasyleague.util.ImageUtil;
+import com.vaadin.flow.component.upload.FinishedEvent;
 import com.vaadin.flow.component.upload.StartedEvent;
-import com.vaadin.flow.component.upload.SucceededEvent;
 import com.vaadin.flow.component.upload.Upload;
-import com.vaadin.flow.component.upload.receivers.FileBuffer;
+import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
 
@@ -28,8 +28,6 @@ public class VaadinImageUploader extends Upload {
 	private final boolean needsResize;
 	private final boolean circle;
 
-	private static FileBuffer fileBuffer = new FileBuffer();
-
 	private String fileName = "";
 
 	public VaadinImageUploader() {
@@ -41,7 +39,7 @@ public class VaadinImageUploader extends Upload {
 	}
 
 	public VaadinImageUploader(int maxWidthOfResizedPicture, int maxHeightOfResizedPicture, boolean needsResize, boolean circle) {
-		super(fileBuffer);
+		super();
 		this.maxWidthOfResizedPicture = maxWidthOfResizedPicture;
 		this.maxHeightOfResizedPicture = maxHeightOfResizedPicture;
 		this.needsResize = needsResize;
@@ -51,8 +49,10 @@ public class VaadinImageUploader extends Upload {
 	}
 
 	private void init() {
+		MemoryBuffer fileBuffer = new MemoryBuffer();
+		setReceiver(fileBuffer);
 		addStartedListener(this::uploadStarted);
-		addSucceededListener(this::uploadSucceeded);
+		addFinishedListener(event -> uploadFinished(event, fileBuffer));
 	}
 
 	private void uploadStarted(StartedEvent event) {
@@ -64,7 +64,7 @@ public class VaadinImageUploader extends Upload {
 		}
 	}
 
-	private void uploadSucceeded(SucceededEvent event) {
+	private void uploadFinished(FinishedEvent event, MemoryBuffer fileBuffer) {
 		try {
 			BufferedImage image = ImageIO.read(fileBuffer.getInputStream());
 			if (needsResize) {

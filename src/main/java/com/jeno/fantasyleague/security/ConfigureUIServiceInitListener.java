@@ -2,7 +2,6 @@ package com.jeno.fantasyleague.security;
 
 import com.jeno.fantasyleague.ui.common.OfflineBanner;
 import com.jeno.fantasyleague.ui.exception.AccessDeniedException;
-import com.jeno.fantasyleague.ui.login.LoginView;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.server.ServiceInitEvent;
@@ -37,8 +36,6 @@ public class ConfigureUIServiceInitListener implements VaadinServiceInitListener
 		if (!accessGranted) {
 			if (SecurityUtils.isUserLoggedIn()) {
 				event.rerouteToError(AccessDeniedException.class);
-			} else {
-				event.rerouteTo(LoginView.class);
 			}
 		}
 	}

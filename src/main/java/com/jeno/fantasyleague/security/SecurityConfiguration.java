@@ -133,6 +133,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				"/h2-console/**",
 
 				// (production mode) static resources
-				"/frontend-es5/**", "/frontend-es6/**");
+				"/frontend-es5/**", "/frontend-es6/**",
+
+				// Application specific resources
+				"/register",
+				"/register**",
+				"/forgotPassword**",
+				"/forgotPassword",
+				"/resetPassword**",
+				"/resetPassword",
+				"/activateAccount**",
+				"/activateAccount",
+				"/error/**",
+				"/accessDenied/**");
 	}
 }

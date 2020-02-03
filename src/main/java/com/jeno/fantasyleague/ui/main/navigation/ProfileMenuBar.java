@@ -44,7 +44,8 @@ public class ProfileMenuBar extends MenuBar {
 		MenuItem profileItem = addItem("profile", null);
 		// TODO
 //		profileItem.addAsFirst(ImageUtil.getUserProfilePictureImage(user));
-		profileItem.getElement().getClassList().add("menu-state-item profile-item");
+		profileItem.getElement().getClassList().add("menu-state-item");
+		profileItem.getElement().getClassList().add("profile-item");
 		profileItem.setText(user.getUsername());
 		profileItem.getSubMenu().addItem("Profile", item -> getUI().ifPresent(ui -> ui.navigate(State.PROFILE.getIdentifier())));
 		profileItem.getSubMenu().addItem("Logout", item -> VaadinUtil.logout());

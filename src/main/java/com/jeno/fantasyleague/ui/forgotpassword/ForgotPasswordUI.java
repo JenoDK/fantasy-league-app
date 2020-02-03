@@ -4,9 +4,10 @@ import java.util.Optional;
 
 import com.jeno.fantasyleague.backend.data.repository.UserRepository;
 import com.jeno.fantasyleague.backend.data.service.email.PasswordResetService;
-import com.jeno.fantasyleague.exception.EmailException;
 import com.jeno.fantasyleague.backend.model.User;
+import com.jeno.fantasyleague.exception.EmailException;
 import com.jeno.fantasyleague.ui.RedirectUI;
+import com.jeno.fantasyleague.ui.annotation.AlwaysAllow;
 import com.jeno.fantasyleague.util.VaadinUtil;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.router.PageTitle;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @PageTitle("Forgot Password")
 @Route("forgotPassword")
+@AlwaysAllow
 public class ForgotPasswordUI extends RedirectUI {
 
 	@Autowired
@@ -25,13 +27,12 @@ public class ForgotPasswordUI extends RedirectUI {
 	private ForgotPasswordForm form;
 
 	public ForgotPasswordUI() {
-		super("Login", "login");
+		super();
 	}
 
 	@Override
 	protected Component getMiddleComponent() {
 		form = new ForgotPasswordForm();
-		form.setWidth(null);
 		form.resetPassword()
 				.map(email -> {
 					Optional<User> user = userRepository.findByEmail(email);

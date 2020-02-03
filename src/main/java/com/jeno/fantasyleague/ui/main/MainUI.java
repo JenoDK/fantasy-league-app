@@ -1,7 +1,8 @@
 package com.jeno.fantasyleague.ui.main;
 
-import com.jeno.fantasyleague.security.SecurityHolder;
 import com.jeno.fantasyleague.backend.model.UserNotification;
+import com.jeno.fantasyleague.security.SecurityHolder;
+import com.jeno.fantasyleague.ui.annotation.SpringUIScope;
 import com.jeno.fantasyleague.ui.main.broadcast.Broadcaster;
 import com.jeno.fantasyleague.ui.main.navigation.TopBar;
 import com.vaadin.flow.component.AttachEvent;
@@ -19,18 +20,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @Theme(Lumo.class)
 @PageTitle("Fantasy League")
-@Route("main")
+@Route("")
 @Push(value = PushMode.AUTOMATIC, transport = Transport.LONG_POLLING)
+@SpringUIScope
 public class MainUI extends VerticalLayout implements Broadcaster.BroadcastListener {
 
-	@Autowired
-	private SecurityHolder securityHolder;
-	@Autowired
-	private NotificationModel notificationModel;
+	private final SecurityHolder securityHolder;
+	private final NotificationModel notificationModel;
 
 	private TopBar topBar;
 
-	public MainUI() {
+	@Autowired
+	public MainUI(SecurityHolder securityHolder, NotificationModel notificationModel) {
 		addClassName("main-layout");
 		setSpacing(false);
 		setMargin(false);
@@ -38,6 +39,8 @@ public class MainUI extends VerticalLayout implements Broadcaster.BroadcastListe
 
 		topBar = new TopBar(securityHolder.getUser(), securityHolder.getUserNotifications(), notificationModel);
 		add(topBar);
+		this.securityHolder = securityHolder;
+		this.notificationModel = notificationModel;
 	}
 
 	@Override

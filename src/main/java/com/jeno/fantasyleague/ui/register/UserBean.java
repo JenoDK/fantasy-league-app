@@ -1,14 +1,14 @@
 package com.jeno.fantasyleague.ui.register;
 
-import com.jeno.fantasyleague.backend.model.User;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import com.jeno.fantasyleague.backend.model.User;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
 
 public class UserBean extends User {
 
-	@NotBlank
-	@Size(max = 100)
+	@NotEmpty
+	@Length(max = 100)
 	private String repeatPassword;
 
 	public String getRepeatPassword() {

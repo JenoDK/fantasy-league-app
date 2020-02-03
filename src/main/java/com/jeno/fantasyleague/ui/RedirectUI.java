@@ -1,25 +1,17 @@
 package com.jeno.fantasyleague.ui;
 
+import com.jeno.fantasyleague.ui.login.LoginView;
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.Label;
-import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.router.RouterLink;
 
-public abstract class RedirectUI extends Div {
-
-	private final String redirectButtonText;
-	private final String redirectPath;
+public abstract class RedirectUI extends VerticalLayout {
 
 	protected VerticalLayout mainLayout;
-	protected Button redirectButton;
+	protected RouterLink redirectLink;
 
-	public RedirectUI(String redirectButtonText, String redirectPath) {
-		this.redirectButtonText = redirectButtonText;
-		this.redirectPath = redirectPath;
-
+	public RedirectUI() {
 		initLayout();
 	}
 
@@ -27,17 +19,14 @@ public abstract class RedirectUI extends Div {
 		mainLayout = new VerticalLayout();
 		mainLayout.setSizeFull();
 
-		redirectButton = new Button(redirectButtonText, VaadinIcon.ARROW_CIRCLE_LEFT.create());
-		redirectButton.addClickListener(ignored -> UI.getCurrent().navigate(redirectPath));
+		redirectLink = new RouterLink("Back to login", LoginView.class);
 
 		Component middleComponent = getMiddleComponent();
 
-		mainLayout.add(redirectButton);
+		mainLayout.add(redirectLink);
 		mainLayout.add(middleComponent);
-//		mainLayout.setComponentAlignment(redirectButton, Alignment.TOP_LEFT);
-		mainLayout.setFlexGrow(1, redirectButton);
-//		mainLayout.setComponentAlignment(middleComponent, Alignment.MIDDLE_CENTER);
-		mainLayout.setFlexGrow(9, middleComponent);
+		mainLayout.setHorizontalComponentAlignment(Alignment.START, redirectLink);
+		mainLayout.setHorizontalComponentAlignment(Alignment.CENTER, middleComponent);
 
 		add(mainLayout);
 	}
@@ -47,20 +36,12 @@ public abstract class RedirectUI extends Div {
 	protected void actionSuccessful(String successMessage) {
 		mainLayout.removeAll();
 
-		VerticalLayout successLayout = new VerticalLayout();
-		successLayout.setHeight(null);
+		H2 successTitle = new H2(successMessage);
 
-		Label successLabel = new Label(successMessage);
-//		successLabel.addClassName(ValoTheme.LABEL_LARGE);
-//		successLabel.addClassName(ValoTheme.LABEL_SUCCESS);
-
-		successLayout.add(successLabel);
-		successLayout.add(redirectButton);
-//		successLayout.setComponentAlignment(successLabel, Alignment.MIDDLE_CENTER);
-//		successLayout.setComponentAlignment(redirectButton, Alignment.MIDDLE_CENTER);
-
-		mainLayout.add(successLayout);
-//		mainLayout.setComponentAlignment(successLayout, Alignment.MIDDLE_CENTER);
+		mainLayout.add(redirectLink);
+		mainLayout.add(successTitle);
+		mainLayout.setHorizontalComponentAlignment(Alignment.START, redirectLink);
+		mainLayout.setHorizontalComponentAlignment(Alignment.CENTER, successTitle);
 	}
 
 }

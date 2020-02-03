@@ -2,11 +2,11 @@ package com.jeno.fantasyleague.ui.error;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.jeno.fantasyleague.ui.annotation.AlwaysAllow;
 import com.jeno.fantasyleague.ui.main.MainView;
 import com.jeno.fantasyleague.util.AppConst;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Text;
-import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.dom.ElementFactory;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.ErrorParameter;
@@ -18,7 +18,7 @@ import com.vaadin.flow.router.RouterLink;
 
 @ParentLayout(MainView.class)
 @PageTitle(AppConst.TITLE_NOT_FOUND)
-@JsModule("./styles/shared-styles.js")
+@AlwaysAllow
 public class CustomRouteNotFoundError extends RouteNotFoundError {
 
 	public CustomRouteNotFoundError() {

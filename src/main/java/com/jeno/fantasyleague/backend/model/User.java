@@ -15,14 +15,13 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 import com.google.common.collect.Sets;
 import com.jeno.fantasyleague.backend.model.audit.DateAudit;
 import org.hibernate.annotations.NaturalId;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
 @Table(name = "users", uniqueConstraints = {
@@ -40,24 +39,23 @@ public class User extends DateAudit {
 	private Long id;
 
 	@NotBlank
-	@Size(max = 40)
+	@Length(max = 40)
 	private String name;
 
 	@NotBlank
-	@Size(max = 30)
+	@Length(max = 30)
 	private String username;
 
 	@NaturalId
 	@NotBlank
-	@Size(max = 40)
+	@Length(max = 40)
 	@Email
 	private String email;
 
 	@NotBlank
-	@Size(max = 100)
+	@Length(max = 100)
 	private String password;
 
-	@NotNull
 	private boolean active = false;
 
 	@ManyToMany(fetch = FetchType.LAZY)

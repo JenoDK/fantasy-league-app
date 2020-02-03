@@ -40,7 +40,7 @@ public class ResetPasswordUI extends RedirectUI implements HasUrlParameter<Strin
 	private User user;
 
 	public ResetPasswordUI() {
-		super("Login", "login");
+		super();
 	}
 
 

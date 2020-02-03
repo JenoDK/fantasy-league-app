@@ -6,6 +6,7 @@ import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.jeno.fantasyleague.ui.annotation.AlwaysAllow;
 import com.jeno.fantasyleague.ui.error.AccessDeniedView;
 import com.jeno.fantasyleague.ui.error.CustomRouteNotFoundError;
 import com.jeno.fantasyleague.ui.login.LoginView;
@@ -56,9 +57,7 @@ public final class SecurityUtils {
 	 * @return true if access is granted, false otherwise.
 	 */
 	public static boolean isAccessGranted(Class<?> securedClass) {
-		final boolean publicView = LoginView.class.equals(securedClass)
-			|| AccessDeniedView.class.equals(securedClass)
-			|| CustomRouteNotFoundError.class.equals(securedClass);
+		final boolean publicView = securedClass.isAnnotationPresent(AlwaysAllow.class);
 
 		// Always allow access to public views
 		if (publicView) {

@@ -1,48 +1,48 @@
 @mixin all-components {
 
-    .v-caption-no-required-indicator {
-        display: none;
+  .v-caption-no-required-indicator {
+    display: none;
+  }
+
+  .v-slot-ignore-error-indicator, .v-caption-v-slot-ignore-error-indicator {
+    .v-errorindicator {
+      display: none;
     }
+  }
 
-    .v-slot-ignore-error-indicator, .v-caption-v-slot-ignore-error-indicator {
-        .v-errorindicator {
-            display:none;
-        }
+  .v-grid .v-grid-cell.icon-column {
+    padding: 0px;
+
+    .component-wrap {
+      height: 100%;
+      display: block;
     }
+  }
 
-    .v-grid .v-grid-cell.icon-column {
-        padding: 0px;
+  .v-grid .v-grid-cell.grid-cell-tiny-text {
+    font-size: 12px;
+  }
 
-        .component-wrap {
-            height: 100%;
-            display: block;
-        }
-    }
+  .cursor-hover-pointer {
+    cursor: pointer;
+  }
 
-    .v-grid .v-grid-cell.grid-cell-tiny-text {
-		font-size: 12px;
-	}
+  .black-small-border {
+    border: 1px solid black;
+  }
 
-    .cursor-hover-pointer {
-        cursor: pointer;
-    }
+  .no-left-margin-padding {
+    margin-left: 0px;
+    padding-left: 0px;
+  }
 
-    .black-small-border {
-		border: 1px solid black;
-	}
+  .margin-top-10 {
+    padding-top: 10px;
+  }
 
-	.no-left-margin-padding {
-		margin-left: 0px;
-		padding-left: 0px;
-	}
-
-	.margin-top-10 {
-		padding-top: 10px;
-	}
-
-	.no-visual-panel {
-		background: none;
-		border: none;
-	}
+  .no-visual-panel {
+    background: none;
+    border: none;
+  }
 
 }

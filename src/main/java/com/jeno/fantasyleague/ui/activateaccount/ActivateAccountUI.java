@@ -38,7 +38,7 @@ public class ActivateAccountUI extends RedirectUI implements HasUrlParameter<Str
 	private User user;
 
 	public ActivateAccountUI() {
-		super("Login", "login");
+		super();
 	}
 
 	@Override
