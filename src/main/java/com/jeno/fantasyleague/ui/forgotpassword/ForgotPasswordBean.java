@@ -1,16 +1,15 @@
 package com.jeno.fantasyleague.ui.forgotpassword;
 
 import org.hibernate.annotations.NaturalId;
-
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
 
 public class ForgotPasswordBean {
 
 	@NaturalId
-	@NotBlank
-	@Size(max = 40)
+	@NotEmpty
+	@Length(max = 40)
 	@Email
 	private String email;
 

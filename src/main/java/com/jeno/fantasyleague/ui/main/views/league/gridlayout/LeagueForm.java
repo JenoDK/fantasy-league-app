@@ -4,7 +4,6 @@ import java.util.Map;
 
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.enums.Template;
-import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.ui.common.field.CustomButton;
 import com.jeno.fantasyleague.util.RxUtil;
 import com.jeno.fantasyleague.util.VaadinUtil;
@@ -16,6 +15,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
+
 import io.reactivex.Observable;
 
 public class LeagueForm extends HorizontalLayout {
@@ -67,7 +67,7 @@ public class LeagueForm extends HorizontalLayout {
 		fieldLayout.add(templateCombobox);
 		add(fieldLayout);
 
-		submit = new CustomButton(Resources.getMessage("create"), VaadinIcon.USER_CHECK.create());
+		submit = new CustomButton(getTranslation("create"), VaadinIcon.USER_CHECK.create());
 		submit.addClickShortcut(Key.ENTER);
 		add(submit);
 

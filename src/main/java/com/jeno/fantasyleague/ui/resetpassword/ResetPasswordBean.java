@@ -1,16 +1,16 @@
 package com.jeno.fantasyleague.ui.resetpassword;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
 
 public class ResetPasswordBean {
 
-	@NotBlank
-	@Size(max = 100)
+	@NotEmpty
+	@Length(max = 100)
 	private String password;
 
-	@NotBlank
-	@Size(max = 100)
+	@NotEmpty
+	@Length(max = 100)
 	private String repeatPassword;
 
 	public ResetPasswordBean() {

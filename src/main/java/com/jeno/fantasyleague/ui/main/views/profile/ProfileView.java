@@ -1,38 +1,35 @@
 package com.jeno.fantasyleague.ui.main.views.profile;
 
-import javax.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.jeno.fantasyleague.backend.data.dao.UserDao;
 import com.jeno.fantasyleague.backend.data.dao.ValidationException;
-import com.jeno.fantasyleague.security.SecurityHolder;
 import com.jeno.fantasyleague.backend.model.User;
+import com.jeno.fantasyleague.security.SecurityHolder;
 import com.jeno.fantasyleague.ui.common.image.ImageUploadWithPlaceholder;
+import com.jeno.fantasyleague.ui.main.MainView;
 import com.jeno.fantasyleague.ui.main.views.state.State;
+import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.Route;
-import org.springframework.beans.factory.annotation.Autowired;
 
-@Route(value = State.StateUrlConstants.PROFILE)
+@Tag("profile-view")
+@Route(value = State.StateUrlConstants.PROFILE, layout = MainView.class)
 public class ProfileView extends VerticalLayout {
 
     @Autowired
-    private SecurityHolder securityHolder;
-    @Autowired
-    private UserDao userDao;
+    public ProfileView(SecurityHolder securityHolder, UserDao userDao) {
+        User user = securityHolder.getUser();
 
-    @PostConstruct
-    void init() {
-        User currentUser = securityHolder.getUser();
-
-        ImageUploadWithPlaceholder uploadLayout = new ImageUploadWithPlaceholder(currentUser);
+        ImageUploadWithPlaceholder uploadLayout = new ImageUploadWithPlaceholder(user);
         uploadLayout.imageUploadedAndResized().subscribe(file -> {
-            currentUser.setProfile_picture(file.readAllBytes());
-            userDao.update(currentUser);
+            user.setProfile_picture(file.readAllBytes());
+            userDao.update(user);
         });
 
-        UserProfileBean bean = new UserProfileBean(currentUser.getUsername());
+        UserProfileBean bean = new UserProfileBean(user.getUsername());
         Binder<UserProfileBean> binder = new Binder<>();
         TextField userNameField = new TextField("Username");
         binder.forField(userNameField)
@@ -40,13 +37,13 @@ public class ProfileView extends VerticalLayout {
         binder.setBean(bean);
         binder.addStatusChangeListener(status -> {
             if (!status.hasValidationErrors()) {
-                String previousUsername = currentUser.getUsername();
-                currentUser.setUsername(bean.getUsername());
+                String previousUsername = user.getUsername();
+                user.setUsername(bean.getUsername());
                 try {
-                    userDao.update(currentUser);
+                    userDao.update(user);
                 } catch (ValidationException e) {
                     userNameField.setErrorMessage(String.join(",<br/>", e.getErrorMap().values()));
-                    currentUser.setUsername(previousUsername);
+                    user.setUsername(previousUsername);
                 }
             }
         });

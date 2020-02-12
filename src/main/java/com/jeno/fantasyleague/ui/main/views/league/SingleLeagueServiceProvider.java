@@ -5,6 +5,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.google.common.collect.Sets;
 import com.jeno.fantasyleague.backend.data.repository.ContestantGroupRepository;
 import com.jeno.fantasyleague.backend.data.repository.ContestantRepository;
@@ -14,7 +17,6 @@ import com.jeno.fantasyleague.backend.data.repository.LeagueRepository;
 import com.jeno.fantasyleague.backend.data.repository.LeagueSettingRepository;
 import com.jeno.fantasyleague.backend.data.repository.PredictionRepository;
 import com.jeno.fantasyleague.backend.data.repository.UserNotificationRepository;
-import com.jeno.fantasyleague.security.SecurityHolder;
 import com.jeno.fantasyleague.backend.data.service.email.ApplicationEmailService;
 import com.jeno.fantasyleague.backend.data.service.leaguetemplates.LeagueTemplateService;
 import com.jeno.fantasyleague.backend.data.service.repo.contestant.ContestantService;
@@ -29,9 +31,8 @@ import com.jeno.fantasyleague.backend.model.Prediction;
 import com.jeno.fantasyleague.backend.model.User;
 import com.jeno.fantasyleague.backend.model.UserNotification;
 import com.jeno.fantasyleague.backend.model.enums.NotificationType;
+import com.jeno.fantasyleague.security.SecurityHolder;
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @SpringComponent
 public class SingleLeagueServiceProvider {

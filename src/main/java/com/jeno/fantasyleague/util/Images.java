@@ -5,6 +5,8 @@ public class Images {
 	private Images() {
 	}
 
+	public static final String VAADIN_RESOURCE_PREFIX = "VAADIN/themes/fantasy-league/";
+
 	public static final String DEFAULT_PROFILE_PICTURE = "images/default_profile_picture.png";
 	public static final String NOTIFICATION = "images/notification.png";
 	public static final String NOTIFICATION_ACTIVE = "images/notification_active.png";

@@ -12,20 +12,14 @@ import com.vaadin.flow.server.StreamResource;
 
 public class ImageUtil {
 
-	public static Image getUserProfilePictureImage(User user) {
-		if (user.getProfile_picture() != null) {
-			return new Image(
-					getUserProfilePictureResource(user),
-					"profile_picture");
-		} else {
-			return new Image(Images.DEFAULT_PROFILE_PICTURE, "default_profile_picture");
-		}
-	}
-
 	public static StreamResource getUserProfilePictureResource(User user) {
-		return new StreamResource(
-				"profile_picture.png",
-				() -> new ByteArrayInputStream(user.getProfile_picture()));
+		if (user.getProfile_picture() != null) {
+			return new StreamResource(
+					"profile_picture.png",
+					() -> new ByteArrayInputStream(user.getProfile_picture()));
+		} else {
+			return new StreamResource("default_profile_picture.png", () -> ImageUtil.class.getClassLoader().getResourceAsStream(Images.VAADIN_RESOURCE_PREFIX + Images.DEFAULT_PROFILE_PICTURE));
+		}
 	}
 
 	public static Image getLeaguePictureResource(League league) {

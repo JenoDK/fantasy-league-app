@@ -4,38 +4,27 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.jeno.fantasyleague.util.Images;
+import com.vaadin.flow.component.icon.VaadinIcon;
 
 public enum State {
 
-//    HOME(StateUrlConstants.HOME, "Home", true, Images.Icons.HOME_ICON, 0),
-    LEAGUE(StateUrlConstants.LEAGUE, "League", true, Images.Icons.LEAGUE_ICON, 0),
-    PROFILE(StateUrlConstants.PROFILE, "Profile", false, 20);
+    LEAGUE(StateUrlConstants.LEAGUE, "League", VaadinIcon.HOME, 0),
+    PROFILE(StateUrlConstants.PROFILE, "Profile", VaadinIcon.USER, 20);
 
     private String identifier;
     private String name;
-    private boolean showInMenuBar;
-    private String icon = "";
+    private VaadinIcon icon;
     private int seq;
 
-    State(String identifier, String name, boolean showInMenuBar, int seq) {
+    State(String identifier, String name, VaadinIcon icon, int seq) {
         this.identifier = identifier;
         this.name = name;
-        this.showInMenuBar = showInMenuBar;
-        this.seq = seq;
-    }
-
-    State(String identifier, String name, boolean showInMenuBar, String icon, int seq) {
-        this.identifier = identifier;
-        this.name = name;
-        this.showInMenuBar = showInMenuBar;
         this.icon = icon;
         this.seq = seq;
     }
 
     public static List<State> getMenuItems() {
         return Arrays.stream(State.values())
-                .filter(State::getShowInMenuBar)
                 .collect(Collectors.toList());
     }
 
@@ -47,11 +36,7 @@ public enum State {
         return identifier;
     }
 
-    public boolean getShowInMenuBar() {
-        return showInMenuBar;
-    }
-
-    public String getIcon() {
+    public VaadinIcon getIcon() {
         return icon;
     }
 
@@ -61,6 +46,7 @@ public enum State {
 
     public static class StateUrlConstants {
 
+        public static final String ROOT = "";
         public static final String LEAGUE = "league";
         public static final String PROFILE = "profile";
 

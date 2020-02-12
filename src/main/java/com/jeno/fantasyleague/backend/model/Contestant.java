@@ -10,8 +10,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import com.jeno.fantasyleague.backend.model.audit.UserAudit;
 
@@ -23,15 +24,15 @@ public class Contestant extends UserAudit {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@NotBlank
-	@Size(max = 32)
+	@NotEmpty
+	@Length(max = 32)
 	private String name;
 
 	@Lob
 	@Basic(fetch = FetchType.LAZY)
 	private byte[] icon;
 
-	@Size(max = 128)
+	@Length(max = 128)
 	private String icon_path;
 
 	@ManyToOne(targetEntity = League.class, fetch = FetchType.LAZY)

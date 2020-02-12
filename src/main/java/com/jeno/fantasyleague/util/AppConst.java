@@ -7,5 +7,4 @@ public class AppConst {
 	public static final String TITLE_NOT_FOUND = "Not found";
 	public static final String TITLE_ACCESS_DENIED = "Access denied";
 
-	public static final String PAGE_MAIN = "main";
 }

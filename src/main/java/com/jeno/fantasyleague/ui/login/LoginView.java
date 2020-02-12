@@ -3,7 +3,7 @@ package com.jeno.fantasyleague.ui.login;
 import com.jeno.fantasyleague.security.SecurityUtils;
 import com.jeno.fantasyleague.ui.annotation.AlwaysAllow;
 import com.jeno.fantasyleague.ui.forgotpassword.ForgotPasswordUI;
-import com.jeno.fantasyleague.ui.main.MainUI;
+import com.jeno.fantasyleague.ui.main.views.league.LeagueModule;
 import com.jeno.fantasyleague.ui.register.RegisterUI;
 import com.jeno.fantasyleague.util.AppConst;
 import com.vaadin.flow.component.dependency.CssImport;
@@ -61,7 +61,7 @@ public class LoginView extends VerticalLayout implements AfterNavigationObserver
 	@Override
 	public void beforeEnter(BeforeEnterEvent event) {
 		if (SecurityUtils.isUserLoggedIn()) {
-			event.forwardTo(MainUI.class);
+			event.forwardTo(LeagueModule.class);
 		}
 	}
 

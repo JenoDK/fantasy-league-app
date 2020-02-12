@@ -2,19 +2,19 @@ package com.jeno.fantasyleague.ui.main.views.league;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.jeno.fantasyleague.backend.data.repository.LeagueRepository;
-import com.jeno.fantasyleague.security.SecurityHolder;
 import com.jeno.fantasyleague.backend.data.service.repo.league.LeagueService;
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.User;
+import com.jeno.fantasyleague.security.SecurityHolder;
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.UIScope;
+
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @SpringComponent
-@UIScope
 public class LeagueModel {
 
 	@Autowired

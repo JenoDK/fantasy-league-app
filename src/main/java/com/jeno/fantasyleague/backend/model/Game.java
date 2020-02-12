@@ -11,7 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.Length;
 
 import com.jeno.fantasyleague.backend.model.audit.UserAudit;
 
@@ -59,7 +60,7 @@ public class Game extends UserAudit {
 	@Column(name = "next_game_id", insertable = false, updatable = false)
 	private Long next_game_fk;
 
-	@Size(max = 128)
+	@Length(max = 128)
 	private String location;
 
 	@Column(name = "game_date_time")

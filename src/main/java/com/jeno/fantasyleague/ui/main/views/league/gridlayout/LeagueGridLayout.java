@@ -8,6 +8,7 @@ import com.google.common.collect.Maps;
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.vaadin.flow.component.board.Board;
+
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
 
@@ -20,14 +21,11 @@ public class LeagueGridLayout extends Board {
 	private Map<Long, ExistingLeagueGridComponent> leagueMap = Maps.newHashMap();
 
 	public LeagueGridLayout(SingleLeagueServiceProvider singleLeagueServiceProvider) {
-		// TODO
-//		super(1, 1);
-//		this.singleLeagueServiceProvider = singleLeagueServiceProvider;
-//		setSpacing(true);
-//		addClassName("league-grid-layout");
-//
-//		newLeagueComponent = new NewLeagueGridComponent();
-//		add(newLeagueComponent);
+		super();
+		this.singleLeagueServiceProvider = singleLeagueServiceProvider;
+
+		newLeagueComponent = new NewLeagueGridComponent();
+		add(newLeagueComponent);
 	}
 
 	public void setLeagues(List<League> leagues) {

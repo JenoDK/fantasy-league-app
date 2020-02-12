@@ -1,15 +1,7 @@
 package com.jeno.fantasyleague.security;
 
-import java.util.Optional;
-
-import com.jeno.fantasyleague.backend.data.repository.UserRepository;
-import com.jeno.fantasyleague.backend.model.RoleName;
-import com.jeno.fantasyleague.util.AppConst;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -18,6 +10,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
+
+import com.jeno.fantasyleague.backend.model.RoleName;
 
 /**
  * Configures spring security, doing the following:
@@ -34,7 +28,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	private static final String LOGIN_PROCESSING_URL = "/login";
 	private static final String LOGIN_FAILURE_URL = "/login?error";
 	private static final String LOGIN_URL = "/login";
-	private static final String LOGOUT_SUCCESS_URL = "/" + AppConst.PAGE_MAIN;
 
 	private final UserDetailsService userDetailsService;
 
@@ -44,17 +37,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Autowired
 	public SecurityConfiguration(UserDetailsService userDetailsService) {
 		this.userDetailsService = userDetailsService;
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public CurrentUser currentUser(UserRepository userRepository) {
-		return () -> {
-			final String username = SecurityUtils.getUsername();
-			return Optional.ofNullable(username)
-					.flatMap(userRepository::findByUsername)
-					.orElseGet(() -> null);
-		};
 	}
 
 	/**
@@ -96,7 +78,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.successHandler(new SavedRequestAwareAuthenticationSuccessHandler())
 
 				// Configure logout
-				.and().logout().logoutSuccessUrl(LOGOUT_SUCCESS_URL);
+				.and().logout().logoutSuccessUrl("/login");
 	}
 
 	/**

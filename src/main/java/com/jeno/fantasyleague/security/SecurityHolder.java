@@ -1,27 +1,45 @@
 package com.jeno.fantasyleague.security;
 
+import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
+
+import javax.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 
 import com.jeno.fantasyleague.backend.data.repository.UserNotificationRepository;
+import com.jeno.fantasyleague.backend.data.service.repo.user.UserService;
 import com.jeno.fantasyleague.backend.model.User;
 import com.jeno.fantasyleague.backend.model.UserNotification;
+import com.vaadin.flow.server.VaadinRequest;
+import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @SpringComponent
 public class SecurityHolder {
 
-	private final UserNotificationRepository userNotificationRepository;
-	private final CurrentUser currentUser;
-
 	@Autowired
-	public SecurityHolder(UserNotificationRepository userNotificationRepository, CurrentUser currentUser) {
-		this.userNotificationRepository = userNotificationRepository;
-		this.currentUser = currentUser;
-	}
+	private UserNotificationRepository userNotificationRepository;
+	@Autowired
+	private UserService userService;
 
+	@Transactional
+	public void loadUser(VaadinRequest vaadinRequest) {
+		Principal principal = vaadinRequest.getUserPrincipal();
+		if (principal == null || StringUtils.isEmpty(principal.getName())){
+			return;
+		}
+		Optional<User> user = userService.findByUsernameAndJoinRoles(principal.getName());
+		if (!user.isPresent()) {
+			return;
+		}
+		VaadinSession.getCurrent().setAttribute(User.class, user.get());
+	}
+	
 	public User getUser() {
-		return currentUser.getUser();
+		return VaadinSession.getCurrent().getAttribute(User.class);
 	}
 
 	public List<UserNotification> getUserNotifications() {

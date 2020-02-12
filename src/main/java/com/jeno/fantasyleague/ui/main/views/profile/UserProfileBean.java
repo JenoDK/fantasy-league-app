@@ -1,12 +1,12 @@
 package com.jeno.fantasyleague.ui.main.views.profile;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
 
 public class UserProfileBean {
 
-	@NotBlank
-	@Size(max = 30)
+	@NotEmpty
+	@Length(max = 30)
 	private String username;
 
 	public UserProfileBean(String username) {

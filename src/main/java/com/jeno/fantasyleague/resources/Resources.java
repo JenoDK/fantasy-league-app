@@ -1,45 +1,66 @@
 package com.jeno.fantasyleague.resources;
 
+import java.text.MessageFormat;
+import java.util.List;
 import java.util.Locale;
+import java.util.MissingResourceException;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.context.support.ResourceBundleMessageSource;
 
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.i18n.I18NProvider;
+import com.vaadin.flow.spring.annotation.SpringComponent;
+
 @SpringComponent
-public class Resources {
+public class Resources implements I18NProvider {
 
-	private static final Logger LOG = LogManager.getLogger(Resources.class.getName());
+	private static Resources activeResources = null;
 
-	private static final ThreadLocal<Resources> activeResources = new ThreadLocal<>();
+	public static final Locale LOCALE_NL = new Locale("nl", "NL");
+	public static final Locale LOCALE_EN = new Locale("en", "GB");
+
+	private static List<Locale> locales = List.of(LOCALE_NL, LOCALE_EN);
+
+	private final ResourceBundleMessageSource messageSource;
 
 	@Autowired
-	private ResourceBundleMessageSource messageSource;
-
-	private Locale locale = Locale.ENGLISH;
-
-	private String getMessageInternal(String resource, Object... args) {
-		return getMessageInternal(locale, resource, args);
+	public Resources(ResourceBundleMessageSource messageSource) {
+		this.messageSource = messageSource;
 	}
 
-	private String getMessageInternal(Locale locale, String resource, Object... args) {
-		try {
-			return messageSource.getMessage(resource, args, locale);
-		} catch (NoSuchMessageException nsmEx) {
-			try {
-				LOG.trace("Could not find resource", nsmEx);
+	@Override
+	public List<Locale> getProvidedLocales() {
+		return locales;
+	}
 
-				return messageSource.getMessage(resource, args, Locale.ENGLISH);
-			} catch (NoSuchMessageException nsmExDefaultLocale) {
-				LOG.trace("Could not find resource in default locale", nsmExDefaultLocale);
-
-				LOG.warn(nsmExDefaultLocale.getMessage());
-			}
+	@Override
+	public String getTranslation(String key, Locale locale, Object... params) {
+		if (key == null) {
+			LoggerFactory.getLogger(Resources.class.getName())
+					.warn("Got lang request for key with null value!");
+			return "";
 		}
-		return resource;
+
+		String value;
+		try {
+			value = messageSource.getMessage(key, params, locale);
+		} catch (final MissingResourceException | NoSuchMessageException e) {
+			LoggerFactory.getLogger(Resources.class.getName())
+					.warn("Missing resource", e);
+			return "!" + locale.getLanguage() + ": " + key;
+		}
+		if (params.length > 0) {
+			value = MessageFormat.format(value, params);
+		}
+		return value;
+	}
+
+	public static void set(Resources resources) {
+		activeResources = resources;
 	}
 
 	/**
@@ -49,22 +70,11 @@ public class Resources {
 	 * @throws NoActiveResourcesFoundException If no resources are found
 	 */
 	public static Resources get() {
-		Resources resources = activeResources.get();
-
-		if (resources == null) {
+		if (activeResources == null) {
 			throw new NoActiveResourcesFoundException();
 		}
 
-		return resources;
-	}
-
-	/**
-	 * Sets the active resources for this thread
-	 *
-	 * @param resources The resources
-	 */
-	public static void set(Resources resources) {
-		activeResources.set(resources);
+		return activeResources;
 	}
 
 	/**
@@ -75,7 +85,24 @@ public class Resources {
 	 * @return
 	 */
 	public static String getMessage(String resource, Object... args) {
-		return get().getMessageInternal(resource, args);
+		return get().getTranslation(resource, getLocale(), args);
+	}
+
+	/**
+	 * Static copy from {@link Component#getLocale()}
+	 * @return
+	 */
+	private static Locale getLocale() {
+		UI currentUi = UI.getCurrent();
+		Locale locale = currentUi == null ? null : currentUi.getLocale();
+		if (locale == null) {
+			if (locales != null && !locales.isEmpty()) {
+				locale = locales.get(0);
+			} else {
+				locale = Locale.getDefault();
+			}
+		}
+		return locale;
 	}
 
 }
