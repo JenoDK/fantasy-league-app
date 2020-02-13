@@ -6,12 +6,6 @@ import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.jeno.fantasyleague.ui.annotation.AlwaysAllow;
-import com.jeno.fantasyleague.ui.error.AccessDeniedView;
-import com.jeno.fantasyleague.ui.error.CustomRouteNotFoundError;
-import com.jeno.fantasyleague.ui.login.LoginView;
-import com.vaadin.flow.server.ServletHelper.RequestType;
-import com.vaadin.flow.shared.ApplicationConstants;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -20,6 +14,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import com.jeno.fantasyleague.ui.annotation.AlwaysAllow;
+import com.vaadin.flow.server.ServletHelper.RequestType;
+import com.vaadin.flow.shared.ApplicationConstants;
 
 /**
  * SecurityUtils takes care of all such static operations that have to do with

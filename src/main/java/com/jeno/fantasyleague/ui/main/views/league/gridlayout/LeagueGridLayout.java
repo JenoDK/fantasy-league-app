@@ -7,12 +7,12 @@ import java.util.stream.Collectors;
 import com.google.common.collect.Maps;
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
-import com.vaadin.flow.component.board.Board;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
 
-public class LeagueGridLayout extends Board {
+public class LeagueGridLayout extends VerticalLayout {
 
 	private final BehaviorSubject<League> clickedLeague = BehaviorSubject.create();
 

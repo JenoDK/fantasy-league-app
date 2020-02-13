@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 import com.jeno.fantasyleague.backend.data.service.leaguetemplates.worldcup2018.FifaWorldCup2018Stages;
 import com.jeno.fantasyleague.backend.model.Contestant;
 import com.jeno.fantasyleague.backend.model.ContestantWeight;
@@ -20,13 +19,11 @@ import com.jeno.fantasyleague.backend.model.User;
 import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.ui.common.window.PopupWindow;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
-import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.charts.TotalUserScoresChart;
-import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.charts.UsersChartLayout;
-import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.charts.UsersScoreProgressionChart;
 import com.vaadin.flow.component.accordion.Accordion;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+
 import io.reactivex.Observable;
 
 public class UserScoresTab extends VerticalLayout {
@@ -48,17 +45,6 @@ public class UserScoresTab extends VerticalLayout {
 				.map(UserTotalScoreBean::getUser)
 				.map(User::getUsername)
 				.collect(Collectors.toSet());
-
-		UsersScoreProgressionChart scoresTimelineChart = new UsersScoreProgressionChart(scoreBeans, singleLeagueServiceprovider.getLoggedInUser());
-		UsersChartLayout scoresTimelineChartLayout = new UsersChartLayout(
-				userNames,
-				Sets.newHashSet(singleLeagueServiceprovider.getLoggedInUser().getUsername()),
-				scoresTimelineChart);
-		TotalUserScoresChart totalScoresTimelineChart = new TotalUserScoresChart(scoreBeans, singleLeagueServiceprovider.getLoggedInUser());
-		UsersChartLayout totalScoresTimelineChartLayout = new UsersChartLayout(
-				userNames,
-				totalScoresTimelineChart.getIdsWithSeriesShown(),
-				totalScoresTimelineChart);
 
 		UserTotalScoreGrid totalScoreGrid = new UserTotalScoreGrid(scoreBeans, singleLeagueServiceprovider.getLoggedInUser());
 		totalScoreGrid.setWidth("100%");
@@ -101,15 +87,6 @@ public class UserScoresTab extends VerticalLayout {
 			List<UserTotalScoreBean> scores = fetchTotalScores();
 			totalScoreGrid.setItems(scores);
 
-			Set<String> users = scores.stream()
-					.map(UserTotalScoreBean::getUser)
-					.map(User::getUsername)
-					.collect(Collectors.toSet());
-			scoresTimelineChartLayout.refresh(users);
-			scoresTimelineChart.refresh(scores);
-			totalScoresTimelineChartLayout.refresh(users);
-			totalScoresTimelineChart.refresh(scores);
-
 			scores.stream()
 					.filter(bean -> singleLeagueServiceprovider.getLoggedInUser().getId().equals(bean.getUser().getId()))
 					.findFirst()
@@ -118,8 +95,6 @@ public class UserScoresTab extends VerticalLayout {
 		});
 
 		add(refreshButton);
-		add(totalScoresTimelineChartLayout);
-		add(scoresTimelineChartLayout);
 		add(totalScoreGrid);
 		add(predictionScoresLayout);
 	}

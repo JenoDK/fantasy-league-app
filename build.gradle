@@ -37,8 +37,6 @@ configurations {
 	compile.exclude group: "org.springframework.boot", module: "spring-boot-starter-logging"
 }
 
-vaadin.autoconfigure()
-
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
 	compile('org.springframework.boot:spring-boot-starter-security')
@@ -46,6 +44,9 @@ dependencies {
 
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-log4j2', version: '2.0.0.RELEASE'
 
+	compile vaadin.bom()
+	compile vaadin.core()
+	compile vaadin.lumoTheme()
 	compile('com.vaadin:vaadin-spring-boot-starter')
 
 	compile("org.liquibase:liquibase-core:3.8.2") {

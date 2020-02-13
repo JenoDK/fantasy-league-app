@@ -4,20 +4,23 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.jeno.fantasyleague.ui.main.views.league.LeagueModule;
+import com.jeno.fantasyleague.ui.main.views.profile.ProfileView;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.icon.VaadinIcon;
 
 public enum State {
 
-    LEAGUE(StateUrlConstants.LEAGUE, "League", VaadinIcon.HOME, 0),
-    PROFILE(StateUrlConstants.PROFILE, "Profile", VaadinIcon.USER, 20);
+    LEAGUE(LeagueModule.class, "League", VaadinIcon.HOME, 0),
+    PROFILE(ProfileView.class, "Profile", VaadinIcon.USER, 20);
 
-    private String identifier;
+    private Class<? extends Component> viewClass;
     private String name;
     private VaadinIcon icon;
     private int seq;
 
-    State(String identifier, String name, VaadinIcon icon, int seq) {
-        this.identifier = identifier;
+    State(Class<? extends Component> viewClass, String name, VaadinIcon icon, int seq) {
+        this.viewClass = viewClass;
         this.name = name;
         this.icon = icon;
         this.seq = seq;
@@ -32,8 +35,8 @@ public enum State {
         return name;
     }
 
-    public String getIdentifier() {
-        return identifier;
+    public Class<? extends Component> getViewClass() {
+        return viewClass;
     }
 
     public VaadinIcon getIcon() {
