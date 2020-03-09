@@ -3,7 +3,7 @@ package com.jeno.fantasyleague.ui.main.views.league.singleleague.knockoutstage;
 import java.util.Objects;
 import java.util.Optional;
 
-import com.jeno.fantasyleague.util.GridUtil;
+import com.jeno.fantasyleague.util.LayoutUtil;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -31,7 +31,7 @@ public class GameResultsLayout extends HorizontalLayout {
 		HorizontalLayout scoreWrapper = new HorizontalLayout();
 		scoreWrapper.setMargin(false);
 		if (editable) {
-			GridUtil.getTextFieldScoreLayout(
+			LayoutUtil.getTextFieldScoreLayout(
 					bean,
 					homeTeamGetter,
 					homeTeamSetter,
@@ -55,7 +55,6 @@ public class GameResultsLayout extends HorizontalLayout {
 		RadioButtonGroup<String> winnerSelection = new RadioButtonGroup<>();
 		winnerSelection.addClassName("winner-selection");
 		winnerSelection.setItems("homeTeam", "awayTeam");
-//		winnerSelection.setItemCaptionGenerator(ignored -> "");
 		if (winnerGetter.apply(bean).isPresent()) {
 			winnerSelection.setValue(winnerGetter.apply(bean).get() ? "homeTeam" : "awayTeam");
 		}

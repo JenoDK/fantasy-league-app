@@ -1,8 +1,11 @@
 package com.jeno.fantasyleague.ui.main.views.league;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.BeanFactory;
@@ -19,6 +22,7 @@ import com.jeno.fantasyleague.backend.data.repository.PredictionRepository;
 import com.jeno.fantasyleague.backend.data.repository.UserNotificationRepository;
 import com.jeno.fantasyleague.backend.data.service.email.ApplicationEmailService;
 import com.jeno.fantasyleague.backend.data.service.leaguetemplates.LeagueTemplateService;
+import com.jeno.fantasyleague.backend.data.service.leaguetemplates.SoccerCupStages;
 import com.jeno.fantasyleague.backend.data.service.repo.contestant.ContestantService;
 import com.jeno.fantasyleague.backend.data.service.repo.game.GameService;
 import com.jeno.fantasyleague.backend.data.service.repo.league.LeagueService;
@@ -31,8 +35,13 @@ import com.jeno.fantasyleague.backend.model.Prediction;
 import com.jeno.fantasyleague.backend.model.User;
 import com.jeno.fantasyleague.backend.model.UserNotification;
 import com.jeno.fantasyleague.backend.model.enums.NotificationType;
+import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.security.SecurityHolder;
+import com.jeno.fantasyleague.ui.main.views.league.singleleague.matches.MatchPredictionBean;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.spring.annotation.SpringComponent;
+
+import io.reactivex.Observable;
 
 @SpringComponent
 public class SingleLeagueServiceProvider {
@@ -69,6 +78,22 @@ public class SingleLeagueServiceProvider {
 	private SecurityHolder securityHolder;
 	@Autowired
 	private BeanFactory beanFactory;
+
+	public void predictionChanged(Observable<MatchPredictionBean> predictionChanged, Consumer<Prediction> postConsume) {
+		predictionChanged
+				.subscribe(bean -> {
+					Prediction prediction = bean.setPredictionScoresAndGetModelItem();
+					if (LocalDateTime.now().isBefore(prediction.getGame().getGameDateTime())) {
+						getPredictionRepository().saveAndFlush(prediction);
+						postConsume.accept(prediction);
+					} else {
+						Notification.show(Resources.getMessage("toLateToUpdatePrediction"));
+					}
+					if (prediction.getHome_team_score().equals(prediction.getAway_team_score()) && Objects.isNull(prediction.getWinner()) && !SoccerCupStages.GROUP_PHASE.toString().equals(prediction.getGame().getStage())) {
+						Notification.show("Be sure to select a winner");
+					}
+				});
+	}
 
 	public GameRepository getGameRepository() {
 		return gameRepository;
@@ -109,16 +134,18 @@ public class SingleLeagueServiceProvider {
 	public UserNotification createLeagueInviteUserNotification(User user, League league) {
 		UserNotification notification = new UserNotification();
 		notification.setUser(user);
-		notification.setMessage(league.getName() + " League invite");
+		notification.setMessage(Resources.getMessage("leagueInvite", league.getName()));
 		notification.setReference_id(league.getId());
 		notification.setReference_table("league");
 		notification.setNotification_type(NotificationType.LEAGUE_INVITE);
 		return userNotificationRepository.saveAndFlush(notification);
 	}
 
-	public List<User> getUsersWithPendingInvite(League league) {
+	public List<User> getUsersWithPendingInvite(League league, List<User> leagueUsers) {
+		Set<Long> leagueUSerIds = leagueUsers.stream().map(User::getId).collect(Collectors.toSet());
 		return userNotificationRepository
 				.findByNotificationTypeAndReferenceIdAndJoinUsers(NotificationType.LEAGUE_INVITE, league.getId()).stream()
+						.filter(user -> !leagueUSerIds.contains(user.getUser().getId()))
 						.map(UserNotification::getUser)
 						.collect(Collectors.toList());
 	}
@@ -129,6 +156,10 @@ public class SingleLeagueServiceProvider {
 
 	public User getLoggedInUser() {
 		return securityHolder.getUser();
+	}
+
+	public SecurityHolder getSecurityHolder() {
+		return securityHolder;
 	}
 
 	public boolean loggedInUserIsLeagueCreator(League league) {
@@ -172,10 +203,6 @@ public class SingleLeagueServiceProvider {
 		return leagueService.getTotalLeagueScores(league);
 	}
 
-	public double getUserLeaguePredictionScore(League league, Prediction prediction) {
-		return leagueService.getPredictionScoreForUser(league, prediction, securityHolder.getUser());
-	}
-
 	public double getLeaguePredictionScoreForUser(League league, Prediction prediction, User user) {
 		return leagueService.getPredictionScoreForUser(league, prediction, user);
 	}
@@ -183,9 +210,8 @@ public class SingleLeagueServiceProvider {
 	public Map<Long, Double> getLeaguePredictionScoresForUser(
 			League league,
 			List<Prediction> predictionsWithJoinedGames,
-			List<ContestantWeight> contestantWeights,
-			User user) {
-		return leagueService.getPredictionScoresForUser(league, predictionsWithJoinedGames, contestantWeights, user);
+			List<ContestantWeight> contestantWeights) {
+		return leagueService.getPredictionScoresForUser(league, predictionsWithJoinedGames, contestantWeights);
 	}
 
 	public ApplicationEmailService getEmailService() {

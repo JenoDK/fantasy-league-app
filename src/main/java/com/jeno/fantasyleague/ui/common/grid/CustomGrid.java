@@ -1,13 +1,20 @@
 package com.jeno.fantasyleague.ui.common.grid;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
+import java.util.function.BiFunction;
+import java.util.stream.Collectors;
 
+import com.google.common.collect.Sets;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
+import com.vaadin.flow.data.renderer.Renderer;
 
 public class CustomGrid<T> extends Grid<T> {
 
@@ -21,21 +28,30 @@ public class CustomGrid<T> extends Grid<T> {
 		setDataProvider(builder.dataProvider);
 		buildColumns(builder);
 		if (builder.columnOrder.length > 0) {
-			setColumns(builder.columnOrder);
+			List<Column<T>> columns = Arrays.stream(builder.columnOrder)
+					.map(this::getColumnByKey)
+					.filter(Objects::nonNull)
+					.collect(Collectors.toList());
+			columns.addAll(getColumns().stream()
+					.filter(c -> !Sets.newHashSet(builder.columnOrder).contains(c.getKey()))
+					.collect(Collectors.toList()));
+			setColumnOrder(columns);
 		}
 	}
 
 	public CustomGrid() {
 		super();
 		setHeightByRows(true);
+		addThemeVariants(
+				GridVariant.LUMO_NO_BORDER,
+				GridVariant.LUMO_NO_ROW_BORDERS,
+				GridVariant.LUMO_ROW_STRIPES);
+
 	}
 
 	@Override
-	public void setItems(Collection<T> items) {
-		super.setItems(items);
-		if (adjustHeightDynamically) {
-			setHeight((36f * (items.size() + 1)) + "px");
-		}
+	protected <C extends Column<T>> C addColumn(Renderer<T> renderer, BiFunction<Renderer<T>, String, C> columnFactory) {
+		return super.addColumn(renderer, columnFactory);
 	}
 
 	public Collection<T> getItems() {
@@ -74,6 +90,7 @@ public class CustomGrid<T> extends Grid<T> {
 		builder.textColumns.forEach((key, value) ->
 			addColumn(value.valueProvider)
 					.setHeader(value.caption)
+					.setKey(key)
 					.setId(key));
 		builder.iconColumns.values().forEach(this::addIconColumn);
 	}
@@ -81,15 +98,14 @@ public class CustomGrid<T> extends Grid<T> {
 	public Column addIconColumn(CustomGridBuilder.ColumnProvider<T, CustomGridBuilder.IconColumnValue> value) {
 		Column<T> column = addColumn(new ComponentRenderer<>(t -> createIconColumnComponent(value.valueProvider.apply(t))))
 				.setClassNameGenerator(item -> "icon-column")
-				.setWidth("50px")
+				.setFlexGrow(0)
 				.setHeader(value.caption);
 		column.setId(value.id);
+		column.setKey(value.id);
 		return column;
 	}
 
 	private Component createIconColumnComponent(CustomGridBuilder.IconColumnValue iconColumnValue) {
-		HorizontalLayout layout = new HorizontalLayout();
-		layout.setSizeFull();
 		Image icon = new Image();
 		icon.setWidth("30px");
 		icon.setHeight("30px");
@@ -102,8 +118,7 @@ public class CustomGrid<T> extends Grid<T> {
 			icon.addClassName("cursor-hover-pointer");
 			icon.addClickListener(ignored -> iconColumnValue.iconClickAction.perform(this));
 		}
-		layout.add(icon);
-		return layout;
+		return icon;
 	}
 
 	public void setAdjustHeightDynamically(boolean adjustHeightDynamically) {

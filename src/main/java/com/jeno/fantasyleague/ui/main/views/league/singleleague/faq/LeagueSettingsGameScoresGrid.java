@@ -17,15 +17,19 @@ public class LeagueSettingsGameScoresGrid extends CustomGrid<LeagueSettingsGameS
 
 	private void initColumns() {
 		addColumn(LeagueSettingsGameScoreBean::getStage)
+				.setAutoWidth(true)
 				.setHeader(Resources.getMessage("stage"))
 				.setId("stageColumn");
 		addColumn(LeagueSettingsGameScoreBean::getAllCorrect)
+				.setAutoWidth(true)
 				.setHeader(Resources.getMessage("AllCorrect"))
 				.setId("allCorrectColumn");
 		addColumn(LeagueSettingsGameScoreBean::getCorrectResultAndWrongScore)
+				.setAutoWidth(true)
 				.setHeader(Resources.getMessage("WrongScore"))
 				.setId("wrongScoreColumn");
 		addColumn(LeagueSettingsGameScoreBean::getAllWrong)
+				.setAutoWidth(true)
 				.setHeader(Resources.getMessage("AllWrong"))
 				.setId("allWrongColumn");
 	}

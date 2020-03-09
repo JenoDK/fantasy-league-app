@@ -5,26 +5,28 @@ import java.util.Map;
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.enums.Template;
 import com.jeno.fantasyleague.ui.common.field.CustomButton;
+import com.jeno.fantasyleague.util.Images;
 import com.jeno.fantasyleague.util.RxUtil;
 import com.jeno.fantasyleague.util.VaadinUtil;
 import com.vaadin.flow.component.Key;
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.dependency.JsModule;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 
 import io.reactivex.Observable;
 
+@JsModule("./styles/league-form-styles.js")
 public class LeagueForm extends HorizontalLayout {
 
-	private VerticalLayout fieldLayout;
 	private TextField nameField;
-	private ComboBox<Template> templateCombobox;
+	private TextArea description;
 
-	private Button submit;
+	private CustomButton submit;
 
 	private BeanValidationBinder<League> binder = new BeanValidationBinder<>(League.class);
 
@@ -36,42 +38,45 @@ public class LeagueForm extends HorizontalLayout {
 
 	private void initBinder() {
 		binder.forField(nameField).bind("name");
-		binder.forField(templateCombobox).bind("template");
+		binder.forField(description).bind("description");
 		reset();
 	}
 
 	private void initLayout() {
-		addClassNames("add-new-form");
-		setSizeFull();
-		setMargin(false);
+		setSizeUndefined();
 		setSpacing(false);
+		setMargin(false);
+		getStyle().set("--lumo-border-radius", "0.5em");
 
-		fieldLayout = new VerticalLayout();
-		fieldLayout.setMargin(false);
-		fieldLayout.setSpacing(true);
+		Image icon = new Image(Images.Icons.UEFA_EURO_2020, "UEFA EURO 2020");
+		icon.addClassName("league-logo");
+		icon.setWidth("150px");
+		add(icon);
 
-		nameField = new TextField();
-//		nameField.addClassName(ValoTheme.TEXTFIELD_TINY);
-		nameField.setPlaceholder("Name");
+		VerticalLayout formLayout = new VerticalLayout();
+		formLayout.setSpacing(false);
+		formLayout.setMargin(false);
 
-		templateCombobox = new ComboBox<>();
-		templateCombobox.addClassName("no-required-indicator");
-//		templateCombobox.addClassName(ValoTheme.COMBOBOX_TINY);
-		templateCombobox.setPlaceholder("Template");
-		templateCombobox.setItems(Template.values());
-		templateCombobox.setItemLabelGenerator(Template::getName);
-		// TODO
-//		templateCombobox.setItemIconGenerator(temp -> new ThemeResource(temp.getIconPath()));
+		nameField = new TextField("Name");
+		nameField.setPlaceholder("Awesome league");
 
-		fieldLayout.add(nameField);
-		fieldLayout.add(templateCombobox);
-		add(fieldLayout);
+		description = new TextArea("Description");
+		description.setPlaceholder("Tom won't win this one!");
+
+		formLayout.add(nameField);
+		formLayout.add(description);
 
 		submit = new CustomButton(getTranslation("create"), VaadinIcon.USER_CHECK.create());
 		submit.addClickShortcut(Key.ENTER);
-		add(submit);
+		submit.getStyle().set("margin-top", "15px");
+		// Button bar
+		HorizontalLayout actions = new HorizontalLayout();
+		actions.add(submit);
 
-//		setComponentAlignment(submit, Alignment.BOTTOM_RIGHT);
+		formLayout.add(actions);
+
+		add(formLayout);
+		setAlignItems(Alignment.CENTER);
 	}
 
 	public Observable<League> validSubmit() {
@@ -88,7 +93,7 @@ public class LeagueForm extends HorizontalLayout {
 
 	public void reset() {
 		League bean = new League();
-		bean.setTemplate(Template.FIFA_WORLD_CUP_2018);
+		bean.setTemplate(Template.UEFA_EURO_2020);
 		binder.setBean(bean);
 	}
 }

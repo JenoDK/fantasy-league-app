@@ -260,4 +260,10 @@
         </createIndex>
     </changeSet>
 
+    <changeSet author="jeno" id="change-contestant-power_index-to-bigint">
+        <modifyDataType columnName="power_index"
+                        newDataType="BIGINT"
+                        tableName="contestant"/>
+    </changeSet>
+
 </databaseChangeLog>

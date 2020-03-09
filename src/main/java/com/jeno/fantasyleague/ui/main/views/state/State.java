@@ -52,6 +52,7 @@ public enum State {
         public static final String ROOT = "";
         public static final String LEAGUE = "league";
         public static final String PROFILE = "profile";
+        public static final String PAGE_NOT_FOUND = "notFound";
 
         private StateUrlConstants() {
         }

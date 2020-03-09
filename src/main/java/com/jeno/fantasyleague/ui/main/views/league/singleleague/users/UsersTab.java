@@ -6,36 +6,47 @@ import com.google.common.collect.Lists;
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.User;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
-import com.vaadin.flow.component.html.Label;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.DataProvider;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
 
-public class UsersTab extends HorizontalLayout {
+public class UsersTab extends VerticalLayout {
 
 	public UsersTab(League league, SingleLeagueServiceProvider singleLeagueServiceProvider) {
 		super();
 		setMargin(false);
-		setSpacing(true);
+		setPadding(false);
+		setSizeFull();
 
 		VerticalLayout leftSide = new VerticalLayout();
 		leftSide.setMargin(false);
+		leftSide.setPadding(false);
 		leftSide.setSpacing(false);
+		leftSide.setSizeFull();
 
-		Label leagueUsersLabel = new Label("League Users");
-//		leagueUsersLabel.addClassName(ValoTheme.LABEL_H3);
-		leftSide.add(leagueUsersLabel);
+		leftSide.add(new H3("League Users"));
 		List<User> users = singleLeagueServiceProvider.getLeagueRepository().fetchLeagueUsers(league.getId());
+		UserGrid usersGrid = new UserGrid(DataProvider.fromStream(users.stream()), singleLeagueServiceProvider, league);
+		if (singleLeagueServiceProvider.loggedInUserIsLeagueCreator(league)) {
+			usersGrid.addColumn(new ComponentRenderer<>(user -> UserGrid.promoteButton(user, singleLeagueServiceProvider, league)))
+					.setWidth("130px");
+		}
+		leftSide.add(usersGrid);
 
-		leftSide.add(new UserGrid(DataProvider.fromStream(users.stream()), singleLeagueServiceProvider, league));
+		List<User> pendingInvites = singleLeagueServiceProvider.getUsersWithPendingInvite(league, users);
+		UserGrid pendingUserInvitesGrid = new UserGrid(DataProvider.fromStream(pendingInvites.stream()), singleLeagueServiceProvider, league);
+		leftSide.add(new H3("Pending invites"));
+		leftSide.add(pendingUserInvitesGrid);
 
 		add(leftSide);
 
 		if (singleLeagueServiceProvider.loggedInUserIsLeagueAdmin(league)) {
-			List<User> usersWithPendingInvites = singleLeagueServiceProvider.getUsersWithPendingInvite(league);
 			List<User> usersToExcludeFromInviteChoices = Lists.newArrayList(users);
-			usersToExcludeFromInviteChoices.addAll(usersWithPendingInvites);
-			add(new InviteUserLayout(league, usersToExcludeFromInviteChoices, singleLeagueServiceProvider));
+			usersToExcludeFromInviteChoices.addAll(pendingInvites);
+			InviteUserLayout inviteUserLayout = new InviteUserLayout(league, usersToExcludeFromInviteChoices, singleLeagueServiceProvider);
+			inviteUserLayout.userInvited().subscribe(ignored -> pendingUserInvitesGrid.setItems(singleLeagueServiceProvider.getUsersWithPendingInvite(league, users)));
+			add(inviteUserLayout);
 		}
 	}
 

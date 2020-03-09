@@ -3,14 +3,14 @@ package com.jeno.fantasyleague.ui.main.views.league.singleleague.knockoutstage;
 import java.time.LocalDateTime;
 import java.util.function.Consumer;
 
-import com.jeno.fantasyleague.backend.data.service.leaguetemplates.worldcup2018.FifaWorldCup2018Initializer;
+import com.jeno.fantasyleague.backend.data.service.leaguetemplates.eufaeuro2020.UefaEuro2020Initializer;
 import com.jeno.fantasyleague.backend.data.service.repo.game.GameServiceImpl;
 import com.jeno.fantasyleague.backend.model.Contestant;
 import com.jeno.fantasyleague.backend.model.Game;
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
-import com.jeno.fantasyleague.util.GridUtil;
+import com.jeno.fantasyleague.util.LayoutUtil;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -50,7 +50,7 @@ public class EightFinalsGameLayout extends KnockoutGameLayout {
 			ComboBox<Contestant> contestantCombobox = getContestantComboBox(game, placeHolder, possibleContestant, contestantConsumer);
 			return new HorizontalLayout(contestantCombobox);
 		} else {
-			return GridUtil.createTeamLayout(possibleContestant, placeHolder);
+			return LayoutUtil.createTeamLayout(possibleContestant, placeHolder);
 		}
 	}
 
@@ -84,7 +84,7 @@ public class EightFinalsGameLayout extends KnockoutGameLayout {
 		return contestantCombobox;
 	}
 
-	private DataProvider<Contestant, String> getDataProvider(FifaWorldCup2018Initializer.Group group) {
+	private DataProvider<Contestant, String> getDataProvider(UefaEuro2020Initializer.Group group) {
 		return new CallbackDataProvider<>(
 				q -> singleLeagueServiceprovider.getContestantService().getPossibleContestantsFromGroupStage(group, league).stream(),
 				q -> singleLeagueServiceprovider.getContestantService().getPossibleContestantsFromGroupStage(group, league).size());

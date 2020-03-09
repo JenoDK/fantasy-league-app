@@ -1,75 +1,75 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 
 import com.jeno.fantasyleague.backend.model.League;
+import com.jeno.fantasyleague.resources.Resources;
+import com.jeno.fantasyleague.ui.common.field.CustomButton;
 import com.jeno.fantasyleague.ui.common.image.VaadinImageUploader;
 import com.jeno.fantasyleague.util.ImageUtil;
-import com.jeno.fantasyleague.util.RxUtil;
-import com.vaadin.flow.component.ClickEvent;
+import com.jeno.fantasyleague.util.VaadinUtil;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.server.StreamResource;
+
 import io.reactivex.Observable;
 
 public class LeagueTopBar extends VerticalLayout {
 
+	private CustomButton backToLeague;
 	private VaadinImageUploader upload;
 	private Image imageLayout;
-	private Button backToLeaguesView;
-	private Label title;
 
 	public LeagueTopBar(League league) {
 		super();
 		setMargin(false);
+		setPadding(false);
 		setSpacing(false);
 		setSizeFull();
-		addClassName("league-view-topbar");
 
 		upload = new VaadinImageUploader();
+		CustomButton button = new CustomButton("Change banner", VaadinIcon.CAMERA.create());
+		upload.setUploadButton(button);
+		upload.setDropAllowed(false);
 		upload.imageResized()
-				.subscribe(imageInputStream -> imageLayout.setSrc(new StreamResource(
+				.subscribe(os -> imageLayout.setSrc(new StreamResource(
 						upload.getFileName(),
-						() -> imageInputStream)));
+						() -> new ByteArrayInputStream(os.toByteArray()))));
 
-		upload.addClassName("tiny-upload");
-		upload.setHeight("50px");
-		upload.addFailedListener(event -> {
-			// TODO
-		});
-
-		imageLayout = ImageUtil.getLeaguePictureResource(league);
-		imageLayout.addClassName("league-picture");
+		imageLayout = ImageUtil.getLeaguePictureImage(league);
+		VaadinUtil.addStyles(imageLayout.getStyle(), "width: 100%; max-height: 200px; object-fit: cover;");
 
 		HorizontalLayout titleLayout = new HorizontalLayout();
-		titleLayout.setWidth("100%");
+		titleLayout.setPadding(false);
+		titleLayout.setMargin(false);
+		titleLayout.setWidthFull();
 
-		backToLeaguesView = new Button("Leagues", VaadinIcon.ARROW_CIRCLE_LEFT.create());
-		backToLeaguesView.addClassName("back-to-leagues-view");
-		title = new Label(league.getName());
-//		title.addClassName(ValoTheme.LABEL_H2);
+		H3 title = new H3(league.getName());
+		title.getStyle().set("flex", "1");
+		title.getStyle().set("margin-top", "0.5em");
 
-		titleLayout.add(backToLeaguesView);
 		titleLayout.add(title);
 		titleLayout.add(upload);
-//		titleLayout.setComponentAlignment(backToLeaguesView, Alignment.BOTTOM_LEFT);
-//		titleLayout.setComponentAlignment(title, Alignment.TOP_CENTER);
-//		titleLayout.setComponentAlignment(upload, Alignment.BOTTOM_RIGHT);
+		titleLayout.setAlignItems(Alignment.CENTER);
+		titleLayout.setJustifyContentMode(JustifyContentMode.BETWEEN);
+
+		backToLeague = new CustomButton(Resources.getMessage("backToLeague", VaadinIcon.ARROW_LEFT));
 
 		add(titleLayout);
 		add(imageLayout);
-//		setComponentAlignment(imageLayout, Alignment.MIDDLE_CENTER);
+		setAlignItems(Alignment.CENTER);
 	}
 
-	public Observable<ByteArrayInputStream> imageUploadedAndResized() {
+	public Observable<ByteArrayOutputStream> imageUploaded() {
 		return upload.imageResized();
 	}
 
-	public Observable<ClickEvent<Button>> backToLeagues() {
-		return RxUtil.clicks(backToLeaguesView);
-	}
 }

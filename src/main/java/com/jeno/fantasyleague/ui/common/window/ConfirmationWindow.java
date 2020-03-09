@@ -7,12 +7,13 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+
 import io.reactivex.functions.Consumer;
 
 public class ConfirmationWindow {
 
 	public static void showConfirmationPopup(String caption, String confirmText, Consumer<Void> onYes, Consumer<Void> onNo) {
-		new PopupWindow.Builder(caption, "confirmationWindow", window -> createConfirmationLayout(confirmText, onYes, onNo, window))
+		new PopupWindow.Builder(caption, window -> createConfirmationLayout(confirmText, onYes, onNo, window))
 				.setHeight(200)
 				.setWidth(350)
 				.build()

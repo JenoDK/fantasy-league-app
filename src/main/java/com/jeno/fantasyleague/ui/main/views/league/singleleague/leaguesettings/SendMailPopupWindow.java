@@ -26,7 +26,6 @@ public class SendMailPopupWindow {
 	public void show() {
 		new PopupWindow.Builder(
 							Resources.getMessage("sendMail"),
-						"sendLeagueMailWindow",
 						this::createLayout)
 //				.closable(true)
 //				.resizable(true)

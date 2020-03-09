@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.ui.common.field.StringToPositiveIntegerConverter;
 import com.jeno.fantasyleague.util.DecimalUtil;
-import com.jeno.fantasyleague.util.GridUtil;
+import com.jeno.fantasyleague.util.LayoutUtil;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
@@ -30,7 +30,7 @@ public class TeamWeightsGrid extends Grid<TeamWeightBean> {
 	}
 
 	private void initGrid(League league) {
-		addColumn(new ComponentRenderer<>(teamWeight -> GridUtil.createTeamLayout(teamWeight.getContestant())))
+		addColumn(new ComponentRenderer<>(teamWeight -> LayoutUtil.createTeamLayout(teamWeight.getContestant())))
 				.setHeader("Team");
 		addColumn(TeamWeightBean::getPowerIndex)
 				.setHeader("Power Index");

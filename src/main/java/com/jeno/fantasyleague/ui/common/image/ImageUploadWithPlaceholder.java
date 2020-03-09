@@ -1,78 +1,71 @@
 package com.jeno.fantasyleague.ui.common.image;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
+import java.io.ByteArrayOutputStream;
 import java.util.Optional;
 
-import com.jeno.fantasyleague.backend.model.User;
-import com.jeno.fantasyleague.util.ImageUtil;
+import com.jeno.fantasyleague.ui.common.field.CustomButton;
+import com.jeno.fantasyleague.ui.common.label.StatusLabel;
+import com.jeno.fantasyleague.util.Images;
 import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.html.Label;
-import com.vaadin.flow.component.html.NativeButton;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.server.StreamResource;
+
 import io.reactivex.Observable;
 
 public class ImageUploadWithPlaceholder extends VerticalLayout {
 
 	private VaadinImageUploader upload;
 	private Image imageLayout;
-	private Label errorLabel;
-
-	private Optional<File> currentImage = Optional.empty();
+	private StatusLabel errorLabel;
 
 	public ImageUploadWithPlaceholder() {
 		super();
 		initLayout();
 	}
 
-	public ImageUploadWithPlaceholder(User user) {
-		this();
-		imageLayout.setSrc(ImageUtil.getUserProfilePictureResource(user));
-	}
-
 	private void initLayout() {
 		imageLayout = new Image();
+		imageLayout.setSrc(Images.DEFAULT_PROFILE_PICTURE);
 
-		upload = new VaadinImageUploader(100);
+		upload = new VaadinImageUploader(200);
 		upload.imageResized()
-				.subscribe(imageInputStream -> {
-					remove(errorLabel);
-					imageLayout.setSrc(new StreamResource(
-							upload.getFileName(),
-							() -> imageInputStream));
-					add(imageLayout);
-				});
+				.subscribe(this::updateImage);
 		upload.addFailedListener(event -> {
-			remove(imageLayout);
 			if (event.getReason().getCause() == null) {
-				errorLabel.setText(event.getReason().getMessage());
+				errorLabel.setErrorText(event.getReason().getMessage());
 			} else {
-				errorLabel.setText(event.getReason().getCause().getMessage());
+				errorLabel.setErrorText(event.getReason().getCause().getMessage());
 			}
-			add(errorLabel);
-			currentImage = Optional.empty();
 		});
-		NativeButton uploadButton = new NativeButton("Choose image");
-		uploadButton.addComponentAsFirst(VaadinIcon.PICTURE.create());
+		CustomButton uploadButton = new CustomButton("Choose image", VaadinIcon.PICTURE.create());
 		upload.setUploadButton(uploadButton);
 		upload.addClassName("ignore-error-indicator");
 
-		Label infoLabel = new Label("Rectangular (or close to) will have the best results");
-
-		errorLabel = new Label();
+		errorLabel = new StatusLabel();
 
 		add(upload);
-		add(infoLabel);
+		add(errorLabel);
 		add(imageLayout);
+		setAlignItems(Alignment.CENTER);
 	}
 
-	public Optional<File> getImage() {
-		return currentImage;
+	private void updateImage(ByteArrayOutputStream os) {
+		errorLabel.reset();
+		imageLayout.setSrc(
+				new StreamResource(upload.getFileName(), () -> new ByteArrayInputStream(os.toByteArray())));
 	}
 
-	public Observable<ByteArrayInputStream> imageUploadedAndResized() {
+	public void updateImage(StreamResource pictureResource) {
+		imageLayout.setSrc(pictureResource);
+	}
+
+	public Optional<ByteArrayInputStream> getImage() {
+		return upload.currentValue();
+	}
+
+	public Observable<ByteArrayOutputStream> imageUploadedAndResized() {
 		return upload.imageResized();
 	}
 

@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Sets;
-import com.jeno.fantasyleague.backend.data.service.leaguetemplates.worldcup2018.FifaWorldCup2018Stages;
+import com.jeno.fantasyleague.backend.data.service.leaguetemplates.SoccerCupStages;
 import com.jeno.fantasyleague.backend.model.Contestant;
 import com.jeno.fantasyleague.backend.model.Game;
 import com.jeno.fantasyleague.backend.model.League;
@@ -71,7 +71,7 @@ public class KnockoutStageTab extends VerticalLayout {
 				.collect(Collectors.toMap(bean -> bean.getGame().getId(), Function.identity()));
 		List<TwoGamesWithNextId> gamesWithNextIdList = getTwoGamesWithNextIdObjects(knockoutGameBeans.values());
 		TwoGamesWithNextId start = gamesWithNextIdList.stream()
-				.filter(twoGames -> FifaWorldCup2018Stages.EIGHTH_FINALS.toString().equals(twoGames.getStage()))
+				.filter(twoGames -> SoccerCupStages.EIGHTH_FINALS.toString().equals(twoGames.getStage()))
 				.sorted(Comparator.comparing(TwoGamesWithNextId::getEarliestDate))
 				.findFirst()
 				.get();
@@ -82,14 +82,14 @@ public class KnockoutStageTab extends VerticalLayout {
 		addGame(gamesPerStage, addedGameIds, start.secondBean);
 		goForward(gamesPerStage, addedGameIds, gamesWithNextIdList, knockoutGameBeans, start);
 
-		addRowsToColumn(gamesPerStage.get(FifaWorldCup2018Stages.EIGHTH_FINALS.toString()), 0, 2, 0);
+		addRowsToColumn(gamesPerStage.get(SoccerCupStages.EIGHTH_FINALS.toString()), 0, 2, 0);
 		addEighthFinalsLines();
-		addRowsToColumn(gamesPerStage.get(FifaWorldCup2018Stages.QUARTER_FINALS.toString()), 2, 4, 1);
+		addRowsToColumn(gamesPerStage.get(SoccerCupStages.QUARTER_FINALS.toString()), 2, 4, 1);
 		addQuarterFinalsLines();
-		addRowsToColumn(gamesPerStage.get(FifaWorldCup2018Stages.SEMI_FINALS.toString()), 4, 8, 3);
+		addRowsToColumn(gamesPerStage.get(SoccerCupStages.SEMI_FINALS.toString()), 4, 8, 3);
 		addSemiFinalsLines();
 
-		addFinals(gamesPerStage.get(FifaWorldCup2018Stages.FINALS.toString()));
+		addFinals(gamesPerStage.get(SoccerCupStages.FINALS.toString()));
 	}
 
 	private void goForward(
@@ -256,7 +256,7 @@ public class KnockoutStageTab extends VerticalLayout {
 			int counterStart) {
 		int counter = ROW_START + counterStart;
 		for (KnockoutGameBean game : games) {
-			if (FifaWorldCup2018Stages.EIGHTH_FINALS.toString().equals(game.getGame().getStage())) {
+			if (SoccerCupStages.EIGHTH_FINALS.toString().equals(game.getGame().getStage())) {
 //				bracketLayout.add(new EightFinalsGameLayout(singleLeagueServiceprovider, league, game), column, counter);
 			} else {
 //				bracketLayout.add(new RestFinalsGameLayout(singleLeagueServiceprovider, league, game), column, counter);

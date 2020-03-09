@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.imageio.ImageIO;
@@ -14,6 +15,8 @@ import com.vaadin.flow.component.upload.FinishedEvent;
 import com.vaadin.flow.component.upload.StartedEvent;
 import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
+
+import elemental.json.Json;
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
 
@@ -22,7 +25,7 @@ public class VaadinImageUploader extends Upload {
 	private static final Set<String> ALLOWED_TYPES = Sets.newHashSet("image/png", "image/jpeg", "image/gif");
 	private static final long MAX_SIZE_IN_KB = 10000000;
 
-	private final BehaviorSubject<ByteArrayInputStream> imageResized = BehaviorSubject.create();
+	private final BehaviorSubject<ByteArrayOutputStream> imageResized = BehaviorSubject.create();
 	private final int maxWidthOfResizedPicture;
 	private final int maxHeightOfResizedPicture;
 	private final boolean needsResize;
@@ -57,11 +60,16 @@ public class VaadinImageUploader extends Upload {
 
 	private void uploadStarted(StartedEvent event) {
 		if (event.getContentLength() > MAX_SIZE_IN_KB) {
-			throw new ImageUploadException("File is to big, maximum is 10MB");
+			error("File is to big, maximum is 10MB");
 		}
 		if (!ALLOWED_TYPES.contains(event.getMIMEType())) {
-			throw new ImageUploadException("File type not allowed");
+			error("File type not allowed");
 		}
+	}
+
+	private void error(String s) {
+		setFiles(Json.createArray());
+		throw new ImageUploadException(s);
 	}
 
 	private void uploadFinished(FinishedEvent event, MemoryBuffer fileBuffer) {
@@ -76,14 +84,23 @@ public class VaadinImageUploader extends Upload {
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
 			ImageIO.write(image, "PNG", os);
 			fileName = event.getFileName();
-			imageResized.onNext(new ByteArrayInputStream(os.toByteArray()));
+			imageResized.onNext(os);
+			setFiles(Json.createArray());
 		} catch (IOException e) {
 			throw new ImageUploadException("Could not rescale image", e);
 		}
 	}
 
-	public Observable<ByteArrayInputStream> imageResized() {
+	public Observable<ByteArrayOutputStream> imageResized() {
 		return imageResized;
+	}
+
+	public Optional<ByteArrayInputStream> currentValue() {
+		if (imageResized.hasValue()) {
+			return Optional.of(new ByteArrayInputStream(imageResized.getValue().toByteArray()));
+		} else {
+			return Optional.empty();
+		}
 	}
 
 	public String getFileName() {

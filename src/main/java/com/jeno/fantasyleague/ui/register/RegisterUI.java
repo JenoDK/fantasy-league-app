@@ -1,7 +1,7 @@
 package com.jeno.fantasyleague.ui.register;
 
-import java.io.IOException;
-import java.nio.file.Files;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 import com.jeno.fantasyleague.backend.data.dao.UserDao;
 import com.jeno.fantasyleague.backend.data.dao.ValidationException;
@@ -15,8 +15,6 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.page.Viewport;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 
 @PageTitle("Register")
 @Route(value = "register")
@@ -45,10 +43,10 @@ public class RegisterUI extends RedirectUI {
 		return form;
 	}
 
-	private void addUser(User user) throws IOException {
+	private void addUser(User user) {
 		try {
 			if (form.getProfilePictureUploader().getImage().isPresent()) {
-				user.setProfile_picture(Files.readAllBytes(form.getProfilePictureUploader().getImage().get().toPath()));
+				user.setProfile_picture(form.getProfilePictureUploader().getImage().get().readAllBytes());
 			}
 			if (accountActivationRequired) {
 				User createdUser = userDao.add(user);

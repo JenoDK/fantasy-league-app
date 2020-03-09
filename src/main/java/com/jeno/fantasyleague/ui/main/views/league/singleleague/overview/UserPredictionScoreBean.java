@@ -3,7 +3,7 @@ package com.jeno.fantasyleague.ui.main.views.league.singleleague.overview;
 import java.util.Objects;
 import java.util.Optional;
 
-import com.jeno.fantasyleague.backend.data.service.leaguetemplates.worldcup2018.FifaWorldCup2018Stages;
+import com.jeno.fantasyleague.backend.data.service.leaguetemplates.SoccerCupStages;
 import com.jeno.fantasyleague.backend.model.Contestant;
 import com.jeno.fantasyleague.backend.model.Game;
 import com.jeno.fantasyleague.backend.model.League;
@@ -99,7 +99,7 @@ public class UserPredictionScoreBean {
 	}
 
 	public String getPredictionHiddenUntil() {
-		if (FifaWorldCup2018Stages.GROUP_PHASE.toString().equals(prediction.getGame().getStage())) {
+		if (SoccerCupStages.GROUP_PHASE.toString().equals(prediction.getGame().getStage())) {
 			return DateUtil.DATE_TIME_FORMATTER.format(league.getLeague_starting_date());
 		} else {
 			return DateUtil.DATE_TIME_FORMATTER.format(prediction.getGame().getGameDateTime());

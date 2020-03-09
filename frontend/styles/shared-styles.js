@@ -109,7 +109,10 @@ $_documentContainer.innerHTML = `
 					display: flex;
 					animation: none !important;
 					min-width: 300px;
-					outline: none;
+				}
+
+				:host([theme~="crud"]) [part="backdrop"] {
+					background-color: var(--lumo-shade-80pct);
 				}
 
 				:host([theme~="crud"]) [part="content"] {
@@ -136,10 +139,6 @@ $_documentContainer.innerHTML = `
 						flex-direction: column;
 					}
 
-					:host([theme]) [part="overlay"] {
-						height: 100%;
-						border-radius: 0 !important;
-					}
 				}
 
 				/* we need explicitly set height for wrappers inside dialog-flow */
@@ -176,6 +175,57 @@ $_documentContainer.innerHTML = `
 					color: var(--lumo-secondary-text-color);
 					background-color: var(--lumo-base-color);
 				}
+				:host([theme="no-error-msg"]) [part="error-message"] {
+					display: none;
+				}
+			</style>
+		</template>
+	</dom-module>
+
+	<dom-module id="fantasy-league-button-theme" theme-for="vaadin-button">
+		<template>
+			<style>
+				:host {
+					cursor: pointer;
+				}
+
+				:host([theme~="primary"]) {
+					background-color: var(--_lumo-button-primary-background-color, var(--lumo-primary-color));
+					color: var(--_lumo-button-primary-color, var(--lumo-primary-contrast-color));
+					font-weight: 600;
+					min-width: calc(var(--lumo-button-size) * 2.5);
+                }
+
+				:host([theme~="tertiary"]), :host([theme~="tertiary-inline"]) {
+					background-color:
+							transparent !important;
+					transition: opacity 0.2s;
+					min-width: 0;
+				}
+                
+				:host([theme~="navigation-row"]) {
+                    border-radius: 0;
+                }
+			</style>
+		</template>
+	</dom-module>
+
+	<dom-module id="fantasy-league-menubar-button-theme" theme-for="vaadin-menu-bar-button">
+		<template>
+			<style>
+				:host {
+					cursor: pointer;
+				}
+			</style>
+		</template>
+	</dom-module>
+
+	<dom-module id="fantasy-league-vaadin-context-menu-list-theme" theme-for="vaadin-context-menu-list-box">
+		<template>
+			<style>
+				[part="items"] ::slotted(.vaadin-menu-item) {
+					cursor: pointer;
+				}
 			</style>
 		</template>
 	</dom-module>
@@ -202,32 +252,27 @@ $_documentContainer.innerHTML = `
 					border-top: 1px solid var(--lumo-shade-5pct);
 				}
 
-				/* a special grid theme for the fantasy-league storefront view */
-				:host([theme~="orders"]) {
+				/* a special grid theme for the fantasy-league league grid view */
+				:host([theme~="card-grid"]) [part~="cell"] ::slotted(vaadin-grid-cell-content) {
+					padding: 10px 0px 10px 0px;
+				}
+
+				:host([theme~="card-grid"]) {
 					background: transparent;
 				}
 
-				:host([theme~="orders"]) [part~="cell"]:not(:empty):not([details-cell]) {
+				:host([theme~="card-grid"]) [part~="cell"]:not(:empty):not([details-cell]) {
 					padding: 0;
 				}
 
-				:host([theme~="orders"]) [part~="row"][selected] [part~="cell"] {
+				:host([theme~="card-grid"]) [part~="row"][selected] [part~="cell"] {
 					background: transparent !important;
 				}
 
-				:host([theme~="orders"]) [part~="body-cell"] {
+				:host([theme~="card-grid"]) [part~="body-cell"] {
 					background: transparent;
 				}
 
-				@media (max-width: 600px) {
-					:host([theme~="orders"]) [part~="cell"] ::slotted(vaadin-grid-cell-content) {
-						padding: 0 !important;
-					}
-				}
-
-				:host([theme~="dashboard"]) [part~="cell"] ::slotted(vaadin-grid-cell-content) {
-					padding: 0;
-				}
 			</style>
 		</template>
 	</dom-module>
@@ -415,10 +460,6 @@ $_documentContainer.innerHTML = `
 				box-sizing: border-box !important;
 			}
 
-			vaadin-app-layout vaadin-tabs {
-				max-width: 65%;
-			}
-
 			@media (min-width: 700px) {
 				vaadin-app-layout vaadin-tab {
 					font-size: var(--lumo-font-size-m);
@@ -426,6 +467,7 @@ $_documentContainer.innerHTML = `
 					padding-right: 1em;
 				}
 			}
+
 		</style>
 	</custom-style>`;
 

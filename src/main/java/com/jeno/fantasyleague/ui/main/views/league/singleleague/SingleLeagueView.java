@@ -1,56 +1,68 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague;
 
 import com.jeno.fantasyleague.backend.model.League;
-import com.jeno.fantasyleague.ui.common.tabsheet.LazyTabSheet;
+import com.jeno.fantasyleague.ui.common.field.CustomButton;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
-import com.jeno.fantasyleague.ui.main.views.league.singleleague.faq.FaqTab;
-import com.jeno.fantasyleague.ui.main.views.league.singleleague.groupstage.GroupStageTab;
-import com.jeno.fantasyleague.ui.main.views.league.singleleague.knockoutstage.KnockoutStageTab;
-import com.jeno.fantasyleague.ui.main.views.league.singleleague.leaguesettings.LeagueSettingsTab;
-import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.UserScoresTab;
-import com.jeno.fantasyleague.ui.main.views.league.singleleague.teamweights.TeamWeightsTab;
-import com.jeno.fantasyleague.ui.main.views.league.singleleague.users.UsersTab;
 import com.vaadin.flow.component.ClickEvent;
-import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.contextmenu.MenuItem;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+
 import io.reactivex.Observable;
 
 public class SingleLeagueView extends VerticalLayout {
 
 	private final League league;
-	private final LeagueTopBar topBar;
 
-	private LazyTabSheet tabSheet;
+	private LeagueMenuBar tabSheet;
 
 	public SingleLeagueView(League league, SingleLeagueServiceProvider singleLeagueServiceprovider) {
 		super();
 		this.league = league;
 
-		setMargin(false);
-		setSpacing(false);
+		initLayout(league, singleLeagueServiceprovider);
+	}
 
-		tabSheet = new LazyTabSheet();
-		tabSheet.addLazyTab("overview", "Overview", () -> new UserScoresTab(league, singleLeagueServiceprovider));
-		tabSheet.addLazyTab("teamWeightsTab", "Purchase stocks", () -> new TeamWeightsTab(league, singleLeagueServiceprovider));
-		tabSheet.addLazyTab("groupStageTab", "Group Stage", () -> new GroupStageTab(league, singleLeagueServiceprovider));
-		tabSheet.addLazyTab("knockoutStageTab", "Knockout Stage", () -> new KnockoutStageTab(league, singleLeagueServiceprovider));
-		tabSheet.addLazyTab("fas", "FAQ", () -> new FaqTab(league, singleLeagueServiceprovider));
-		if (singleLeagueServiceprovider.loggedInUserIsLeagueCreator(league)) {
-			tabSheet.addLazyTab("usersTab", "Users", () -> new UsersTab(league, singleLeagueServiceprovider));
-			tabSheet.addLazyTab("leagueSettingsTab", "League Settings", () -> new LeagueSettingsTab(league, singleLeagueServiceprovider));
-		}
+	private void initLayout(League league, SingleLeagueServiceProvider singleLeagueServiceprovider) {
+		setSizeFull();
+		setMaxWidth("1200px");
 
-		topBar = new LeagueTopBar(league);
-		topBar.imageUploadedAndResized().subscribe(byteArrayInputStream -> {
-			league.setLeague_picture(byteArrayInputStream.readAllBytes());
+		HorizontalLayout navigation = new HorizontalLayout();
+		navigation.setWidthFull();
+
+		VerticalLayout main = new VerticalLayout();
+		main.setPadding(false);
+		main.setSizeFull();
+
+		LeagueTopBar topBar = new LeagueTopBar(league);
+		topBar.imageUploaded().subscribe(os -> {
+			league.setLeague_picture(os.toByteArray());
 			singleLeagueServiceprovider.getLeagueRepository().saveAndFlush(league);
 		});
 
+
+		tabSheet = new LeagueMenuBar(league, singleLeagueServiceprovider, main);
+		navigation.add(tabSheet);
+
 		add(topBar);
-		add(tabSheet);
+//		add(createNavigationRow("Matches", VaadinIcon.SWORD.create()));
+		add(navigation);
+		add(main);
 	}
-	public Observable<ClickEvent<Button>> backToLeaguesView() {
-		return topBar.backToLeagues();
+
+	private Component createNavigationRow(String title, Icon icon) {
+		CustomButton button = new CustomButton(title, icon);
+		button.setSizeFull();
+		button.setHeight("100px");
+		button.addThemeName("navigation-row");
+		return button;
+	}
+
+	public Observable<ClickEvent<MenuItem>> backToLeaguesView() {
+		return tabSheet.backToLeaguesView();
 	}
 
 }

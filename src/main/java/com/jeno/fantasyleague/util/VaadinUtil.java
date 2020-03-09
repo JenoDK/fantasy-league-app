@@ -1,5 +1,6 @@
 package com.jeno.fantasyleague.util;
 
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
@@ -12,10 +13,18 @@ import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationResult;
 import com.vaadin.flow.data.binder.Validator;
+import com.vaadin.flow.dom.Style;
 import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.server.VaadinServletRequest;
 
 public class VaadinUtil {
+
+	public static void addStyles(Style style, String styles) {
+		Arrays.stream(styles.split(";"))
+				.map(individualStyle -> individualStyle.split(":"))
+				.filter(s -> s.length == 2)
+				.forEach(s -> style.set(s[0].trim(), s[1].trim()));
+	}
 
 	public static Validator<String> getPasswordsMatchValidator(PasswordField passwordField) {
 		return (Validator<String>) (value, context) -> {

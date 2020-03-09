@@ -6,6 +6,7 @@ import com.jeno.fantasyleague.ui.forgotpassword.ForgotPasswordUI;
 import com.jeno.fantasyleague.ui.main.views.league.LeagueModule;
 import com.jeno.fantasyleague.ui.register.RegisterUI;
 import com.jeno.fantasyleague.util.AppConst;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.login.LoginI18n;
@@ -25,7 +26,7 @@ import com.vaadin.flow.theme.lumo.Lumo;
 @PageTitle("Login")
 @AlwaysAllow
 @CssImport("./styles/login-styles.css")
-@Theme(value = Lumo.class, variant = "dark")
+@Theme(value = Lumo.class, variant = Lumo.DARK)
 @Viewport(AppConst.VIEWPORT)
 public class LoginView extends VerticalLayout implements AfterNavigationObserver, BeforeEnterObserver {
 

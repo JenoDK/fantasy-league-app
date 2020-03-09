@@ -18,5 +18,6 @@ public interface LeagueService {
 
 	double getPredictionScoreForUser(League league, Prediction prediction, User user);
 
-	Map<Long,Double> getPredictionScoresForUser(League league, List<Prediction> predictionsWithJoinedGames, List<ContestantWeight> contestantWeights, User user);
+	Map<Long,Double> getPredictionScoresForUser(League league, List<Prediction> predictionsWithJoinedGames, List<ContestantWeight> contestantWeights);
+
 }

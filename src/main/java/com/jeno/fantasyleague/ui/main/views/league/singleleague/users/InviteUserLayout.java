@@ -15,23 +15,29 @@ import com.jeno.fantasyleague.ui.common.grid.CustomGridBuilder;
 import com.jeno.fantasyleague.ui.main.broadcast.Broadcaster;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.jeno.fantasyleague.util.Images;
+import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.CallbackDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.provider.ListDataProvider;
 
+import io.reactivex.Observable;
+import io.reactivex.subjects.BehaviorSubject;
+
 public class InviteUserLayout extends VerticalLayout {
+
+	private final BehaviorSubject<ClickEvent<Button>> userInvited = BehaviorSubject.create();
 
 	public InviteUserLayout(League league, List<User> usersToExclude, SingleLeagueServiceProvider singleLeagueServiceProvider) {
 		super();
 		setMargin(false);
+		setPadding(false);
 
-		Label inviteUsers = new Label("Invite Users");
-//		inviteUsers.addClassName(ValoTheme.LABEL_H3);
+		H3 inviteUsers = new H3("Invite Users");
 		add(inviteUsers);
 
 		Set<Long> usersToExcludeIds =  usersToExclude.stream()
@@ -83,11 +89,16 @@ public class InviteUserLayout extends VerticalLayout {
 						});
 				usersToInviteGrid.setItems(Lists.newArrayList());
 				dataProvider.refreshAll();
+				userInvited.onNext(ignored);
 			} else {
 				Notification.show(Resources.getMessage("adminRightsRevoked"));
 			}
 		});
 		add(inviteButton);
+	}
+
+	public Observable<ClickEvent<Button>> userInvited() {
+		return userInvited;
 	}
 
 	public CallbackDataProvider<User, String> getAddUserComboboxDataProvider(SingleLeagueServiceProvider singleLeagueServiceProvider, Set<Long> existingUserIds) {

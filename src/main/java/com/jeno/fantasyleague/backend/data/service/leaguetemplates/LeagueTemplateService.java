@@ -19,6 +19,6 @@ public interface LeagueTemplateService {
 
 	double calculateScoreOfPrediction(League league, Prediction prediction, User user);
 
-	Map<Long,Double> calculateScoresForUser(League league, List<Prediction> predictionsWithJoinedGames, List<ContestantWeight> contestantWeights, User user);
+	Map<Long,Double> calculateScoresForUser(League league, List<Prediction> predictionsWithJoinedGames, List<ContestantWeight> contestantWeights);
 
 }

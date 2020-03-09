@@ -1,16 +1,19 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.overview;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
-import com.jeno.fantasyleague.backend.data.service.leaguetemplates.worldcup2018.FifaWorldCup2018Stages;
+import com.jeno.fantasyleague.backend.data.service.leaguetemplates.SoccerCupStages;
 import com.jeno.fantasyleague.backend.data.service.repo.league.UserLeagueScore;
 import com.jeno.fantasyleague.backend.model.User;
 
 public class UserTotalScoreBean {
 
 	private final User user;
-	private final Map<FifaWorldCup2018Stages, Double> scores;
+	private final Map<SoccerCupStages, Double> scores;
 	private final Map<LocalDateTime, Double> scoresPerDate;
 	private int position = 0;
 
@@ -32,7 +35,7 @@ public class UserTotalScoreBean {
 		return scores.values().stream().mapToDouble(value -> value).sum();
 	}
 
-	public double getScore(FifaWorldCup2018Stages stage) {
+	public double getScore(SoccerCupStages stage) {
 		return scores.get(stage);
 	}
 
@@ -42,5 +45,18 @@ public class UserTotalScoreBean {
 
 	public int getPosition() {
 		return position;
+	}
+
+	public static List<UserTotalScoreBean> transfer(List<UserLeagueScore> userLeagueScores) {
+		List<UserTotalScoreBean> beans = userLeagueScores.stream()
+				.map(UserTotalScoreBean::new)
+				.sorted(Comparator.comparing(UserTotalScoreBean::getTotalScore).reversed())
+				.collect(Collectors.toList());
+		int position = 1;
+		for (UserTotalScoreBean bean : beans) {
+			bean.setPosition(position);
+			position += 1;
+		}
+		return beans;
 	}
 }

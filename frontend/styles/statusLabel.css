@@ -1,0 +1,45 @@
+.success, .error, .warning {
+    padding: var(--lumo-space-s);
+    padding-left: var(--lumo-size-m);
+    border-radius: var(--lumo-border-radius);
+    margin-top: var(--lumo-space-m);
+    margin-bottom: var(--lumo-space-s);
+}
+
+.error::before, .success::before, .warning::before {
+    font-family: lumo-icons;
+    font-size: var(--lumo-icon-size-m);
+    position: absolute;
+    width: var(--lumo-size-m);
+    height: 1em;
+    line-height: 1;
+    text-align: center;
+    margin-left: calc(var(--lumo-size-m) * -0.95);
+}
+
+.success {
+    background-color: var(--lumo-success-color-10pct);
+    color: var(--lumo-success-text-color);
+}
+
+.error {
+    background-color: var(--lumo-error-color-10pct);
+    color: var(--lumo-error-text-color);
+}
+
+.warning {
+    background-color: var(--lumo-error-color-10pct);
+    color: var(--lumo-primary-text-color);
+}
+
+.success::before {
+    content: var(--lumo-icons-checkmark);
+}
+
+.error::before {
+    content: var(--lumo-icons-error);
+}
+
+.warning::before {
+    content: var(--lumo-icons-error);
+}

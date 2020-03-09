@@ -5,13 +5,13 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
 
-import com.jeno.fantasyleague.backend.data.service.leaguetemplates.worldcup2018.FifaWorldCup2018Stages;
+import com.jeno.fantasyleague.backend.data.service.leaguetemplates.SoccerCupStages;
 import com.jeno.fantasyleague.backend.model.Contestant;
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.Prediction;
 import com.jeno.fantasyleague.backend.model.User;
 import com.jeno.fantasyleague.resources.Resources;
-import com.jeno.fantasyleague.util.GridUtil;
+import com.jeno.fantasyleague.util.LayoutUtil;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -25,7 +25,7 @@ public class OverviewUtil {
 			return false;
 		}
 
-		if (FifaWorldCup2018Stages.GROUP_PHASE.toString().equals(prediction.getGame().getStage())) {
+		if (SoccerCupStages.GROUP_PHASE.toString().equals(prediction.getGame().getStage())) {
 			return LocalDateTime.now().isBefore(league.getLeague_starting_date());
 		} else {
 			return LocalDateTime.now().isBefore(prediction.getGame().getGameDateTime());
@@ -52,12 +52,12 @@ public class OverviewUtil {
 				.filter(homeTeamWon -> Objects.nonNull(homeTeamScore) && Objects.nonNull(awayTeamScore) && homeTeamScore.equals(awayTeamScore))
 				.map(homeTeamWon -> {
 					if (homeTeamWon) {
-						return "(w) " + GridUtil.getScores(homeTeamScore, awayTeamScore);
+						return "(w) " + LayoutUtil.getScores(homeTeamScore, awayTeamScore);
 					} else {
-						return GridUtil.getScores(homeTeamScore, awayTeamScore) + " (w)";
+						return LayoutUtil.getScores(homeTeamScore, awayTeamScore) + " (w)";
 					}
 				})
-				.orElse(GridUtil.getScores(homeTeamScore, awayTeamScore));
+				.orElse(LayoutUtil.getScores(homeTeamScore, awayTeamScore));
 	}
 
 	public static BigDecimal getScoreFormatted(double score) {
@@ -66,7 +66,7 @@ public class OverviewUtil {
 
 	public static Component getTeamComponent(Contestant team, String placeholder, Integer teamWeight) {
 		if (team != null) {
-			HorizontalLayout teamLayout = GridUtil.createTeamLayout(team);
+			HorizontalLayout teamLayout = LayoutUtil.createTeamLayout(team);
 			if (teamWeight != null && teamWeight > 0) {
 				Label stocksLabel = new Label(" - <b>Stocks: " + teamWeight + "</b>");
 //				stocksLabel.addClassName(ValoTheme.LABEL_LIGHT);

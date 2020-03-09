@@ -5,8 +5,10 @@ import com.jeno.fantasyleague.util.Images;
 
 public enum Template {
 
-	FIFA_WORLD_CUP_2018("FIFA World Cup 2018", Images.Icons.FIFA_WORLD_CUP_2018, LeagueTemplateConfig.FIFA_WORLD_CUP_2018)/*,
-	CUSTOM("Custom", Images.Icons.CUSTOM_LEAGUE, LeagueTemplateConfig.CUSTOM)*/;
+	UEFA_EURO_2020("UEFA EURO 2020", Images.Icons.UEFA_EURO_2020, LeagueTemplateConfig.UEFA_EURO_2020),
+	FIFA_WORLD_CUP_2018("FIFA World Cup 2018", Images.Icons.FIFA_WORLD_CUP_2018, LeagueTemplateConfig.FIFA_WORLD_CUP_2018),
+	CUSTOM("Custom", Images.Icons.CUSTOM_LEAGUE, LeagueTemplateConfig.CUSTOM),
+	;
 
 	private String name;
 	private String iconPath;

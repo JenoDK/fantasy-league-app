@@ -39,7 +39,7 @@ public class Contestant extends UserAudit {
 	@JoinColumn(nullable = false, name = "league_id")
 	private League league;
 
-	@ManyToOne(targetEntity = ContestantGroup.class, fetch = FetchType.LAZY)
+	@ManyToOne(targetEntity = ContestantGroup.class)
 	@JoinColumn(name = "contestantgroup_id")
 	private ContestantGroup contestant_group;
 

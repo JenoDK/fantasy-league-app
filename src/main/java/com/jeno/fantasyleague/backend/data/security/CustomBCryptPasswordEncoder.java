@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 public class CustomBCryptPasswordEncoder extends BCryptPasswordEncoder {
 
 	private Pattern BCRYPT_PATTERN = Pattern
-			.compile("\\A\\$2a?\\$\\d\\d\\$[./0-9A-Za-z]{53}");
+			.compile("\\A\\$2(a|y|b)?\\$(\\d\\d)\\$[./0-9A-Za-z]{53}");
 
 	public boolean isBCrypt(String password) {
 		return BCRYPT_PATTERN.matcher(password).matches();

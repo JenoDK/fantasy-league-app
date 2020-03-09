@@ -17,11 +17,12 @@ import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.AllUserResultsForGameLayout;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.OverviewUtil;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.UserPredictionScoreBean;
-import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.UserPredictionScoresGrid;
+import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.UpcomingMatchesGrid;
 import com.jeno.fantasyleague.util.ImageUtil;
 import com.jeno.fantasyleague.util.RxUtil;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Label;
+
 import io.reactivex.Observable;
 
 public class ExistingLeagueGridComponent extends AbstractLeagueGridComponent {
@@ -44,17 +45,17 @@ public class ExistingLeagueGridComponent extends AbstractLeagueGridComponent {
 //		name.addClassName(ValoTheme.LABEL_H3);
 		add(name);
 
-		Image leagueImage = ImageUtil.getLeaguePictureResource(league);
+		Image leagueImage = ImageUtil.getLeaguePictureImage(league);
 		leagueImage.addClassName("league-picture");
 		add(leagueImage);
 
-		UserPredictionScoresGrid upcomingMatchesGrid = new UserPredictionScoresGrid();
+		UpcomingMatchesGrid upcomingMatchesGrid = new UpcomingMatchesGrid();
 		// TODO
 //		upcomingMatchesGrid.setCaption("Upcoming/recent matches");
 		upcomingMatchesGrid.setItems(getUpcomingMatches());
 		upcomingMatchesGrid.viewAllResultsClicked().subscribe(bean -> new PopupWindow.Builder(
 				"All scores",
-				"allScoresWindows", window ->
+				window ->
 				new AllUserResultsForGameLayout(league, bean, singleLeagueServiceProvider))
 //				.closable(true)
 //				.resizable(true)

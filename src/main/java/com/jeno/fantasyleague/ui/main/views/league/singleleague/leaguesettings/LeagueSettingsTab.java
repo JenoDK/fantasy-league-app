@@ -15,7 +15,8 @@ public class LeagueSettingsTab extends VerticalLayout {
 
 	public LeagueSettingsTab(League league, SingleLeagueServiceProvider singleLeagueServiceprovider) {
 		super();
-		setMargin(true);
+		setMargin(false);
+		setPadding(false);
 		setSizeFull();
 
 		List<User> leagueUsers = singleLeagueServiceprovider.getLeagueRepository().fetchLeagueUsers(league.getId());

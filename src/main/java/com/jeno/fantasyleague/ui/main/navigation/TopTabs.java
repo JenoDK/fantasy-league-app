@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import com.jeno.fantasyleague.ui.main.views.state.State;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.tabs.Tab;
@@ -37,7 +38,8 @@ public class TopTabs extends Tabs {
 	}
 
 	private static Tab createTab(VaadinIcon icon, String title, Class<? extends Component> viewClass) {
-		return createTab(populateLink(new RouterLink(null, viewClass), icon, title));
+		RouterLink link = new RouterLink(null, viewClass);
+		return createTab(populateLink(link, icon, title));
 	}
 
 	private static Tab createTab(Component content) {

@@ -8,7 +8,7 @@ import com.google.common.collect.Lists;
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.jeno.fantasyleague.util.DateUtil;
-import com.jeno.fantasyleague.util.GridUtil;
+import com.jeno.fantasyleague.util.LayoutUtil;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -47,10 +47,10 @@ public class GamesGrid extends Grid<GameBean> {
 	}
 
 	private void initGrid() {
-		addColumn(new ComponentRenderer<>(game -> GridUtil.createTeamLayout(game.getHome_team())))
+		addColumn(new ComponentRenderer<>(game -> LayoutUtil.createTeamLayout(game.getHome_team())))
 			.setHeader("Team A");
 		if (singleLeagueService.loggedInUserIsLeagueAdmin(league)) {
-			addColumn(new ComponentRenderer<>(game -> GridUtil.getTextFieldScoreLayout(
+			addColumn(new ComponentRenderer<>(game -> LayoutUtil.getTextFieldScoreLayout(
 					game,
 					GameBean::getHome_team_score,
 					GameBean::setHomeTeamScore,
@@ -61,11 +61,11 @@ public class GamesGrid extends Grid<GameBean> {
 				.setHeader("Score")
 				.setClassNameGenerator(item -> "v-align-center");
 		} else {
-			addColumn(game -> GridUtil.getScores(game.getHome_team_score(), game.getAway_team_score()))
+			addColumn(game -> LayoutUtil.getScores(game.getHome_team_score(), game.getAway_team_score()))
 				.setHeader("Score")
 				.setClassNameGenerator(item -> "v-align-center");
 		}
-		addColumn(new ComponentRenderer<>(game -> GridUtil.createTeamLayout(game.getAway_team())))
+		addColumn(new ComponentRenderer<>(game -> LayoutUtil.createTeamLayout(game.getAway_team())))
 			.setHeader("Team B");
 		addColumn(new ComponentRenderer<>(this::getGameInfo))
 			.setHeader("Info");
@@ -83,7 +83,7 @@ public class GamesGrid extends Grid<GameBean> {
 
 	private HorizontalLayout getPredictionLayout(GameBean gameBean) {
 		if (LocalDateTime.now().isBefore(league.getLeague_starting_date())) {
-			return GridUtil.getTextFieldScoreLayout(
+			return LayoutUtil.getTextFieldScoreLayout(
 					gameBean,
 					GameBean::getHomeTeamPrediction,
 					GameBean::setHomeTeamPrediction,
@@ -93,7 +93,7 @@ public class GamesGrid extends Grid<GameBean> {
 					new HorizontalLayout());
 		} else {
 			HorizontalLayout layout = new HorizontalLayout();
-			layout.add(new Label(GridUtil.getScores(gameBean.getHomeTeamPrediction(), gameBean.getAwayTeamPrediction())));
+			layout.add(new Label(LayoutUtil.getScores(gameBean.getHomeTeamPrediction(), gameBean.getAwayTeamPrediction())));
 			return layout;
 		}
 	}

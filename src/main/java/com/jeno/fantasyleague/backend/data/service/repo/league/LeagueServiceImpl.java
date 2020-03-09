@@ -3,6 +3,11 @@ package com.jeno.fantasyleague.backend.data.service.repo.league;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.jeno.fantasyleague.backend.data.repository.LeagueRepository;
 import com.jeno.fantasyleague.backend.data.service.leaguetemplates.LeagueTemplateService;
 import com.jeno.fantasyleague.backend.data.service.repo.contestantweight.ContestantWeightService;
@@ -11,10 +16,6 @@ import com.jeno.fantasyleague.backend.model.ContestantWeight;
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.Prediction;
 import com.jeno.fantasyleague.backend.model.User;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @Component
@@ -68,10 +69,9 @@ public class LeagueServiceImpl implements LeagueService {
 	public Map<Long, Double> getPredictionScoresForUser(
 			League league,
 			List<Prediction> predictionsWithJoinedGames,
-			List<ContestantWeight> contestantWeights,
-			User user) {
+			List<ContestantWeight> contestantWeights) {
 		LeagueTemplateService templateServiceBean = beanFactory.getBean(league.getTemplate().getTemplateServiceBeanName(), LeagueTemplateService.class);
-		return templateServiceBean.calculateScoresForUser(league, predictionsWithJoinedGames, contestantWeights, user);
+		return templateServiceBean.calculateScoresForUser(league, predictionsWithJoinedGames, contestantWeights);
 	}
 
 }

@@ -6,18 +6,19 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.jeno.fantasyleague.backend.data.repository.ContestantGroupRepository;
 import com.jeno.fantasyleague.backend.data.repository.ContestantRepository;
 import com.jeno.fantasyleague.backend.data.repository.GameRepository;
-import com.jeno.fantasyleague.backend.data.service.leaguetemplates.worldcup2018.FifaWorldCup2018Initializer;
+import com.jeno.fantasyleague.backend.data.service.leaguetemplates.eufaeuro2020.UefaEuro2020Initializer;
 import com.jeno.fantasyleague.backend.model.Contestant;
 import com.jeno.fantasyleague.backend.model.Game;
 import com.jeno.fantasyleague.backend.model.League;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @Component
@@ -101,8 +102,8 @@ public class GameServiceImpl implements GameService {
 		}
 	}
 
-	public static Optional<FifaWorldCup2018Initializer.Group> getGroup(String placeHolder) {
-		return Stream.of(FifaWorldCup2018Initializer.Group.values())
+	public static Optional<UefaEuro2020Initializer.Group> getGroup(String placeHolder) {
+		return Stream.of(UefaEuro2020Initializer.Group.values())
 				.filter(group -> placeHolder.contains(group.getGroupName()))
 				.findFirst();
 	}

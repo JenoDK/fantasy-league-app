@@ -17,12 +17,10 @@ public class LeaguePresenter {
 	public void setupModule(LeagueModule module) {
 		module.removeAll();
 		module.add(view.getLayout());
-
 		view.newLeague().subscribe(model::addLeague);
-
+		view.leagueAccepted().subscribe(ignored -> model.loadLeaguesForUser());
 		model.newLeague().subscribe(view::addLeague);
 		model.leaguesForUser().subscribe(view::setLeagues);
-
 		model.loadLeaguesForUser();
 	}
 

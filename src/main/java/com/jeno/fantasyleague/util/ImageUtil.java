@@ -4,33 +4,45 @@ import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.util.Optional;
 
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.User;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.server.StreamResource;
 
 public class ImageUtil {
 
-	public static StreamResource getUserProfilePictureResource(User user) {
+	public static Optional<StreamResource> getUserProfilePictureResource(User user) {
 		if (user.getProfile_picture() != null) {
-			return new StreamResource(
+			return Optional.of(new StreamResource(
 					"profile_picture.png",
-					() -> new ByteArrayInputStream(user.getProfile_picture()));
+					() -> new ByteArrayInputStream(user.getProfile_picture())));
 		} else {
-			return new StreamResource("default_profile_picture.png", () -> ImageUtil.class.getClassLoader().getResourceAsStream(Images.VAADIN_RESOURCE_PREFIX + Images.DEFAULT_PROFILE_PICTURE));
+			return Optional.empty();
 		}
 	}
 
-	public static Image getLeaguePictureResource(League league) {
+	public static Image getLeaguePictureImage(League league) {
 		if (league.getLeague_picture() != null) {
-			return new Image(new StreamResource(
+			StreamResource resource = new StreamResource(
 					"league_banner.png",
-					() -> new ByteArrayInputStream(league.getLeague_picture())),
-					"league_banner");
+					() -> new ByteArrayInputStream(league.getLeague_picture()));
+			return new Image(resource, "league_banner");
 		} else {
-			return new Image(Images.DEFAULT_LEAGUE_BANNER, "default_league_banner");
+			return new Image(Images.DEFAULT_LEAGUE_BANNER, "league_banner");
 		}
+	}
+
+	/**
+	 * This method serves to put the dynamic image within the same servlet.
+	 * See <a href="https://vaadin.com/docs/v14/flow/advanced/tutorial-dynamic-content.html">the vaadin documentation</a> for more info
+	 * @param image
+	 */
+	public static void generateDynamicContent(Image image) {
+		image.getElement().getStyle().set("display", "none");
+		UI.getCurrent().getElement().appendChild(image.getElement());
 	}
 
 	/**

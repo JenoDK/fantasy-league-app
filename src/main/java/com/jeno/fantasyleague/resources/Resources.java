@@ -21,9 +21,10 @@ public class Resources implements I18NProvider {
 	private static Resources activeResources = null;
 
 	public static final Locale LOCALE_NL = new Locale("nl", "NL");
-	public static final Locale LOCALE_EN = new Locale("en", "GB");
+	public static final Locale LOCALE_EN_GB = new Locale("en", "GB");
+	public static final Locale LOCALE_EN_US = new Locale("en", "US");
 
-	private static List<Locale> locales = List.of(LOCALE_NL, LOCALE_EN);
+	private static List<Locale> locales = List.of(LOCALE_NL, LOCALE_EN_GB, LOCALE_EN_US);
 
 	private final ResourceBundleMessageSource messageSource;
 

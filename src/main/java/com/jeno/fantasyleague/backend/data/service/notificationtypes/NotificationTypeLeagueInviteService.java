@@ -27,13 +27,17 @@ public class NotificationTypeLeagueInviteService implements NotificationTypeServ
 		} else {
 			throw new NotificationException("League no longer exists");
 		}
-		notification.setViewed(true);
-		userNotificationRepository.saveAndFlush(notification);
+		setNotificationViewed(notification);
 	}
 
 	@Override
 	public void declined(UserNotification notification) throws NotificationException {
+		setNotificationViewed(notification);
+	}
 
+	private void setNotificationViewed(UserNotification notification) {
+		notification.setViewed(true);
+		userNotificationRepository.saveAndFlush(notification);
 	}
 
 }
