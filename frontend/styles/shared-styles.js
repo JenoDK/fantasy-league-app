@@ -239,6 +239,11 @@ $_documentContainer.innerHTML = `
 					margin: auto;
 				}
 
+				:host([height-by-rows]) #items,
+				:host([height-by-rows]) #outerscroller {
+					overflow: hidden;
+				}
+
 				[part~="row"]:last-child [part~="header-cell"],
 				[part~="header-cell"]:not(:empty):not([details-cell]) {
 					padding-top: var(--lumo-space-l);

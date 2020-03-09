@@ -1,23 +1,24 @@
-package com.jeno.fantasyleague.ui.main.views.league.singleleague.teamweights;
+package com.jeno.fantasyleague.ui.main.views.league.singleleague.stocks;
 
 import java.math.BigDecimal;
 
 import com.jeno.fantasyleague.backend.model.Contestant;
 import com.jeno.fantasyleague.backend.model.ContestantWeight;
+
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
 
-public class TeamWeightBean {
+public class StocksBean {
 
 	public static final BigDecimal COSMETICAL_PRICE_MODIFIER = BigDecimal.valueOf(100000);
 
-	private final BehaviorSubject<TeamWeightBean> changes = BehaviorSubject.create();
+	private final BehaviorSubject<StocksBean> changes = BehaviorSubject.create();
 
 	private ContestantWeight contestantWeight;
 	private BigDecimal shareCost;
 	private Integer stocksPurchased;
 
-	public TeamWeightBean(ContestantWeight contestantWeight) {
+	public StocksBean(ContestantWeight contestantWeight) {
 		this.contestantWeight = contestantWeight;
 		this.shareCost = BigDecimal.valueOf(contestantWeight.getContestant().getPower_index()).divide(BigDecimal.valueOf(10));
 		this.stocksPurchased = contestantWeight.getWeight();
@@ -59,7 +60,7 @@ public class TeamWeightBean {
 		}
 	}
 
-	public Observable<TeamWeightBean> changes() {
+	public Observable<StocksBean> changes() {
 		return changes;
 	}
 

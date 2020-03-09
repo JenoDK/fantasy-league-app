@@ -1,14 +1,13 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.matches.single;
 
-import java.util.Optional;
+import java.util.Objects;
 
 import com.jeno.fantasyleague.backend.model.Contestant;
 import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.ui.common.label.PredictionStatusLabel;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.matches.MatchBindingModel;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.OverviewUtil;
-import com.jeno.fantasyleague.util.ImageUtil;
-import com.jeno.fantasyleague.util.Images;
+import com.jeno.fantasyleague.util.LayoutUtil;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.html.Div;
@@ -18,7 +17,6 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
-import com.vaadin.flow.server.StreamResource;
 
 import io.reactivex.subjects.BehaviorSubject;
 
@@ -56,17 +54,7 @@ public class UserScoreForGameCard extends PolymerTemplate<MatchBindingModel> {
 	}
 
 	private void initLayout() {
-		Optional<StreamResource> userProfilePic = ImageUtil.getUserProfilePictureResource(bean.getUser());
-		Image icon = new Image();
-		icon.setWidth("50px");
-		icon.setHeight("50px");
-		if (userProfilePic.isPresent()) {
-			icon.setSrc(userProfilePic.get());
-		} else {
-			icon.setSrc(Images.DEFAULT_PROFILE_PICTURE);
-		}
-		user.setText(bean.getUser().getUsername());
-		user.addComponentAsFirst(icon);
+		LayoutUtil.initUserH4(user, bean.getUser());
 
 		PredictionStatusLabel yourPredictionLabel = new PredictionStatusLabel("prediction");
 		yourPredictionLabel.setPredictionStatusText(
@@ -77,7 +65,7 @@ public class UserScoreForGameCard extends PolymerTemplate<MatchBindingModel> {
 				bean.getPredictionHiddenUntil());
 		prediction.add(yourPredictionLabel);
 
-		if (bean.isPredictionIsHiddenForUser()) {
+		if (bean.isPredictionIsHiddenForUser() || (Objects.isNull(bean.getHomePrediction()) || Objects.isNull(bean.getAwayPrediction()))) {
 			points.getStyle().set("display", "none");
 		} else {
 			points.setText(Resources.getMessage("points") + ": " + OverviewUtil.getScoreFormatted(bean.getScore()).toString());

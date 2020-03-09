@@ -9,13 +9,14 @@ class StatusLabel extends PolymerElement {
 			<style include="shared-styles">
 				.success, .error, .warning {
 					padding: var(--lumo-space-s);
-					padding-left: var(--lumo-size-m);
 					border-radius: var(--lumo-border-radius);
-					margin-top: var(--lumo-space-m);
-					margin-bottom: var(--lumo-space-s);
 				}
 
-				.error::before, .success::before, .warning::before {
+				.show-icon.success, .show-icon.error, .show-icon.warning {
+					padding-left: var(--lumo-size-m);
+				}
+
+				.show-icon.error::before, .show-icon.success::before, .show-icon.warning::before {
 					font-family: lumo-icons;
 					font-size: var(--lumo-icon-size-m);
 					width: var(--lumo-size-m);
@@ -39,18 +40,23 @@ class StatusLabel extends PolymerElement {
 					background-color: var(--lumo-error-color-10pct);
 					color: var(--lumo-primary-text-color);
 				}
+                
+                * > iron-icon {
+                    margin-right: 10px;
+                }
 
-				.success::before {
+				.show-icon.success::before {
 					content: var(--lumo-icons-checkmark);
 				}
 
-				.error::before {
+				.show-icon.error::before {
 					content: var(--lumo-icons-error);
 				}
 
-				.warning::before {
+				.show-icon.warning::before {
 					content: var(--lumo-icons-error);
 				}
+
 			</style>
 
 			<label id="label"></label>

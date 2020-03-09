@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.User;
-import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.UserTotalScoreBean;
+import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.usertotalscore.UserTotalScoreBean;
 
 public class LeagueBean {
 

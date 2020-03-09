@@ -24,8 +24,8 @@ import com.jeno.fantasyleague.backend.data.repository.ContestantGroupRepository;
 import com.jeno.fantasyleague.backend.data.repository.ContestantRepository;
 import com.jeno.fantasyleague.backend.data.repository.GameRepository;
 import com.jeno.fantasyleague.backend.data.repository.LeagueRepository;
-import com.jeno.fantasyleague.backend.data.service.leaguetemplates.TemplateException;
 import com.jeno.fantasyleague.backend.data.service.leaguetemplates.SoccerCupStages;
+import com.jeno.fantasyleague.backend.data.service.leaguetemplates.TemplateException;
 import com.jeno.fantasyleague.backend.model.Contestant;
 import com.jeno.fantasyleague.backend.model.ContestantGroup;
 import com.jeno.fantasyleague.backend.model.Game;
@@ -179,26 +179,26 @@ public class UefaEuro2020Initializer {
 	 */
 	public enum Team {
 
-		AUSTRIA("Austria", Group.GROUP_C, 94, "images/icons/country_icons/austria.png"),
-		BELGIUM("Belgium", Group.GROUP_B, 213, "images/icons/country_icons/belgium.png"),
-		CROATIA("Croatia", Group.GROUP_D, 144, "images/icons/country_icons/croatia.png"),
-		CZECH_REPUBLIC("Czech Republic", Group.GROUP_D, 60, "images/icons/country_icons/czech_republic.png"),
-		DENMARK("Denmark", Group.GROUP_B, 157, "images/icons/country_icons/denmark.png"),
-		ENGLAND("England", Group.GROUP_D, 163, "images/icons/country_icons/england.png"),
-		FINLAND("Finland", Group.GROUP_B, 49, "images/icons/country_icons/finland.png"),
-		FRANCE("France", Group.GROUP_F, 219, "images/icons/country_icons/france.png"),
-		GERMANY("Germany", Group.GROUP_F, 183, "images/icons/country_icons/germany.png"),
-		ITALY("Italy", Group.GROUP_A, 156, "images/icons/country_icons/italy.png"),
-		NETHERLANDS("Netherlands", Group.GROUP_C, 156, "images/icons/country_icons/netherlands.png"),
-		POLAND("Poland", Group.GROUP_E, 133, "images/icons/country_icons/poland.png"),
-		PORTUGAL("Portugal", Group.GROUP_F, 186, "images/icons/country_icons/portugal.png"),
-		RUSSIA("Russia", Group.GROUP_B, 115, "images/icons/country_icons/russia.png"),
-		SPAIN("Spain", Group.GROUP_E, 207, "images/icons/country_icons/spain.png"),
-		SWEDEN("Sweden", Group.GROUP_E, 144, "images/icons/country_icons/sweden.png"),
-		SWITZERLAND("Switzerland", Group.GROUP_A, 154, "images/icons/country_icons/switzerland.png"),
-		TURKEY("Turkey", Group.GROUP_A, 106, "images/icons/country_icons/switzerland.png"),
-		UKRAINE("Ukraine", Group.GROUP_C, 102, "images/icons/country_icons/ukraine.png"),
-		WALES("Wales", Group.GROUP_A, 121, "images/icons/country_icons/wales.png");
+		AUSTRIA("Austria", Group.GROUP_C, 43, "images/icons/country_icons/austria.png"),
+		BELGIUM("Belgium", Group.GROUP_B, 97, "images/icons/country_icons/belgium.png"),
+		CROATIA("Croatia", Group.GROUP_D, 66, "images/icons/country_icons/croatia.png"),
+		CZECH_REPUBLIC("Czech Republic", Group.GROUP_D, 27, "images/icons/country_icons/czech_republic.png"),
+		DENMARK("Denmark", Group.GROUP_B, 72, "images/icons/country_icons/denmark.png"),
+		ENGLAND("England", Group.GROUP_D, 74, "images/icons/country_icons/england.png"),
+		FINLAND("Finland", Group.GROUP_B, 22, "images/icons/country_icons/finland.png"),
+		FRANCE("France", Group.GROUP_F, 100, "images/icons/country_icons/france.png"),
+		GERMANY("Germany", Group.GROUP_F, 84, "images/icons/country_icons/germany.png"),
+		ITALY("Italy", Group.GROUP_A, 71, "images/icons/country_icons/italy.png"),
+		NETHERLANDS("Netherlands", Group.GROUP_C, 71, "images/icons/country_icons/netherlands.png"),
+		POLAND("Poland", Group.GROUP_E, 61, "images/icons/country_icons/poland.png"),
+		PORTUGAL("Portugal", Group.GROUP_F, 85, "images/icons/country_icons/portugal.png"),
+		RUSSIA("Russia", Group.GROUP_B, 53, "images/icons/country_icons/russia.png"),
+		SPAIN("Spain", Group.GROUP_E, 95, "images/icons/country_icons/spain.png"),
+		SWEDEN("Sweden", Group.GROUP_E, 66, "images/icons/country_icons/sweden.png"),
+		SWITZERLAND("Switzerland", Group.GROUP_A, 70, "images/icons/country_icons/switzerland.png"),
+		TURKEY("Turkey", Group.GROUP_A, 48, "images/icons/country_icons/switzerland.png"),
+		UKRAINE("Ukraine", Group.GROUP_C, 47, "images/icons/country_icons/ukraine.png"),
+		WALES("Wales", Group.GROUP_A, 55, "images/icons/country_icons/wales.png");
 
 		private String name;
 		private Optional<Group> group = Optional.empty();
@@ -212,7 +212,13 @@ public class UefaEuro2020Initializer {
 			this.iconPath = iconPath;
 		}
 
-	}
+		public String getName() {
+			return name;
+		}
+
+		public Integer getPowerIndex() {
+			return powerIndex;
+		}}
 
 	public enum Group {
 		GROUP_A("Group A"),

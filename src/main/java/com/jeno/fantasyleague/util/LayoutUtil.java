@@ -1,6 +1,7 @@
 package com.jeno.fantasyleague.util;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 import com.jeno.fantasyleague.backend.model.Contestant;
 import com.jeno.fantasyleague.backend.model.User;
@@ -8,6 +9,7 @@ import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.ui.common.field.NonNullValidator;
 import com.jeno.fantasyleague.ui.common.field.StringToPositiveIntegerConverter;
 import com.jeno.fantasyleague.ui.common.grid.CustomGridBuilder;
+import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -16,6 +18,7 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.BinderValidationStatus;
 import com.vaadin.flow.data.binder.Setter;
 import com.vaadin.flow.function.ValueProvider;
+import com.vaadin.flow.server.StreamResource;
 
 import io.reactivex.subjects.BehaviorSubject;
 
@@ -95,14 +98,37 @@ public class LayoutUtil {
 	}
 
 	public static <T> TextField createPositiveIntegerTextField(Binder<T> binder, ValueProvider<T, Integer> getter, Setter<T, Integer> setter) {
+		return createPositiveIntegerTextField(binder, getter, setter, b -> b);
+	}
+
+	public static <T> TextField createPositiveIntegerTextField(Binder<T> binder, ValueProvider<T, Integer> getter, Setter<T, Integer> setter, Function<Binder.BindingBuilder<T, Integer>, Binder.BindingBuilder<T, Integer>> builderFunction) {
 		TextField field = new TextField();
 		field.setWidth("50px");
 		field.addThemeName("no-error-msg");
-		binder.forField(field)
+		Binder.BindingBuilder<T, Integer> builder = binder.forField(field)
 				.withNullRepresentation(" ")
 				.withConverter(new StringToPositiveIntegerConverter(null, Resources.getMessage("error.positiveNumber")))
-				.withValidator(new NonNullValidator(Resources.getMessage("error.cannotBeNull")))
-				.bind(getter, setter);
+				.withValidator(new NonNullValidator(Resources.getMessage("error.cannotBeNull")));
+		builderFunction.apply(builder);
+		builder.bind(getter, setter);
 		return field;
+	}
+
+	public static void initUserH4(H4 label, User user) {
+		initUserH4(label, user, user.getUsername());
+	}
+
+	public static void initUserH4(H4 label, User user, String labelText) {
+		Optional<StreamResource> userProfilePic = ImageUtil.getUserProfilePictureResource(user);
+		Image icon = new Image();
+		icon.setWidth("50px");
+		icon.setHeight("50px");
+		if (userProfilePic.isPresent()) {
+			icon.setSrc(userProfilePic.get());
+		} else {
+			icon.setSrc(Images.DEFAULT_PROFILE_PICTURE);
+		}
+		label.setText(labelText);
+		label.addComponentAsFirst(icon);
 	}
 }

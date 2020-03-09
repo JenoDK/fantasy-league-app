@@ -1,4 +1,4 @@
-package com.jeno.fantasyleague.ui.main.views.league.singleleague.overview;
+package com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.usertotalscore;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;

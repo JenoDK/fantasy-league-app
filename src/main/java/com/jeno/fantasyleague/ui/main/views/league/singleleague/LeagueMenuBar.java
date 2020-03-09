@@ -7,6 +7,8 @@ import com.jeno.fantasyleague.ui.common.tabsheet.CustomMenuBar;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.faq.FaqTab;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.matches.MatchTab;
+import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.OverviewTab;
+import com.jeno.fantasyleague.ui.main.views.league.singleleague.stocks.StocksTab;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.users.UsersTab;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.contextmenu.MenuItem;
@@ -43,19 +45,19 @@ public class LeagueMenuBar extends CustomMenuBar {
 		mainMenuItemLabel.getStyle().set("cursor", "pointer");
 		mainMenuItemLayout.add(VaadinIcon.MENU.create(), mainMenuItemLabel);
 		MenuItem mainMenu = addItem(mainMenuItemLayout);
-		CustomMenuItem matchesItem = addLazyItemForMenu(mainMenu, mainMenuItemLabel, "matches", "Matches", () -> new MatchTab(league, singleLeagueServiceprovider, back, backItem));
-//		CustomMenuItem overviewItem = addLazyItemForMenu(mainMenu, mainMenuItemLabel, "overview", "Overview", () -> new OverviewTab(league, singleLeagueServiceprovider));
-//		addLazyItemForMenu(mainMenu, mainMenuItemLabel, "teamWeightsTab", "Purchase stocks", () -> new TeamWeightsTab(league, singleLeagueServiceprovider));
+		addLazyItemForMenu(mainMenu, mainMenuItemLabel, "matches", "Matches", () -> new MatchTab(league, singleLeagueServiceprovider, back, backItem));
+		CustomMenuItem overviewItem = addLazyItemForMenu(mainMenu, mainMenuItemLabel, "overview", "Overview", () -> new OverviewTab(league, singleLeagueServiceprovider));
+		addLazyItemForMenu(mainMenu, mainMenuItemLabel, "teamWeightsTab", "Purchase stocks", () -> new StocksTab(league, singleLeagueServiceprovider));
 //		addLazyItemForMenu(mainMenu, mainMenuItemLabel, "groupStageTab", "Group Stage", () -> new GroupStageTab(league, singleLeagueServiceprovider));
 //		addLazyItemForMenu(mainMenu, mainMenuItemLabel, "knockoutStageTab", "Knockout Stage", () -> new KnockoutStageTab(league, singleLeagueServiceprovider));
 		addLazyItemForMenu(mainMenu, mainMenuItemLabel, "faq", "FAQ", () -> new FaqTab(league, singleLeagueServiceprovider));
 		if (singleLeagueServiceprovider.loggedInUserIsLeagueCreator(league)) {
-			addLazyItemForMenu(mainMenu, mainMenuItemLabel, "usersTab", "Users", () -> new UsersTab(league, singleLeagueServiceprovider)).getListener().onComponentEvent(null);
+			addLazyItemForMenu(mainMenu, mainMenuItemLabel, "usersTab", "Users", () -> new UsersTab(league, singleLeagueServiceprovider));
 //			addLazyItemForMenu(mainMenu, mainMenuItemLabel, "leagueSettingsTab", "League Settings", () -> new LeagueSettingsTab(league, singleLeagueServiceprovider));
 		}
 		mainMenu.getSubMenu().addItem("Back to your leagues", backToLeagueGrid::onNext);
 		// Activate this by default
-		matchesItem.getListener().onComponentEvent(null);
+		overviewItem.getListener().onComponentEvent(null);
 	}
 
 	private CustomMenuItem addLazyItemForMenu(MenuItem menuItem, Label label, String id, String caption, ComponentCreationFunction function) {

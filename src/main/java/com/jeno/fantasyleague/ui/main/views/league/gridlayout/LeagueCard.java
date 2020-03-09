@@ -7,7 +7,7 @@ import com.google.common.collect.Lists;
 import com.jeno.fantasyleague.backend.model.User;
 import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.OverviewUtil;
-import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.UserTotalScoreBean;
+import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.usertotalscore.UserTotalScoreBean;
 import com.jeno.fantasyleague.util.ImageUtil;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.JsModule;

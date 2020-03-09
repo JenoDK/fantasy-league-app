@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -15,8 +16,9 @@ import com.jeno.fantasyleague.backend.model.Game;
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.Prediction;
 import com.jeno.fantasyleague.backend.model.User;
-import com.jeno.fantasyleague.ui.common.window.PopupWindow;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
+import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.usertotalscore.UserTotalScoreBean;
+import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.usertotalscore.UserTotalScoreGrid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 public class OverviewTab extends VerticalLayout {
@@ -34,28 +36,14 @@ public class OverviewTab extends VerticalLayout {
 		this.singleLeagueServiceprovider = singleLeagueServiceprovider;
 		this.league = league;
 
-		UpcomingMatchesGrid upcomingMatchesGrid = new UpcomingMatchesGrid();
-		upcomingMatchesGrid.setItems(getUpcomingMatches(singleLeagueServiceprovider));
-		upcomingMatchesGrid.viewAllResultsClicked().subscribe(bean -> new PopupWindow.Builder(
-				"All scores",
-				window ->
-				new AllUserResultsForGameLayout(league, bean, singleLeagueServiceprovider))
-//				.closable(true)
-//				.resizable(true)
-				.setHeight(700)
-				.setWidth(900)
-				.build()
-				.open());
-		add(upcomingMatchesGrid);
+		List<UserTotalScoreBean> scoreBeans = fetchTotalScores();
+		Set<String> userNames = scoreBeans.stream()
+				.map(UserTotalScoreBean::getUser)
+				.map(User::getUsername)
+				.collect(Collectors.toSet());
 
-//		List<UserTotalScoreBean> scoreBeans = fetchTotalScores();
-//		Set<String> userNames = scoreBeans.stream()
-//				.map(UserTotalScoreBean::getUser)
-//				.map(User::getUsername)
-//				.collect(Collectors.toSet());
-//
-//		UserTotalScoreGrid totalScoreGrid = new UserTotalScoreGrid(scoreBeans, false, singleLeagueServiceprovider.getLoggedInUser());
-//		totalScoreGrid.setWidth("100%");
+		UserTotalScoreGrid totalScoreGrid = new UserTotalScoreGrid(scoreBeans, false, singleLeagueServiceprovider.getLoggedInUser());
+		totalScoreGrid.setWidth("100%");
 //
 //		Accordion predictionScoresLayout = new Accordion();
 //		predictionScoresLayout.getElement().getClassList().add("darker-tabcolor");
@@ -103,7 +91,7 @@ public class OverviewTab extends VerticalLayout {
 //		});
 //
 //		add(refreshButton);
-//		add(totalScoreGrid);
+		add(totalScoreGrid);
 //		add(predictionScoresLayout);
 	}
 

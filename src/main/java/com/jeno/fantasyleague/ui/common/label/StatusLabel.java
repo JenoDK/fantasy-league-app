@@ -18,9 +18,24 @@ public class StatusLabel extends PolymerTemplate<TemplateModel> {
 	@Id("label")
 	private Label label;
 
+	public StatusLabel() {
+		this(true);
+	}
+
+	public StatusLabel(boolean showIcon) {
+		super();
+		if (showIcon) {
+			label.addClassName("show-icon");
+		}
+	}
+
 	public void reset() {
 		label.setText("");
 		label.removeClassNames(SUCCESS, ERROR, WARNING);
+	}
+
+	public Label getLabel() {
+		return label;
 	}
 
 	public void setText(String text) {

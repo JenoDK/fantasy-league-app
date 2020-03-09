@@ -28,7 +28,7 @@ public class MatchCardBean {
 	}
 
 	public String getPointsGained() {
-		return Resources.getMessage("points") + ": " + match.getPredictionScore();
+		return Resources.getMessage("points") + ": " + OverviewUtil.getScoreFormatted(match.getPredictionScore());
 	}
 
 	private Game getGame() {
