@@ -34,6 +34,11 @@ public class CustomButton extends Button {
 	}
 
 	private void initStyles() {
+		setThemeName("primary");
+	}
+
+	public void addPreventClickPropagation() {
+		getElement().addEventListener("click", event -> {}).addEventData("event.stopPropagation()");
 	}
 
 }

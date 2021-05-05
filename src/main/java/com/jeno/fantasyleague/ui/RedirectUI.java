@@ -23,9 +23,9 @@ public abstract class RedirectUI extends VerticalLayout {
 
 		Component middleComponent = getMiddleComponent();
 
-		mainLayout.add(redirectLink);
 		mainLayout.add(middleComponent);
-		mainLayout.setHorizontalComponentAlignment(Alignment.START, redirectLink);
+		mainLayout.add(redirectLink);
+		mainLayout.setHorizontalComponentAlignment(Alignment.CENTER, redirectLink);
 		mainLayout.setHorizontalComponentAlignment(Alignment.CENTER, middleComponent);
 
 		add(mainLayout);

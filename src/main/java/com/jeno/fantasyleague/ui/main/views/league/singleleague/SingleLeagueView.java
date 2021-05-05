@@ -5,16 +5,18 @@ import com.jeno.fantasyleague.ui.common.field.CustomButton;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.contextmenu.MenuItem;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 import io.reactivex.Observable;
+import io.reactivex.subjects.BehaviorSubject;
 
 public class SingleLeagueView extends VerticalLayout {
 
+	private final BehaviorSubject<ClickEvent<Button>> backClick = BehaviorSubject.create();
 	private final League league;
 
 	private LeagueMenuBar tabSheet;
@@ -29,6 +31,9 @@ public class SingleLeagueView extends VerticalLayout {
 	private void initLayout(League league, SingleLeagueServiceProvider singleLeagueServiceprovider) {
 		setSizeFull();
 		setMaxWidth("1200px");
+
+		Button back = new Button(VaadinIcon.ARROW_LEFT.create());
+		back.addClickListener(backClick::onNext);
 
 		HorizontalLayout navigation = new HorizontalLayout();
 		navigation.setWidthFull();
@@ -47,6 +52,7 @@ public class SingleLeagueView extends VerticalLayout {
 		tabSheet = new LeagueMenuBar(league, singleLeagueServiceprovider, main);
 		navigation.add(tabSheet);
 
+		add(back);
 		add(topBar);
 //		add(createNavigationRow("Matches", VaadinIcon.SWORD.create()));
 		add(navigation);
@@ -61,8 +67,8 @@ public class SingleLeagueView extends VerticalLayout {
 		return button;
 	}
 
-	public Observable<ClickEvent<MenuItem>> backToLeaguesView() {
-		return tabSheet.backToLeaguesView();
+	public Observable<ClickEvent<Button>> backToLeaguesView() {
+		return backClick;
 	}
 
 }

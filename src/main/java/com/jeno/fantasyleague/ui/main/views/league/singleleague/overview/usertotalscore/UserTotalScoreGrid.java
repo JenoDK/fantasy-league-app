@@ -4,17 +4,18 @@ import java.util.List;
 
 import com.jeno.fantasyleague.backend.model.User;
 import com.jeno.fantasyleague.ui.common.grid.CustomGrid;
+import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.chart.UserScoreBean;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 
 import io.reactivex.subjects.BehaviorSubject;
 
-public class UserTotalScoreGrid extends CustomGrid<UserTotalScoreBean> {
+public class UserTotalScoreGrid extends CustomGrid<UserScoreBean> {
 
 	private final User loggedInUser;
 	private final boolean minimalistic;
 
-	public UserTotalScoreGrid(List<UserTotalScoreBean> items, boolean minimalistic, User loggedInUser) {
+	public UserTotalScoreGrid(List<UserScoreBean> items, boolean minimalistic, User loggedInUser) {
 		super();
 		this.loggedInUser = loggedInUser;
 		this.minimalistic = minimalistic;
@@ -58,10 +59,10 @@ public class UserTotalScoreGrid extends CustomGrid<UserTotalScoreBean> {
 //		sort(Lists.newArrayList(new GridSortOrder<>(userScoreColumn, SortDirection.DESCENDING)));
 	}
 
-	private String getUserInfoColumn(UserTotalScoreBean userTotalScoreBean) {
-		return userTotalScoreBean.getUser().getUsername() +
-				(userTotalScoreBean.getUser().getId().equals(loggedInUser.getId()) ? " (You)" : "") +
-				" - " + userTotalScoreBean.getUser().getName();
+	private String getUserInfoColumn(UserScoreBean userScoreBean) {
+		return userScoreBean.getUser().getUsername() +
+				(userScoreBean.getUser().getId().equals(loggedInUser.getId()) ? " (You)" : "") +
+				" - " + userScoreBean.getUser().getName();
 	}
 
 }

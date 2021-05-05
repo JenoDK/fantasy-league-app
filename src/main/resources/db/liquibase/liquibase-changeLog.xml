@@ -6,5 +6,6 @@
 
     <include file="create/create-tables.xml" relativeToChangelogFile="true"/>
     <include file="changelogs/add-default-users.xml" relativeToChangelogFile="true"/>
+	<include file="changelogs/add-user-graph-pref-column.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

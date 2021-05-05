@@ -4,19 +4,16 @@ import java.util.List;
 
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.User;
-import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.usertotalscore.UserTotalScoreBean;
 
 public class LeagueBean {
 
 	private final League league;
-	private final List<UserTotalScoreBean> scores;
 	private final User loggedInUser;
 	private final List<User> leagueUsers;
 	private final List<User> leagueOwners;
 
-	public LeagueBean(League league, List<UserTotalScoreBean> scores, User loggedInUser, List<User> leagueUsers, List<User> leagueOwners) {
+	public LeagueBean(League league, User loggedInUser, List<User> leagueUsers, List<User> leagueOwners) {
 		this.league = league;
-		this.scores = scores;
 		this.loggedInUser = loggedInUser;
 		this.leagueUsers = leagueUsers;
 		this.leagueOwners = leagueOwners;
@@ -24,10 +21,6 @@ public class LeagueBean {
 
 	public League getLeague() {
 		return league;
-	}
-
-	public List<UserTotalScoreBean> getScores() {
-		return scores;
 	}
 
 	public User getLoggedInUser() {
@@ -45,22 +38,16 @@ public class LeagueBean {
 	public static class Builder {
 
 		private League league;
-		private List<UserTotalScoreBean> scores;
 		private User loggedInUser;
 		private List<User> leagueUsers;
 		private List<User> leagueOwners;
 
 		public LeagueBean createLeagueBean() {
-			return new LeagueBean(league, scores, loggedInUser, leagueUsers, leagueOwners);
+			return new LeagueBean(league, loggedInUser, leagueUsers, leagueOwners);
 		}
 
 		public Builder setLeague(League league) {
 			this.league = league;
-			return this;
-		}
-
-		public Builder setScores(List<UserTotalScoreBean> scores) {
-			this.scores = scores;
 			return this;
 		}
 

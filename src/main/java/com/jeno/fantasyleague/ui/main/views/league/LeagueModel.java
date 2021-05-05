@@ -13,7 +13,6 @@ import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.User;
 import com.jeno.fantasyleague.security.SecurityHolder;
 import com.jeno.fantasyleague.ui.main.views.league.gridlayout.LeagueBean;
-import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.usertotalscore.UserTotalScoreBean;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 
 import io.reactivex.Observable;
@@ -59,11 +58,8 @@ public class LeagueModel {
 
 	@Transactional
 	public LeagueBean makeLeagueBean(League league, User user) {
-//		List<UserTotalScoreBean> userScores = UserTotalScoreBean.transfer(leagueService.getTotalLeagueScores(league));
-		List<UserTotalScoreBean> userScores =  List.of();
 		return new LeagueBean.Builder()
 				.setLeague(league)
-				.setScores(userScores)
 				.setLoggedInUser(user)
 				.setLeagueUsers(leagueRepo.fetchLeagueUsers(league.getId()))
 				.setLeagueOwners(leagueRepo.fetchLeagueOwners(league.getId()))

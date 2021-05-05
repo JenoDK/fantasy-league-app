@@ -196,6 +196,10 @@ $_documentContainer.innerHTML = `
 					min-width: calc(var(--lumo-button-size) * 2.5);
                 }
 
+				:host([theme~="primary"][disabled]) {
+					background-color: var(--lumo-primary-color-10pct);;
+				}
+
 				:host([theme~="tertiary"]), :host([theme~="tertiary-inline"]) {
 					background-color:
 							transparent !important;

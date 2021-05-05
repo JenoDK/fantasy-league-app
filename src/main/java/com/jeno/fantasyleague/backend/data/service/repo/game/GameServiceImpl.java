@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.jeno.fantasyleague.backend.data.repository.ContestantGroupRepository;
 import com.jeno.fantasyleague.backend.data.repository.ContestantRepository;
@@ -33,7 +32,6 @@ public class GameServiceImpl implements GameService {
 
 	@Override
 	public void updateGroupStageGameScores(List<Game> games) {
-		games.stream().forEach(this::setGroupStageWinner);
 		gameRepository.saveAll(games);
 		contestantRepository.saveAll(games.stream()
 				.flatMap(game -> Stream.of(game.getHome_team(), game.getAway_team()))
@@ -84,10 +82,12 @@ public class GameServiceImpl implements GameService {
 	}
 
 	private List<Contestant> getOptionalGroupContestantsByPlaceHolder(String placeholder, League league) {
-		return getGroup(placeholder)
-				.flatMap(group -> contestantGroupRepository.findByNameAndLeague(group.getGroupName(), league))
-				.map(g -> contestantGroupRepository.fetchGroupContestants(g.getId()))
-				.orElse(Lists.newArrayList());
+		return getGroups(placeholder).stream()
+				.map(group -> contestantGroupRepository.findByNameAndLeague(group.getGroupName(), league))
+				.filter(Optional::isPresent)
+				.map(Optional::get)
+				.flatMap(g -> contestantGroupRepository.fetchGroupContestants(g.getId()).stream())
+				.collect(Collectors.toList());
 	}
 
 	private void setGroupStageWinner(Game game) {
@@ -102,10 +102,10 @@ public class GameServiceImpl implements GameService {
 		}
 	}
 
-	public static Optional<UefaEuro2020Initializer.Group> getGroup(String placeHolder) {
+	public static List<UefaEuro2020Initializer.Group> getGroups(String placeHolder) {
 		return Stream.of(UefaEuro2020Initializer.Group.values())
-				.filter(group -> placeHolder.contains(group.getGroupName()))
-				.findFirst();
+				.filter(group -> placeHolder.contains(group.getShortName()))
+				.collect(Collectors.toList());
 	}
 
 }

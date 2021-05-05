@@ -24,6 +24,19 @@ public class ImageUtil {
 		}
 	}
 
+	public static Image createProfileIcon(User user) {
+		Optional<StreamResource> userProfilePic = ImageUtil.getUserProfilePictureResource(user);
+		Image icon = new Image();
+		icon.setWidth("50px");
+		icon.setHeight("50px");
+		if (userProfilePic.isPresent()) {
+			icon.setSrc(userProfilePic.get());
+		} else {
+			icon.setSrc(Images.DEFAULT_PROFILE_PICTURE);
+		}
+		return icon;
+	}
+
 	public static Image getLeaguePictureImage(League league) {
 		if (league.getLeague_picture() != null) {
 			StreamResource resource = new StreamResource(

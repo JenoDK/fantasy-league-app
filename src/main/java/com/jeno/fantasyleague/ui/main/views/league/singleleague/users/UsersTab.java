@@ -5,13 +5,14 @@ import java.util.List;
 import com.google.common.collect.Lists;
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.User;
+import com.jeno.fantasyleague.ui.common.tabsheet.LazyTabComponent;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 
-public class UsersTab extends VerticalLayout {
+public class UsersTab extends LazyTabComponent {
 
 	public UsersTab(League league, SingleLeagueServiceProvider singleLeagueServiceProvider) {
 		super();

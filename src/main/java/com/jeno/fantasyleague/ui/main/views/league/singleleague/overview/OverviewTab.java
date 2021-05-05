@@ -1,161 +1,149 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.overview;
 
-import java.time.LocalDateTime;
-import java.util.Comparator;
+import static com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.chart.ScoreChart.DEFAULT_TOP_SHOWN;
+
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.jeno.fantasyleague.backend.data.service.leaguetemplates.SoccerCupStages;
+import com.google.common.collect.Maps;
 import com.jeno.fantasyleague.backend.model.Contestant;
-import com.jeno.fantasyleague.backend.model.ContestantWeight;
-import com.jeno.fantasyleague.backend.model.Game;
 import com.jeno.fantasyleague.backend.model.League;
-import com.jeno.fantasyleague.backend.model.Prediction;
 import com.jeno.fantasyleague.backend.model.User;
+import com.jeno.fantasyleague.ui.common.tabsheet.LazyTabComponent;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
-import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.usertotalscore.UserTotalScoreBean;
+import com.jeno.fantasyleague.ui.main.views.league.singleleague.LeagueMenuBar;
+import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.chart.ScoreChart;
+import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.chart.UserScoreBean;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.usertotalscore.UserTotalScoreGrid;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.contextmenu.MenuItem;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.textfield.NumberField;
 
-public class OverviewTab extends VerticalLayout {
+public class OverviewTab extends LazyTabComponent {
 
 	private final SingleLeagueServiceProvider singleLeagueServiceprovider;
 	private final League league;
+	private final LeagueMenuBar menuBar;
 
-	public OverviewTab(League league, SingleLeagueServiceProvider singleLeagueServiceprovider) {
+	private List<MenuItem> extraMenuItems;
+	private User loggedInUser;
+	private User.GraphPreference graphPreference;
+
+	public OverviewTab(League league, SingleLeagueServiceProvider singleLeagueServiceprovider, LeagueMenuBar menuBar) {
 		super();
 		addClassName("overview-tab");
 		setMargin(false);
 		setPadding(false);
 		setSpacing(false);
 
+		User loggedInUser = singleLeagueServiceprovider.getLoggedInUser();
+
 		this.singleLeagueServiceprovider = singleLeagueServiceprovider;
 		this.league = league;
+		this.menuBar = menuBar;
+		this.loggedInUser = loggedInUser;
+		this.graphPreference = loggedInUser.getGraph_preference();
 
-		List<UserTotalScoreBean> scoreBeans = fetchTotalScores();
-		Set<String> userNames = scoreBeans.stream()
-				.map(UserTotalScoreBean::getUser)
-				.map(User::getUsername)
-				.collect(Collectors.toSet());
-
-		UserTotalScoreGrid totalScoreGrid = new UserTotalScoreGrid(scoreBeans, false, singleLeagueServiceprovider.getLoggedInUser());
+		List<UserScoreBean> scoreBeans = fetchTotalScores();
+		UserTotalScoreGrid totalScoreGrid = new UserTotalScoreGrid(scoreBeans, false, loggedInUser);
 		totalScoreGrid.setWidth("100%");
-//
-//		Accordion predictionScoresLayout = new Accordion();
-//		predictionScoresLayout.getElement().getClassList().add("darker-tabcolor");
-//
-//		Map<FifaWorldCup2018Stages, UserPredictionScoresGrid> gridPerStageMap = Maps.newHashMap();
-//		Arrays.stream(FifaWorldCup2018Stages.values())
-//				.forEach(stage -> gridPerStageMap.put(stage, new UserPredictionScoresGrid()));
-//
-//		gridPerStageMap.keySet().stream()
-//				.sorted(Comparator.comparingInt(FifaWorldCup2018Stages::getSeq))
-//				.forEach(key -> predictionScoresLayout.add(Resources.getMessage(key.getName()), gridPerStageMap.get(key)));
-//
-//		Observable.merge(gridPerStageMap.values().stream().map(UserPredictionScoresGrid::viewAllResultsClicked).collect(Collectors.toSet()))
-//				.subscribe(bean -> new PopupWindow.Builder(
-//							"All scores",
-//							"allScoresWindows", window ->
-//							new AllUserResultsForGameLayout(league, bean, singleLeagueServiceprovider))
-////						.closable(true)
-////						.resizable(true)
-//						.setHeight(700)
-//						.setWidth(900)
-//						.build()
-//						.open());
-//
-//		totalScoreGrid.addItemClickListener(event ->
-//				setPredictionScoreItems(fetchPredictionScores(event.getItem().getUser()), gridPerStageMap));
-//		scoreBeans.stream()
-//				.filter(bean -> singleLeagueServiceprovider.getLoggedInUser().getId().equals(bean.getUser().getId()))
-//				.findFirst()
-//				.ifPresent(totalScoreGrid::select);
-//		setPredictionScoreItems(fetchPredictionScores(singleLeagueServiceprovider.getLoggedInUser()), gridPerStageMap);
-//
-//		Button refreshButton = new Button(VaadinIcon.REFRESH.create());
-////		refreshButton.addClassName(ValoTheme.BUTTON_TINY);
-////		refreshButton.addClassName(ValoTheme.BUTTON_ICON_ONLY);
-//		refreshButton.addClickListener(ignored -> {
-//			List<UserTotalScoreBean> scores = fetchTotalScores();
-//			totalScoreGrid.setItems(scores);
-//
-//			scores.stream()
-//					.filter(bean -> singleLeagueServiceprovider.getLoggedInUser().getId().equals(bean.getUser().getId()))
-//					.findFirst()
-//					.ifPresent(totalScoreGrid::select);
-//			setPredictionScoreItems(fetchPredictionScores(singleLeagueServiceprovider.getLoggedInUser()), gridPerStageMap);
-//		});
-//
-//		add(refreshButton);
+		Set<String> iconPaths = singleLeagueServiceprovider.getContestantRepository().findAll().stream()
+				.map(Contestant::getIcon_path)
+				.filter(Objects::nonNull)
+				.collect(Collectors.toSet());
+		ScoreChart scoreChart = new ScoreChart(fetchTotalScores(), generateColorMap(iconPaths, COLORS), loggedInUser);
+		NumberField numberField = new NumberField();
+		numberField.setValue(DEFAULT_TOP_SHOWN);
+		numberField.setMax(scoreBeans.size());
+		numberField.setMin(1);
+		numberField.addValueChangeListener(event -> {
+			switch (graphPreference) {
+				case COLUMN:
+					scoreChart.showHBarChart(event.getValue());
+					break;
+				case COLUMN_FLAGS:
+					scoreChart.showVBarChart(event.getValue());
+					break;
+				case LINE:
+					scoreChart.showLineChart(event.getValue());
+					break;
+			}
+		});
+		numberField.setHasControls(true);
+
+		add(numberField);
+		add(scoreChart);
 		add(totalScoreGrid);
-//		add(predictionScoresLayout);
+
+		MenuItem hBarChartMenuItem = this.menuBar.addItem(VaadinIcon.BAR_CHART_H.create(), event -> {
+			setGraphPreference(User.GraphPreference.COLUMN);
+			scoreChart.showHBarChart(numberField.getValue());
+		});
+		MenuItem vBarChartMenuItem = this.menuBar.addItem(VaadinIcon.BAR_CHART.create(), event -> {
+			setGraphPreference(User.GraphPreference.COLUMN_FLAGS);
+			scoreChart.showVBarChart(numberField.getValue());
+		});
+		MenuItem lineChartMenuItem = this.menuBar.addItem(VaadinIcon.LINE_CHART.create(), event -> {
+			setGraphPreference(User.GraphPreference.LINE);
+			scoreChart.showLineChart(numberField.getValue());
+		});
+		extraMenuItems = List.of(hBarChartMenuItem, vBarChartMenuItem, lineChartMenuItem);
 	}
 
-	private void setPredictionScoreItems(List<UserPredictionScoreBean> userPredictionScoreBeans, Map<SoccerCupStages, UpcomingMatchesGrid> gridPerStageMap) {
-		ArrayListMultimap<SoccerCupStages, UserPredictionScoreBean> beansPerStage = ArrayListMultimap.create();
-		userPredictionScoreBeans.forEach(bean -> beansPerStage.put(SoccerCupStages.valueOf(bean.getGame().getStage()), bean));
-		beansPerStage.asMap().entrySet().forEach(entry -> gridPerStageMap.get(entry.getKey()).setItems(entry.getValue()));
+	private void setGraphPreference(User.GraphPreference graphPref) {
+		graphPreference = graphPref;
+		if (!loggedInUser.getGraph_preference().equals(graphPreference)) {
+			loggedInUser.setGraph_preference(graphPreference);
+			loggedInUser = singleLeagueServiceprovider.getUserDao().update(loggedInUser);
+		}
 	}
 
-	private List<UserPredictionScoreBean> getUpcomingMatches(SingleLeagueServiceProvider singleLeagueServiceProvider) {
-		LocalDateTime date1 = LocalDateTime.now().minusHours(12);
-		List<Game> games = singleLeagueServiceProvider.getGameRepository().findByLeagueAndGameDateTimeGreaterThan(league, date1).stream()
-				.sorted(Comparator.comparing(Game::getGameDateTime))
-				.collect(Collectors.toList());
-		Map<Long, Prediction> predictions = singleLeagueServiceProvider.getPredictionRepository()
-				.findByLeagueAndUserAndJoinGames(league, singleLeagueServiceProvider.getLoggedInUser()).stream()
-				.collect(Collectors.toMap(Prediction::getGame_fk, Function.identity()));
-		Map<Long, Contestant> contestantMap = singleLeagueServiceProvider.getContestantRepository().findByLeague(league).stream()
-				.collect(Collectors.toMap(Contestant::getId, Function.identity()));
-		Map<Long, Integer> weightsForUserPerContestant =
-				singleLeagueServiceProvider.getContestantWeightRepository().findByUserAndLeague(
-						singleLeagueServiceProvider.getLoggedInUser(),
-						league).stream()
-						.collect(Collectors.toMap(ContestantWeight::getContestant_fk, ContestantWeight::getWeight));
-		return games.stream()
-				.map(game -> new UserPredictionScoreBean(
-						predictions.get(game.getId()),
-						contestantMap.get(game.getHome_team_fk()),
-						contestantMap.get(game.getAway_team_fk()),
-						weightsForUserPerContestant.get(game.getHome_team_fk()),
-						weightsForUserPerContestant.get(game.getAway_team_fk()),
-						singleLeagueServiceProvider.getLeaguePredictionScoreForUser(league, predictions.get(game.getId()), singleLeagueServiceProvider.getLoggedInUser()),
-						OverviewUtil.isHiddenForUser(singleLeagueServiceProvider.getLoggedInUser(), league, predictions.get(game.getId())),
-						league))
-				.sorted(Comparator.comparing(o -> o.getGame().getGameDateTime()))
-				.collect(Collectors.toList());
+	@Override
+	protected void hide() {
+		super.hide();
+		extraMenuItems.stream()
+				.filter(Objects::nonNull)
+				.forEach(i -> i.setVisible(false));
 	}
 
-	private List<UserPredictionScoreBean> fetchPredictionScores(User user) {
-		Map<Long, Contestant> contestantMap = singleLeagueServiceprovider.getContestantRepository().findByLeague(league).stream()
-				.collect(Collectors.toMap(Contestant::getId, Function.identity()));
-		List<ContestantWeight> contestantWeights = singleLeagueServiceprovider.getContestantWeightRepository().findByUserAndLeague(user, league);
-		Map<Long, Integer> weightsForUserPerContestant =
-				contestantWeights.stream()
-						.collect(Collectors.toMap(ContestantWeight::getContestant_fk, ContestantWeight::getWeight));
-		List<Prediction> predictionsWithJoinedGames =
-				singleLeagueServiceprovider.getPredictionRepository().findByLeagueAndUserAndJoinGames(league, user);
-		Map<Long, Double> scorePerPredictionMap =
-				singleLeagueServiceprovider.getLeaguePredictionScoresForUser(league, predictionsWithJoinedGames, contestantWeights);
-		return predictionsWithJoinedGames.stream()
-				.map(prediction -> new UserPredictionScoreBean(
-						prediction,
-						contestantMap.get(prediction.getGame().getHome_team_fk()),
-						contestantMap.get(prediction.getGame().getAway_team_fk()),
-						weightsForUserPerContestant.get(prediction.getGame().getHome_team_fk()),
-						weightsForUserPerContestant.get(prediction.getGame().getAway_team_fk()),
-						scorePerPredictionMap.get(prediction.getId()),
-						OverviewUtil.isHiddenForUser(singleLeagueServiceprovider.getLoggedInUser(), league, prediction),
-						league))
-				.collect(Collectors.toList());
+	@Override
+	protected void show() {
+		super.show();
+		extraMenuItems.stream()
+				.filter(Objects::nonNull)
+				.forEach(i -> i.setVisible(true));
 	}
 
-	public List<UserTotalScoreBean> fetchTotalScores() {
-		return UserTotalScoreBean.transfer(singleLeagueServiceprovider.getUserLeagueScores(league));
+	private static String[] COLORS = new String[] {
+			"#FF0000", "#00FF00", "#0000FF", "#FFFF00", "#FF00FF", "#00FFFF", "#000000",
+			"#800000", "#008000", "#000080", "#808000", "#800080", "#008080", "#808080",
+			"#C00000", "#00C000", "#0000C0", "#C0C000", "#C000C0", "#00C0C0", "#C0C0C0",
+			"#400000", "#004000", "#000040", "#404000", "#400040", "#004040", "#404040",
+			"#200000", "#002000", "#000020", "#202000", "#200020", "#002020", "#202020",
+			"#600000", "#006000", "#000060", "#606000", "#600060", "#006060", "#606060",
+			"#A00000", "#00A000", "#0000A0", "#A0A000", "#A000A0", "#00A0A0", "#A0A0A0",
+			"#E00000", "#00E000", "#0000E0", "#E0E000", "#E000E0", "#00E0E0", "#E0E0E0",
+	};
+
+	public static Map<String, String> generateColorMap(Set<String> iconPaths, String[] colors) {
+		int i = 0;
+		Map<String, String> colorMap = Maps.newHashMap();
+		for (String iconPath : iconPaths) {
+			colorMap.put(iconPath, colors[i]);
+			i++;
+		}
+		return colorMap;
+	}
+
+	public List<UserScoreBean> fetchTotalScores() {
+		return UserScoreBean.transfer(singleLeagueServiceprovider.getUserLeagueScores(league));
+	}
+
+	public enum ChartType {
+		HBAR, VBAR, LINE
 	}
 
 }

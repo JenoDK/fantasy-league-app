@@ -8,6 +8,6 @@ import com.jeno.fantasyleague.backend.model.League;
 
 public interface ContestantService {
 
-	List<Contestant> getPossibleContestantsFromGroupStage(UefaEuro2020Initializer.Group group, League league);
+	List<Contestant> getPossibleContestantsFromGroupStage(List<UefaEuro2020Initializer.Group> groups, League league);
 
 }

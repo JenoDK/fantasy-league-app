@@ -13,16 +13,16 @@ import com.jeno.fantasyleague.backend.model.ContestantWeight;
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.ui.common.label.StatusLabel;
+import com.jeno.fantasyleague.ui.common.tabsheet.LazyTabComponent;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.jeno.fantasyleague.util.DateUtil;
 import com.jeno.fantasyleague.util.DecimalUtil;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.ValidationResult;
 import com.vaadin.flow.data.provider.DataProvider;
 
-public class StocksTab extends VerticalLayout {
+public class StocksTab extends LazyTabComponent {
 
 	private League league;
 	private SingleLeagueServiceProvider singleLeagueServiceprovider;
@@ -51,6 +51,7 @@ public class StocksTab extends VerticalLayout {
 	public void fetchAndSetTeamWeights() {
 		teamWeights = singleLeagueServiceprovider.getContestantWeights(league).stream()
 				.map(StocksBean::new)
+//				.sorted(Comparator.comparingInt(StocksBean::getStocksPurchased).reversed())
 				.sorted(Comparator.comparingInt(StocksBean::getPowerIndex).reversed())
 				.collect(Collectors.toList());
 	}
@@ -101,7 +102,7 @@ public class StocksTab extends VerticalLayout {
 		BigDecimal weightToDistribute = getWeightToDistribute();
 		boolean exceedsLimit = weightToDistribute.compareTo(BigDecimal.ZERO) < 0;
 		balanceLabel.setText("$" + getWeightToDistributeString(weightToDistribute));
-		balanceLabel.getLabel().addComponentAsFirst(VaadinIcon.WALLET.create());
+		balanceLabel.addComponentAsFirst(VaadinIcon.WALLET.create());
 		if (exceedsLimit) {
 			balanceLabel.setErrorStyle();
 		} else {

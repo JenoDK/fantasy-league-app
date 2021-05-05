@@ -3,7 +3,6 @@ package com.jeno.fantasyleague.ui.main.views.league.singleleague.stocks;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.resources.Resources;
@@ -64,6 +63,7 @@ public class StockCard extends PolymerTemplate<MatchBindingModel> {
 	private void initLayout() {
 		teamLayout.add(LayoutUtil.createTeamLayout(bean.getContestant()));
 		buyStocks.setText(Resources.getMessage("buyStocks"));
+		buyStocks.setEnabled(LocalDateTime.now().isBefore(league.getLeague_starting_date()));
 		pricePerStock.setText(Resources.getMessage("price", DecimalUtil.getTwoDecimalsThousandSeperator(bean.getShareCost())));
 		updateStocksPurchasedLabel();
 	}
@@ -96,16 +96,7 @@ public class StockCard extends PolymerTemplate<MatchBindingModel> {
 			statusLabel.setVisible(false);
 
 			Binder<StocksBean> binder = new Binder<>();
-			binder.setValidationStatusHandler(s -> {
-				if (s.hasErrors()) {
-					var msg = s.getValidationErrors().stream()
-							.map(ValidationResult::getErrorMessage)
-							.distinct()
-							.collect(Collectors.joining("\n"));
-					statusLabel.setErrorText(msg);
-				}
-				statusLabel.setVisible(s.hasErrors());
-			});
+			binder.setValidationStatusHandler(LayoutUtil.getDefaultBinderValidationStatusHandler(statusLabel));
 			binder.setBean(bean);
 
 			amountLayout.add(LayoutUtil.createPositiveIntegerTextField(binder, StocksBean::getStocksPurchased, StocksBean::setStocksPurchased, b -> b.withValidator((Validator<Integer>) (value, context) -> {

@@ -30,7 +30,6 @@ public class UserGrid extends CustomGrid<User> {
 			}
 			changePromoteDemoteButton(user, singleLeagueServiceProvider, league, promoteDemoteButton);
 		});
-		promoteDemoteButton.setWidth("100px");
 		if (league.getCreatedBy().getId().equals(user.getId())) {
 			promoteDemoteButton.setVisible(false);
 		}

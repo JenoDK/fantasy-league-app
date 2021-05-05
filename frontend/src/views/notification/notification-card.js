@@ -1,6 +1,5 @@
 import {PolymerElement} from '@polymer/polymer/polymer-element.js';
 import '../../../styles/shared-styles.js';
-import styles from '../../../styles/statusLabel.css'
 import {html} from '@polymer/polymer/lib/utils/html-tag.js';
 
 class NotificationCard extends PolymerElement {

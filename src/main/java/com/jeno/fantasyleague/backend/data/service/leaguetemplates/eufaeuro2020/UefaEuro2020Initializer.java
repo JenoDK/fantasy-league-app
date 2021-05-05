@@ -188,11 +188,15 @@ public class UefaEuro2020Initializer {
 		FINLAND("Finland", Group.GROUP_B, 22, "images/icons/country_icons/finland.png"),
 		FRANCE("France", Group.GROUP_F, 100, "images/icons/country_icons/france.png"),
 		GERMANY("Germany", Group.GROUP_F, 84, "images/icons/country_icons/germany.png"),
+		HUNGARY("Hungary", Group.GROUP_F, 71, "images/icons/country_icons/hungary.png"),
 		ITALY("Italy", Group.GROUP_A, 71, "images/icons/country_icons/italy.png"),
 		NETHERLANDS("Netherlands", Group.GROUP_C, 71, "images/icons/country_icons/netherlands.png"),
+		NORTH_MACEDONIA("North Macedonia", Group.GROUP_C, 71, "images/icons/country_icons/north_macedonia.png"),
 		POLAND("Poland", Group.GROUP_E, 61, "images/icons/country_icons/poland.png"),
 		PORTUGAL("Portugal", Group.GROUP_F, 85, "images/icons/country_icons/portugal.png"),
 		RUSSIA("Russia", Group.GROUP_B, 53, "images/icons/country_icons/russia.png"),
+		SCOTLAND("Scotland", Group.GROUP_D, 95, "images/icons/country_icons/scotland.png"),
+		SLOVAKIA("Slovakia", Group.GROUP_E, 95, "images/icons/country_icons/slovakia.png"),
 		SPAIN("Spain", Group.GROUP_E, 95, "images/icons/country_icons/spain.png"),
 		SWEDEN("Sweden", Group.GROUP_E, 66, "images/icons/country_icons/sweden.png"),
 		SWITZERLAND("Switzerland", Group.GROUP_A, 70, "images/icons/country_icons/switzerland.png"),
@@ -201,7 +205,7 @@ public class UefaEuro2020Initializer {
 		WALES("Wales", Group.GROUP_A, 55, "images/icons/country_icons/wales.png");
 
 		private String name;
-		private Optional<Group> group = Optional.empty();
+		private Optional<Group> group;
 		private Integer powerIndex;
 		private String iconPath;
 
@@ -215,27 +219,30 @@ public class UefaEuro2020Initializer {
 		public String getName() {
 			return name;
 		}
-
-		public Integer getPowerIndex() {
-			return powerIndex;
-		}}
+	}
 
 	public enum Group {
-		GROUP_A("Group A"),
-		GROUP_B("Group B"),
-		GROUP_C("Group C"),
-		GROUP_D("Group D"),
-		GROUP_E("Group E"),
-		GROUP_F("Group F");
+		GROUP_A("Group A", "A"),
+		GROUP_B("Group B", "B"),
+		GROUP_C("Group C", "C"),
+		GROUP_D("Group D", "D"),
+		GROUP_E("Group E", "E"),
+		GROUP_F("Group F", "F");
 
 		private String groupName;
+		private String shortName;
 
-		Group(String groupName) {
+		Group(String groupName, String shortName) {
 			this.groupName = groupName;
+			this.shortName = shortName;
 		}
 
 		public String getGroupName() {
 			return groupName;
+		}
+
+		public String getShortName() {
+			return shortName;
 		}
 	}
 

@@ -14,13 +14,14 @@ import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.LeagueSetting;
 import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.ui.common.label.HtmlLabel;
+import com.jeno.fantasyleague.ui.common.tabsheet.LazyTabComponent;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.jeno.fantasyleague.util.DateUtil;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.accordion.Accordion;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
-public class FaqTab extends VerticalLayout {
+public class FaqTab extends LazyTabComponent {
 
 	public static final String SCORE_CALCULATION = "%s * (1 + %s/10)";
 

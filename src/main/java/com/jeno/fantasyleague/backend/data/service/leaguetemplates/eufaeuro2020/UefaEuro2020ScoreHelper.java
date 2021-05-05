@@ -1,6 +1,5 @@
 package com.jeno.fantasyleague.backend.data.service.leaguetemplates.eufaeuro2020;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -57,33 +56,20 @@ public class UefaEuro2020ScoreHelper {
 			List<Prediction> predictions,
 			List<ContestantWeight> contestantWeights) {
 		Map<SoccerCupStages, Double> scorePerStage = Maps.newHashMap();
-		Map<LocalDateTime, Double> scorePerDate = Maps.newHashMap();
+		Map<Long, Double> scoresPerGame = Maps.newHashMap();
 		Map<Long, Integer> contestantWeightsMap = contestantWeights.stream()
 				.collect(Collectors.toMap(ContestantWeight::getContestant_fk, ContestantWeight::getWeight));
 		predictions.forEach(prediction -> {
 			SoccerCupStages stage = SoccerCupStages.valueOf(prediction.getGame().getStage());
 			double scoreForPrediction = calculateScoreOfPrediction(prediction, settingMap, contestantWeightsMap);
+			scoresPerGame.put(prediction.getGame_fk(), scoreForPrediction);
 			if (scorePerStage.containsKey(stage)) {
 				scorePerStage.put(stage, scorePerStage.get(stage) + scoreForPrediction);
 			} else {
 				scorePerStage.put(stage, scoreForPrediction);
 			}
-			LocalDateTime gameDate = prediction.getGame().getGameDateTime();
-			if (scorePerDate.containsKey(gameDate)) {
-				scorePerDate.put(gameDate, scorePerDate.get(gameDate) + scoreForPrediction);
-			} else {
-				scorePerDate.put(gameDate, scoreForPrediction);
-			}
 		});
-		double score = 0d;
-		for (LocalDateTime localDateTime : scorePerDate.keySet().stream()
-				.sorted(LocalDateTime::compareTo)
-				.collect(Collectors.toList())) {
-			Double scoreFromDate = scorePerDate.get(localDateTime);
-			score += scoreFromDate;
-			scorePerDate.put(localDateTime, score);
-		}
-		return new UserLeagueScore(user, scorePerStage, scorePerDate);
+		return new UserLeagueScore(user, scoresPerGame, scorePerStage, predictions);
 	}
 
 	public double calculateScoreOfPrediction(League league, Prediction prediction, User user) {

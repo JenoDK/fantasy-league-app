@@ -6,12 +6,12 @@ import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.User;
 import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.ui.common.field.CustomButton;
+import com.jeno.fantasyleague.ui.common.tabsheet.LazyTabComponent;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
-public class LeagueSettingsTab extends VerticalLayout {
+public class LeagueSettingsTab extends LazyTabComponent {
 
 	public LeagueSettingsTab(League league, SingleLeagueServiceProvider singleLeagueServiceprovider) {
 		super();

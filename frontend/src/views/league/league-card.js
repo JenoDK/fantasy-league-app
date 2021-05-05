@@ -80,7 +80,7 @@ class LeagueCard extends PolymerElement {
 				}
 
 				.top-3-grid {
-					padding: var(--lumo-space-l) var(--lumo-space-m);
+					padding: var(--lumo-space-s) var(--lumo-space-s);
 					border-radius: var(--lumo-border-radius);
 					cursor: pointer;
 					pointer-events: none;

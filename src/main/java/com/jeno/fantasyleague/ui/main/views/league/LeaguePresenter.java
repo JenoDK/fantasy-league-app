@@ -24,4 +24,7 @@ public class LeaguePresenter {
 		model.loadLeaguesForUser();
 	}
 
+	public void showMainLeagueScreen() {
+		view.showLeagueGridLayout();
+	}
 }

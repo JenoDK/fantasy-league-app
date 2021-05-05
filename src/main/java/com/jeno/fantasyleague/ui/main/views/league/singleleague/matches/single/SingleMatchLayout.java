@@ -19,10 +19,12 @@ public class SingleMatchLayout extends VerticalLayout {
 
 	private final MatchBean match;
 	private final SingleLeagueServiceProvider singleLeagueServiceprovider;
+	private final boolean loggedInUserIsAdmin;
 
-	public SingleMatchLayout(MatchBean match, SingleLeagueServiceProvider singleLeagueServiceprovider) {
+	public SingleMatchLayout(MatchBean match, SingleLeagueServiceProvider singleLeagueServiceprovider, boolean loggedInUserIsAdmin) {
 		this.match = match;
 		this.singleLeagueServiceprovider = singleLeagueServiceprovider;
+		this.loggedInUserIsAdmin = loggedInUserIsAdmin;
 
 		initLayout();
 	}
@@ -31,7 +33,7 @@ public class SingleMatchLayout extends VerticalLayout {
 		setPadding(false);
 		setMargin(false);
 
-		MatchCard matchCard = new MatchCard(match, null);
+		MatchCard matchCard = new MatchCard(match, null, loggedInUserIsAdmin, singleLeagueServiceprovider, true);
 		add(matchCard);
 
 		Map<Long, Integer> homeTeamWeights = singleLeagueServiceprovider.getContestantWeightRepository()
@@ -67,5 +69,6 @@ public class SingleMatchLayout extends VerticalLayout {
 						grid.getDataProvider().refreshItem(b);
 					});
 		});
+		matchCard.scoreChanged().subscribe(singleLeagueServiceprovider::updateGameScore);
 	}
 }

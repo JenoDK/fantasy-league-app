@@ -111,7 +111,7 @@ public class LeagueView {
 		layout.add(singleLeagieView);
 	}
 
-	private void showLeagueGridLayout() {
+	protected void showLeagueGridLayout() {
 		layout.removeAll();
 		constructLeagueGridLayout();
 		leagueGrid.getDataProvider().refreshAll();

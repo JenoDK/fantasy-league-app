@@ -20,4 +20,6 @@ public interface ContestantGroupRepository extends JpaRepository<ContestantGroup
 	List<Contestant> fetchGroupContestants(@Param("id") Long groupId);
 
 	Optional<ContestantGroup> findByNameAndLeague(String name, League league);
+
+	List<ContestantGroup> findByNameInAndLeague(List<String> names, League league);
 }

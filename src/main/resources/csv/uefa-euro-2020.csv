@@ -1,52 +1,52 @@
 Id,Round Number,Date,Location,Home Team,Away Team,Group,Result,Next Game
-1,1,12/06/2020 21:00,Stadio Olimpico,Turkey,Italy,Group A,,
-2,1,13/06/2020 15:00,Baku Olympic Stadium,Wales,Switzerland,Group A,,
-3,1,13/06/2020 18:00,Parken Stadium,Denmark,Finland,Group B,,
-4,1,13/06/2020 21:00,Saint Petersburg Stadium,Belgium,Russia,Group B,,
-5,1,14/06/2020 15:00,Wembley Stadium,England,Croatia,Group D,,
-6,1,14/06/2020 18:00,Arena Nationala,Austria,Play-off Winner D (A),Group C,,
-7,1,14/06/2020 21:00,Johan Cruijff ArenA,Netherlands,Ukraine,Group C,,
-8,1,15/06/2020 15:00,Hampden Park,Play-off Winner C,Czech Republic,Group D,,
-9,1,15/06/2020 18:00,Dublin Arena,Poland,Play-off Winner B,Group E,,
-10,1,15/06/2020 21:00,San Mamés Stadium,Spain,Sweden,Group E,,
-11,1,16/06/2020 18:00,Puskás Aréna,Play-off Winner A (D),Portugal,Group F,,
-12,1,16/06/2020 21:00,Football Arena Munich,France,Germany,Group F,,
-13,2,17/06/2020 15:00,Saint Petersburg Stadium,Finland,Russia,Group B,,
-14,2,17/06/2020 18:00,Baku Olympic Stadium,Turkey,Wales,Group A,,
-15,2,17/06/2020 21:00,Stadio Olimpico,Italy,Switzerland,Group A,,
-16,2,18/06/2020 15:00,Arena Nationala,Ukraine,Play-off Winner D (A),Group C,,
-17,2,18/06/2020 18:00,Parken Stadium,Denmark,Belgium,Group B,,
-18,2,18/06/2020 21:00,Johan Cruijff ArenA,Netherlands,Austria,Group C,,
-19,2,19/06/2020 15:00,Dublin Arena,Sweden,Play-off Winner B,Group E,,
-20,2,19/06/2020 18:00,Hampden Park,Croatia,Czech Republic,Group D,,
-21,2,19/06/2020 21:00,Wembley Stadium,England,Play-off Winner C,Group D,,
-22,2,20/06/2020 15:00,Puskás Aréna,Play-off Winner A (D),France,Group F,,
-23,2,20/06/2020 18:00,Football Arena Munich,Portugal,Germany,Group F,,
-24,2,20/06/2020 21:00,San Mamés Stadium,Spain,Poland,Group E,,
-25,3,21/06/2020 18:00,Stadio Olimpico,Italy,Wales,Group A,,
-26,3,21/06/2020 18:00,Baku Olympic Stadium,Switzerland,Turkey,Group A,,
-27,3,22/06/2020 18:00,Arena Nationala,Ukraine,Austria,Group C,,
-28,3,22/06/2020 18:00,Johan Cruijff ArenA,Play-off Winner D (A),Netherlands,Group C,,
-29,3,22/06/2020 21:00,Saint Petersburg Stadium,Finland,Belgium,Group B,,
-30,3,22/06/2020 21:00,Parken Stadium,Russia,Denmark,Group B,,
-31,3,23/06/2020 21:00,Wembley Stadium,Czech Republic,England,Group D,,
-32,3,23/06/2020 21:00,Hampden Park,Croatia,Play-off Winner C,Group D,,
-33,3,24/06/2020 18:00,Dublin Arena,Sweden,Poland,Group E,,
-34,3,24/06/2020 18:00,San Mamés Stadium,Play-off Winner B,Spain,Group E,,
-35,3,24/06/2020 21:00,Football Arena Munich,Germany,Play-off Winner A (D),Group F,,
-36,3,24/06/2020 21:00,Puskás Aréna,Portugal,France,Group F,,
-37,Round of 16,27/06/2020 18:00,Johan Cruijff ArenA,2A,2B,,,45
-38,Round of 16,27/06/2020 21:00,Wembley Stadium,1A,2C,,,45
-39,Round of 16,28/06/2020 18:00,Puskás Aréna,1C,3D/E/F,,,46
-40,Round of 16,28/06/2020 21:00,San Mamés Stadium,1B,3A/D/E/F,,,46
-41,Round of 16,29/06/2020 18:00,Parken Stadium,2D,2E,,,47
-42,Round of 16,29/06/2020 21:00,Arena Nationala,1F,3A/B/C,,,47
-43,Round of 16,30/06/2020 18:00,Dublin Arena,1D,2F,,,48
-44,Round of 16,30/06/2020 21:00,Hampden Park,1E,3A/B/C/D,,,48
-45,Quarter Finals,03/07/2020 18:00,Saint Petersburg Stadium,To be announced,To be announced,,,49
-46,Quarter Finals,03/07/2020 21:00,Football Arena Munich,To be announced,To be announced,,,49
-47,Quarter Finals,04/07/2020 18:00,Baku Olympic Stadium,To be announced,To be announced,,,50
-48,Quarter Finals,04/07/2020 21:00,Stadio Olimpico,To be announced,To be announced,,,50
-49,Semi Finals,07/07/2020 21:00,Wembley Stadium,To be announced,To be announced,,,51
-50,Semi Finals,08/07/2020 21:00,Wembley Stadium,To be announced,To be announced,,,51
-51,Final,12/07/2020 21:00,Wembley Stadium,To be announced,To be announced,,,
+1,1,11/06/2021 21:00,Olimpico in Rome,Turkey,Italy,Group A,,
+2,1,12/06/2021 15:00,Baki Olimpiya Stadionu,Wales,Switzerland,Group A,,
+3,1,12/06/2021 18:00,Parken,Denmark,Finland,Group B,,
+4,1,12/06/2021 21:00,Gazprom Arena,Belgium,Russia,Group B,,
+5,1,13/06/2021 15:00,Wembley Stadium,England,Croatia,Group D,,
+6,1,13/06/2021 18:00,National Arena Bucharest,Austria,North Macedonia,Group C,,
+7,1,13/06/2021 21:00,Johan Cruijff ArenA,Netherlands,Ukraine,Group C,,
+8,1,14/06/2021 15:00,Hampden Park,Scotland,Czech Republic,Group D,,
+9,1,14/06/2021 18:00,Aviva Stadium,Poland,Slovakia,Group E,,
+10,1,14/06/2021 21:00,Estadio de San Mamés,Spain,Sweden,Group E,,
+11,1,15/06/2021 18:00,Puskás Aréna,Hungary,Portugal,Group F,,
+12,1,15/06/2021 21:00,Allianz Arena,France,Germany,Group F,,
+13,2,16/06/2021 15:00,Gazprom Arena,Finland,Russia,Group B,,
+14,2,16/06/2021 18:00,Baki Olimpiya Stadionu,Turkey,Wales,Group A,,
+15,2,16/06/2021 21:00,Olimpico in Rome,Italy,Switzerland,Group A,,
+16,2,17/06/2021 15:00,National Arena Bucharest,Ukraine,North Macedonia,Group C,,
+17,2,17/06/2021 18:00,Parken,Denmark,Belgium,Group B,,
+18,2,17/06/2021 21:00,Johan Cruijff ArenA,Netherlands,Austria,Group C,,
+19,2,18/06/2021 15:00,Aviva Stadium,Sweden,Slovakia,Group E,,
+20,2,18/06/2021 18:00,Hampden Park,Croatia,Czech Republic,Group D,,
+21,2,18/06/2021 21:00,Wembley Stadium,England,Scotland,Group D,,
+22,2,19/06/2021 15:00,Puskás Aréna,Hungary,France,Group F,,
+23,2,19/06/2021 18:00,Allianz Arena,Portugal,Germany,Group F,,
+24,2,19/06/2021 21:00,Estadio de San Mamés,Spain,Poland,Group E,,
+25,3,20/06/2021 18:00,Olimpico in Rome,Italy,Wales,Group A,,
+26,3,20/06/2021 18:00,Baki Olimpiya Stadionu,Switzerland,Turkey,Group A,,
+27,3,21/06/2021 18:00,National Arena Bucharest,Ukraine,Austria,Group C,,
+28,3,21/06/2021 18:00,Johan Cruijff ArenA,North Macedonia,Netherlands,Group C,,
+29,3,21/06/2021 21:00,Gazprom Arena,Finland,Belgium,Group B,,
+30,3,21/06/2021 21:00,Parken,Russia,Denmark,Group B,,
+31,3,22/06/2021 21:00,Wembley Stadium,Czech Republic,England,Group D,,
+32,3,22/06/2021 21:00,Hampden Park,Croatia,Scotland,Group D,,
+33,3,23/06/2021 18:00,Aviva Stadium,Sweden,Poland,Group E,,
+34,3,23/06/2021 18:00,Estadio de San Mamés,Slovakia,Spain,Group E,,
+35,3,23/06/2021 21:00,Allianz Arena,Germany,Hungary,Group F,,
+36,3,23/06/2021 21:00,Puskás Aréna,Portugal,France,Group F,,
+37,Round of 16,26/06/2021 18:00,Johan Cruijff ArenA,2A,2B,,,45
+38,Round of 16,26/06/2021 21:00,Wembley Stadium,1A,2C,,,45
+39,Round of 16,27/06/2021 18:00,Puskás Aréna,1C,3D/E/F,,,46
+40,Round of 16,27/06/2021 21:00,Estadio de San Mamés,1B,3A/D/E/F,,,46
+41,Round of 16,28/06/2021 18:00,Parken,2D,2E,,,47
+42,Round of 16,28/06/2021 21:00,National Arena Bucharest,1F,3A/B/C,,,47
+43,Round of 16,29/06/2021 18:00,Aviva Stadium,1D,2F,,,48
+44,Round of 16,29/06/2021 21:00,Hampden Park,1E,3A/B/C/D,,,48
+45,Quarter Finals,02/07/2021 18:00,Gazprom Arena,To be announced,To be announced,,,49
+46,Quarter Finals,02/07/2021 21:00,Allianz Arena,To be announced,To be announced,,,49
+47,Quarter Finals,03/07/2021 18:00,Baki Olimpiya Stadionu,To be announced,To be announced,,,50
+48,Quarter Finals,03/07/2021 21:00,Olimpico in Rome,To be announced,To be announced,,,50
+49,Semi Finals,06/07/2021 21:00,Wembley Stadium,To be announced,To be announced,,,51
+50,Semi Finals,07/07/2021 21:00,Wembley Stadium,To be announced,To be announced,,,51
+51,Final,11/07/2021 21:00,Wembley Stadium,To be announced,To be announced,,,

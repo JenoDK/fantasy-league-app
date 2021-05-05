@@ -24,4 +24,9 @@ public class DecimalUtil {
 		return base.multiply(ONE_HUNDRED).divide(total, 0, RoundingMode.HALF_UP);
 	}
 
+	public static double round(double value, int precision) {
+		int scale = (int) Math.pow(10, precision);
+		return (double) Math.round(value * scale) / scale;
+	}
+
 }

@@ -4,6 +4,8 @@ import java.util.Set;
 
 import javax.persistence.Basic;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,12 +18,13 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import com.google.common.collect.Sets;
-import com.jeno.fantasyleague.backend.model.audit.DateAudit;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
+
+import com.google.common.collect.Sets;
+import com.jeno.fantasyleague.backend.model.audit.DateAudit;
 
 @Entity
 @Table(name = "users", uniqueConstraints = {
@@ -33,6 +36,10 @@ import org.hibernate.validator.constraints.NotBlank;
 		})
 })
 public class User extends DateAudit {
+
+	public enum GraphPreference {
+		COLUMN, COLUMN_FLAGS, LINE
+	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -70,6 +77,9 @@ public class User extends DateAudit {
 	@Lob
 	@Basic(fetch = FetchType.LAZY)
 	private byte[] profile_picture;
+
+	@Enumerated(EnumType.STRING)
+	private GraphPreference graph_preference = GraphPreference.COLUMN;
 
 	public User() {
 	}
@@ -143,6 +153,14 @@ public class User extends DateAudit {
 
 	public void setProfile_picture(byte[] profile_picture) {
 		this.profile_picture = profile_picture;
+	}
+
+	public GraphPreference getGraph_preference() {
+		return graph_preference;
+	}
+
+	public void setGraph_preference(GraphPreference graph_preference) {
+		this.graph_preference = graph_preference;
 	}
 
 	public Set<UserNotification> getNotifications() {

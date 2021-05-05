@@ -3,8 +3,9 @@
   "license": "UNLICENSED",
   "dependencies": {
     "@polymer/polymer": "3.2.0",
+    "@vaadin/flow-deps": "./target/frontend",
     "@webcomponents/webcomponentsjs": "^2.2.10",
-    "@vaadin/flow-deps": "./target/frontend"
+    "google-charts": "^2.0.0"
   },
   "devDependencies": {
     "webpack": "4.30.0",

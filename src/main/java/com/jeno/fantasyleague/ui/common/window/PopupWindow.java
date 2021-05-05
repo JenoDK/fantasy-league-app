@@ -2,6 +2,8 @@ package com.jeno.fantasyleague.ui.common.window;
 
 import java.util.function.Function;
 
+import javax.swing.*;
+
 import com.jeno.fantasyleague.ui.common.field.CustomButton;
 import com.jeno.fantasyleague.util.VaadinUtil;
 import com.vaadin.flow.component.Component;
@@ -21,7 +23,7 @@ public class PopupWindow extends Dialog {
 		this.builder = builder;
 
 		// Size config
-		if(builder.sizeUndefined){
+		if (builder.sizeUndefined){
 			setSizeUndefined();
 		} else {
 			if (builder.heightUndefined) {
@@ -53,13 +55,19 @@ public class PopupWindow extends Dialog {
 		bottomBar.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
 		bottomBar.setAlignItems(FlexComponent.Alignment.END);
 		switch(builder.type) {
+			case NORMAL:
+				CustomButton close = new CustomButton("Close");
+				close.addThemeName("primary");
+				close.addClickListener(ignored -> close());
+				bottomBar.add(close);
+				break;
 			case ALERT:
 				CustomButton ok = new CustomButton("OK");
 				ok.addClickListener(ignored -> close());
 				bottomBar.add(ok);
 				break;
 			case CONFIRM:
-				CustomButton confirm = new CustomButton("Confirm");
+				CustomButton confirm = new CustomButton(builder.confirmText != null ? builder.confirmText : "Confirm");
 				confirm.addThemeName("primary");
 				confirm.addClickListener(ignored -> {
 					if (onConfirm.onConfirm()) {
@@ -85,9 +93,12 @@ public class PopupWindow extends Dialog {
 
 		private float pixelHeight = 200;
 		private float pixelWidth = 300;
+		private boolean draggable = false;
+		private boolean resizable = false;
 		private boolean sizeUndefined = false;
 		private boolean heightUndefined = false;
-		private Type type;
+		private Type type = Type.NORMAL;
+		private String confirmText;
 
 		private final String caption;
 		private final Function<PopupWindow, Component> contentGenerator;
@@ -107,6 +118,18 @@ public class PopupWindow extends Dialog {
 			return this;
 		}
 
+//		public Builder setDraggable(boolean draggable) {
+//			this.draggable = draggable;
+//			return this;
+//		}
+//
+//		public Builder setResizable(boolean resizable) {
+//			this.resizable = resizable;
+//			return this;
+//		}
+
+
+
 		public Builder setWidth(float pixelWidth) {
 			this.pixelWidth = pixelWidth;
 			return this;
@@ -122,13 +145,18 @@ public class PopupWindow extends Dialog {
 			return this;
 		}
 
+		public Builder setConfirmText(String confirmText) {
+			this.confirmText = confirmText;
+			return this;
+		}
+
 		public PopupWindow build() {
 			return new PopupWindow(this);
 		}
 	}
 
 	public enum Type {
-		ALERT, CONFIRM
+		NORMAL, ALERT, CONFIRM
 	}
 
 	public interface OnConfirm {

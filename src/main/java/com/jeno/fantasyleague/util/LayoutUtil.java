@@ -2,6 +2,7 @@ package com.jeno.fantasyleague.util;
 
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import com.jeno.fantasyleague.backend.model.Contestant;
 import com.jeno.fantasyleague.backend.model.User;
@@ -9,16 +10,20 @@ import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.ui.common.field.NonNullValidator;
 import com.jeno.fantasyleague.ui.common.field.StringToPositiveIntegerConverter;
 import com.jeno.fantasyleague.ui.common.grid.CustomGridBuilder;
+import com.jeno.fantasyleague.ui.common.label.StatusLabel;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.BinderValidationStatus;
+import com.vaadin.flow.data.binder.BinderValidationStatusHandler;
 import com.vaadin.flow.data.binder.Setter;
+import com.vaadin.flow.data.binder.ValidationResult;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.function.ValueProvider;
-import com.vaadin.flow.server.StreamResource;
 
 import io.reactivex.subjects.BehaviorSubject;
 
@@ -38,7 +43,11 @@ public class LayoutUtil {
 	public static HorizontalLayout createTeamLayout(boolean nameToTheLeft, Contestant contestant, String teamPlaceHolder) {
 		return Optional.ofNullable(contestant)
 				.map(c -> LayoutUtil.createTeamLayout(nameToTheLeft, c))
-				.orElse(new HorizontalLayout(new Label(teamPlaceHolder)));
+				.orElseGet(() -> {
+					HorizontalLayout layout = new HorizontalLayout(new Label(teamPlaceHolder));
+					layout.setAlignItems(FlexComponent.Alignment.CENTER);
+					return layout;
+				});
 	}
 
 	public static HorizontalLayout createTeamLayout(Contestant contestant) {
@@ -97,6 +106,19 @@ public class LayoutUtil {
 		return layout;
 	}
 
+	public static <T> BinderValidationStatusHandler<T> getDefaultBinderValidationStatusHandler(StatusLabel statusLabel) {
+		return s -> {
+			if (s.hasErrors()) {
+				var msg = s.getValidationErrors().stream()
+						.map(ValidationResult::getErrorMessage)
+						.distinct()
+						.collect(Collectors.joining("\n"));
+				statusLabel.setErrorText(msg);
+			}
+			statusLabel.setVisible(s.hasErrors());
+		};
+	}
+
 	public static <T> TextField createPositiveIntegerTextField(Binder<T> binder, ValueProvider<T, Integer> getter, Setter<T, Integer> setter) {
 		return createPositiveIntegerTextField(binder, getter, setter, b -> b);
 	}
@@ -105,6 +127,7 @@ public class LayoutUtil {
 		TextField field = new TextField();
 		field.setWidth("50px");
 		field.addThemeName("no-error-msg");
+		field.setValueChangeMode(ValueChangeMode.EAGER);
 		Binder.BindingBuilder<T, Integer> builder = binder.forField(field)
 				.withNullRepresentation(" ")
 				.withConverter(new StringToPositiveIntegerConverter(null, Resources.getMessage("error.positiveNumber")))
@@ -118,17 +141,11 @@ public class LayoutUtil {
 		initUserH4(label, user, user.getUsername());
 	}
 
-	public static void initUserH4(H4 label, User user, String labelText) {
-		Optional<StreamResource> userProfilePic = ImageUtil.getUserProfilePictureResource(user);
-		Image icon = new Image();
-		icon.setWidth("50px");
-		icon.setHeight("50px");
-		if (userProfilePic.isPresent()) {
-			icon.setSrc(userProfilePic.get());
-		} else {
-			icon.setSrc(Images.DEFAULT_PROFILE_PICTURE);
-		}
+	public static Image initUserH4(H4 label, User user, String labelText) {
+		Image icon = ImageUtil.createProfileIcon(user);
 		label.setText(labelText);
 		label.addComponentAsFirst(icon);
+		return icon;
 	}
+
 }

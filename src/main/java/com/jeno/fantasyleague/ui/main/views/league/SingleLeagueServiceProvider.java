@@ -12,6 +12,7 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.google.common.collect.Sets;
+import com.jeno.fantasyleague.backend.data.dao.UserDao;
 import com.jeno.fantasyleague.backend.data.repository.ContestantGroupRepository;
 import com.jeno.fantasyleague.backend.data.repository.ContestantRepository;
 import com.jeno.fantasyleague.backend.data.repository.ContestantWeightRepository;
@@ -75,6 +76,9 @@ public class SingleLeagueServiceProvider {
 	private LeagueSettingRepository leagueSettingRepository;
 
 	@Autowired
+	private UserDao userDao;
+
+	@Autowired
 	private SecurityHolder securityHolder;
 	@Autowired
 	private BeanFactory beanFactory;
@@ -93,6 +97,19 @@ public class SingleLeagueServiceProvider {
 						Notification.show("Be sure to select a winner");
 					}
 				});
+	}
+
+	public void updateGameScore(MatchPredictionBean matchPredictionBean) {
+		if (loggedInUserIsLeagueAdmin(matchPredictionBean.getLeague())) {
+			Game game = matchPredictionBean.setGameScoresAndGetGameModelItem();
+			if (SoccerCupStages.GROUP_PHASE.toString().equals(game.getStage())) {
+				getGameService().updateGroupStageGameScores(List.of(game));
+			} else {
+				getGameService().updateKnockoutStageScore(game);
+			}
+		} else {
+			Notification.show(Resources.getMessage("adminRightsRevoked"));
+		}
 	}
 
 	public GameRepository getGameRepository() {
@@ -129,6 +146,10 @@ public class SingleLeagueServiceProvider {
 
 	public PredictionRepository getPredictionRepository() {
 		return predictionRepository;
+	}
+
+	public UserDao getUserDao() {
+		return userDao;
 	}
 
 	public UserNotification createLeagueInviteUserNotification(User user, League league) {

@@ -1,17 +1,17 @@
 package com.jeno.fantasyleague.ui.common.tabsheet;
 
-import com.vaadin.flow.component.tabs.Tab;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
-public class LazyTabComponent extends Tab {
+public abstract class LazyTabComponent extends VerticalLayout {
 
-	private final String tabId;
-
-	public LazyTabComponent(String tabId, String caption) {
-		super(caption);
-		this.tabId = tabId;
+	protected void hide() {
+		if (isVisible()) {
+			setVisible(false);
+		}
 	}
 
-	public String getTabId() {
-		return tabId;
+	protected void show() {
+		setVisible(true);
 	}
+
 }

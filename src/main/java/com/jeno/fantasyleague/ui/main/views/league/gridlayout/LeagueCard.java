@@ -7,7 +7,7 @@ import com.google.common.collect.Lists;
 import com.jeno.fantasyleague.backend.model.User;
 import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.OverviewUtil;
-import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.usertotalscore.UserTotalScoreBean;
+import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.chart.UserScoreBean;
 import com.jeno.fantasyleague.util.ImageUtil;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.JsModule;
@@ -67,11 +67,11 @@ public class LeagueCard extends PolymerTemplate<TemplateModel> {
 //		wrapper.add(new TopThreeGrid(league.getScores().stream().limit(3).collect(Collectors.toList()), league.getLoggedInUser()));
 	}
 
-	private class TopThreeGrid extends Grid<UserTotalScoreBean> {
+	private class TopThreeGrid extends Grid<UserScoreBean> {
 
 		private final User loggedInUser;
 
-		public TopThreeGrid(List<UserTotalScoreBean>items, User loggedInUser) {
+		public TopThreeGrid(List<UserScoreBean>items, User loggedInUser) {
 			super();
 			this.loggedInUser = loggedInUser;
 
@@ -85,22 +85,24 @@ public class LeagueCard extends PolymerTemplate<TemplateModel> {
 			addThemeNames("orders", "no-row-borders");
 			addClassName("top-3-grid");
 
-			addColumn(UserTotalScoreBean::getPosition)
-					.setWidth("60px");
+			addColumn(UserScoreBean::getPosition)
+					.setWidth("60px")
+					.setFlexGrow(0)
+					.setId("position");
 			addColumn(userTotalScoreBean -> getUserInfoColumn(userTotalScoreBean))
 					.setHeader(Resources.getMessage("username"))
 					.setId("userName");
-			Column<UserTotalScoreBean> userScoreColumn =
+			Column<UserScoreBean> userScoreColumn =
 					addColumn(bean -> OverviewUtil.getScoreFormatted(bean.getTotalScore()))
-							.setHeader(Resources.getMessage("totalScore"));
+							.setHeader(Resources.getMessage("totalScoreGridTitle"));
 			userScoreColumn.setId("totalScore");
 			sort(Lists.newArrayList(new GridSortOrder<>(userScoreColumn, SortDirection.DESCENDING)));
 		}
 
-		private String getUserInfoColumn(UserTotalScoreBean userTotalScoreBean) {
-			return userTotalScoreBean.getUser().getUsername() +
-					(userTotalScoreBean.getUser().getId().equals(loggedInUser.getId()) ? " (You)" : "") +
-					" - " + userTotalScoreBean.getUser().getName();
+		private String getUserInfoColumn(UserScoreBean userScoreBean) {
+			return userScoreBean.getUser().getUsername() +
+					(userScoreBean.getUser().getId().equals(loggedInUser.getId()) ? " (You)" : "") +
+					" - " + userScoreBean.getUser().getName();
 		}
 	}
 }

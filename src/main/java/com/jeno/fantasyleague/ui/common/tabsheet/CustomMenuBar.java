@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import com.google.common.collect.Maps;
 import com.vaadin.flow.component.ClickEvent;
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.contextmenu.SubMenu;
@@ -21,12 +20,13 @@ public class CustomMenuBar extends MenuBar {
 	private VerticalLayout tabLayout;
 	private String currentId;
 	Map<String, ComponentCreationFunction> functions;
-	Map<String, Component> initializedTabs;
+	Map<String, LazyTabComponent> initializedTabs;
 
 	public CustomMenuBar(VerticalLayout tabLayout) {
 		this.tabLayout = tabLayout;
 		this.functions = Maps.newHashMap();
 		this.initializedTabs = Maps.newHashMap();
+		setWidth("100%");
 	}
 
 	public MenuItem addItem(VaadinIcon icon, String text, ComponentEventListener<ClickEvent<MenuItem>> listener) {
@@ -44,15 +44,11 @@ public class CustomMenuBar extends MenuBar {
 			if (!Objects.equals(id, currentId)) {
 				clickListener.onComponentEvent(event);
 				if (initializedTabs.containsKey(id)) {
-					initializedTabs.values().stream()
-							.filter(Component::isVisible)
-							.forEach(c -> c.setVisible(false));
-					initializedTabs.get(id).setVisible(true);
+					initializedTabs.values().forEach(LazyTabComponent::hide);
+					initializedTabs.get(id).show();
 				} else if (functions.containsKey(id)) {
-					initializedTabs.values().stream()
-							.filter(Component::isVisible)
-							.forEach(c -> c.setVisible(false));
-					Component tabComponent = functions.get(id).createComponent();
+					initializedTabs.values().forEach(LazyTabComponent::hide);
+					LazyTabComponent tabComponent = functions.get(id).createComponent();
 					tabLayout.add(tabComponent);
 					initializedTabs.put(id, tabComponent);
 				}
@@ -69,7 +65,7 @@ public class CustomMenuBar extends MenuBar {
 	}
 
 	public interface ComponentCreationFunction {
-		Component createComponent();
+		LazyTabComponent createComponent();
 	}
 
 	public class CustomMenuItem {

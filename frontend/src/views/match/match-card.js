@@ -1,6 +1,5 @@
 import {PolymerElement} from '@polymer/polymer/polymer-element.js';
 import '../../../styles/shared-styles.js';
-import styles from '../../../styles/statusLabel.css'
 import {html} from '@polymer/polymer/lib/utils/html-tag.js';
 
 class MatchCard extends PolymerElement {
@@ -51,15 +50,11 @@ class MatchCard extends PolymerElement {
 					margin: 0px;
 				}
 
-				.info-wrapper > .left, .info-wrapper > .right {
-					width: 200px;
-				}
-
 				.info-wrapper > .right {
 					text-align: end;
 				}
 
-				#match-wrapper {
+				#match-wrapper, #score-wrapper {
 					width: 100%;
 					display: flex;
 					align-items: center;
@@ -126,6 +121,11 @@ class MatchCard extends PolymerElement {
 						<h4 class="middle">[[match.stage]]</h4>
 						<h4 class="right">[[match.place]]</h4>
 					</div>
+                    <div id="score-wrapper">
+						<vaadin-button id="score-button" on-click="openScore" theme="primary">Fill in
+							score
+						</vaadin-button>
+                    </div>
 					<div id="match-wrapper"></div>
 					<div class="prediction-wrapper">
 						<vaadin-button id="prediction-button" on-click="openPrediction" theme="primary">Fill in
@@ -143,12 +143,19 @@ class MatchCard extends PolymerElement {
         return 'match-card';
     }
 
-    handleClickDiv() {
-        this.$server.handleClick();
+    handleClickDiv(event) {
+        if (event.srcElement.nodeName !== "VAADIN-COMBO-BOX") {
+            this.$server.handleClick();
+        }
     }
 
     openPrediction(event) {
         this.$server.openPrediction();
+        event.stopPropagation();
+    }
+
+    openScore(event) {
+        this.$server.openScore();
         event.stopPropagation();
     }
 

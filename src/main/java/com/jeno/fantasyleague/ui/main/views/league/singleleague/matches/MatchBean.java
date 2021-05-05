@@ -17,6 +17,8 @@ public class MatchBean {
 
 	private Prediction prediction;
 	private BehaviorSubject<MatchBean> predictionChanged = BehaviorSubject.create();
+	private BehaviorSubject<Contestant> homeContestantChanged = BehaviorSubject.create();
+	private BehaviorSubject<Contestant> awayContestantChanged = BehaviorSubject.create();
 
 	private final Contestant homeTeam;
 	private final Contestant awayTeam;
@@ -126,5 +128,13 @@ public class MatchBean {
 		} else {
 			return DateUtil.DATE_TIME_FORMATTER.format(prediction.getGame().getGameDateTime());
 		}
+	}
+
+	public BehaviorSubject<Contestant> getHomeContestantChanged() {
+		return homeContestantChanged;
+	}
+
+	public BehaviorSubject<Contestant> getAwayContestantChanged() {
+		return awayContestantChanged;
 	}
 }

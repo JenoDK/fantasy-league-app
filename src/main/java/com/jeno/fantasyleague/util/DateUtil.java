@@ -9,6 +9,7 @@ import java.util.Date;
 public class DateUtil {
 
 	public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+	public static final DateTimeFormatter DATE_DAY_FORMATTER = DateTimeFormatter.ofPattern("dd/MM");
 
 	private DateUtil() {
 	}

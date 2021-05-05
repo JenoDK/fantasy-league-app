@@ -4,12 +4,15 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
 
+import com.jeno.fantasyleague.backend.data.service.leaguetemplates.SoccerCupStages;
 import com.jeno.fantasyleague.backend.model.Contestant;
 import com.jeno.fantasyleague.backend.model.Game;
+import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.Prediction;
 
 public class MatchPredictionBean {
 
+	private League league;
 	private Game game;
 	private Prediction prediction;
 
@@ -24,7 +27,8 @@ public class MatchPredictionBean {
 	private Integer awayTeamPrediction;
 	private Optional<Boolean> homeTeamPredictionIsWinner;
 
-	public MatchPredictionBean(Prediction prediction) {
+	public MatchPredictionBean(League league, Prediction prediction) {
+		this.league = league;
 		this.game = prediction.getGame();
 		this.prediction = prediction;
 
@@ -42,6 +46,10 @@ public class MatchPredictionBean {
 		homeTeamPredictionIsWinner = Optional.ofNullable(prediction.getWinner())
 				.flatMap(winner -> Optional.ofNullable(homeTeam))
 				.map(home -> home.getId().equals(prediction.getWinner().getId()));
+	}
+
+	public League getLeague() {
+		return league;
 	}
 
 	public Contestant getAwayTeam() {
@@ -64,11 +72,11 @@ public class MatchPredictionBean {
 		return game.getGameDateTime();
 	}
 
-	public Integer getHome_team_score() {
+	public Integer getHomeTeamScore() {
 		return homeTeamScore;
 	}
 
-	public Integer getAway_team_score() {
+	public Integer getAwayTeamScore() {
 		return awayTeamScore;
 	}
 
@@ -124,10 +132,14 @@ public class MatchPredictionBean {
 		} else if (homeTeamScore < awayTeamScore) {
 			game.setWinner(game.getAway_team());
 		} else {
-			if (homeTeamIsWinner.isPresent() && homeTeamIsWinner.get()) {
-				game.setWinner(game.getHome_team());
+			if (homeTeamIsWinner.isPresent() && !SoccerCupStages.GROUP_PHASE.toString().equals(game.getStage())) {
+				if (homeTeamIsWinner.get()) {
+					game.setWinner(game.getHome_team());
+				} else {
+					game.setWinner(game.getAway_team());
+				}
 			} else {
-				game.setWinner(game.getAway_team());
+				game.setWinner(null);
 			}
 		}
 		return game;
@@ -141,7 +153,7 @@ public class MatchPredictionBean {
 		} else if (homeTeamPrediction < awayTeamPrediction) {
 			prediction.setWinner(awayTeam);
 		} else {
-			if (homeTeamPredictionIsWinner.isPresent()) {
+			if (homeTeamPredictionIsWinner.isPresent() && !SoccerCupStages.GROUP_PHASE.toString().equals(game.getStage())) {
 				if (homeTeamPredictionIsWinner.get()) {
 					prediction.setWinner(homeTeam);
 				} else {
