@@ -12,12 +12,14 @@ import com.jeno.fantasyleague.util.VaadinUtil;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RouterLayout;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 @PageTitle("Forgot Password")
 @Route("forgotPassword")
 @AlwaysAllow
-public class ForgotPasswordUI extends RedirectUI {
+public class ForgotPasswordUI extends RedirectUI implements RouterLayout {
 
 	@Autowired
 	private UserRepository userRepository;

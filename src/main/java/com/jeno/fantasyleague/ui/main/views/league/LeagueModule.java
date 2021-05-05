@@ -12,11 +12,12 @@ import com.vaadin.flow.router.AfterNavigationEvent;
 import com.vaadin.flow.router.AfterNavigationObserver;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
+import com.vaadin.flow.router.RouterLayout;
 
 @Tag("league-view")
 @Route(value = State.StateUrlConstants.LEAGUE, layout = MainView.class)
 @RouteAlias(value = State.StateUrlConstants.ROOT, layout = MainView.class)
-public class LeagueModule extends VerticalLayout implements AfterNavigationObserver {
+public class LeagueModule extends VerticalLayout implements AfterNavigationObserver, RouterLayout {
 
 	@Autowired
 	private LeaguePresenter presenter;

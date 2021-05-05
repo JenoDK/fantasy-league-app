@@ -16,13 +16,14 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.ParentLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteNotFoundError;
+import com.vaadin.flow.router.RouterLayout;
 import com.vaadin.flow.router.RouterLink;
 
 @ParentLayout(MainView.class)
 @PageTitle(AppConst.TITLE_NOT_FOUND)
 @Route(value = State.StateUrlConstants.PAGE_NOT_FOUND, layout = MainView.class)
 @AlwaysAllow
-public class CustomRouteNotFoundError extends RouteNotFoundError {
+public class CustomRouteNotFoundError extends RouteNotFoundError implements RouterLayout {
 
 	public CustomRouteNotFoundError() {
 		RouterLink link = Component.from(

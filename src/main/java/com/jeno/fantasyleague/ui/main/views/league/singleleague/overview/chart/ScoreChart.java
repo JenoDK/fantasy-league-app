@@ -34,11 +34,13 @@ import com.jeno.fantasyleague.util.DecimalUtil;
 import com.vaadin.flow.component.ClientCallable;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.JsModule;
+import com.vaadin.flow.component.dependency.NpmPackage;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 
 @Tag("score-chart")
+@NpmPackage(value = "google-charts", version = "^2.0.0")
 @JsModule("./src/views/overview/score-chart.js")
 public class ScoreChart extends PolymerTemplate<ScoreChartModel> {
 

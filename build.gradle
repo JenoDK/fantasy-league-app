@@ -11,12 +11,12 @@ buildscript {
 }
 
 plugins {
-	id 'com.devsoap.vaadin-flow' version '1.2'
+	id 'org.springframework.boot' version '2.2.4.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+	id 'java'
+	id 'com.vaadin' version '0.14.5.1'
 }
 
-apply plugin: 'java'
-apply plugin: 'org.springframework.boot'
-apply plugin: 'io.spring.dependency-management'
 apply from: 'liquibase.gradle'
 
 group = 'com.jeno'
@@ -28,53 +28,54 @@ repositories {
 	mavenCentral()
 }
 
-ext {
-	vaadinVersion = '14.1.2'
-}
-
 configurations {
 	runtime.exclude group: "org.springframework.boot", module: "spring-boot-starter-logging"
 	compile.exclude group: "org.springframework.boot", module: "spring-boot-starter-logging"
+	developmentOnly
+	runtimeClasspath {
+		extendsFrom developmentOnly
+	}
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "com.vaadin:vaadin-bom:$vaadinVersion"
+	}
 }
 
 dependencies {
-	compile('org.springframework.boot:spring-boot-starter-data-jpa')
-	compile('org.springframework.boot:spring-boot-starter-security')
-	compile('org.springframework.boot:spring-boot-starter-web')
+	implementation('com.vaadin:vaadin-spring-boot-starter') {
+//         Webjars are only needed when running in Vaadin 13 compatibility mode
+		["com.vaadin.webjar", "org.webjars.bowergithub.insites",
+		 "org.webjars.bowergithub.polymer", "org.webjars.bowergithub.polymerelements",
+		 "org.webjars.bowergithub.vaadin", "org.webjars.bowergithub.webcomponents"]
+				.forEach { group -> exclude(group: group) }
+	}
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
-	compile group: 'org.springframework.boot', name: 'spring-boot-starter-log4j2', version: '2.0.0.RELEASE'
+	implementation('org.springframework.boot:spring-boot-starter-data-jpa')
+	implementation('org.springframework.boot:spring-boot-starter-security')
+	implementation('org.springframework.boot:spring-boot-starter-web')
 
-	compile vaadin.bom()
-	compile vaadin.core()
-	compile vaadin.lumoTheme()
-	compile('com.vaadin:vaadin-spring-boot-starter')
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-log4j2', version: '2.0.0.RELEASE'
 
-	compile("org.liquibase:liquibase-core:3.8.2") {
+//	compile vaadin.bom()
+//	compile vaadin.core()
+//	compile vaadin.lumoTheme()
+//	compile('com.vaadin:vaadin-spring-boot-starter')
+
+	implementation("org.liquibase:liquibase-core:3.8.2") {
 		exclude group: "org.slf4j", module: "slf4j-api"
 		exclude group: "ch.qos.logback", module: "logback-classic"
 	}
 
-	compile('it.ozimov:spring-boot-email-core:0.6.3')
-	compile('com.google.guava:guava:23.0')
-	compile('io.reactivex.rxjava2:rxjava:2.1.10')
-	compile('org.apache.commons:commons-csv:1.5')
-	compile('com.j2html:j2html:1.4.0')
+	implementation('it.ozimov:spring-boot-email-core:0.6.3')
+	implementation('com.google.guava:guava:23.0')
+	implementation('io.reactivex.rxjava2:rxjava:2.1.10')
+	implementation('org.apache.commons:commons-csv:1.5')
+	implementation('com.j2html:j2html:1.4.0')
+	implementation('mysql:mysql-connector-java')
 
-	runtime('mysql:mysql-connector-java')
-
-	testCompile('org.springframework.boot:spring-boot-starter-test')
-	testCompile('org.springframework.security:spring-security-test')
-}
-
-task stage(type: Copy, dependsOn: [clean, build]) {
-	from jar.archivePath
-	into project.rootDir
-	rename {
-		'app.jar'
-	}
-}
-stage.mustRunAfter(clean)
-
-clean.doLast {
-	project.file('app.jar').delete()
+	testImplementation('org.springframework.boot:spring-boot-starter-test')
+	testImplementation('org.springframework.security:spring-security-test')
 }

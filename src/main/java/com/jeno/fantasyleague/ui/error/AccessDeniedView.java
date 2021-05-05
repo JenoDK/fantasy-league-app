@@ -15,6 +15,7 @@ import com.vaadin.flow.router.HasErrorParameter;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.ParentLayout;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RouterLayout;
 import com.vaadin.flow.templatemodel.TemplateModel;
 
 @Tag("access-denied-view")
@@ -23,7 +24,7 @@ import com.vaadin.flow.templatemodel.TemplateModel;
 @PageTitle(AppConst.TITLE_ACCESS_DENIED)
 @Route("accessDenied")
 @AlwaysAllow
-public class AccessDeniedView extends PolymerTemplate<TemplateModel> implements HasErrorParameter<AccessDeniedException> {
+public class AccessDeniedView extends PolymerTemplate<TemplateModel> implements HasErrorParameter<AccessDeniedException>, RouterLayout {
 
 	@Override
 	public int setErrorParameter(BeforeEnterEvent beforeEnterEvent, ErrorParameter<AccessDeniedException> errorParameter) {

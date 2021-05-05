@@ -33,3 +33,4 @@ nbdist/
 ### Vaadin stuff ###
 node_modules/
 target/
+webpack.generated.js

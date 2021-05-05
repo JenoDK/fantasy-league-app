@@ -19,11 +19,13 @@ import com.vaadin.flow.router.Location;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.QueryParameters;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RouterLayout;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 @PageTitle("Reset Password")
 @Route("activateAccount")
-public class ActivateAccountUI extends RedirectUI implements HasUrlParameter<String> {
+public class ActivateAccountUI extends RedirectUI implements HasUrlParameter<String>, RouterLayout {
 
 	@Autowired
 	private UserRepository userRepository;

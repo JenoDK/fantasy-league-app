@@ -15,12 +15,13 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.page.Viewport;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RouterLayout;
 
 @PageTitle("Register")
 @Route(value = "register")
 @AlwaysAllow
 @Viewport(AppConst.VIEWPORT)
-public class RegisterUI extends RedirectUI {
+public class RegisterUI extends RedirectUI implements RouterLayout {
 
 	@Autowired
 	private UserDao userDao;

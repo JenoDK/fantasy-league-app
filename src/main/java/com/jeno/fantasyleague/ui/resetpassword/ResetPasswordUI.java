@@ -20,11 +20,13 @@ import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.QueryParameters;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RouterLayout;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 @PageTitle("Reset Password")
 @Route("resetPassword")
-public class ResetPasswordUI extends RedirectUI implements HasUrlParameter<String> {
+public class ResetPasswordUI extends RedirectUI implements HasUrlParameter<String>, RouterLayout {
 
 	@Autowired
 	private UserRepository userRepository;
