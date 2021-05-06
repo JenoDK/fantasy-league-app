@@ -9,12 +9,14 @@ import com.jeno.fantasyleague.util.RxUtil;
 import com.jeno.fantasyleague.util.VaadinUtil;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import io.reactivex.Observable;
 
+@CssImport(value = "./styles/shared-styles.css")
 public class ResetPasswordForm extends CustomTitleForm {
 
 	private PasswordField passwordField;
@@ -41,7 +43,9 @@ public class ResetPasswordForm extends CustomTitleForm {
 	}
 
 	private void initLayout() {
-		setWidth(null);
+		addClassName("width-mobile-100");
+		addClassName("width-40");
+		setResponsiveSteps(new ResponsiveStep("0", 1, ResponsiveStep.LabelsPosition.TOP));
 
 		passwordField = new PasswordField("Password");
 		passwordField.setPrefixComponent(VaadinIcon.PASSWORD.create());

@@ -11,6 +11,7 @@ import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
@@ -22,7 +23,7 @@ public class RegisterUserForm extends CustomTitleForm {
 
 	private TextField nameField;
 	private TextField userNameField;
-	private TextField emailField;
+	private EmailField emailField;
 	private PasswordField passwordField;
 	private PasswordField repeatPasswordField;
 	private ImageUploadWithPlaceholder profilePictureField;
@@ -63,7 +64,7 @@ public class RegisterUserForm extends CustomTitleForm {
 		userNameField.setPlaceholder("Username");
 		userNameField.setPrefixComponent(VaadinIcon.CLIPBOARD_USER.create());
 
-		emailField = new TextField();
+		emailField = new EmailField();
 		emailField.setPlaceholder("Email");
 		emailField.setPrefixComponent(VaadinIcon.MAILBOX.create());
 

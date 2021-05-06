@@ -12,7 +12,13 @@ public abstract class RedirectUI extends VerticalLayout {
 	protected RouterLink redirectLink;
 
 	public RedirectUI() {
-		initLayout();
+		this(true);
+	}
+
+	public RedirectUI(boolean initLayout) {
+		if (initLayout) {
+			initLayout();
+		}
 	}
 
 	protected void initLayout() {

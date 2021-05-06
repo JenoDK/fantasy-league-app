@@ -2,12 +2,13 @@ package com.jeno.fantasyleague.backend.data.service.email;
 
 import java.util.UUID;
 
-import com.jeno.fantasyleague.backend.data.repository.PasswordResetTokenRepository;
-import com.jeno.fantasyleague.exception.EmailException;
-import com.jeno.fantasyleague.backend.model.PasswordResetToken;
-import com.jeno.fantasyleague.backend.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.jeno.fantasyleague.backend.data.repository.PasswordResetTokenRepository;
+import com.jeno.fantasyleague.backend.model.PasswordResetToken;
+import com.jeno.fantasyleague.backend.model.User;
+import com.jeno.fantasyleague.exception.EmailException;
 
 @Service
 public class PasswordResetService {
@@ -22,7 +23,7 @@ public class PasswordResetService {
 		String token = UUID.randomUUID().toString();
 		PasswordResetToken pwResetToken = new PasswordResetToken(user, token);
 		passwordResetTokenRepository.save(pwResetToken);
-		String url = contextPath + "/resetPassword?id=" + user.getId() + "&token=" + token;
+		String url = contextPath + "/resetPassword?token=" + token;
 		emailService.sendEmail(
 				"Reset password " + user.getUsername(),
 				"Click the following link to reset your password: " + url,

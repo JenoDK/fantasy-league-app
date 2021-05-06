@@ -3,9 +3,11 @@
 !gradle/wrapper/gradle-wrapper.jar
 /src/main/resources/rebel.xml
 /src/main/resources/application-dev.properties
+/src/main/resources/application-prod.properties
 /src/main/webapp/VAADIN/widgetsets
 /src/main/webapp/VAADIN/gwt-unitCache
 /src/main/webapp/VAADIN/themes/fantasy-league/styles.scss.cache
+/deployment/
 
 ### STS ###
 .apt_generated
