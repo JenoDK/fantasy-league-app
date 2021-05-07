@@ -25,35 +25,18 @@ public class LeagueModel {
 	private LeagueRepository leagueRepo;
 	@Autowired
 	private LeagueService leagueService;
-	@Autowired
-	private SecurityHolder securityHolder;
 
-	private final BehaviorSubject<List<LeagueBean>> leaguesForUser = BehaviorSubject.create();
-	private final BehaviorSubject<LeagueBean> newLeague = BehaviorSubject.create();
-
-	public void addLeague(League league) {
-		// Add current logged in user as owner and user
-		User user = securityHolder.getUser();
+	public LeagueBean addLeague(League league, User user) {
 		// Add as owner
 		league.getOwners().add(user);
-		League addedLeague = leagueService.addLeague(league, user);
-		this.newLeague.onNext(makeLeagueBean(addedLeague, user));
+		return makeLeagueBean(leagueService.addLeague(league, user), user);
 	}
 
-	public Observable<LeagueBean> newLeague() {
-		return newLeague;
-	}
-
-	public Observable<List<LeagueBean>> leaguesForUser() {
-		return leaguesForUser;
-	}
-
-	public void loadLeaguesForUser() {
-		User user = securityHolder.getUser();
-		leaguesForUser.onNext(leagueRepo.findByUsers(user).stream()
+	public List<LeagueBean> loadLeaguesForUser(User user) {
+		return leagueRepo.findByUsers(user).stream()
 				.sorted(Comparator.comparing(League::getLeague_starting_date).reversed())
 				.map(league -> makeLeagueBean(league, user))
-				.collect(Collectors.toList()));
+				.collect(Collectors.toList());
 	}
 
 	@Transactional

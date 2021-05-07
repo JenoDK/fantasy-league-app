@@ -267,40 +267,42 @@ public class ScoreChart extends PolymerTemplate<ScoreChartModel> {
 				.filter(b -> b.getPosition() <= showTop || userIsLoggedInUser(user, b))
 				.collect(Collectors.toList());
 		List<ScoreChartDataPerDate> scoresPerDate = Lists.newArrayList();
-		gamesSorted.stream().findFirst()
-				.map(Game::getGameDateTime)
-				.ifPresent(firstDate -> {
-							int showToInt = (int) showTop;
-							List<Double> zeroScores = Lists.newArrayList();
-							if (gamesSorted.size() < 9) {
-								for (int i = 0; i < gamesSorted.size(); i++) {
-									List<Game> allGamesUpUntilNow = gamesSorted.subList(0, i + 1);
-									String date = allGamesUpUntilNow.stream().reduce((one, two) -> two)
-											.map(lastGame -> DateUtil.DATE_DAY_FORMATTER.format(lastGame.getGameDateTime()))
-											.orElse("NA");
-									List<Double> scores = usersToShow.stream()
-											.map(u -> u.getScoreForGames(allGamesUpUntilNow))
-											.collect(Collectors.toList());
-									scoresPerDate.add(new ScoreChartDataPerDate(date, scores));
-								}
-							} else {
-								int chunkSize = gamesSorted.size() / 8;
-								List<List<Game>> gamesPartitioned = Lists.partition(gamesSorted, chunkSize);
-								for (int i = 0; i < gamesPartitioned.size(); i++) {
-									List<Game> allGamesUpUntilNow = gamesPartitioned.subList(0, i + 1).stream()
-											.flatMap(List::stream)
-											.sorted(Comparator.comparing(Game::getGameDateTime))
-											.collect(Collectors.toList());
-									String date = gamesPartitioned.get(i).stream().reduce((one, two) -> two)
-											.map(lastGame -> DateUtil.DATE_DAY_FORMATTER.format(lastGame.getGameDateTime()))
-											.orElse("NA");
-									List<Double> scores = usersToShow.stream()
-											.map(u -> u.getScoreForGames(allGamesUpUntilNow))
-											.collect(Collectors.toList());
-									scoresPerDate.add(new ScoreChartDataPerDate(date, scores));
-								}
+		if (!gamesSorted.isEmpty()) {
+			gamesSorted.stream().findFirst()
+					.map(Game::getGameDateTime)
+					.ifPresent(firstDate -> {
+						if (gamesSorted.size() < 9) {
+							for (int i = 0; i < gamesSorted.size(); i++) {
+								List<Game> allGamesUpUntilNow = gamesSorted.subList(0, i + 1);
+								String date = allGamesUpUntilNow.stream().reduce((one, two) -> two)
+										.map(lastGame -> DateUtil.DATE_DAY_FORMATTER.format(lastGame.getGameDateTime()))
+										.orElse("NA");
+								List<Double> scores = usersToShow.stream()
+										.map(u -> u.getScoreForGames(allGamesUpUntilNow))
+										.collect(Collectors.toList());
+								scoresPerDate.add(new ScoreChartDataPerDate(date, scores));
 							}
-						});
+						} else {
+							int chunkSize = gamesSorted.size() / 8;
+							List<List<Game>> gamesPartitioned = Lists.partition(gamesSorted, chunkSize);
+							for (int i = 0; i < gamesPartitioned.size(); i++) {
+								List<Game> allGamesUpUntilNow = gamesPartitioned.subList(0, i + 1).stream()
+										.flatMap(List::stream)
+										.sorted(Comparator.comparing(Game::getGameDateTime))
+										.collect(Collectors.toList());
+								String date = gamesPartitioned.get(i).stream().reduce((one, two) -> two)
+										.map(lastGame -> DateUtil.DATE_DAY_FORMATTER.format(lastGame.getGameDateTime()))
+										.orElse("NA");
+								List<Double> scores = usersToShow.stream()
+										.map(u -> u.getScoreForGames(allGamesUpUntilNow))
+										.collect(Collectors.toList());
+								scoresPerDate.add(new ScoreChartDataPerDate(date, scores));
+							}
+						}
+					});
+		} else {
+			scoresPerDate.add(new ScoreChartDataPerDate(DateUtil.DATE_DAY_FORMATTER.format(now), usersToShow.stream().map(ignored -> 0d).collect(Collectors.toList())));
+		}
 		getModel().setScoresPerDate(scoresPerDate);
 		List<String> headers = usersToShow.stream()
 				.map(this::getDisplayName)
