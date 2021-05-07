@@ -65,7 +65,7 @@ class LeagueCard extends PolymerElement {
 
 				.picture_wrapper img {
 					width: 100%;
-					max-height: 200px;
+					max-height: 300px;
 					object-fit: cover;
 				}
 
@@ -79,6 +79,12 @@ class LeagueCard extends PolymerElement {
 					}
 				}
 
+				@media (max-width: 600px) {
+					.info-wrapper {
+						flex-direction: column;
+					}
+				}
+
 				.top-3-grid {
 					padding: var(--lumo-space-s) var(--lumo-space-s);
 					border-radius: var(--lumo-border-radius);
@@ -88,7 +94,9 @@ class LeagueCard extends PolymerElement {
 			</style>
 			<div id="content" class="content">
 				<vaadin-vertical-layout id="wrapper" class="wrapper">
-					<div id="leagueImage_div" class="picture_wrapper"></div>
+					<div id="leagueImage_div" class="picture_wrapper">
+                        <img id="leagueImageTag"></img>
+                    </div>
 					<div id="info" class="info-wrapper">
 						<h2 id="leagueName" class="name"></h2>
 						<div class="minor_info">
@@ -103,6 +111,10 @@ class LeagueCard extends PolymerElement {
 
     static get is() {
         return 'league-card';
+    }
+
+    ready() {
+        super.ready();
     }
 }
 

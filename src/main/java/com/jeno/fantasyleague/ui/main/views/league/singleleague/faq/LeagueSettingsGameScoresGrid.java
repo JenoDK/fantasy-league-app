@@ -3,13 +3,12 @@ package com.jeno.fantasyleague.ui.main.views.league.singleleague.faq;
 import java.util.List;
 
 import com.jeno.fantasyleague.resources.Resources;
-import com.jeno.fantasyleague.ui.common.grid.CustomGrid;
+import com.vaadin.flow.component.grid.Grid;
 
-public class LeagueSettingsGameScoresGrid extends CustomGrid<LeagueSettingsGameScoreBean> {
+public class LeagueSettingsGameScoresGrid extends Grid<LeagueSettingsGameScoreBean> {
 
 	public LeagueSettingsGameScoresGrid(List<LeagueSettingsGameScoreBean> items) {
 		super();
-
 		initColumns();
 		setItems(items);
 		setWidth("100%");

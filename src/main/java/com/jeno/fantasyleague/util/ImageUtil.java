@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.User;
+import com.jeno.fantasyleague.ui.common.LeagueImageResourceCache;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.server.StreamResource;
@@ -39,10 +40,7 @@ public class ImageUtil {
 
 	public static Image getLeaguePictureImage(League league) {
 		if (league.getLeague_picture() != null) {
-			StreamResource resource = new StreamResource(
-					"league_banner.png",
-					() -> new ByteArrayInputStream(league.getLeague_picture()));
-			return new Image(resource, "league_banner");
+			return new Image(LeagueImageResourceCache.addOrGetLeagueImageResource(league), "league_banner");
 		} else {
 			return new Image(Images.DEFAULT_LEAGUE_BANNER, "league_banner");
 		}

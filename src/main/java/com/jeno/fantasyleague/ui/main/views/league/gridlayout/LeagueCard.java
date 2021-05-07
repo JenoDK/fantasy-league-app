@@ -1,26 +1,22 @@
 package com.jeno.fantasyleague.ui.main.views.league.gridlayout;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
-import com.google.common.collect.Lists;
+import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.User;
-import com.jeno.fantasyleague.resources.Resources;
-import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.OverviewUtil;
-import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.chart.UserScoreBean;
+import com.jeno.fantasyleague.ui.common.LeagueImageResourceCache;
 import com.jeno.fantasyleague.util.ImageUtil;
+import com.jeno.fantasyleague.util.Images;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.JsModule;
-import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.grid.GridSortOrder;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
-import com.vaadin.flow.data.provider.SortDirection;
 import com.vaadin.flow.templatemodel.TemplateModel;
 
 import io.reactivex.subjects.BehaviorSubject;
@@ -41,6 +37,9 @@ public class LeagueCard extends PolymerTemplate<TemplateModel> {
 	@Id("leagueImage_div")
 	private Div imageDiv;
 
+	@Id("leagueImageTag")
+	private Image img;
+
 	@Id("leagueName")
 	private H2 name;
 
@@ -58,51 +57,18 @@ public class LeagueCard extends PolymerTemplate<TemplateModel> {
 	}
 
 	private void initLayout() {
-		wrapper.addClickListener(ignored -> clickedLeague.onNext(league));
-		name.setText(league.getLeague().getName());
-		adminName.setText("Owners: " + league.getLeagueOwners().stream().map(User::getUsername).collect(Collectors.joining(", ")));
-		membersCount.setText("Members: " + league.getLeagueUsers().size());
-		imageDiv.add(ImageUtil.getLeaguePictureImage(league.getLeague()));
+		League league = this.league.getLeague();
+		img.setAlt("league_banner");
+		if (league.getLeague_picture() != null) {
+			img.setSrc(LeagueImageResourceCache.addOrGetLeagueImageResource(league));
+		} else {
+			img.setSrc(Images.DEFAULT_LEAGUE_BANNER);
+		}
+		wrapper.addClickListener(ignored -> clickedLeague.onNext(this.league));
+		name.setText(league.getName());
+		adminName.setText("Owners: " + this.league.getLeagueOwners().stream().map(User::getUsername).collect(Collectors.joining(", ")));
+		membersCount.setText("Members: " + this.league.getLeagueUsers().size());
 		wrapper.setHorizontalComponentAlignment(FlexComponent.Alignment.CENTER, imageDiv);
-//		wrapper.add(new TopThreeGrid(league.getScores().stream().limit(3).collect(Collectors.toList()), league.getLoggedInUser()));
 	}
 
-	private class TopThreeGrid extends Grid<UserScoreBean> {
-
-		private final User loggedInUser;
-
-		public TopThreeGrid(List<UserScoreBean>items, User loggedInUser) {
-			super();
-			this.loggedInUser = loggedInUser;
-
-			initGrid();
-			setItems(items);
-		}
-
-		private void initGrid() {
-			setHeightByRows(true);
-			setSelectionMode(SelectionMode.NONE);
-			addThemeNames("orders", "no-row-borders");
-			addClassName("top-3-grid");
-
-			addColumn(UserScoreBean::getPosition)
-					.setWidth("60px")
-					.setFlexGrow(0)
-					.setId("position");
-			addColumn(userTotalScoreBean -> getUserInfoColumn(userTotalScoreBean))
-					.setHeader(Resources.getMessage("username"))
-					.setId("userName");
-			Column<UserScoreBean> userScoreColumn =
-					addColumn(bean -> OverviewUtil.getScoreFormatted(bean.getTotalScore()))
-							.setHeader(Resources.getMessage("totalScoreGridTitle"));
-			userScoreColumn.setId("totalScore");
-			sort(Lists.newArrayList(new GridSortOrder<>(userScoreColumn, SortDirection.DESCENDING)));
-		}
-
-		private String getUserInfoColumn(UserScoreBean userScoreBean) {
-			return userScoreBean.getUser().getUsername() +
-					(userScoreBean.getUser().getId().equals(loggedInUser.getId()) ? " (You)" : "") +
-					" - " + userScoreBean.getUser().getName();
-		}
-	}
 }

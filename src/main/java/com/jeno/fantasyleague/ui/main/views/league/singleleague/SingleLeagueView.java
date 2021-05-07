@@ -1,6 +1,11 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import com.jeno.fantasyleague.backend.data.service.email.ApplicationEmailService;
 import com.jeno.fantasyleague.backend.model.League;
+import com.jeno.fantasyleague.ui.common.LeagueImageResourceCache;
 import com.jeno.fantasyleague.ui.common.field.CustomButton;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.vaadin.flow.component.ClickEvent;
@@ -15,6 +20,8 @@ import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
 
 public class SingleLeagueView extends VerticalLayout {
+
+	private static final Logger LOG = LogManager.getLogger(SingleLeagueView.class.getName());
 
 	private final BehaviorSubject<ClickEvent<Button>> backClick = BehaviorSubject.create();
 	private final League league;
@@ -44,8 +51,14 @@ public class SingleLeagueView extends VerticalLayout {
 
 		LeagueTopBar topBar = new LeagueTopBar(league);
 		topBar.imageUploaded().subscribe(os -> {
-			league.setLeague_picture(os.toByteArray());
-			singleLeagueServiceprovider.getLeagueRepository().saveAndFlush(league);
+			try {
+				LeagueImageResourceCache.remove(league);
+				league.setLeague_picture(os.toByteArray());
+				singleLeagueServiceprovider.getLeagueRepository().saveAndFlush(league);
+				topBar.updateLeagueImage(league);
+			} catch (Exception e) {
+				LOG.error("Failed to update league image", e);
+			}
 		});
 
 

@@ -1,11 +1,12 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
 import com.jeno.fantasyleague.backend.model.League;
+import com.jeno.fantasyleague.ui.common.LeagueImageResourceCache;
 import com.jeno.fantasyleague.ui.common.field.CustomButton;
 import com.jeno.fantasyleague.ui.common.image.VaadinImageUploader;
+import com.jeno.fantasyleague.ui.common.label.StatusLabel;
 import com.jeno.fantasyleague.util.ImageUtil;
 import com.jeno.fantasyleague.util.VaadinUtil;
 import com.vaadin.flow.component.html.H3;
@@ -13,7 +14,6 @@ import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.server.StreamResource;
 
 import io.reactivex.Observable;
 
@@ -29,17 +29,19 @@ public class LeagueTopBar extends VerticalLayout {
 		setSpacing(false);
 		setSizeFull();
 
-		upload = new VaadinImageUploader();
+		VerticalLayout imageUploadLayout = new VerticalLayout();
+		imageUploadLayout.setMargin(false);
+		imageUploadLayout.setPadding(false);
+		imageUploadLayout.setAlignItems(Alignment.END);
+		StatusLabel statusLabel = new StatusLabel();
+		statusLabel.setVisible(false);
+		upload = new VaadinImageUploader(1200, 300, true, false, statusLabel);
 		CustomButton button = new CustomButton("Change banner", VaadinIcon.CAMERA.create());
 		upload.setUploadButton(button);
 		upload.setDropAllowed(false);
-		upload.imageResized()
-				.subscribe(os -> imageLayout.setSrc(new StreamResource(
-						upload.getFileName(),
-						() -> new ByteArrayInputStream(os.toByteArray()))));
-
+		imageUploadLayout.add(statusLabel, upload);
 		imageLayout = ImageUtil.getLeaguePictureImage(league);
-		VaadinUtil.addStyles(imageLayout.getStyle(), "width: 100%; max-height: 200px; object-fit: cover;");
+		VaadinUtil.addStyles(imageLayout.getStyle(), "width: 100%; max-height: 300px; object-fit: cover;");
 
 		HorizontalLayout titleLayout = new HorizontalLayout();
 		titleLayout.setPadding(false);
@@ -49,9 +51,11 @@ public class LeagueTopBar extends VerticalLayout {
 		H3 title = new H3(league.getName());
 		title.getStyle().set("flex", "1");
 		title.getStyle().set("margin-top", "0.5em");
+		VerticalLayout tL = new VerticalLayout(title);
+		tL.setWidthFull();
 
-		titleLayout.add(title);
-		titleLayout.add(upload);
+		titleLayout.add(tL);
+		titleLayout.add(imageUploadLayout);
 		titleLayout.setAlignItems(Alignment.CENTER);
 		titleLayout.setJustifyContentMode(JustifyContentMode.BETWEEN);
 
@@ -64,4 +68,7 @@ public class LeagueTopBar extends VerticalLayout {
 		return upload.imageResized();
 	}
 
+	public void updateLeagueImage(League league) {
+		imageLayout.setSrc(LeagueImageResourceCache.addOrGetLeagueImageResource(league));
+	}
 }

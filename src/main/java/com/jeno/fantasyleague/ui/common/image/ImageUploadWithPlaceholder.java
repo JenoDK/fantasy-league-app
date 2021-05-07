@@ -29,21 +29,13 @@ public class ImageUploadWithPlaceholder extends VerticalLayout {
 		imageLayout = new Image();
 		imageLayout.setSrc(Images.DEFAULT_PROFILE_PICTURE);
 
-		upload = new VaadinImageUploader(200);
+		errorLabel = new StatusLabel();
+		upload = new VaadinImageUploader(200, errorLabel);
 		upload.imageResized()
 				.subscribe(this::updateImage);
-		upload.addFailedListener(event -> {
-			if (event.getReason().getCause() == null) {
-				errorLabel.setErrorText(event.getReason().getMessage());
-			} else {
-				errorLabel.setErrorText(event.getReason().getCause().getMessage());
-			}
-		});
 		CustomButton uploadButton = new CustomButton("Choose image", VaadinIcon.PICTURE.create());
 		upload.setUploadButton(uploadButton);
-		upload.addClassName("ignore-error-indicator");
-
-		errorLabel = new StatusLabel();
+		upload.setDropAllowed(false);
 
 		add(upload);
 		add(errorLabel);

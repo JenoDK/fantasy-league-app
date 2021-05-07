@@ -33,6 +33,10 @@ public class LeagueGrid extends Grid<LeagueBean> {
 	public void setLeagues(List<LeagueBean> leagues) {
 		leagueListDataProvider.getItems().clear();
 		addItems(leagues);
+		getElement().executeJs(
+				"   setTimeout(() => {\n" +
+						"        this.notifyResize();\n" +
+						"    }, 190);");
 	}
 
 	public void addLeague(LeagueBean league) {

@@ -91,14 +91,17 @@ public class ProfileView extends VerticalLayout implements RouterLayout {
 		save.addClickListener(event -> {
 			if (binder.writeBeanIfValid(bean)) {
 				String previousUsername = user.getUsername();
+				String previousEmail = user.getEmail();
 				user.setUsername(bean.getUsername());
+				user.setEmail(bean.getEmail());
 				uploadLayout.getImage().map(ByteArrayInputStream::readAllBytes).ifPresent(user::setProfile_picture);
 				try {
 					userDao.update(user);
 					infoLabel.setSuccessText("Changes saved");
 				} catch (ValidationException e) {
-					username.setErrorMessage(String.join(",<br/>", e.getErrorMap().values()));
+					infoLabel.setErrorText(String.join(",<br/>", e.getErrorMap().values()));
 					user.setUsername(previousUsername);
+					user.setEmail(previousEmail);
 				}
 			} else {
 				BinderValidationStatus<UserProfileBean> validate = binder.validate();

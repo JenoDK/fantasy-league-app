@@ -4,17 +4,18 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Optional;
 import java.util.Set;
 
 import javax.imageio.ImageIO;
 
 import com.google.common.collect.Sets;
+import com.jeno.fantasyleague.ui.common.label.StatusLabel;
 import com.jeno.fantasyleague.util.ImageUtil;
-import com.vaadin.flow.component.upload.FinishedEvent;
-import com.vaadin.flow.component.upload.StartedEvent;
+import com.vaadin.flow.component.upload.SucceededEvent;
 import com.vaadin.flow.component.upload.Upload;
-import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
+import com.vaadin.flow.component.upload.receivers.FileBuffer;
 
 import elemental.json.Json;
 import io.reactivex.Observable;
@@ -23,58 +24,47 @@ import io.reactivex.subjects.BehaviorSubject;
 public class VaadinImageUploader extends Upload {
 
 	private static final Set<String> ALLOWED_TYPES = Sets.newHashSet("image/png", "image/jpeg", "image/gif");
-	private static final long MAX_SIZE_IN_KB = 10000000;
 
 	private final BehaviorSubject<ByteArrayOutputStream> imageResized = BehaviorSubject.create();
 	private final int maxWidthOfResizedPicture;
 	private final int maxHeightOfResizedPicture;
 	private final boolean needsResize;
 	private final boolean circle;
+	private final StatusLabel statusLabel;
 
 	private String fileName = "";
 
-	public VaadinImageUploader() {
-		this(0, 0, false, false);
+	public VaadinImageUploader(int maxSizeOfResizedPicture, StatusLabel statusLabel) {
+		this(maxSizeOfResizedPicture, maxSizeOfResizedPicture, true, true, statusLabel);
 	}
 
-	public VaadinImageUploader(int maxSizeOfResizedPicture) {
-		this(maxSizeOfResizedPicture, maxSizeOfResizedPicture, true, true);
-	}
-
-	public VaadinImageUploader(int maxWidthOfResizedPicture, int maxHeightOfResizedPicture, boolean needsResize, boolean circle) {
+	public VaadinImageUploader(int maxWidthOfResizedPicture, int maxHeightOfResizedPicture, boolean needsResize, boolean circle, StatusLabel statusLabel) {
 		super();
 		this.maxWidthOfResizedPicture = maxWidthOfResizedPicture;
 		this.maxHeightOfResizedPicture = maxHeightOfResizedPicture;
 		this.needsResize = needsResize;
 		this.circle = circle;
+		this.statusLabel = statusLabel;
 
 		init();
 	}
 
 	private void init() {
-		MemoryBuffer fileBuffer = new MemoryBuffer();
+		FileBuffer fileBuffer = new FileBuffer();
 		setReceiver(fileBuffer);
-		addStartedListener(this::uploadStarted);
-		addFinishedListener(event -> uploadFinished(event, fileBuffer));
+		setAcceptedFileTypes(ALLOWED_TYPES.toArray(new String[]{}));
+		setMaxFileSize(20000000);
+		addStartedListener(event -> statusLabel.setVisible(false));
+		addSucceededListener(event -> uploadFinished(event, fileBuffer));
+		addFileRejectedListener(event -> {
+			statusLabel.setVisible(true);
+			statusLabel.setErrorText(event.getErrorMessage());
+		});
 	}
 
-	private void uploadStarted(StartedEvent event) {
-		if (event.getContentLength() > MAX_SIZE_IN_KB) {
-			error("File is to big, maximum is 10MB");
-		}
-		if (!ALLOWED_TYPES.contains(event.getMIMEType())) {
-			error("File type not allowed");
-		}
-	}
-
-	private void error(String s) {
-		setFiles(Json.createArray());
-		throw new ImageUploadException(s);
-	}
-
-	private void uploadFinished(FinishedEvent event, MemoryBuffer fileBuffer) {
-		try {
-			BufferedImage image = ImageIO.read(fileBuffer.getInputStream());
+	private void uploadFinished(SucceededEvent event, FileBuffer fileBuffer) {
+		try(InputStream in = fileBuffer.getInputStream()) {
+			BufferedImage image = ImageIO.read(in);
 			if (needsResize) {
 				image = ImageUtil.resizeImage(image, maxWidthOfResizedPicture, maxHeightOfResizedPicture);
 			}
