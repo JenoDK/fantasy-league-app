@@ -4,9 +4,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.google.common.collect.Lists;
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.UserNotification;
 import com.jeno.fantasyleague.ui.common.StyleModifier;
+import com.jeno.fantasyleague.ui.common.label.StatusLabel;
 import com.jeno.fantasyleague.ui.main.views.league.gridlayout.LeagueBean;
 import com.jeno.fantasyleague.ui.main.views.league.gridlayout.LeagueForm;
 import com.jeno.fantasyleague.ui.main.views.league.gridlayout.LeagueGrid;
@@ -34,6 +36,7 @@ public class LeagueView {
 
 	private VerticalLayout layout;
 	private LeagueGrid leagueGrid;
+	private StatusLabel leagueInfoLabel;
 	private SingleLeagueView singleLeagieView;
 
 	@Autowired
@@ -42,6 +45,8 @@ public class LeagueView {
 		this.notificationModel = notificationModel;
 		this.leagueForm = new LeagueForm();
 		this.leagueGrid = new LeagueGrid();
+		this.leagueInfoLabel = new StatusLabel(true);
+		this.leagueInfoLabel.setVisible(false);
 
 		layout = new VerticalLayout();
 		layout.setId("league-view-id");
@@ -57,16 +62,16 @@ public class LeagueView {
 		List<UserNotification> userNotifications = singleLeagueServiceProvider.getSecurityHolder().getUserNotifications();
 		if (!userNotifications.isEmpty()) {
 			NotificationGrid notificationGrid = new NotificationGrid(userNotifications, singleLeagueServiceProvider.getSecurityHolder(), notificationModel, leagueAccepted);
-			addSection(notificationGrid, "Notifications", style -> {});
+			addSection(Lists.newArrayList(notificationGrid), "Notifications", style -> {});
 		}
-		addSection(leagueGrid, "Your leagues", style -> {});
-		addSection(leagueForm, "Create new league", style -> style
+		addSection(Lists.newArrayList(leagueInfoLabel, leagueGrid), "Your leagues", style -> {});
+		addSection(Lists.newArrayList(leagueForm), "Create new league", style -> style
 				.set("background-color", "var(--lumo-primary-color-10pct)")
 				.set("border-radius", "var(--lumo-border-radius)")
 				.set("--lumo-border-radius", "1em"));
 	}
 
-	private void addSection(Component component, String sectionTitle, StyleModifier styleModifier) {
+	private void addSection(List<Component> components, String sectionTitle, StyleModifier styleModifier) {
 		VerticalLayout sectionLayout = new VerticalLayout();
 		H4 sectionTitleLabel = new H4(sectionTitle);
 		sectionTitleLabel.getStyle().set("margin", "var(--lumo-space-m)");
@@ -77,8 +82,8 @@ public class LeagueView {
 		sectionLayout.setMaxWidth("1200px");
 		styleModifier.modify(sectionLayout.getStyle());
 
-		sectionLayout.add(component);
-		sectionLayout.setHorizontalComponentAlignment(FlexComponent.Alignment.CENTER, component);
+		components.forEach(sectionLayout::add);
+		components.forEach(c -> sectionLayout.setHorizontalComponentAlignment(FlexComponent.Alignment.CENTER, c));
 
 		layout.add(sectionLayout);
 	}
@@ -88,7 +93,13 @@ public class LeagueView {
 	}
 
 	public void setLeagues(List<LeagueBean> leagues) {
-		leagueGrid.setLeagues(leagues);
+		if (!leagues.isEmpty()) {
+			leagueInfoLabel.setVisible(false);
+			leagueGrid.setLeagues(leagues);
+		} else {
+			leagueInfoLabel.setVisible(true);
+			leagueInfoLabel.setInfoText("Your leagues will appear here, wait until you get invited to one and refresh the page or create your own league");
+		}
 	}
 
 	public Observable<League> newLeague() {
@@ -106,7 +117,7 @@ public class LeagueView {
 
 	private void viewLeague(LeagueBean league) {
 		layout.removeAll();
-		singleLeagieView = new SingleLeagueView(league.getLeague(), singleLeagueServiceProvider);
+		singleLeagieView = new SingleLeagueView(league, singleLeagueServiceProvider);
 		singleLeagieView.backToLeaguesView().subscribe(ignored -> showLeagueGridLayout());
 		layout.add(singleLeagieView);
 	}

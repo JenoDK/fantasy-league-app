@@ -1,9 +1,11 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.users;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
 import com.jeno.fantasyleague.backend.model.League;
+import com.jeno.fantasyleague.backend.model.LeagueUser;
 import com.jeno.fantasyleague.backend.model.User;
 import com.jeno.fantasyleague.ui.common.tabsheet.LazyTabComponent;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
@@ -27,7 +29,7 @@ public class UsersTab extends LazyTabComponent {
 		leftSide.setSizeFull();
 
 		leftSide.add(new H3("League Users"));
-		List<User> users = singleLeagueServiceProvider.getLeagueRepository().fetchLeagueUsers(league.getId());
+		List<User> users = singleLeagueServiceProvider.getLeagueRepository().fetchLeagueUsers(league.getId()).stream().map(LeagueUser::getUser).collect(Collectors.toList());
 		UserGrid usersGrid = new UserGrid(DataProvider.fromStream(users.stream()), singleLeagueServiceProvider, league);
 		if (singleLeagueServiceProvider.loggedInUserIsLeagueCreator(league)) {
 			usersGrid.addColumn(new ComponentRenderer<>(user -> UserGrid.promoteButton(user, singleLeagueServiceProvider, league)))

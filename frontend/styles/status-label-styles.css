@@ -1,13 +1,13 @@
-.success, .error, .warning {
+.success, .error, .warning, .info {
     padding: var(--lumo-space-s);
     border-radius: var(--lumo-border-radius);
 }
 
-.show-icon.success, .show-icon.error, .show-icon.warning {
+.show-icon.success, .show-icon.error, .show-icon.warning, .show-icon.info {
     padding-left: var(--lumo-size-m);
 }
 
-.show-icon.error::before, .show-icon.success::before, .show-icon.warning::before {
+.show-icon.error::before, .show-icon.success::before, .show-icon.warning::before, .show-icon.info::before {
     font-family: lumo-icons;
     font-size: var(--lumo-icon-size-m);
     width: var(--lumo-size-m);
@@ -27,7 +27,7 @@
     color: var(--lumo-error-text-color);
 }
 
-.warning {
+.warning, .info {
     background-color: var(--lumo-error-color-10pct);
     color: var(--lumo-primary-text-color);
 }
@@ -46,4 +46,8 @@
 
 .show-icon.warning::before {
     content: var(--lumo-icons-error);
+}
+
+.show-icon.info::before {
+    content: var(--lumo-icons-bell);
 }

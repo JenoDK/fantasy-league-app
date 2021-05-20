@@ -1,9 +1,11 @@
 package com.jeno.fantasyleague.backend.model;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -15,6 +17,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -47,11 +50,8 @@ public class League extends UserAudit {
 	@Enumerated(EnumType.STRING)
 	private Template template;
 
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "league_users",
-			joinColumns = @JoinColumn(name = "league_id"),
-			inverseJoinColumns = @JoinColumn(name = "user_id"))
-	private Set<User> users = Sets.newHashSet();
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.league", cascade= CascadeType.ALL)
+	private Set<LeagueUser> leagueUsers = new HashSet<>(0);
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "league_owners",
@@ -104,12 +104,12 @@ public class League extends UserAudit {
 		this.template = template;
 	}
 
-	public Set<User> getUsers() {
-		return users;
+	public Set<LeagueUser> getLeagueUsers() {
+		return leagueUsers;
 	}
 
-	public void setUsers(Set<User> users) {
-		this.users = users;
+	public void setLeagueUsers(Set<LeagueUser> leagueUsers) {
+		this.leagueUsers = leagueUsers;
 	}
 
 	public Set<User> getOwners() {

@@ -5,9 +5,11 @@ import org.apache.logging.log4j.Logger;
 
 import com.jeno.fantasyleague.backend.data.service.email.ApplicationEmailService;
 import com.jeno.fantasyleague.backend.model.League;
+import com.jeno.fantasyleague.backend.model.LeagueUser;
 import com.jeno.fantasyleague.ui.common.LeagueImageResourceCache;
 import com.jeno.fantasyleague.ui.common.field.CustomButton;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
+import com.jeno.fantasyleague.ui.main.views.league.gridlayout.LeagueBean;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
@@ -24,18 +26,19 @@ public class SingleLeagueView extends VerticalLayout {
 	private static final Logger LOG = LogManager.getLogger(SingleLeagueView.class.getName());
 
 	private final BehaviorSubject<ClickEvent<Button>> backClick = BehaviorSubject.create();
-	private final League league;
+	private final LeagueBean leagueBean;
 
 	private LeagueMenuBar tabSheet;
 
-	public SingleLeagueView(League league, SingleLeagueServiceProvider singleLeagueServiceprovider) {
+	public SingleLeagueView(LeagueBean leagueBean, SingleLeagueServiceProvider singleLeagueServiceprovider) {
 		super();
-		this.league = league;
+		this.leagueBean = leagueBean;
 
-		initLayout(league, singleLeagueServiceprovider);
+		initLayout(leagueBean, singleLeagueServiceprovider);
 	}
 
-	private void initLayout(League league, SingleLeagueServiceProvider singleLeagueServiceprovider) {
+	private void initLayout(LeagueBean leagueBean, SingleLeagueServiceProvider singleLeagueServiceprovider) {
+		League league = leagueBean.getLeague();
 		setSizeFull();
 		setMaxWidth("1200px");
 
@@ -66,8 +69,13 @@ public class SingleLeagueView extends VerticalLayout {
 		navigation.add(tabSheet);
 
 		add(back);
+		if (leagueBean.getLoggedInLeagueUser().isShow_help()) {
+			LeagueHelpBar leagueHelpBar = new LeagueHelpBar(leagueBean);
+			add(leagueHelpBar);
+			leagueHelpBar.doNotShow().subscribe(lu -> singleLeagueServiceprovider.getLeagueUserRepository().saveAndFlush(lu));
+			leagueHelpBar.skipHelp().subscribe(lu -> singleLeagueServiceprovider.getLeagueUserRepository().saveAndFlush(lu));
+		}
 		add(topBar);
-//		add(createNavigationRow("Matches", VaadinIcon.SWORD.create()));
 		add(navigation);
 		add(main);
 	}

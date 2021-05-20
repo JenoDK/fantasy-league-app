@@ -1,22 +1,31 @@
 package com.jeno.fantasyleague.ui.main.views.league.gridlayout;
 
 import java.util.List;
+import java.util.Objects;
 
 import com.jeno.fantasyleague.backend.model.League;
+import com.jeno.fantasyleague.backend.model.LeagueUser;
 import com.jeno.fantasyleague.backend.model.User;
 
 public class LeagueBean {
 
 	private final League league;
 	private final User loggedInUser;
-	private final List<User> leagueUsers;
+	private final List<LeagueUser> leagueUsers;
 	private final List<User> leagueOwners;
 
-	public LeagueBean(League league, User loggedInUser, List<User> leagueUsers, List<User> leagueOwners) {
+	public LeagueBean(League league, User loggedInUser, List<LeagueUser> leagueUsers, List<User> leagueOwners) {
 		this.league = league;
 		this.loggedInUser = loggedInUser;
 		this.leagueUsers = leagueUsers;
 		this.leagueOwners = leagueOwners;
+	}
+
+	public LeagueUser getLoggedInLeagueUser() {
+		return leagueUsers.stream()
+				.filter(lu -> Objects.equals(loggedInUser.getId(), lu.getUser().getId()))
+				.findFirst()
+				.orElseThrow(() -> new RuntimeException("Impossible for a logged in user " + loggedInUser.getUsername() + " not to be part of the leagueUser list"));
 	}
 
 	public League getLeague() {
@@ -27,7 +36,7 @@ public class LeagueBean {
 		return loggedInUser;
 	}
 
-	public List<User> getLeagueUsers() {
+	public List<LeagueUser> getLeagueUsers() {
 		return leagueUsers;
 	}
 
@@ -39,7 +48,7 @@ public class LeagueBean {
 
 		private League league;
 		private User loggedInUser;
-		private List<User> leagueUsers;
+		private List<LeagueUser> leagueUsers;
 		private List<User> leagueOwners;
 
 		public LeagueBean createLeagueBean() {
@@ -56,7 +65,7 @@ public class LeagueBean {
 			return this;
 		}
 
-		public Builder setLeagueUsers(List<User> leagueUsers) {
+		public Builder setLeagueUsers(List<LeagueUser> leagueUsers) {
 			this.leagueUsers = leagueUsers;
 			return this;
 		}

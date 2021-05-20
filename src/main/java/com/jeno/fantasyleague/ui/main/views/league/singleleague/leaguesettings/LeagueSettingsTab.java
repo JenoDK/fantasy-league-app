@@ -1,8 +1,10 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.leaguesettings;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.jeno.fantasyleague.backend.model.League;
+import com.jeno.fantasyleague.backend.model.LeagueUser;
 import com.jeno.fantasyleague.backend.model.User;
 import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.ui.common.field.CustomButton;
@@ -19,7 +21,7 @@ public class LeagueSettingsTab extends LazyTabComponent {
 		setPadding(false);
 		setSizeFull();
 
-		List<User> leagueUsers = singleLeagueServiceprovider.getLeagueRepository().fetchLeagueUsers(league.getId());
+		List<User> leagueUsers = singleLeagueServiceprovider.getLeagueRepository().fetchLeagueUsers(league.getId()).stream().map(LeagueUser::getUser).collect(Collectors.toList());
 		Button sendEmailButton = new CustomButton(Resources.getMessage("sendMailToLeagueUsers"), VaadinIcon.MAILBOX.create());
 		sendEmailButton.addClickListener(ignored ->
 				new SendMailPopupWindow(leagueUsers, singleLeagueServiceprovider.getEmailService()).show());

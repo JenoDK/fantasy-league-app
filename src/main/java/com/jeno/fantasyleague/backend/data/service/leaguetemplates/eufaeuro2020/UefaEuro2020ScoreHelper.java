@@ -20,6 +20,7 @@ import com.jeno.fantasyleague.backend.data.service.repo.league.UserLeagueScore;
 import com.jeno.fantasyleague.backend.model.ContestantWeight;
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.LeagueSetting;
+import com.jeno.fantasyleague.backend.model.LeagueUser;
 import com.jeno.fantasyleague.backend.model.Prediction;
 import com.jeno.fantasyleague.backend.model.User;
 
@@ -38,7 +39,7 @@ public class UefaEuro2020ScoreHelper {
 	public List<UserLeagueScore> calculateTotalUserScores(League league) {
 		ArrayListMultimap<Long, Prediction> predictionsPerUser = ArrayListMultimap.create();
 		ArrayListMultimap<Long, ContestantWeight> contestantWeightsPerUser = ArrayListMultimap.create();
-		List<User> leagueUsers = leagueRepository.fetchLeagueUsers(league.getId());
+		List<User> leagueUsers = leagueRepository.fetchLeagueUsers(league.getId()).stream().map(LeagueUser::getUser).collect(Collectors.toList());
 		Map<String, LeagueSetting> settingMap = leagueSettingRepository.findByLeague(league).stream()
 				.collect(Collectors.toMap(LeagueSetting::getName, Function.identity()));
 		predictionRepository.findByLeagueAndJoinGames(league).stream()

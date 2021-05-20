@@ -1,0 +1,25 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+	<changeSet id="add-user-league-help-columns" author="Jeno">
+		<addColumn tableName="league_users">
+			<column name="show_help" type="TINYINT(1)"/>
+		</addColumn>
+		<addColumn tableName="league_users">
+			<column name="help_stage" type="VARCHAR(32)"/>
+		</addColumn>
+	</changeSet>
+
+	<changeSet id="user-league-help-columns-default-value" author="Jeno">
+		<update tableName="league_users">
+			<column name="show_help" valueBoolean="false"/>
+		</update>
+		<update tableName="league_users">
+			<column name="help_stage" value="0"/>
+		</update>
+	</changeSet>
+
+</databaseChangeLog>

@@ -10,6 +10,8 @@ public class StatusLabel extends Label {
 	private static final String SUCCESS = "success";
 	private static final String WARNING = "warning";
 	private static final String ERROR = "error";
+	private static final String INFO = "info";
+	private final boolean showIcon;
 
 	public StatusLabel() {
 		this(true);
@@ -17,6 +19,7 @@ public class StatusLabel extends Label {
 
 	public StatusLabel(boolean showIcon) {
 		super();
+		this.showIcon = showIcon;
 		if (showIcon) {
 			addClassName("show-icon");
 		}
@@ -25,6 +28,15 @@ public class StatusLabel extends Label {
 	public void reset() {
 		setText("");
 		removeClassNames(SUCCESS, ERROR, WARNING);
+	}
+
+	public void setInfoText(String text) {
+		setText(text);
+		setInfoStyle();
+	}
+
+	public void setInfoStyle() {
+		setStyle(INFO);
 	}
 
 	public void setSuccessText(String text) {
@@ -38,18 +50,23 @@ public class StatusLabel extends Label {
 	}
 
 	public void setSuccessStyle() {
-		removeClassNames(ERROR, WARNING);
-		addClassName(SUCCESS);
+		setStyle(SUCCESS);
 	}
 
 	public void setErrorStyle() {
-		removeClassNames(SUCCESS, WARNING);
-		addClassName(ERROR);
+		setStyle(ERROR);
 	}
 
 	public void setWarningStyle() {
-		removeClassNames(SUCCESS, ERROR);
-		addClassName(WARNING);
+		setStyle(WARNING);
+	}
+
+	private void setStyle(String style) {
+		removeClassNames(getClassNames().toArray(String[]::new));
+		addClassName(style);
+		if (showIcon) {
+			addClassName("show-icon");
+		}
 	}
 
 }

@@ -9,11 +9,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jeno.fantasyleague.backend.data.repository.LeagueRepository;
+import com.jeno.fantasyleague.backend.data.repository.LeagueUserRepository;
 import com.jeno.fantasyleague.backend.data.service.leaguetemplates.LeagueTemplateService;
 import com.jeno.fantasyleague.backend.data.service.repo.contestantweight.ContestantWeightService;
 import com.jeno.fantasyleague.backend.data.service.repo.prediction.PredictionService;
 import com.jeno.fantasyleague.backend.model.ContestantWeight;
 import com.jeno.fantasyleague.backend.model.League;
+import com.jeno.fantasyleague.backend.model.LeagueUser;
 import com.jeno.fantasyleague.backend.model.Prediction;
 import com.jeno.fantasyleague.backend.model.User;
 
@@ -28,6 +30,8 @@ public class LeagueServiceImpl implements LeagueService {
 	@Autowired
 	private LeagueRepository leagueRepo;
 	@Autowired
+	private LeagueUserRepository leagueUserRepository;
+	@Autowired
 	private BeanFactory beanFactory;
 
 	@Override
@@ -40,16 +44,21 @@ public class LeagueServiceImpl implements LeagueService {
 
 		addUserToLeague(newLeague, user);
 
-		return leagueRepo.findById(newLeague.getId()).get();
+		return leagueRepo.findByIdAndJoinLeagueUsers(newLeague.getId()).get();
 	}
 
 	@Override
 	public void addUserToLeague(League league, User user) {
-		league.getUsers().add(user);
-		League updatedLeague = leagueRepo.saveAndFlush(league);
-
-		contestantWeightService.addDefaultContestantWeights(updatedLeague, user);
-		predictionService.addDefaultPredictions(league, user);
+		LeagueUser leagueUser = new LeagueUser();
+		leagueUser.setLeague(league);
+		leagueUser.setUser(user);
+		leagueUser.setShow_help(true);
+		leagueUser.setHelp_stage(LeagueUser.HelpStage.BUY_STOCKS);
+		leagueUserRepository.save(leagueUser);
+		leagueRepo.findByIdAndJoinLeagueUsers(league.getId()).ifPresent(updatedLeague -> {
+			contestantWeightService.addDefaultContestantWeights(updatedLeague, user);
+			predictionService.addDefaultPredictions(league, user);
+		});
 	}
 
 	@Override
