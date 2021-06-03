@@ -1,5 +1,9 @@
 package com.jeno.fantasyleague.backend.model;
 
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.OptionalInt;
+
 import javax.persistence.AssociationOverride;
 import javax.persistence.AssociationOverrides;
 import javax.persistence.EmbeddedId;
@@ -20,12 +24,54 @@ import javax.persistence.Transient;
 public class LeagueUser implements java.io.Serializable {
 
 	public enum HelpStage {
-		BUY_STOCKS(1);
+		BUY_STOCKS(1, "buyStocksTip"),
+		FILL_PREDICTIONS(2, "fillPredictionsTip"),
+		CHECK_OVERVIEW(3, "checkOverviewTip");
 
 		private final int stage;
+		private final String resourceKey;
 
-		HelpStage(int stage) {
+		HelpStage(int stage, String resourceKey) {
 			this.stage = stage;
+			this.resourceKey = resourceKey;
+		}
+
+		public boolean isFirstStage() {
+			OptionalInt minStage = Arrays.stream(HelpStage.values())
+					.mapToInt(HelpStage::getStage)
+					.min();
+			if (minStage.isPresent()) {
+				return minStage.getAsInt() == getStage();
+			}
+			return false;
+		}
+
+		public boolean isLastStage() {
+			OptionalInt maxStage = Arrays.stream(HelpStage.values())
+					.mapToInt(HelpStage::getStage)
+					.max();
+			if (maxStage.isPresent()) {
+				return maxStage.getAsInt() == getStage();
+			}
+			return false;
+		}
+
+		public String getResourceKey() {
+			return resourceKey;
+		}
+
+		public Optional<HelpStage> getPreviousStage() {
+			int currentStage = getStage();
+			return Arrays.stream(HelpStage.values())
+					.filter(stage -> stage.getStage() == (currentStage - 1))
+					.findFirst();
+		}
+
+		public Optional<HelpStage> getNextStage() {
+			int currentStage = getStage();
+			return Arrays.stream(HelpStage.values())
+					.filter(stage -> stage.getStage() == (currentStage + 1))
+					.findFirst();
 		}
 
 		public int getStage() {

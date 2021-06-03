@@ -3,9 +3,7 @@ package com.jeno.fantasyleague.ui.main.views.league.singleleague;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.jeno.fantasyleague.backend.data.service.email.ApplicationEmailService;
 import com.jeno.fantasyleague.backend.model.League;
-import com.jeno.fantasyleague.backend.model.LeagueUser;
 import com.jeno.fantasyleague.ui.common.LeagueImageResourceCache;
 import com.jeno.fantasyleague.ui.common.field.CustomButton;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
@@ -70,10 +68,18 @@ public class SingleLeagueView extends VerticalLayout {
 
 		add(back);
 		if (leagueBean.getLoggedInLeagueUser().isShow_help()) {
-			LeagueHelpBar leagueHelpBar = new LeagueHelpBar(leagueBean);
-			add(leagueHelpBar);
-			leagueHelpBar.doNotShow().subscribe(lu -> singleLeagueServiceprovider.getLeagueUserRepository().saveAndFlush(lu));
-			leagueHelpBar.skipHelp().subscribe(lu -> singleLeagueServiceprovider.getLeagueUserRepository().saveAndFlush(lu));
+			LeagueTipDialog leagueTipDialog = new LeagueTipDialog(leagueBean);
+			leagueTipDialog.show();
+			leagueTipDialog.hideTips().subscribe(lu -> {
+				leagueTipDialog.close();
+				singleLeagueServiceprovider.getLeagueUserRepository().saveAndFlush(lu);
+			});
+			leagueTipDialog.skipTip().subscribe(lu -> {
+				if (!lu.isShow_help()) {
+					leagueTipDialog.close();
+				}
+				singleLeagueServiceprovider.getLeagueUserRepository().saveAndFlush(lu);
+			});
 		}
 		add(topBar);
 		add(navigation);

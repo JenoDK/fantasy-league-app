@@ -2,8 +2,6 @@ package com.jeno.fantasyleague.ui.common.window;
 
 import java.util.function.Function;
 
-import javax.swing.*;
-
 import com.jeno.fantasyleague.ui.common.field.CustomButton;
 import com.jeno.fantasyleague.util.VaadinUtil;
 import com.vaadin.flow.component.Component;
@@ -32,6 +30,12 @@ public class PopupWindow extends Dialog {
 				setHeight(builder.pixelHeight + "px");
 			}
 			setWidth(builder.pixelWidth + "px");
+		}
+		if (builder.stringWidth != null) {
+			setWidth(builder.stringWidth);
+		}
+		if (builder.stringHeight != null) {
+			setHeight(builder.stringHeight);
 		}
 		getElement().getThemeList().add("crud");
 
@@ -79,6 +83,9 @@ public class PopupWindow extends Dialog {
 				cancel.addClickListener(ignored -> close());
 				bottomBar.add(cancel, confirm);
 				break;
+			case NO_BUTTONS:
+				bottomBar.setVisible(false);
+				break;
 		}
 		root.add(bottomBar);
 
@@ -93,6 +100,8 @@ public class PopupWindow extends Dialog {
 
 		private float pixelHeight = 200;
 		private float pixelWidth = 300;
+		private String stringHeight;
+		private String stringWidth;
 		private boolean draggable = false;
 		private boolean resizable = false;
 		private boolean sizeUndefined = false;
@@ -140,6 +149,16 @@ public class PopupWindow extends Dialog {
 			return this;
 		}
 
+		public Builder setWidth(String stringWidth) {
+			this.stringWidth = stringWidth;
+			return this;
+		}
+
+		public Builder setHeight(String stringHeight) {
+			this.stringHeight = stringHeight;
+			return this;
+		}
+
 		public Builder setType(Type type) {
 			this.type = type;
 			return this;
@@ -156,7 +175,7 @@ public class PopupWindow extends Dialog {
 	}
 
 	public enum Type {
-		NORMAL, ALERT, CONFIRM
+		NORMAL, ALERT, CONFIRM, NO_BUTTONS
 	}
 
 	public interface OnConfirm {
