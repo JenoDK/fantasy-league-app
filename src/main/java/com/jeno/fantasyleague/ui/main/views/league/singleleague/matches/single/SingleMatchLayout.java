@@ -11,7 +11,7 @@ import com.jeno.fantasyleague.backend.model.Contestant;
 import com.jeno.fantasyleague.backend.model.ContestantWeight;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.matches.MatchBean;
-import com.jeno.fantasyleague.ui.main.views.league.singleleague.matches.MatchCard;
+import com.jeno.fantasyleague.ui.main.views.league.singleleague.matches.MatchCardLayout;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.OverviewUtil;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
@@ -33,7 +33,7 @@ public class SingleMatchLayout extends VerticalLayout {
 		setPadding(false);
 		setMargin(false);
 
-		MatchCard matchCard = new MatchCard(match, null, loggedInUserIsAdmin, singleLeagueServiceprovider, true);
+		MatchCardLayout matchCard = new MatchCardLayout(match, null, loggedInUserIsAdmin, true, singleLeagueServiceprovider);
 		add(matchCard);
 
 		Map<Long, Integer> homeTeamWeights = singleLeagueServiceprovider.getContestantWeightRepository()

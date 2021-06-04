@@ -12,6 +12,7 @@ import java.util.stream.Stream;
 import com.jeno.fantasyleague.backend.model.ContestantWeight;
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.resources.Resources;
+import com.jeno.fantasyleague.ui.common.label.HtmlLabel;
 import com.jeno.fantasyleague.ui.common.label.StatusLabel;
 import com.jeno.fantasyleague.ui.common.tabsheet.LazyTabComponent;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
@@ -46,13 +47,17 @@ public class StocksTab extends LazyTabComponent {
 
 		initRightSide(league, singleLeagueServiceprovider);
 		add(stocksGrid);
+		HtmlLabel source = new HtmlLabel();
+		source.getElement().getThemeList().add("small");
+		source.setText("<i>Stock prices are decided based on scores found at <a href=\"https://nl-sports.unibet.be/betting/sports/event/1007377084\" target=\"_blank\">Unibet</a></i>");
+		add(source);
 	}
 
 	public void fetchAndSetTeamWeights() {
 		teamWeights = singleLeagueServiceprovider.getContestantWeights(league).stream()
 				.map(StocksBean::new)
 //				.sorted(Comparator.comparingInt(StocksBean::getStocksPurchased).reversed())
-				.sorted(Comparator.comparingInt(StocksBean::getPowerIndex).reversed())
+				.sorted(Comparator.comparingDouble(StocksBean::getPowerIndex).reversed())
 				.collect(Collectors.toList());
 	}
 
@@ -69,8 +74,11 @@ public class StocksTab extends LazyTabComponent {
 		BigDecimal serversideWeightWithBeanReplacedToDistribute = getWeightToDistribute(streamWithBeanReplaced);
 		BigDecimal clientSideWeightToDistribute = getWeightToDistribute();
 		if (!serversideWeightWithBeanReplacedToDistribute.equals(clientSideWeightToDistribute)) {
-			return ValidationResult.error("Server-side changes were detected, refreshing and then you can try again");
+			return ValidationResult.error("Server-side changes were detected, refresh and then you can try again");
 		} else {
+			if (bean.getStocksPurchased() > 10) {
+				return ValidationResult.error("You cannot purchase more than 10 stocks per team.");
+			}
 			boolean exceedsLimit = clientSideWeightToDistribute.compareTo(BigDecimal.ZERO) < 0;
 			boolean isInTime = LocalDateTime.now().isBefore(league.getLeague_starting_date());
 			if (!isInTime) {

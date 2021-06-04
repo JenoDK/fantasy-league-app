@@ -1,7 +1,9 @@
 package com.jeno.fantasyleague.ui.common.window;
 
+import java.util.List;
 import java.util.function.Function;
 
+import com.google.common.collect.Lists;
 import com.jeno.fantasyleague.ui.common.field.CustomButton;
 import com.jeno.fantasyleague.util.VaadinUtil;
 import com.vaadin.flow.component.Component;
@@ -38,6 +40,7 @@ public class PopupWindow extends Dialog {
 			setHeight(builder.stringHeight);
 		}
 		getElement().getThemeList().add("crud");
+		builder.extraThemeNames.forEach(extraThemeName -> getElement().getThemeList().add(extraThemeName));
 
 		VerticalLayout root = new VerticalLayout();
 		root.setSizeFull();
@@ -108,6 +111,7 @@ public class PopupWindow extends Dialog {
 		private boolean heightUndefined = false;
 		private Type type = Type.NORMAL;
 		private String confirmText;
+		private List<String> extraThemeNames = Lists.newArrayList();
 
 		private final String caption;
 		private final Function<PopupWindow, Component> contentGenerator;
@@ -156,6 +160,11 @@ public class PopupWindow extends Dialog {
 
 		public Builder setHeight(String stringHeight) {
 			this.stringHeight = stringHeight;
+			return this;
+		}
+
+		public Builder addExtraThemeNames(String extraThemeNames) {
+			this.extraThemeNames.add(extraThemeNames);
 			return this;
 		}
 

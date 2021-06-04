@@ -25,7 +25,7 @@ public class ApplicationEmailService {
 			message.setSubject(subject);
 			message.setTo(user.getEmail());
 			message.setSubject(subject);
-			message.setText(getHtmlBody(body));
+			message.setText(body);
 			emailSender.send(message);
 
 		} catch (Exception e) {

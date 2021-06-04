@@ -101,15 +101,6 @@ $_documentContainer.innerHTML = `
 	<dom-module id="fantasy-league-dialog-overlay-theme" theme-for="vaadin-dialog-overlay">
 		<template>
 			<style>
-				:host([theme~="orders"]) {
-					padding: var(--lumo-space-xs);
-				}
-
-				:host([theme~="orders"]) [part="overlay"] {
-					display: flex;
-					animation: none !important;
-					min-width: 300px;
-				}
 
 				:host([theme~="crud"]) [part="backdrop"] {
 					background-color: var(--lumo-shade-80pct);
@@ -119,10 +110,8 @@ $_documentContainer.innerHTML = `
 					padding: 0;
 				}
 
-				:host([theme~="orders"]) [part="content"],
-				:host([theme~="orders"]) [part="overlay"] {
-					max-width: 65em;
-					width: 100%;
+				:host([theme~="league-tip"]) {
+					width: 40%
 				}
 
 				@media (max-width: 600px), (max-height: 600px) {
@@ -139,6 +128,10 @@ $_documentContainer.innerHTML = `
 						flex-direction: column;
 					}
 
+					:host([theme~="league-tip"]) {
+						max-width: 65em;
+						width: 80%
+					}
 				}
 
 				/* we need explicitly set height for wrappers inside dialog-flow */
@@ -209,6 +202,11 @@ $_documentContainer.innerHTML = `
                 
 				:host([theme~="navigation-row"]) {
                     border-radius: 0;
+                }
+                
+                :host([theme~="small-for-mobile"]) {
+					font-weight: 300;
+					font-size: var(--lumo-font-size-xs);
                 }
 			</style>
 		</template>

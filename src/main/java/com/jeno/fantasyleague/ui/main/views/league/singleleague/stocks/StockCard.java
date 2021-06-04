@@ -17,8 +17,11 @@ import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.H4;
+import com.vaadin.flow.component.html.H5;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -51,6 +54,9 @@ public class StockCard extends PolymerTemplate<MatchBindingModel> {
 	@Id("stocksPurchased")
 	private H4 stocksPurchased;
 
+	@Id("stocksLeft")
+	private H5 stocksLeft;
+
 	public StockCard(League league, StocksBean bean, BehaviorSubject<StocksBean> stocksChanged, Function<StocksBean, ValidationResult> validateStockChange) {
 		this.league = league;
 		this.bean = bean;
@@ -71,6 +77,7 @@ public class StockCard extends PolymerTemplate<MatchBindingModel> {
 	private void updateStocksPurchasedLabel() {
 		String valueOfBoughtStocks = DecimalUtil.getTwoDecimalsThousandSeperator(bean.getShareCost().multiply(BigDecimal.valueOf(bean.getStocksPurchased())));
 		stocksPurchased.setText(Resources.getMessage("stocksBought", bean.getStocksPurchased(), valueOfBoughtStocks));
+		stocksLeft.setText("Stocks left: " + (10 - bean.getStocksPurchased()));
 	}
 
 	@ClientCallable

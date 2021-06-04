@@ -37,11 +37,11 @@ class StockCard extends PolymerElement {
 					margin-top: 10px;
 				}
 
-				.right h4 {
+				.right h4, .right h5 {
 					text-align: end;
 				}
 
-				h4 {
+				h4, h5 {
 					margin: 5px 0px 5px 0px;
 				}
 
@@ -67,6 +67,7 @@ class StockCard extends PolymerElement {
 					<div class="right">
 						<h4 id="pricePerStock"></h4>
 						<h4 id="stocksPurchased"></h4>
+						<h5 id="stocksLeft"></h5>
 					</div>
 				</div>
 			</div>

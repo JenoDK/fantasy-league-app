@@ -24,16 +24,19 @@ import javax.persistence.Transient;
 public class LeagueUser implements java.io.Serializable {
 
 	public enum HelpStage {
-		BUY_STOCKS(1, "buyStocksTip"),
-		FILL_PREDICTIONS(2, "fillPredictionsTip"),
-		CHECK_OVERVIEW(3, "checkOverviewTip");
+		INTRO(0, "introTip", "introTitle"),
+		BUY_STOCKS(1, "buyStocksTip", "buyStocksTitle"),
+		FILL_PREDICTIONS(2, "fillPredictionsTip", "fillPredictionsTitle"),
+		CHECK_OVERVIEW(3, "checkOverviewTip", "checkOverviewTitle");
 
 		private final int stage;
 		private final String resourceKey;
+		private final String titleResourceKey;
 
-		HelpStage(int stage, String resourceKey) {
+		HelpStage(int stage, String resourceKey, String titleResourceKey) {
 			this.stage = stage;
 			this.resourceKey = resourceKey;
+			this.titleResourceKey = titleResourceKey;
 		}
 
 		public boolean isFirstStage() {
@@ -58,6 +61,10 @@ public class LeagueUser implements java.io.Serializable {
 
 		public String getResourceKey() {
 			return resourceKey;
+		}
+
+		public String getTitleResourceKey() {
+			return titleResourceKey;
 		}
 
 		public Optional<HelpStage> getPreviousStage() {

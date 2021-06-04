@@ -266,4 +266,16 @@
                         tableName="contestant"/>
     </changeSet>
 
+	<changeSet author="jeno" id="change-contestant-power_index-to-decimal">
+		<modifyDataType columnName="power_index"
+						newDataType="DECIMAL(38,19)"
+						tableName="contestant"/>
+	</changeSet>
+
+	<changeSet author="jeno" id="change-contestant-weight-to-bigint">
+		<modifyDataType columnName="weight"
+						newDataType="BIGINT"
+						tableName="contestantweight"/>
+	</changeSet>
+
 </databaseChangeLog>

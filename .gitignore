@@ -36,3 +36,7 @@ nbdist/
 node_modules/
 target/
 webpack.generated.js
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml

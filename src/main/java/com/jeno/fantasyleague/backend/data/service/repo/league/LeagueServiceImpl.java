@@ -53,7 +53,7 @@ public class LeagueServiceImpl implements LeagueService {
 		leagueUser.setLeague(league);
 		leagueUser.setUser(user);
 		leagueUser.setShow_help(true);
-		leagueUser.setHelp_stage(LeagueUser.HelpStage.BUY_STOCKS);
+		leagueUser.setHelp_stage(LeagueUser.HelpStage.INTRO);
 		leagueUserRepository.save(leagueUser);
 		leagueRepo.findByIdAndJoinLeagueUsers(league.getId()).ifPresent(updatedLeague -> {
 			contestantWeightService.addDefaultContestantWeights(updatedLeague, user);

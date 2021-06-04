@@ -40,7 +40,7 @@ public class StocksBean {
 		this.stocksPurchased = stocksPruchased;
 	}
 
-	public Integer getPowerIndex() {
+	public Double getPowerIndex() {
 		return contestantWeight.getContestant().getPower_index();
 	}
 

@@ -159,7 +159,7 @@ public class UefaEuro2020Initializer {
 		contestant.setName(team.name);
 		contestant.setIcon_path(team.iconPath);
 		contestant.setLeague(league);
-		contestant.setPower_index(team.powerIndex);
+		contestant.setPower_index(team.getUnibetScore());
 		team.group.map(groupsMap::get).ifPresent(contestant::setContestant_group);
 		return contestant;
 	}
@@ -179,45 +179,49 @@ public class UefaEuro2020Initializer {
 	 */
 	public enum Team {
 
-		AUSTRIA("Austria", Group.GROUP_C, 43, "images/icons/country_icons/austria.png"),
-		BELGIUM("Belgium", Group.GROUP_B, 97, "images/icons/country_icons/belgium.png"),
-		CROATIA("Croatia", Group.GROUP_D, 66, "images/icons/country_icons/croatia.png"),
-		CZECH_REPUBLIC("Czech Republic", Group.GROUP_D, 27, "images/icons/country_icons/czech_republic.png"),
-		DENMARK("Denmark", Group.GROUP_B, 72, "images/icons/country_icons/denmark.png"),
-		ENGLAND("England", Group.GROUP_D, 74, "images/icons/country_icons/england.png"),
-		FINLAND("Finland", Group.GROUP_B, 22, "images/icons/country_icons/finland.png"),
-		FRANCE("France", Group.GROUP_F, 100, "images/icons/country_icons/france.png"),
-		GERMANY("Germany", Group.GROUP_F, 84, "images/icons/country_icons/germany.png"),
-		HUNGARY("Hungary", Group.GROUP_F, 71, "images/icons/country_icons/hungary.png"),
-		ITALY("Italy", Group.GROUP_A, 71, "images/icons/country_icons/italy.png"),
-		NETHERLANDS("Netherlands", Group.GROUP_C, 71, "images/icons/country_icons/netherlands.png"),
-		NORTH_MACEDONIA("North Macedonia", Group.GROUP_C, 71, "images/icons/country_icons/north_macedonia.png"),
-		POLAND("Poland", Group.GROUP_E, 61, "images/icons/country_icons/poland.png"),
-		PORTUGAL("Portugal", Group.GROUP_F, 85, "images/icons/country_icons/portugal.png"),
-		RUSSIA("Russia", Group.GROUP_B, 53, "images/icons/country_icons/russia.png"),
-		SCOTLAND("Scotland", Group.GROUP_D, 95, "images/icons/country_icons/scotland.png"),
-		SLOVAKIA("Slovakia", Group.GROUP_E, 95, "images/icons/country_icons/slovakia.png"),
-		SPAIN("Spain", Group.GROUP_E, 95, "images/icons/country_icons/spain.png"),
-		SWEDEN("Sweden", Group.GROUP_E, 66, "images/icons/country_icons/sweden.png"),
-		SWITZERLAND("Switzerland", Group.GROUP_A, 70, "images/icons/country_icons/switzerland.png"),
-		TURKEY("Turkey", Group.GROUP_A, 48, "images/icons/country_icons/switzerland.png"),
-		UKRAINE("Ukraine", Group.GROUP_C, 47, "images/icons/country_icons/ukraine.png"),
-		WALES("Wales", Group.GROUP_A, 55, "images/icons/country_icons/wales.png");
+		FRANCE("France", Group.GROUP_F, 100.0, "images/icons/country_icons/france.png"),
+		ENGLAND("England", Group.GROUP_D, 92.31, "images/icons/country_icons/england.png"),
+		BELGIUM("Belgium", Group.GROUP_B, 85.71, "images/icons/country_icons/belgium.png"),
+		PORTUGAL("Portugal", Group.GROUP_F, 70.59, "images/icons/country_icons/portugal.png"),
+		GERMANY("Germany", Group.GROUP_F, 60.0, "images/icons/country_icons/germany.png"),
+		SPAIN("Spain", Group.GROUP_E, 60.0, "images/icons/country_icons/spain.png"),
+		ITALY("Italy", Group.GROUP_A, 50.0, "images/icons/country_icons/italy.png"),
+		NETHERLANDS("Netherlands", Group.GROUP_C, 42.86, "images/icons/country_icons/netherlands.png"),
+		DENMARK("Denmark", Group.GROUP_B, 23.08, "images/icons/country_icons/denmark.png"),
+		CROATIA("Croatia", Group.GROUP_D, 14.63, "images/icons/country_icons/croatia.png"),
+		TURKEY("Turkey", Group.GROUP_A, 10.71, "images/icons/country_icons/switzerland.png"),
+		SWITZERLAND("Switzerland", Group.GROUP_A, 8.96, "images/icons/country_icons/switzerland.png"),
+		POLAND("Poland", Group.GROUP_E, 8.45, "images/icons/country_icons/poland.png"),
+		RUSSIA("Russia", Group.GROUP_B, 6.59, "images/icons/country_icons/russia.png"),
+		SWEDEN("Sweden", Group.GROUP_E, 6.59, "images/icons/country_icons/sweden.png"),
+		UKRAINE("Ukraine", Group.GROUP_C, 6.59, "images/icons/country_icons/ukraine.png"),
+		CZECH_REPUBLIC("Czech Republic", Group.GROUP_D, 5.41, "images/icons/country_icons/czech_republic.png"),
+		AUSTRIA("Austria", Group.GROUP_C, 4.26, "images/icons/country_icons/austria.png"),
+		SCOTLAND("Scotland", Group.GROUP_D, 3.31, "images/icons/country_icons/scotland.png"),
+		WALES("Wales", Group.GROUP_A, 2.99, "images/icons/country_icons/wales.png"),
+		SLOVAKIA("Slovakia", Group.GROUP_E, 1.71, "images/icons/country_icons/slovakia.png"),
+		FINLAND("Finland", Group.GROUP_B, 1.33, "images/icons/country_icons/finland.png"),
+		NORTH_MACEDONIA("North Macedonia", Group.GROUP_C, 1.33, "images/icons/country_icons/north_macedonia.png"),
+		HUNGARY("Hungary", Group.GROUP_F, 0.86, "images/icons/country_icons/hungary.png");
 
 		private String name;
 		private Optional<Group> group;
-		private Integer powerIndex;
+		private Double unibetScore;
 		private String iconPath;
 
-		Team(String name, Group group, Integer powerIndex, String iconPath) {
+		Team(String name, Group group, Double unibetScore, String iconPath) {
 			this.name = name;
 			this.group = Optional.of(group);
-			this.powerIndex = powerIndex;
+			this.unibetScore = unibetScore;
 			this.iconPath = iconPath;
 		}
 
 		public String getName() {
 			return name;
+		}
+
+		public Double getUnibetScore() {
+			return unibetScore;
 		}
 	}
 

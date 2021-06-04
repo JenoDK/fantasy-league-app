@@ -8,6 +8,8 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 
 public class CustomButton extends Button {
 
+	private String basicTheme = "primary";
+
 	public CustomButton() {
 		super();
 		initStyles();
@@ -33,8 +35,14 @@ public class CustomButton extends Button {
 		initStyles();
 	}
 
+	public CustomButton(VaadinIcon icon, String basicTheme) {
+		super(icon.create());
+		this.basicTheme = basicTheme;
+		initStyles();
+	}
+
 	private void initStyles() {
-		setThemeName("primary");
+		setThemeName(basicTheme);
 	}
 
 	public void addPreventClickPropagation() {
