@@ -22,7 +22,7 @@ public class NotificationTypeLeagueInviteService implements NotificationTypeServ
 
 	@Override
 	public void accepted(UserNotification notification) throws NotificationException {
-		Optional<League> league = leagueRepository.findByIdAndJoinLeagueUsers(notification.getReference_id());
+		Optional<League> league = leagueRepository.findById(notification.getReference_id());
 		if (league.isPresent()) {
 			leagueService.addUserToLeague(league.get(), notification.getUser());
 		} else {

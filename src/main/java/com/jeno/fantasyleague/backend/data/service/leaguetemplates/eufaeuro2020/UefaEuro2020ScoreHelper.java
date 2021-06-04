@@ -14,6 +14,7 @@ import com.google.common.collect.Maps;
 import com.jeno.fantasyleague.backend.data.repository.ContestantWeightRepository;
 import com.jeno.fantasyleague.backend.data.repository.LeagueRepository;
 import com.jeno.fantasyleague.backend.data.repository.LeagueSettingRepository;
+import com.jeno.fantasyleague.backend.data.repository.LeagueUserRepository;
 import com.jeno.fantasyleague.backend.data.repository.PredictionRepository;
 import com.jeno.fantasyleague.backend.data.service.leaguetemplates.SoccerCupStages;
 import com.jeno.fantasyleague.backend.data.service.repo.league.UserLeagueScore;
@@ -32,14 +33,14 @@ public class UefaEuro2020ScoreHelper {
 	@Autowired
 	private PredictionRepository predictionRepository;
 	@Autowired
-	private LeagueRepository leagueRepository;
+	private LeagueUserRepository leagueUserRepository;
 	@Autowired
 	private LeagueSettingRepository leagueSettingRepository;
 
 	public List<UserLeagueScore> calculateTotalUserScores(League league) {
 		ArrayListMultimap<Long, Prediction> predictionsPerUser = ArrayListMultimap.create();
 		ArrayListMultimap<Long, ContestantWeight> contestantWeightsPerUser = ArrayListMultimap.create();
-		List<User> leagueUsers = leagueRepository.fetchLeagueUsers(league.getId()).stream().map(LeagueUser::getUser).collect(Collectors.toList());
+		List<User> leagueUsers = leagueUserRepository.findByLeague(league.getId()).stream().map(LeagueUser::getUser).collect(Collectors.toList());
 		Map<String, LeagueSetting> settingMap = leagueSettingRepository.findByLeague(league).stream()
 				.collect(Collectors.toMap(LeagueSetting::getName, Function.identity()));
 		predictionRepository.findByLeagueAndJoinGames(league).stream()

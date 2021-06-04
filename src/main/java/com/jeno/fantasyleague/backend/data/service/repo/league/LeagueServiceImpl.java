@@ -44,7 +44,7 @@ public class LeagueServiceImpl implements LeagueService {
 
 		addUserToLeague(newLeague, user);
 
-		return leagueRepo.findByIdAndJoinLeagueUsers(newLeague.getId()).get();
+		return leagueRepo.findById(newLeague.getId()).get();
 	}
 
 	@Override
@@ -55,7 +55,7 @@ public class LeagueServiceImpl implements LeagueService {
 		leagueUser.setShow_help(true);
 		leagueUser.setHelp_stage(LeagueUser.HelpStage.INTRO);
 		leagueUserRepository.save(leagueUser);
-		leagueRepo.findByIdAndJoinLeagueUsers(league.getId()).ifPresent(updatedLeague -> {
+		leagueRepo.findById(league.getId()).ifPresent(updatedLeague -> {
 			contestantWeightService.addDefaultContestantWeights(updatedLeague, user);
 			predictionService.addDefaultPredictions(league, user);
 		});

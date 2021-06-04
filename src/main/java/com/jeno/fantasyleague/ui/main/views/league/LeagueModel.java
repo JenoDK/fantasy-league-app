@@ -49,7 +49,7 @@ public class LeagueModel {
 		return new LeagueBean.Builder()
 				.setLeague(league)
 				.setLoggedInUser(user)
-				.setLeagueUsers(leagueRepo.fetchLeagueUsers(league.getId()))
+				.setLeagueUsers(leagueUserRepository.findByLeague(league.getId()))
 				.setLeagueOwners(leagueRepo.fetchLeagueOwners(league.getId()))
 				.createLeagueBean();
 	}
