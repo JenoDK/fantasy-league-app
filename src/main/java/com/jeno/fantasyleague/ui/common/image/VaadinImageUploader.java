@@ -23,7 +23,7 @@ import io.reactivex.subjects.BehaviorSubject;
 
 public class VaadinImageUploader extends Upload {
 
-	private static final Set<String> ALLOWED_TYPES = Sets.newHashSet("image/png", "image/jpeg", "image/gif");
+	private static final Set<String> ALLOWED_TYPES = Sets.newHashSet("image/*");
 
 	private final BehaviorSubject<ByteArrayOutputStream> imageResized = BehaviorSubject.create();
 	private final int maxWidthOfResizedPicture;
@@ -53,6 +53,9 @@ public class VaadinImageUploader extends Upload {
 		FileBuffer fileBuffer = new FileBuffer();
 		setReceiver(fileBuffer);
 		setAcceptedFileTypes(ALLOWED_TYPES.toArray(new String[]{}));
+		// You can use the capture html5 attribute
+		// https://caniuse.com/html-media-capture
+		getElement().setAttribute("capture", "environment");
 		setMaxFileSize(20000000);
 		addStartedListener(event -> statusLabel.setVisible(false));
 		addSucceededListener(event -> uploadFinished(event, fileBuffer));
