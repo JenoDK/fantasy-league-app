@@ -278,4 +278,10 @@
 						tableName="contestantweight"/>
 	</changeSet>
 
+	<changeSet author="jeno" id="change-league-name-length">
+		<modifyDataType columnName="name"
+						newDataType="VARCHAR(255)"
+						tableName="league"/>
+	</changeSet>
+
 </databaseChangeLog>

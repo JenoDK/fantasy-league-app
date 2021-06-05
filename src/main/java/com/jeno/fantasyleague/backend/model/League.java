@@ -34,7 +34,7 @@ public class League extends UserAudit {
 	private Long id;
 
 	@NotEmpty
-	@Length(max = 32)
+	@Length(max = 255)
 	private String name;
 
 	private String description;
