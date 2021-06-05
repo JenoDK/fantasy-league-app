@@ -203,17 +203,28 @@ public class MatchCardLayout extends Div {
 	}
 
 	private void openScore() {
-		Function<PopupWindow, Component> popupLayoutFunction = popupWindow -> createPredictionLayout(
-				popupWindow,
-				MatchPredictionBean::getHomeTeamScore,
-				MatchPredictionBean::setHomeTeamScore,
-				MatchPredictionBean::getAwayTeamScore,
-				MatchPredictionBean::setAwayTeamScore,
-				scoreChanged,
-				() -> predictionBean.getHomeTeamIsWinner(),
-				homeTeamIsWinner -> predictionBean.setHomeTeamIsWinner(homeTeamIsWinner),
-				true
-		);
+		Function<PopupWindow, Component> popupLayoutFunction = popupWindow -> {
+			VerticalLayout layout = createPredictionLayout(
+					popupWindow,
+					MatchPredictionBean::getHomeTeamScore,
+					MatchPredictionBean::setHomeTeamScore,
+					MatchPredictionBean::getAwayTeamScore,
+					MatchPredictionBean::setAwayTeamScore,
+					scoreChanged,
+					() -> predictionBean.getHomeTeamIsWinner(),
+					homeTeamIsWinner -> predictionBean.setHomeTeamIsWinner(homeTeamIsWinner),
+					true
+			);
+			CustomButton clearScores = new CustomButton("Clear scores");
+			clearScores.addThemeName("small");
+			clearScores.addClickListener(ignored -> {
+				predictionBean.setAwayTeamScore(null);
+				predictionBean.setHomeTeamScore(null);
+				predictionBean.setHomeTeamIsWinnerOptional(Optional.empty());
+			});
+			layout.add(clearScores);
+			return layout;
+		};
 		new PopupWindow.Builder("Score", popupLayoutFunction)
 				.setType(PopupWindow.Type.CONFIRM)
 				.sizeUndefined(true)

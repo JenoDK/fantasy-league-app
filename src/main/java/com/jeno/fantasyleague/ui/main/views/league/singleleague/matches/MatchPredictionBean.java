@@ -120,6 +120,10 @@ public class MatchPredictionBean {
 		this.homeTeamIsWinner = Optional.of(homeTeamIsWinner);
 	}
 
+	public void setHomeTeamIsWinnerOptional(Optional<Boolean> homeTeamIsWinner) {
+		this.homeTeamIsWinner = homeTeamIsWinner;
+	}
+
 	public void setHomeTeamPredictionIsWinner(Boolean homeTeamPredictionIsWinner) {
 		this.homeTeamPredictionIsWinner = Optional.of(homeTeamPredictionIsWinner);
 	}
@@ -127,19 +131,21 @@ public class MatchPredictionBean {
 	public Game setGameScoresAndGetGameModelItem() {
 		game.setHome_team_score(homeTeamScore);
 		game.setAway_team_score(awayTeamScore);
-		if (homeTeamScore > awayTeamScore) {
-			game.setWinner(game.getHome_team());
-		} else if (homeTeamScore < awayTeamScore) {
-			game.setWinner(game.getAway_team());
-		} else {
-			if (homeTeamIsWinner.isPresent() && !SoccerCupStages.GROUP_PHASE.toString().equals(game.getStage())) {
-				if (homeTeamIsWinner.get()) {
-					game.setWinner(game.getHome_team());
-				} else {
-					game.setWinner(game.getAway_team());
-				}
+		if (homeTeamScore != null && awayTeamScore != null) {
+			if (homeTeamScore > awayTeamScore) {
+				game.setWinner(game.getHome_team());
+			} else if (homeTeamScore < awayTeamScore) {
+				game.setWinner(game.getAway_team());
 			} else {
-				game.setWinner(null);
+				if (homeTeamIsWinner.isPresent() && !SoccerCupStages.GROUP_PHASE.toString().equals(game.getStage())) {
+					if (homeTeamIsWinner.get()) {
+						game.setWinner(game.getHome_team());
+					} else {
+						game.setWinner(game.getAway_team());
+					}
+				} else {
+					game.setWinner(null);
+				}
 			}
 		}
 		return game;
