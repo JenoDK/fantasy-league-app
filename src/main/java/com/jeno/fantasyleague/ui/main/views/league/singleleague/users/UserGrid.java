@@ -53,12 +53,22 @@ public class UserGrid extends CustomGrid<User> {
 								"usernameColumn",
 								User::getUsername,
 								"Username"))
+				.withTextColumn(
+						new CustomGridBuilder.ColumnProvider<>(
+								"nameColumn",
+								User::getName,
+								"Name"))
+				.withTextColumn(
+						new CustomGridBuilder.ColumnProvider<>(
+								"emailColumn",
+								User::getEmail,
+								"Email"))
 				.withIconColumn(
 						new CustomGridBuilder.ColumnProvider<>(
 								"iconColumn",
 								LayoutUtil::getUserIconColumnValue,
 								""))
-				.withColumnOrder("iconColumn", "usernameColumn");
+				.withColumnOrder("iconColumn", "usernameColumn", "nameColumn", "emailColumn");
 	}
 
 }

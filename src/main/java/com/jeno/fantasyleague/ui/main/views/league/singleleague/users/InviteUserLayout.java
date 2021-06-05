@@ -63,7 +63,8 @@ public class InviteUserLayout extends VerticalLayout {
 
 		ComboBox<User> userComboBox = new ComboBox<>("Select user");
 //		userComboBox.addClassName(ValoTheme.COMBOBOX_SMALL);
-		userComboBox.setItemLabelGenerator(User::getUsername);
+		userComboBox.setWidthFull();
+		userComboBox.setItemLabelGenerator(u -> "Username: " + u.getUsername() + " Name: " + u.getName() + " email: " + u.getEmail());
 		userComboBox.setDataProvider(dataProvider);
 		userComboBox.addFocusListener(ignored -> dataProvider.refreshAll());
 		userComboBox.addValueChangeListener(event -> {

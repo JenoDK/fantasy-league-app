@@ -53,9 +53,6 @@ public class VaadinImageUploader extends Upload {
 		FileBuffer fileBuffer = new FileBuffer();
 		setReceiver(fileBuffer);
 		setAcceptedFileTypes(ALLOWED_TYPES.toArray(new String[]{}));
-		// You can use the capture html5 attribute
-		// https://caniuse.com/html-media-capture
-		getElement().setAttribute("capture", "environment");
 		setMaxFileSize(20000000);
 		addStartedListener(event -> statusLabel.setVisible(false));
 		addSucceededListener(event -> uploadFinished(event, fileBuffer));
