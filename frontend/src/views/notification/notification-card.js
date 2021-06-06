@@ -22,10 +22,13 @@ class NotificationCard extends PolymerElement {
 					background-color: var(--lumo-primary-color-10pct);
 					box-shadow: 0 7px 9px var(--lumo-shade-50pct);
 					border-bottom: 1px solid var(--lumo-shade-10pct);
-					display: flex;
-					padding: 0 var(--lumo-space-m);
+					padding: var(--lumo-space-m);
 					border-radius: var(--lumo-border-radius);
 				}
+                
+                #notificationMsg {
+                    white-space: normal;
+                }
 
 				/* Non smartphone */
 				@media (min-width: 600px) {
@@ -36,15 +39,20 @@ class NotificationCard extends PolymerElement {
 
 				/* Smartphone */
 				@media (max-width: 600px) {
+                    .content {
+                        max-width 500px;
+                    }
 				}
 
 			</style>
 			<div id="content" class="content">
-				<vaadin-horizontal-layout id="wrapper" class="wrapper" >
+				<vaadin-vertical-layout id="wrapper" class="wrapper" >
 					<h4 id="notificationMsg" class="name"></h4>
-                    <vaadin-button id="prediction-button" on-click="acceptNotification" theme="primary">Accept</vaadin-button>
-                    <vaadin-button id="prediction-button" on-click="declineNotification" theme="primary">Decline</vaadin-button>
-				</vaadin-horizontal-layout>
+					<vaadin-horizontal-layout id="button-wreapper">
+						<vaadin-button id="prediction-button" on-click="acceptNotification" theme="primary">Accept</vaadin-button>
+						<vaadin-button id="prediction-button" on-click="declineNotification" theme="primary">Decline</vaadin-button>
+                    </vaadin-horizontal-layout>
+				</vaadin-vertical-layout>
 			</div>
         `;
     }

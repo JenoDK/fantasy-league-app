@@ -39,6 +39,8 @@ public class UsersTab extends LazyTabComponent {
 
 		List<User> pendingInvites = singleLeagueServiceProvider.getUsersWithPendingInvite(league, users);
 		UserGrid pendingUserInvitesGrid = new UserGrid(DataProvider.fromStream(pendingInvites.stream()), singleLeagueServiceProvider, league);
+		pendingUserInvitesGrid.addColumn(new ComponentRenderer<>(user -> UserGrid.sendMailButton(user, singleLeagueServiceProvider, league)))
+				.setWidth("130px");
 		leftSide.add(new H3("Pending invites"));
 		leftSide.add(pendingUserInvitesGrid);
 

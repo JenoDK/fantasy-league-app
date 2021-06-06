@@ -7,9 +7,12 @@ import com.vaadin.flow.component.ClientCallable;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.H4;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import com.vaadin.flow.templatemodel.TemplateModel;
@@ -26,10 +29,13 @@ public class NotificationCard extends PolymerTemplate<TemplateModel> {
 	private Div content;
 
 	@Id("wrapper")
-	private HorizontalLayout wrapper;
+	private VerticalLayout wrapper;
 
 	@Id("notificationMsg")
 	private H4 notificationMsg;
+
+	@Id("button-wreapper")
+	private HorizontalLayout buttonWrapper;
 
 	public NotificationCard(NotificationBean bean, Consumer<UserNotification> accepted, Consumer<UserNotification> declined) {
 		this.bean = bean;
@@ -40,7 +46,9 @@ public class NotificationCard extends PolymerTemplate<TemplateModel> {
 	}
 
 	private void initLayout() {
-		wrapper.setAlignItems(FlexComponent.Alignment.CENTER);
+		wrapper.setSpacing(true);
+		buttonWrapper.setSpacing(true);
+		buttonWrapper.setMargin(false);
 		notificationMsg.setText(bean.getNotification().getMessage());
 	}
 

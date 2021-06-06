@@ -1,5 +1,6 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.users;
 
+import com.jeno.fantasyleague.backend.data.service.email.ApplicationEmailService;
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.User;
 import com.jeno.fantasyleague.ui.common.field.CustomButton;
@@ -34,6 +35,22 @@ public class UserGrid extends CustomGrid<User> {
 			promoteDemoteButton.setVisible(false);
 		}
 		return promoteDemoteButton;
+	}
+
+	public static Button sendMailButton(User user, SingleLeagueServiceProvider singleLeagueServiceProvider, League league) {
+		Button sendMailButton = new CustomButton(VaadinIcon.MAILBOX);
+		sendMailButton.addClickListener(ignored -> {
+			try {
+				ApplicationEmailService emailService = singleLeagueServiceProvider.getEmailService();
+				emailService.sendEmail(
+						"euro2020-manager league invite",
+						"You got invited to participate in the league " + league.getName() + ". Log in to https://euro2020-manager.com and accept the invite.",
+						user);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		});
+		return sendMailButton;
 	}
 
 	private static void changePromoteDemoteButton(User user, SingleLeagueServiceProvider singleLeagueServiceProvider, League league, Button promoteButton) {

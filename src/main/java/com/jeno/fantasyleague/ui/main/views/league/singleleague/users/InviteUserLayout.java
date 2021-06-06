@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.google.common.collect.Lists;
+import com.jeno.fantasyleague.backend.data.service.email.ApplicationEmailService;
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.User;
 import com.jeno.fantasyleague.resources.Resources;
@@ -87,6 +88,15 @@ public class InviteUserLayout extends VerticalLayout {
 							Broadcaster.broadcast(
 									user.getId(),
 									singleLeagueServiceProvider.createLeagueInviteUserNotification(user, league));
+							try {
+								ApplicationEmailService emailService = singleLeagueServiceProvider.getEmailService();
+								emailService.sendEmail(
+										"euro2020-manager league invite",
+										"You got invited to participate in the league " + league.getName() + ". Log in to https://euro2020-manager.com and accept the invite.",
+										user);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
 						});
 				usersToInviteGrid.setItems(Lists.newArrayList());
 				dataProvider.refreshAll();
