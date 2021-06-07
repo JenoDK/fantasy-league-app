@@ -189,7 +189,7 @@ public class UefaEuro2020Initializer {
 		NETHERLANDS("Netherlands", Group.GROUP_C, 42.86, "images/icons/country_icons/netherlands.png"),
 		DENMARK("Denmark", Group.GROUP_B, 23.08, "images/icons/country_icons/denmark.png"),
 		CROATIA("Croatia", Group.GROUP_D, 14.63, "images/icons/country_icons/croatia.png"),
-		TURKEY("Turkey", Group.GROUP_A, 10.71, "images/icons/country_icons/switzerland.png"),
+		TURKEY("Turkey", Group.GROUP_A, 10.71, "images/icons/country_icons/turkey.png"),
 		SWITZERLAND("Switzerland", Group.GROUP_A, 8.96, "images/icons/country_icons/switzerland.png"),
 		POLAND("Poland", Group.GROUP_E, 8.45, "images/icons/country_icons/poland.png"),
 		RUSSIA("Russia", Group.GROUP_B, 6.59, "images/icons/country_icons/russia.png"),

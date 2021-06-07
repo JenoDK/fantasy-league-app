@@ -55,6 +55,8 @@ public class League extends UserAudit {
 
 	private LocalDateTime league_starting_date;
 
+	private Boolean active;
+
 	public League() {
 	}
 
@@ -112,5 +114,13 @@ public class League extends UserAudit {
 
 	public void setLeague_starting_date(LocalDateTime league_starting_date) {
 		this.league_starting_date = league_starting_date;
+	}
+
+	public Boolean getActive() {
+		return active;
+	}
+
+	public void setActive(Boolean active) {
+		this.active = active;
 	}
 }

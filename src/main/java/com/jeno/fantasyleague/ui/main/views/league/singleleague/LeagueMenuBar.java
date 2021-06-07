@@ -43,7 +43,7 @@ public class LeagueMenuBar extends CustomMenuBar {
 //		addLazyItemForMenu(mainMenu, mainMenuItemLabel, "groupStageTab", "Group Stage", () -> new GroupStageTab(league, singleLeagueServiceprovider));
 //		addLazyItemForMenu(mainMenu, mainMenuItemLabel, "knockoutStageTab", "Knockout Stage", () -> new KnockoutStageTab(league, singleLeagueServiceprovider));
 		addLazyItemForMenu(mainMenu, mainMenuItemLabel, "faq", "FAQ", () -> new FaqTab(league, singleLeagueServiceprovider));
-		if (singleLeagueServiceprovider.loggedInUserIsLeagueCreator(league)) {
+		if (singleLeagueServiceprovider.loggedInUserIsLeagueAdmin(league)) {
 			addLazyItemForMenu(mainMenu, mainMenuItemLabel, "usersTab", "Users", () -> new UsersTab(league, singleLeagueServiceprovider));
 			addLazyItemForMenu(mainMenu, mainMenuItemLabel, "leagueSettingsTab", "League Settings", () -> new LeagueSettingsTab(league, singleLeagueServiceprovider));
 		}

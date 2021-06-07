@@ -11,6 +11,7 @@ import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.ui.common.field.CustomButton;
 import com.jeno.fantasyleague.ui.common.label.StatusLabel;
 import com.jeno.fantasyleague.ui.common.tabsheet.LazyTabComponent;
+import com.jeno.fantasyleague.ui.common.window.PopupWindow;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -55,6 +56,26 @@ public class LeagueSettingsTab extends LazyTabComponent {
 				new SendMailPopupWindow(leagueUsers, singleLeagueServiceprovider.getEmailService()).show());
 		add(sendEmailButton);
 		add(singleLeagueServiceprovider.getLeagueTemplateServiceBean(league).getLeagueSettingRenderer().render(league));
+		CustomButton delete = new CustomButton("Delete league");
+		delete.addClickListener(ignored -> {
+			PopupWindow window = new PopupWindow.Builder("Confirm", win -> {
+						StatusLabel label = new StatusLabel();
+						label.setErrorText("Are you sure? This is irreversible.");
+						return label;
+					})
+					.setType(PopupWindow.Type.CONFIRM)
+					.sizeUndefined(true)
+					.build();
+			window.setOnConfirm(new PopupWindow.OnConfirm() {
+				@Override
+				public boolean onConfirm() {
+					singleLeagueServiceprovider.deactivateLeague(league);
+					return true;
+				}
+			});
+			window.open();
+		});
+		add(delete);
 	}
 
 }

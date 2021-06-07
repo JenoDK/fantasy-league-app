@@ -30,9 +30,12 @@ import com.jeno.fantasyleague.backend.data.service.repo.game.GameService;
 import com.jeno.fantasyleague.backend.data.service.repo.league.LeagueService;
 import com.jeno.fantasyleague.backend.data.service.repo.league.UserLeagueScore;
 import com.jeno.fantasyleague.backend.data.service.repo.user.UserService;
+import com.jeno.fantasyleague.backend.model.Contestant;
 import com.jeno.fantasyleague.backend.model.ContestantWeight;
 import com.jeno.fantasyleague.backend.model.Game;
 import com.jeno.fantasyleague.backend.model.League;
+import com.jeno.fantasyleague.backend.model.LeagueSetting;
+import com.jeno.fantasyleague.backend.model.LeagueUser;
 import com.jeno.fantasyleague.backend.model.Prediction;
 import com.jeno.fantasyleague.backend.model.User;
 import com.jeno.fantasyleague.backend.model.UserNotification;
@@ -113,6 +116,11 @@ public class SingleLeagueServiceProvider {
 		} else {
 			Notification.show(Resources.getMessage("adminRightsRevoked"));
 		}
+	}
+
+	public void deactivateLeague(League league) {
+		league.setActive(false);
+		leagueRepository.saveAndFlush(league);
 	}
 
 	public GameRepository getGameRepository() {
