@@ -1,12 +1,18 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.leaguesettings;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.jeno.fantasyleague.backend.data.service.leaguetemplates.SoccerCupStages;
+import com.jeno.fantasyleague.backend.model.ContestantWeight;
 import com.jeno.fantasyleague.backend.model.League;
+import com.jeno.fantasyleague.backend.model.LeagueSetting;
 import com.jeno.fantasyleague.backend.model.LeagueUser;
 import com.jeno.fantasyleague.backend.model.User;
 import com.jeno.fantasyleague.resources.Resources;
@@ -16,6 +22,7 @@ import com.jeno.fantasyleague.ui.common.tabsheet.LazyTabComponent;
 import com.jeno.fantasyleague.ui.common.window.PopupWindow;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.jeno.fantasyleague.util.DateUtil;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -96,6 +103,26 @@ public class LeagueSettingsTab extends LazyTabComponent {
 		Label minLeft = new Label();
 		minLeft.setText(minLeftS);
 		add(minLeft);
+
+		ArrayListMultimap<Long, ContestantWeight> weightsPerUser = ArrayListMultimap.create();
+
+		singleLeagueServiceprovider.getContestantWeightRepository().findByLeagueAndJoinContestant(league).forEach(cw -> {
+			weightsPerUser.put(cw.getUser_fk(), cw);
+		});
+		List<String> stockStrings = weightsPerUser.asMap().entrySet().stream()
+				.map(e -> {
+					String userString = singleLeagueServiceprovider.getUserRepository().findById(e.getKey()).map(u -> u.getUsername() + " " + u.getName() + " " + u.getEmail()).orElse("NULL USER");
+					int sum = e.getValue().stream()
+							.mapToInt(ContestantWeight::getWeight)
+							.sum();
+					return "Stocks for " + userString + ": " + sum;
+				})
+				.collect(Collectors.toList());
+		stockStrings.forEach(s -> {
+			Label ss = new Label();
+			ss.setText(s);
+			add(ss);
+		});
 	}
 
 }

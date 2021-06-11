@@ -22,6 +22,7 @@ import com.jeno.fantasyleague.backend.data.repository.LeagueSettingRepository;
 import com.jeno.fantasyleague.backend.data.repository.LeagueUserRepository;
 import com.jeno.fantasyleague.backend.data.repository.PredictionRepository;
 import com.jeno.fantasyleague.backend.data.repository.UserNotificationRepository;
+import com.jeno.fantasyleague.backend.data.repository.UserRepository;
 import com.jeno.fantasyleague.backend.data.service.email.ApplicationEmailService;
 import com.jeno.fantasyleague.backend.data.service.leaguetemplates.LeagueTemplateService;
 import com.jeno.fantasyleague.backend.data.service.leaguetemplates.SoccerCupStages;
@@ -62,6 +63,8 @@ public class SingleLeagueServiceProvider {
 	@Autowired
 	private ApplicationEmailService emailService;
 
+	@Autowired
+	private UserRepository userRepository;
 	@Autowired
 	private ContestantRepository contestantRepository;
 	@Autowired
@@ -256,5 +259,9 @@ public class SingleLeagueServiceProvider {
 
 	public LeagueSettingRepository getLeagueSettingRepository() {
 		return leagueSettingRepository;
+	}
+
+	public UserRepository getUserRepository() {
+		return userRepository;
 	}
 }
