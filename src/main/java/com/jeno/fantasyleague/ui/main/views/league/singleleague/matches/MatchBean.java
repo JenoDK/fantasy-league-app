@@ -123,11 +123,7 @@ public class MatchBean {
 	}
 
 	public String getPredictionHiddenUntil() {
-		if (SoccerCupStages.GROUP_PHASE.toString().equals(prediction.getGame().getStage())) {
-			return DateUtil.DATE_TIME_FORMATTER.format(league.getLeague_starting_date());
-		} else {
-			return DateUtil.DATE_TIME_FORMATTER.format(prediction.getGame().getGameDateTime());
-		}
+		return DateUtil.DATE_TIME_FORMATTER.format(prediction.getGame().getGameDateTime());
 	}
 
 	public BehaviorSubject<Contestant> getHomeContestantChanged() {

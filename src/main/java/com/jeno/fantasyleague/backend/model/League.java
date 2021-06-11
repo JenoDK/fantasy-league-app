@@ -55,7 +55,7 @@ public class League extends UserAudit {
 
 	private LocalDateTime league_starting_date;
 
-	private Boolean active;
+	private Boolean active = true;
 
 	public League() {
 	}

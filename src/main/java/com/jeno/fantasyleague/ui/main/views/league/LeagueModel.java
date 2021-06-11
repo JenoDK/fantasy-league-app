@@ -39,7 +39,7 @@ public class LeagueModel {
 	public List<LeagueBean> loadLeaguesForUser(User user) {
 		return leagueUserRepository.findByUser(user.getId()).stream()
 				.map(LeagueUser::getLeague)
-				.filter(League::getActive)
+				.filter(l -> Boolean.TRUE.equals(l.getActive()))
 				.sorted(Comparator.comparing(League::getLeague_starting_date).reversed())
 				.map(league -> makeLeagueBean(league, user))
 				.collect(Collectors.toList());

@@ -25,11 +25,7 @@ public class OverviewUtil {
 			return false;
 		}
 
-		if (SoccerCupStages.GROUP_PHASE.toString().equals(prediction.getGame().getStage())) {
-			return LocalDateTime.now().isBefore(league.getLeague_starting_date());
-		} else {
-			return LocalDateTime.now().isBefore(prediction.getGame().getGameDateTime());
-		}
+		return LocalDateTime.now().isBefore(prediction.getGame().getGameDateTime());
 	}
 
 	public static String getPredictionColumn(

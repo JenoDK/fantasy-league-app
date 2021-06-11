@@ -8,6 +8,7 @@
 /src/main/webapp/VAADIN/gwt-unitCache
 /src/main/webapp/VAADIN/themes/fantasy-league/styles.scss.cache
 /deployment/
+create_aws_dump.sh
 
 ### STS ###
 .apt_generated

@@ -16,4 +16,11 @@
 		</update>
 	</changeSet>
 
+	<changeSet id="add-league-active-column-fix-null-values" author="Jeno">
+		<update tableName="league">
+			<column name="active" valueBoolean="true"/>
+			<where>active IS NULL</where>
+		</update>
+	</changeSet>
+
 </databaseChangeLog>
