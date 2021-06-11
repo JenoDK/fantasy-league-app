@@ -1,5 +1,7 @@
 package com.jeno.fantasyleague;
 
+import java.util.TimeZone;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.boot.SpringApplication;
@@ -14,6 +16,7 @@ public class FantasyLeagueApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(FantasyLeagueApplication.class, args);
+		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
 		LOG.info(String.format("Running with heap size: %s, heap max size: %s, heap free size: %s", Runtime.getRuntime().totalMemory(), Runtime.getRuntime().maxMemory(), Runtime.getRuntime().freeMemory()));
 	}
 }

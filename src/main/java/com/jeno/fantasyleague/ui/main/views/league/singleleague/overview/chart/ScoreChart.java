@@ -10,6 +10,7 @@ import static j2html.TagCreator.td;
 import static j2html.TagCreator.tr;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -259,7 +260,7 @@ public class ScoreChart extends PolymerTemplate<ScoreChartModel> {
 	}
 
 	public void showLineChart(double showTop) {
-		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime now = LocalDateTime.now(ZoneId.of("Europe/Brussels"));
 		List<Game> gamesSorted = getGamesSorted().stream()
 				.filter(g -> g.getGameDateTime().isBefore(now))
 				.collect(Collectors.toList());

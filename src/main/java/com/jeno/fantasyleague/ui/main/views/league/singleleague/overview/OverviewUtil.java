@@ -2,6 +2,7 @@ package com.jeno.fantasyleague.ui.main.views.league.singleleague.overview;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -25,7 +26,7 @@ public class OverviewUtil {
 			return false;
 		}
 
-		return LocalDateTime.now().isBefore(prediction.getGame().getGameDateTime());
+		return LocalDateTime.now(ZoneId.of("Europe/Brussels")).isBefore(prediction.getGame().getGameDateTime());
 	}
 
 	public static String getPredictionColumn(

@@ -88,7 +88,7 @@ public class LeagueSettingsTab extends LazyTabComponent {
 		});
 		add(delete);
 
-		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime now = LocalDateTime.now(ZoneId.of("Europe/Brussels"));
 
 		Label currentServerTime = new Label();
 		currentServerTime.setText("Current date time: " + DateUtil.DATE_TIME_FORMATTER.format(now));

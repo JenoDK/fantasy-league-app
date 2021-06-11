@@ -4,6 +4,7 @@ import static com.jeno.fantasyleague.ui.main.views.league.singleleague.stocks.St
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -80,7 +81,7 @@ public class StocksTab extends LazyTabComponent {
 				return ValidationResult.error("You cannot purchase more than 10 stocks per team.");
 			}
 			boolean exceedsLimit = clientSideWeightToDistribute.compareTo(BigDecimal.ZERO) < 0;
-			boolean isInTime = LocalDateTime.now().isBefore(league.getLeague_starting_date());
+			boolean isInTime = LocalDateTime.now(ZoneId.of("Europe/Brussels")).isBefore(league.getLeague_starting_date());
 			if (!isInTime) {
 				return ValidationResult.error(Resources.getMessage("cannotPurchaseStock", DateUtil.DATE_TIME_FORMATTER.format(league.getLeague_starting_date())));
 			} else if (exceedsLimit) {

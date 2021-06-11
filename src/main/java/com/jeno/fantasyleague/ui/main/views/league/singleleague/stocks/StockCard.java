@@ -2,6 +2,7 @@ package com.jeno.fantasyleague.ui.main.views.league.singleleague.stocks;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.function.Function;
 
 import com.jeno.fantasyleague.backend.model.League;
@@ -69,7 +70,7 @@ public class StockCard extends PolymerTemplate<MatchBindingModel> {
 	private void initLayout() {
 		teamLayout.add(LayoutUtil.createTeamLayout(bean.getContestant()));
 		buyStocks.setText(Resources.getMessage("buyStocks"));
-		buyStocks.setEnabled(LocalDateTime.now().isBefore(league.getLeague_starting_date()));
+		buyStocks.setEnabled(LocalDateTime.now(ZoneId.of("Europe/Brussels")).isBefore(league.getLeague_starting_date()));
 		pricePerStock.setText(Resources.getMessage("price", DecimalUtil.getTwoDecimalsThousandSeperator(bean.getShareCost())));
 		updateStocksPurchasedLabel();
 	}
@@ -98,7 +99,7 @@ public class StockCard extends PolymerTemplate<MatchBindingModel> {
 		amountLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
 		amountLayout.add(LayoutUtil.createTeamLayout(true, bean.getContestant(), ""));
 
-		if (LocalDateTime.now().isBefore(league.getLeague_starting_date())) {
+		if (LocalDateTime.now(ZoneId.of("Europe/Brussels")).isBefore(league.getLeague_starting_date())) {
 			StatusLabel statusLabel = new StatusLabel();
 			statusLabel.setVisible(false);
 

@@ -37,7 +37,7 @@ public class PasswordResetToken {
 	}
 
 	private Date createExpiryDate() {
-		return Date.from(LocalDateTime.now().plusMinutes(EXPIRATION_IN_MINUTES).atZone(ZoneId.systemDefault()).toInstant());
+		return Date.from(LocalDateTime.now(ZoneId.of("Europe/Brussels")).plusMinutes(EXPIRATION_IN_MINUTES).atZone(ZoneId.systemDefault()).toInstant());
 	}
 
 	public Long getId() {
