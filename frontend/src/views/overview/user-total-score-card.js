@@ -36,6 +36,8 @@ class UserTotalScoreCard extends PolymerElement {
 					display: flex;
 					align-items: center;
 					margin: 0px 0px 15px 0px;
+					word-wrap: break-word;
+					white-space: normal;
 				}
 
 				.wrapper .iconLabel > img {
@@ -56,6 +58,10 @@ class UserTotalScoreCard extends PolymerElement {
 				.wrapper .smallScore {
 					font-size: var(--lumo-font-size-xs);
 				}
+                
+                .left {
+                    max-width: 20%;
+                }
 
 				.right {
 					display: flex;

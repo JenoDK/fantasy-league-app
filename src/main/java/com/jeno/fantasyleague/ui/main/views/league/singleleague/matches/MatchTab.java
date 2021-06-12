@@ -3,6 +3,7 @@ package com.jeno.fantasyleague.ui.main.views.league.singleleague.matches;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -94,17 +95,7 @@ public class MatchTab extends LazyTabComponent {
 
 	private List<MatchBean> getMatches() {
 		List<Game> games = singleLeagueServiceprovider.getGameRepository().findByLeague(league).stream()
-				.sorted((g1, g2) -> {
-					LocalDateTime now = LocalDateTime.now(ZoneId.of("Europe/Brussels"));
-					boolean isPast1 = g1.getGameDateTime().isBefore(now);
-					boolean isPast2 = g2.getGameDateTime().isBefore(now);
-
-					if (isPast1 != isPast2) {
-						return isPast1 ? 1 : -1;
-					}
-
-					return isPast1 ? g2.getGameDateTime().compareTo(g1.getGameDateTime()) : g1.getGameDateTime().compareTo(g2.getGameDateTime());
-				})
+				.sorted(Comparator.comparing(Game::getGameDateTime))
 				.collect(Collectors.toList());
 		Map<Long, Prediction> predictions = singleLeagueServiceprovider.getPredictionRepository()
 				.findByLeagueAndUserAndJoinGames(league, singleLeagueServiceprovider.getLoggedInUser()).stream()
