@@ -29,7 +29,7 @@ public class UsersTab extends LazyTabComponent {
 		leftSide.setSizeFull();
 
 		leftSide.add(new H3("League Users"));
-		List<User> users = singleLeagueServiceProvider.getLeagueUserRepository().findByLeague(league.getId()).stream().map(LeagueUser::getUser).collect(Collectors.toList());
+		List<User> users = singleLeagueServiceProvider.getLeagueUserRepository().findByLeague(league).stream().map(LeagueUser::getUser).collect(Collectors.toList());
 		UserGrid usersGrid = new UserGrid(DataProvider.fromStream(users.stream()), singleLeagueServiceProvider, league);
 		if (singleLeagueServiceProvider.loggedInUserIsLeagueCreator(league)) {
 			usersGrid.addColumn(new ComponentRenderer<>(user -> UserGrid.promoteButton(user, singleLeagueServiceProvider, league)))

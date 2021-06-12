@@ -22,4 +22,12 @@
 		</update>
 	</changeSet>
 
+	<changeSet id="add-user-league-id-column" author="Jeno">
+		<addColumn tableName="league_users">
+			<column autoIncrement="true" name="id" type="BIGINT">
+				<constraints nullable="false" primaryKey="true"/>
+			</column>
+		</addColumn>
+	</changeSet>
+
 </databaseChangeLog>

@@ -2,21 +2,27 @@ package com.jeno.fantasyleague.backend.data.repository;
 
 import java.util.List;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.LeagueUser;
 import com.jeno.fantasyleague.backend.model.User;
 
 @Repository
 public interface LeagueUserRepository extends JpaRepository<LeagueUser, Long> {
 
-	@Query("SELECT l FROM LeagueUser l WHERE l.pk.user.id = :id")
-	List<LeagueUser> findByUser(@Param("id") Long userId);
+	@Cacheable("findByUsers")
+	List<LeagueUser> findByUser(User user);
 
-	@Query("SELECT l FROM LeagueUser l WHERE l.pk.league.id = :id")
-	List<LeagueUser> findByLeague(@Param("id") Long leagueId);
+	@Cacheable("findByLeague")
+	List<LeagueUser> findByLeague(League league);
+
+
+	@Override
+	@CacheEvict(value = {"findByUsers", "findByLeague"})
+	<S extends LeagueUser> S save(S leagueUser);
 
 }

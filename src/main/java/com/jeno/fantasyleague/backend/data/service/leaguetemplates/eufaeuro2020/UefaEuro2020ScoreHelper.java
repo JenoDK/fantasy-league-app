@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Maps;
 import com.jeno.fantasyleague.backend.data.repository.ContestantWeightRepository;
-import com.jeno.fantasyleague.backend.data.repository.LeagueRepository;
 import com.jeno.fantasyleague.backend.data.repository.LeagueSettingRepository;
 import com.jeno.fantasyleague.backend.data.repository.LeagueUserRepository;
 import com.jeno.fantasyleague.backend.data.repository.PredictionRepository;
@@ -40,7 +39,7 @@ public class UefaEuro2020ScoreHelper {
 	public List<UserLeagueScore> calculateTotalUserScores(League league) {
 		ArrayListMultimap<Long, Prediction> predictionsPerUser = ArrayListMultimap.create();
 		ArrayListMultimap<Long, ContestantWeight> contestantWeightsPerUser = ArrayListMultimap.create();
-		List<User> leagueUsers = leagueUserRepository.findByLeague(league.getId()).stream().map(LeagueUser::getUser).collect(Collectors.toList());
+		List<User> leagueUsers = leagueUserRepository.findByLeague(league).stream().map(LeagueUser::getUser).collect(Collectors.toList());
 		Map<String, LeagueSetting> settingMap = leagueSettingRepository.findByLeague(league).stream()
 				.collect(Collectors.toMap(LeagueSetting::getName, Function.identity()));
 		predictionRepository.findByLeagueAndJoinGames(league).stream()

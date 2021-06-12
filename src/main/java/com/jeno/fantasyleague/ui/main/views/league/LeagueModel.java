@@ -37,9 +37,9 @@ public class LeagueModel {
 	}
 
 	public List<LeagueBean> loadLeaguesForUser(User user) {
-		return leagueUserRepository.findByUser(user.getId()).stream()
+		return leagueUserRepository.findByUser(user).stream()
 				.map(LeagueUser::getLeague)
-				.filter(l -> Boolean.TRUE.equals(l.getActive()))
+				.filter(League::getActive)
 				.sorted(Comparator.comparing(League::getLeague_starting_date).reversed())
 				.map(league -> makeLeagueBean(league, user))
 				.collect(Collectors.toList());
@@ -50,7 +50,7 @@ public class LeagueModel {
 		return new LeagueBean.Builder()
 				.setLeague(league)
 				.setLoggedInUser(user)
-				.setLeagueUsers(leagueUserRepository.findByLeague(league.getId()))
+				.setLeagueUsers(leagueUserRepository.findByLeague(league))
 				.setLeagueOwners(leagueRepo.fetchLeagueOwners(league.getId()))
 				.createLeagueBean();
 	}

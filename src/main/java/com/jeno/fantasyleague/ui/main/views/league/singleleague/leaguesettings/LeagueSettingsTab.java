@@ -61,7 +61,7 @@ public class LeagueSettingsTab extends LazyTabComponent {
 		actions.add(save, infoLabel);
 		add(changeLeagueName, actions);
 
-		List<User> leagueUsers = singleLeagueServiceprovider.getLeagueUserRepository().findByLeague(league.getId()).stream().map(LeagueUser::getUser).collect(Collectors.toList());
+		List<User> leagueUsers = singleLeagueServiceprovider.getLeagueUserRepository().findByLeague(league).stream().map(LeagueUser::getUser).collect(Collectors.toList());
 		Button sendEmailButton = new CustomButton(Resources.getMessage("sendMailToLeagueUsers"), VaadinIcon.MAILBOX.create());
 		sendEmailButton.addClickListener(ignored ->
 				new SendMailPopupWindow(leagueUsers, singleLeagueServiceprovider.getEmailService()).show());

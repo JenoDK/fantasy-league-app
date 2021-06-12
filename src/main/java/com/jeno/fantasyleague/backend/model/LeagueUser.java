@@ -10,17 +10,16 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 @Entity
 @Table(name = "league_users")
-@AssociationOverrides({
-		@AssociationOverride(name = "pk.user",
-				joinColumns = @JoinColumn(name = "user_id")),
-		@AssociationOverride(name = "pk.league",
-				joinColumns = @JoinColumn(name = "league_id")) })
 public class LeagueUser implements java.io.Serializable {
 
 	public enum HelpStage {
@@ -86,38 +85,40 @@ public class LeagueUser implements java.io.Serializable {
 		}
 	}
 
-	private LeagueUserId pk = new LeagueUserId();
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
 	private boolean show_help;
 
-	@Enumerated(EnumType.STRING)
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private User user;
+
+	@ManyToOne
+	@JoinColumn(name = "league_id")
+	private League league;
+
+	@Enumerated
 	private HelpStage help_stage;
 
-	@EmbeddedId
-	public LeagueUserId getPk() {
-		return pk;
+	public LeagueUser() {
 	}
 
-	public void setPk(LeagueUserId pk) {
-		this.pk = pk;
-	}
-
-	@Transient
 	public User getUser() {
-		return getPk().getUser();
+		return user;
 	}
 
 	public void setUser(User user) {
-		getPk().setUser(user);
+		this.user = user;
 	}
 
-	@Transient
 	public League getLeague() {
-		return getPk().getLeague();
+		return league;
 	}
 
 	public void setLeague(League league) {
-		getPk().setLeague(league);
+		this.league = league;
 	}
 
 	public boolean isShow_help() {
