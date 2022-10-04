@@ -18,14 +18,16 @@ public class MatchGrid extends Grid<MatchBean> {
 	private final BehaviorSubject<MatchPredictionBean> predictionChanged = BehaviorSubject.create();
 	private final BehaviorSubject<MatchPredictionBean> scoreChanged = BehaviorSubject.create();
 	private final boolean loggedInUserIsAdmin;
+	private final boolean isForSuperAdmin;
 	private SingleLeagueServiceProvider singleLeagueServiceProvider;
 
 	private ListDataProvider<MatchBean> matchListDataProvider = new ListDataProvider<>(Lists.newArrayList());
 
-	public MatchGrid(SingleLeagueServiceProvider singleLeagueServiceProvider, boolean loggedInUserIsAdmin) {
+	public MatchGrid(SingleLeagueServiceProvider singleLeagueServiceProvider, boolean loggedInUserIsAdmin, boolean isForSuperAdmin) {
 		super();
 		this.singleLeagueServiceProvider = singleLeagueServiceProvider;
 		this.loggedInUserIsAdmin = loggedInUserIsAdmin;
+		this.isForSuperAdmin = isForSuperAdmin;
 		initGrid();
 	}
 
@@ -34,7 +36,7 @@ public class MatchGrid extends Grid<MatchBean> {
 		setHeightByRows(true);
 
 		addColumn(new ComponentRenderer<>(match -> {
-			MatchCardLayout card = new MatchCardLayout(match, clickedMatch, loggedInUserIsAdmin, true, singleLeagueServiceProvider);
+			MatchCardLayout card = new MatchCardLayout(match, isForSuperAdmin ? null : clickedMatch, loggedInUserIsAdmin, isForSuperAdmin, true, singleLeagueServiceProvider);
 			card.predictionChanged().subscribe(predictionChanged::onNext);
 			card.scoreChanged().subscribe(scoreChanged::onNext);
 			return card;

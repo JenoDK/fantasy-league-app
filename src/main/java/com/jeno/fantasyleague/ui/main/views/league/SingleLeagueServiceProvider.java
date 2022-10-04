@@ -17,6 +17,7 @@ import com.jeno.fantasyleague.backend.data.dao.UserDao;
 import com.jeno.fantasyleague.backend.data.repository.ContestantGroupRepository;
 import com.jeno.fantasyleague.backend.data.repository.ContestantRepository;
 import com.jeno.fantasyleague.backend.data.repository.ContestantWeightRepository;
+import com.jeno.fantasyleague.backend.data.repository.EmailLeagueInviteRepository;
 import com.jeno.fantasyleague.backend.data.repository.GameRepository;
 import com.jeno.fantasyleague.backend.data.repository.LeagueRepository;
 import com.jeno.fantasyleague.backend.data.repository.LeagueSettingRepository;
@@ -84,6 +85,8 @@ public class SingleLeagueServiceProvider {
 	private UserNotificationRepository userNotificationRepository;
 	@Autowired
 	private LeagueSettingRepository leagueSettingRepository;
+	@Autowired
+	private EmailLeagueInviteRepository emailLeagueInviteRepository;
 
 	@Autowired
 	private UserDao userDao;
@@ -165,6 +168,10 @@ public class SingleLeagueServiceProvider {
 
 	public PredictionRepository getPredictionRepository() {
 		return predictionRepository;
+	}
+
+	public EmailLeagueInviteRepository getEmailLeagueInviteRepository() {
+		return emailLeagueInviteRepository;
 	}
 
 	public UserDao getUserDao() {

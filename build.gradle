@@ -15,9 +15,10 @@ plugins {
 	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
 	id 'java'
 	id 'com.vaadin' version '0.14.5.1'
+//	id 'org.liquibase.gradle' version '2.0.4'
 }
 
-apply from: 'liquibase.gradle'
+//apply from: 'liquibase.gradle'
 
 group = 'com.jeno'
 version = '1.0.0'
@@ -26,6 +27,16 @@ targetCompatibility = 11
 
 repositories {
 	mavenCentral()
+}
+
+sourceSets {
+	main {
+		java { srcDirs = ['src/main/java'] }
+		resources { srcDirs = ['src/main/resources'] }
+	}
+	test {
+		java { srcDirs = ['src/test/java'] }
+	}
 }
 
 configurations {
@@ -69,7 +80,7 @@ dependencies {
 		exclude group: "ch.qos.logback", module: "logback-classic"
 	}
 
-	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '2.2.4.RELEASE'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '2.5.6'
 	implementation('com.google.guava:guava:23.0')
 	implementation('io.reactivex.rxjava2:rxjava:2.1.10')
 	implementation('org.apache.commons:commons-csv:1.5')

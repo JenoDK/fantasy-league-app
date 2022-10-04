@@ -74,6 +74,9 @@ public class Game extends UserAudit {
 
 	private Integer away_team_score;
 
+	@Column(name = "match_number")
+	private Integer matchNumber;
+
 	public Game() {
 	}
 
@@ -203,5 +206,13 @@ public class Game extends UserAudit {
 
 	public void setAway_team_score(Integer away_team_score) {
 		this.away_team_score = away_team_score;
+	}
+
+	public Integer getMatchNumber() {
+		return matchNumber;
+	}
+
+	public void setMatchNumber(Integer matchNumber) {
+		this.matchNumber = matchNumber;
 	}
 }

@@ -4,6 +4,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.jeno.fantasyleague.security.SecurityUtils;
 import com.jeno.fantasyleague.ui.main.views.state.State;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
@@ -26,6 +27,7 @@ public class TopTabs extends Tabs {
 	private void initLayout() {
 		setOrientation(Tabs.Orientation.HORIZONTAL);
 		List<Tab> tabs = State.getMenuItems().stream()
+				.filter(state -> SecurityUtils.isAccessGranted(state.getViewClass()))
 				.sorted(Comparator.comparing(State::getSeq))
 				.map(this::createTab)
 			.collect(Collectors.toList());

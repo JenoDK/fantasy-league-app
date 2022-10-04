@@ -60,7 +60,7 @@ public class MatchTab extends LazyTabComponent {
 		setMargin(false);
 		setPadding(false);
 
-		matchGrid = new MatchGrid(singleLeagueServiceprovider, loggedInUserIsAdmin);
+		matchGrid = new MatchGrid(singleLeagueServiceprovider, loggedInUserIsAdmin, false);
 		matchGrid.setMatches(getMatches());
 		MenuItem refreshItem = menuBar.addItem(VaadinIcon.REFRESH.create());
 		refreshItem.addClickListener(ignored -> matchGrid.setMatches(getMatches()));

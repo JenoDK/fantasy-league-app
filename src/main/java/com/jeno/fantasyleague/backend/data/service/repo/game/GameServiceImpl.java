@@ -1,5 +1,6 @@
 package com.jeno.fantasyleague.backend.data.service.repo.game;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -14,7 +15,8 @@ import com.google.common.collect.Sets;
 import com.jeno.fantasyleague.backend.data.repository.ContestantGroupRepository;
 import com.jeno.fantasyleague.backend.data.repository.ContestantRepository;
 import com.jeno.fantasyleague.backend.data.repository.GameRepository;
-import com.jeno.fantasyleague.backend.data.service.leaguetemplates.eufaeuro2020.UefaEuro2020Initializer;
+import com.jeno.fantasyleague.backend.data.service.leaguetemplates.FootballInitializer;
+import com.jeno.fantasyleague.backend.data.service.leaguetemplates.fifaworld2022.FifaWorldCup2022Initializer;
 import com.jeno.fantasyleague.backend.model.Contestant;
 import com.jeno.fantasyleague.backend.model.Game;
 import com.jeno.fantasyleague.backend.model.League;
@@ -102,8 +104,8 @@ public class GameServiceImpl implements GameService {
 		}
 	}
 
-	public static List<UefaEuro2020Initializer.Group> getGroups(String placeHolder) {
-		return Stream.of(UefaEuro2020Initializer.Group.values())
+	public static List<FootballInitializer.Group> getGroups(String placeHolder) {
+		return Arrays.stream(FifaWorldCup2022Initializer.groups())
 				.filter(group -> placeHolder.contains(group.getShortName()))
 				.collect(Collectors.toList());
 	}

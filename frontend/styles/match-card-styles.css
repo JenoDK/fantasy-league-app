@@ -15,12 +15,16 @@
     padding: var(--lumo-space-m);
 }
 
-.wrapper[theme~="intractable"] {
+.wrapper[theme~="boxed"] {
     background-color: var(--lumo-primary-color-10pct);
     box-shadow: 0 7px 9px var(--lumo-shade-50pct);
     border-bottom: 1px solid var(--lumo-shade-10pct);
-    cursor: pointer;
+    cursor: default;
     border-radius: var(--lumo-border-radius);
+}
+
+.wrapper[theme~="intractable"] {
+    cursor: pointer;
 }
 
 .wrapper[theme~="intractable"]:hover {

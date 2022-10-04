@@ -19,11 +19,15 @@ public class ApplicationEmailService {
 	private JavaMailSender emailSender;
 
 	public void sendEmail(String subject, String body, User user) {
+		sendEmail(subject, body, user.getEmail());
+	}
+
+	public void sendEmail(String subject, String body, String email) {
 		try {
 			SimpleMailMessage message = new SimpleMailMessage();
 			message.setFrom("noreply@jenodekeyzer.com");
 			message.setSubject(subject);
-			message.setTo(user.getEmail());
+			message.setTo(email);
 			message.setSubject(subject);
 			message.setText(body);
 			emailSender.send(message);

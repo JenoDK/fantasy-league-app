@@ -1,4 +1,4 @@
-package com.jeno.fantasyleague.backend.data.service.leaguetemplates.eufaeuro2020;
+package com.jeno.fantasyleague.backend.data.service.leaguetemplates;
 
 import java.util.List;
 import java.util.Map;
@@ -15,7 +15,6 @@ import com.jeno.fantasyleague.backend.data.repository.ContestantWeightRepository
 import com.jeno.fantasyleague.backend.data.repository.LeagueSettingRepository;
 import com.jeno.fantasyleague.backend.data.repository.LeagueUserRepository;
 import com.jeno.fantasyleague.backend.data.repository.PredictionRepository;
-import com.jeno.fantasyleague.backend.data.service.leaguetemplates.SoccerCupStages;
 import com.jeno.fantasyleague.backend.data.service.repo.league.UserLeagueScore;
 import com.jeno.fantasyleague.backend.model.ContestantWeight;
 import com.jeno.fantasyleague.backend.model.League;
@@ -25,7 +24,7 @@ import com.jeno.fantasyleague.backend.model.Prediction;
 import com.jeno.fantasyleague.backend.model.User;
 
 @Component
-public class UefaEuro2020ScoreHelper {
+public class FootballLeagueScoreHelper {
 
 	@Autowired
 	private ContestantWeightRepository contestantWeightRepository;
@@ -153,22 +152,22 @@ public class UefaEuro2020ScoreHelper {
 	}
 
 	public Float findPowerIndexMultiplier(League league) {
-		return leagueSettingRepository.findByLeagueAndName(league, UefaEuro2020SettingRenderer.POWER_INDEX_MULTIPLIER)
+		return leagueSettingRepository.findByLeagueAndName(league, FootballSettingsRenderer.POWER_INDEX_MULTIPLIER)
 				.map(LeagueSetting::getValue)
 				.map(value -> Float.valueOf(value))
 				.get();
 	}
 
 	public Integer findAllCorrectSetting(Map<String, LeagueSetting> leagueSettings, SoccerCupStages stage) {
-		return Integer.valueOf(leagueSettings.get(stage.getName() + UefaEuro2020SettingRenderer.ALL_CORRECT).getValue());
+		return Integer.valueOf(leagueSettings.get(stage.getName() + FootballSettingsRenderer.ALL_CORRECT).getValue());
 	}
 
 	public Integer findWrongScoreSetting(Map<String, LeagueSetting> leagueSettings, SoccerCupStages stage) {
-		return Integer.valueOf(leagueSettings.get(stage.getName() + UefaEuro2020SettingRenderer.WRONG_SCORE).getValue());
+		return Integer.valueOf(leagueSettings.get(stage.getName() + FootballSettingsRenderer.WRONG_SCORE).getValue());
 	}
 
 	public Integer findAllWrongSetting(Map<String, LeagueSetting> leagueSettings, SoccerCupStages stage) {
-		return Integer.valueOf(leagueSettings.get(stage.getName() + UefaEuro2020SettingRenderer.ALL_WRONG).getValue());
+		return Integer.valueOf(leagueSettings.get(stage.getName() + FootballSettingsRenderer.ALL_WRONG).getValue());
 	}
 
 }

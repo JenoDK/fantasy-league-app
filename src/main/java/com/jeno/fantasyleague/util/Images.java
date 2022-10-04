@@ -16,6 +16,7 @@ public class Images {
 		public static final String HOME_ICON = "images/icons/home_icon.png";
 		public static final String LEAGUE_ICON = "images/icons/league_icon.png";
 
+		public static final String FIFA_WORLD_CUP_2022 = "images/icons/fifa_world_cup_2022.png";
 		public static final String FIFA_WORLD_CUP_2018 = "images/icons/fifa_world_cup_2018.png";
 		public static final String UEFA_EURO_2020 = "images/icons/uefa_euro_2020.png";
 		public static final String CUSTOM_LEAGUE = "images/icons/custom_league.png";

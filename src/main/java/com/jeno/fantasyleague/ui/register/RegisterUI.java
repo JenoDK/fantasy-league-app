@@ -5,7 +5,9 @@ import org.springframework.beans.factory.annotation.Value;
 
 import com.jeno.fantasyleague.backend.data.dao.UserDao;
 import com.jeno.fantasyleague.backend.data.dao.ValidationException;
+import com.jeno.fantasyleague.backend.data.repository.EmailLeagueInviteRepository;
 import com.jeno.fantasyleague.backend.data.service.email.AccountActivationService;
+import com.jeno.fantasyleague.backend.data.service.repo.league.LeagueService;
 import com.jeno.fantasyleague.backend.model.User;
 import com.jeno.fantasyleague.ui.RedirectUI;
 import com.jeno.fantasyleague.ui.annotation.AlwaysAllow;
@@ -26,7 +28,11 @@ public class RegisterUI extends RedirectUI implements RouterLayout {
 	@Autowired
 	private UserDao userDao;
 	@Autowired
+	private EmailLeagueInviteRepository emailLeagueInviteRepository;
+	@Autowired
 	private AccountActivationService accountActivationService;
+	@Autowired
+	private LeagueService leagueService;
 
 	@Value("${account.activation.required}")
 	private boolean accountActivationRequired;
@@ -59,6 +65,11 @@ public class RegisterUI extends RedirectUI implements RouterLayout {
 			} else {
 				user.setActive(true);
 				User createdUser = userDao.add(user);
+				emailLeagueInviteRepository.findByEmail(user.getEmail()).forEach(emailLeagueInvite -> {
+					leagueService.addUserToLeague(emailLeagueInvite.getLeague(), createdUser);
+					emailLeagueInvite.setConsumed(true);
+					emailLeagueInviteRepository.save(emailLeagueInvite);
+				});
 				actionSuccessful("Thanks for your registration " + createdUser.getUsername());
 			}
 		} catch (ValidationException ex) {

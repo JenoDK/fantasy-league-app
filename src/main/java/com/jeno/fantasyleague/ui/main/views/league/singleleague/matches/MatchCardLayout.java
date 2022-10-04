@@ -56,6 +56,7 @@ public class MatchCardLayout extends Div {
 	private final BehaviorSubject<MatchPredictionBean> predictionChanged = BehaviorSubject.create();
 	private final BehaviorSubject<MatchPredictionBean> scoreChanged = BehaviorSubject.create();
 	private final boolean loggedInUserIsAdmin;
+	private final boolean isForSuperAdmin;
 	private final boolean canAdjustContestants;
 	private final SingleLeagueServiceProvider singleLeagueServiceProvider;
 
@@ -73,12 +74,14 @@ public class MatchCardLayout extends Div {
 			MatchBean match,
 			BehaviorSubject<MatchBean> clickedMatch,
 			boolean loggedInUserIsAdmin,
+			boolean isForSuperAdmin,
 			boolean canAdjustContestants,
 			SingleLeagueServiceProvider singleLeagueServiceProvider) {
 		this.match = match;
 		this.predictionBean = new MatchPredictionBean(match.getLeague(), match.getPrediction());
 		this.clickedMatch = clickedMatch;
 		this.loggedInUserIsAdmin = loggedInUserIsAdmin;
+		this.isForSuperAdmin = isForSuperAdmin;
 		this.canAdjustContestants = canAdjustContestants;
 		this.singleLeagueServiceProvider = singleLeagueServiceProvider;
 		initLayout();
@@ -99,25 +102,25 @@ public class MatchCardLayout extends Div {
 		Div infoWrapper = createInfoWrapper();
 		scoreWrapper = createScoreWrapper();
 		matchWrapper = createMatchWrapper();
-		Div predictionWrapper = createPredictionWrapper();
-		VerticalLayout wrapper = new VerticalLayout(infoWrapper, scoreWrapper, matchWrapper, predictionWrapper);
+
+		VerticalLayout wrapper = new VerticalLayout(infoWrapper, scoreWrapper, matchWrapper);
 		wrapper.setId("wrapper");
 		wrapper.setClassName("wrapper");
 		if (clickedMatch != null) {
+			wrapper.getThemeList().add("boxed");
 			wrapper.getThemeList().add("intractable");
 			wrapper.addClickListener(event -> clickedMatch.onNext(match));
 		}
 		wrapper.setPadding(false);
+
+		if (!isForSuperAdmin) {
+			Div predictionWrapper = createPredictionWrapper();
+			wrapper.add(predictionWrapper);
+		} else {
+			wrapper.getThemeList().add("boxed");
+		}
+
 		add(wrapper);
-		yourPredictionLabel = new PredictionStatusLabel("yourPrediction");
-		match.predictionCHanged().subscribe(b -> {
-			predictionBean = new MatchPredictionBean(match.getLeague(), match.getPrediction());
-			setPredictionStatusText();
-		});
-		setPredictionStatusText();
-		yourPredictionWrapper.add(yourPredictionLabel);
-		boolean matchIsEditable = match.getAwayTeam() != null && match.getHomeTeam() != null && nowIsBeforeMatch();
-		predictionButton.setEnabled(matchIsEditable);
 	}
 
 	private Div createPredictionWrapper() {
@@ -132,6 +135,17 @@ public class MatchCardLayout extends Div {
 		pointsGained.setClassName("right");
 		Div predictionWrapper = new Div(predictionButton, yourPredictionWrapper, pointsGained);
 		predictionWrapper.setClassName("prediction-wrapper");
+
+		yourPredictionLabel = new PredictionStatusLabel("yourPrediction");
+		match.predictionCHanged().subscribe(b -> {
+			predictionBean = new MatchPredictionBean(match.getLeague(), match.getPrediction());
+			setPredictionStatusText();
+		});
+		setPredictionStatusText();
+		yourPredictionWrapper.add(yourPredictionLabel);
+		boolean matchIsEditable = match.getAwayTeam() != null && match.getHomeTeam() != null && nowIsBeforeMatch();
+		predictionButton.setEnabled(matchIsEditable);
+
 		return predictionWrapper;
 	}
 
@@ -194,7 +208,7 @@ public class MatchCardLayout extends Div {
 	}
 
 	private Div createScoreWrapper() {
-		CustomButton scoreButton = new CustomButton("Fill in score");
+		CustomButton scoreButton = new CustomButton(isForSuperAdmin ? "Fill in score for all games" : "Fill in score");
 		scoreButton.addClickListener(ignored -> openScore());
 		scoreButton.setId("score-button");
 		scoreButton.addPreventClickPropagation();

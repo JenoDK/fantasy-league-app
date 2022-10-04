@@ -1,12 +1,14 @@
 package com.jeno.fantasyleague.ui.main.views.league;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.google.common.collect.Lists;
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.UserNotification;
+import com.jeno.fantasyleague.backend.model.enums.Template;
 import com.jeno.fantasyleague.ui.common.StyleModifier;
 import com.jeno.fantasyleague.ui.common.label.StatusLabel;
 import com.jeno.fantasyleague.ui.main.views.league.gridlayout.LeagueBean;
@@ -16,6 +18,7 @@ import com.jeno.fantasyleague.ui.main.views.league.singleleague.SingleLeagueView
 import com.jeno.fantasyleague.ui.main.views.notifications.NotificationGrid;
 import com.jeno.fantasyleague.ui.main.views.notifications.NotificationModel;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.accordion.Accordion;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -35,6 +38,7 @@ public class LeagueView {
 	private final BehaviorSubject<UserNotification> leagueAccepted = BehaviorSubject.create();
 
 	private VerticalLayout layout;
+	private LeagueGrid uefa2020LeagueGrid;
 	private LeagueGrid leagueGrid;
 	private StatusLabel leagueInfoLabel;
 	private SingleLeagueView singleLeagieView;
@@ -44,6 +48,7 @@ public class LeagueView {
 		this.singleLeagueServiceProvider = singleLeagueServiceProvider;
 		this.notificationModel = notificationModel;
 		this.leagueForm = new LeagueForm();
+		this.uefa2020LeagueGrid = new LeagueGrid();
 		this.leagueGrid = new LeagueGrid();
 		this.leagueInfoLabel = new StatusLabel(true);
 		this.leagueInfoLabel.setVisible(false);
@@ -55,6 +60,7 @@ public class LeagueView {
 		layout.setAlignItems(FlexComponent.Alignment.CENTER);
 
 		constructLeagueGridLayout();
+		uefa2020LeagueGrid.clickedLeague().subscribe(this::viewLeague);
 		leagueGrid.clickedLeague().subscribe(this::viewLeague);
 	}
 
@@ -64,7 +70,12 @@ public class LeagueView {
 			NotificationGrid notificationGrid = new NotificationGrid(userNotifications, singleLeagueServiceProvider.getSecurityHolder(), notificationModel, leagueAccepted);
 			addSection(Lists.newArrayList(notificationGrid), "Notifications", style -> {});
 		}
+		Accordion oldLeagues = new Accordion();
+		oldLeagues.setWidthFull();
+		oldLeagues.add("UEFA Euro 2020", uefa2020LeagueGrid);
+		oldLeagues.close();
 		addSection(Lists.newArrayList(leagueInfoLabel, leagueGrid), "Your leagues", style -> {});
+		addSection(Lists.newArrayList(oldLeagues), "Old leagues", style -> {});
 		addSection(Lists.newArrayList(leagueForm), "Create new league", style -> style
 				.set("background-color", "var(--lumo-primary-color-10pct)")
 				.set("border-radius", "var(--lumo-border-radius)")
@@ -95,7 +106,14 @@ public class LeagueView {
 	public void setLeagues(List<LeagueBean> leagues) {
 		if (!leagues.isEmpty()) {
 			leagueInfoLabel.setVisible(false);
-			leagueGrid.setLeagues(leagues);
+			List<LeagueBean> world2022Leagues = leagues.stream()
+					.filter(leagueBean -> Template.FIFA_WORLD_CUP_2022.equals(leagueBean.getLeague().getTemplate()))
+					.collect(Collectors.toList());
+			List<LeagueBean> uefa2020Leagues = leagues.stream()
+					.filter(leagueBean -> Template.UEFA_EURO_2020.equals(leagueBean.getLeague().getTemplate()))
+					.collect(Collectors.toList());
+			leagueGrid.setLeagues(world2022Leagues);
+			uefa2020LeagueGrid.setLeagues(uefa2020Leagues);
 		} else {
 			leagueInfoLabel.setVisible(true);
 			leagueInfoLabel.setInfoText("Your leagues will appear here, wait until you get invited to one and refresh the page or create your own league");

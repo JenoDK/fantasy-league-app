@@ -8,6 +8,7 @@ import com.jeno.fantasyleague.ui.common.grid.CustomGrid;
 import com.jeno.fantasyleague.ui.common.grid.CustomGridBuilder;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.jeno.fantasyleague.util.LayoutUtil;
+import com.jeno.fantasyleague.util.VaadinUtil;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.data.provider.DataProvider;
@@ -42,9 +43,10 @@ public class UserGrid extends CustomGrid<User> {
 		sendMailButton.addClickListener(ignored -> {
 			try {
 				ApplicationEmailService emailService = singleLeagueServiceProvider.getEmailService();
+				String rootUrl = VaadinUtil.getRootRequestURL();
 				emailService.sendEmail(
-						"euro2020-manager league invite",
-						"You got invited to participate in the league " + league.getName() + ". Log in to https://euro2020-manager.com and accept the invite.",
+						"FIFA World Cup 2022 - League Invite",
+						"You got invited to participate in the league " + league.getName() + ". Log in to " + rootUrl + " and accept the invite.",
 						user);
 			} catch (Exception e) {
 				e.printStackTrace();

@@ -28,4 +28,8 @@ public interface GameRepository extends JpaRepository<Game, Long>, JpaSpecificat
 	List<Game> findByLeagueAndGroupStageAndJoinTeams(@Param("league") League league, @Param("contestantGroup") ContestantGroup contestantGroup);
 
 	List<Game> findByLeagueAndStage(League league, String stage);
+
+	List<Game> findByMatchNumber(Integer matchNumber);
+
+	List<Game> findByLeagueAndMatchNumber(League league, Integer matchNumber);
 }

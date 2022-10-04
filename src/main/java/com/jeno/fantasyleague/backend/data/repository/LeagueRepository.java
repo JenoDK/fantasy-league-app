@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.User;
+import com.jeno.fantasyleague.backend.model.enums.Template;
 
 @Repository
 public interface LeagueRepository extends JpaRepository<League, Long> {
@@ -16,4 +17,5 @@ public interface LeagueRepository extends JpaRepository<League, Long> {
 	@Query("SELECT l.owners FROM League l WHERE l.id = :id")
 	List<User> fetchLeagueOwners(@Param("id") Long leagueId);
 
+	List<League> findByTemplate(Template template);
 }

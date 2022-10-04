@@ -33,7 +33,7 @@ public class SingleMatchLayout extends VerticalLayout {
 		setPadding(false);
 		setMargin(false);
 
-		MatchCardLayout matchCard = new MatchCardLayout(match, null, loggedInUserIsAdmin, true, singleLeagueServiceprovider);
+		MatchCardLayout matchCard = new MatchCardLayout(match, null, loggedInUserIsAdmin, false, true, singleLeagueServiceprovider);
 		add(matchCard);
 
 		Map<Long, Integer> homeTeamWeights = singleLeagueServiceprovider.getContestantWeightRepository()

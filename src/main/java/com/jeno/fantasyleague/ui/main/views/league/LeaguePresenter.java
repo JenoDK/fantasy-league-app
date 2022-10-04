@@ -28,6 +28,7 @@ public class LeaguePresenter {
 	}
 
 	public void showMainLeagueScreen() {
-		view.showLeagueGridLayout();
+		// I want to keep the state in the league view
+		// view.showLeagueGridLayout();
 	}
 }

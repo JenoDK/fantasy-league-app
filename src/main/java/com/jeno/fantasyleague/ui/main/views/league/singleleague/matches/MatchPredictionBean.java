@@ -128,7 +128,16 @@ public class MatchPredictionBean {
 		this.homeTeamPredictionIsWinner = Optional.of(homeTeamPredictionIsWinner);
 	}
 
+	public Game getGame() {
+		return game;
+	}
+
 	public Game setGameScoresAndGetGameModelItem() {
+		setGameScoresAndGetGameModelItem(game);
+		return game;
+	}
+
+	public void setGameScoresAndGetGameModelItem(Game game) {
 		game.setHome_team_score(homeTeamScore);
 		game.setAway_team_score(awayTeamScore);
 		if (homeTeamScore != null && awayTeamScore != null) {
@@ -148,7 +157,6 @@ public class MatchPredictionBean {
 				}
 			}
 		}
-		return game;
 	}
 
 	public Prediction setPredictionScoresAndGetModelItem() {

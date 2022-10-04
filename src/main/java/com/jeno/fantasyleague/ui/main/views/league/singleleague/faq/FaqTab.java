@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.jeno.fantasyleague.backend.data.service.leaguetemplates.SoccerCupStages;
-import com.jeno.fantasyleague.backend.data.service.leaguetemplates.eufaeuro2020.UefaEuro2020SettingRenderer;
+import com.jeno.fantasyleague.backend.data.service.leaguetemplates.FootballSettingsRenderer;
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.LeagueSetting;
 import com.jeno.fantasyleague.resources.Resources;
@@ -76,7 +76,7 @@ public class FaqTab extends LazyTabComponent {
 	}
 
 	public String findCurrentPowerIndexMultiplier() {
-		return singleLeagueServiceProvider.getLeagueSettingRepository().findByLeagueAndName(league, UefaEuro2020SettingRenderer.POWER_INDEX_MULTIPLIER)
+		return singleLeagueServiceProvider.getLeagueSettingRepository().findByLeagueAndName(league, FootballSettingsRenderer.POWER_INDEX_MULTIPLIER)
 				.map(LeagueSetting::getValue)
 				.orElse("");
 	}
@@ -91,11 +91,11 @@ public class FaqTab extends LazyTabComponent {
 					Map<String, LeagueSetting> settingsToNameMap = leagueSettingPerGroup.get(stage).stream()
 							.collect(Collectors.toMap(LeagueSetting::getName, Function.identity()));
 					Integer allCorrect = Integer.valueOf(
-							settingsToNameMap.get(stage.getName() + UefaEuro2020SettingRenderer.ALL_CORRECT).getValue());
+							settingsToNameMap.get(stage.getName() + FootballSettingsRenderer.ALL_CORRECT).getValue());
 					Integer wrongScore = Integer.valueOf(
-							settingsToNameMap.get(stage.getName() + UefaEuro2020SettingRenderer.WRONG_SCORE).getValue());
+							settingsToNameMap.get(stage.getName() + FootballSettingsRenderer.WRONG_SCORE).getValue());
 					Integer allWrong = Integer.valueOf(
-							settingsToNameMap.get(stage.getName() + UefaEuro2020SettingRenderer.ALL_WRONG).getValue());
+							settingsToNameMap.get(stage.getName() + FootballSettingsRenderer.ALL_WRONG).getValue());
 					return new LeagueSettingsGameScoreBean(
 							Resources.getMessage(stage.getName()),
 							allCorrect,

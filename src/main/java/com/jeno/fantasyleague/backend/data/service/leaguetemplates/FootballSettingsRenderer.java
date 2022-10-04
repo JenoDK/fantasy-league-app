@@ -1,4 +1,4 @@
-package com.jeno.fantasyleague.backend.data.service.leaguetemplates.eufaeuro2020;
+package com.jeno.fantasyleague.backend.data.service.leaguetemplates;
 
 import java.util.Comparator;
 import java.util.List;
@@ -29,7 +29,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 
 @org.springframework.stereotype.Component
-public class UefaEuro2020SettingRenderer implements LeagueSettingRenderer {
+public class FootballSettingsRenderer implements LeagueSettingRenderer {
 
 	public static final String ALL_CORRECT = "AllCorrect";
 	public static final String WRONG_SCORE = "WrongScore";

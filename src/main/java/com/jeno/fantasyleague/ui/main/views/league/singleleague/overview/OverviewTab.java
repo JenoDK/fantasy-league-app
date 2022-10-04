@@ -27,6 +27,7 @@ public class OverviewTab extends LazyTabComponent {
 	private final SingleLeagueServiceProvider singleLeagueServiceprovider;
 	private final League league;
 	private final LeagueMenuBar menuBar;
+	private final UserTotalScoreGrid totalScoreGrid;
 
 	private List<MenuItem> extraMenuItems;
 	private User loggedInUser;
@@ -48,7 +49,7 @@ public class OverviewTab extends LazyTabComponent {
 		this.graphPreference = loggedInUser.getGraph_preference();
 
 		List<UserScoreBean> scoreBeans = fetchTotalScores();
-		UserTotalScoreGrid totalScoreGrid = new UserTotalScoreGrid(scoreBeans, false, loggedInUser);
+		totalScoreGrid = new UserTotalScoreGrid(scoreBeans, false, loggedInUser);
 		totalScoreGrid.setWidth("100%");
 		Set<String> iconPaths = singleLeagueServiceprovider.getContestantRepository().findAll().stream()
 				.map(Contestant::getIcon_path)
@@ -115,6 +116,7 @@ public class OverviewTab extends LazyTabComponent {
 		extraMenuItems.stream()
 				.filter(Objects::nonNull)
 				.forEach(i -> i.setVisible(true));
+		totalScoreGrid.setItems(fetchTotalScores());
 	}
 
 	private static String[] COLORS = new String[] {
