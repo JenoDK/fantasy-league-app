@@ -27,7 +27,7 @@ public class LeagueTipDialog extends VerticalLayout {
 
 	public LeagueTipDialog(LeagueBean leagueBean, SingleLeagueServiceProvider singleLeagueServiceprovider) {
 		this.leagueBean = leagueBean;
-		this.leagueUser = leagueBean.getLoggedInLeagueUser();
+		this.leagueUser = singleLeagueServiceprovider.getLoggedInLeagueUser(leagueBean.getLeague());
 
 		initLayout();
 

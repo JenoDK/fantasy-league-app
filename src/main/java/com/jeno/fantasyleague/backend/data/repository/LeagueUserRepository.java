@@ -20,7 +20,6 @@ public interface LeagueUserRepository extends JpaRepository<LeagueUser, Long> {
 	@Cacheable("findByLeague")
 	List<LeagueUser> findByLeague(League league);
 
-
 	@Override
 	@CacheEvict(value = {"findByUsers", "findByLeague"})
 	<S extends LeagueUser> S save(S leagueUser);

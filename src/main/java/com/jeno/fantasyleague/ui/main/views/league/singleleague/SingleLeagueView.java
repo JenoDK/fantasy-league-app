@@ -9,6 +9,7 @@ import com.jeno.fantasyleague.ui.common.LeagueImageResourceCache;
 import com.jeno.fantasyleague.ui.common.field.CustomButton;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.jeno.fantasyleague.ui.main.views.league.gridlayout.LeagueBean;
+import com.jeno.fantasyleague.ui.main.views.league.singleleague.chat.ChatBox;
 import com.jeno.fantasyleague.util.VaadinUtil;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
@@ -85,13 +86,14 @@ public class SingleLeagueView extends VerticalLayout {
 		topButtonBar.add(back, help);
 
 		add(topButtonBar);
-		LeagueUser loggedInLeagueUser = leagueBean.getLoggedInLeagueUser();
+		LeagueUser loggedInLeagueUser = singleLeagueServiceprovider.getLoggedInLeagueUser(league);
 		if (loggedInLeagueUser.isShow_help()) {
 			showHelp(leagueBean, singleLeagueServiceprovider);
 			// We only show it the first time, want to avoid spamming.
 			loggedInLeagueUser.setShow_help(false);
 			singleLeagueServiceprovider.getLeagueUserRepository().saveAndFlush(loggedInLeagueUser);
 		}
+		main.add(new ChatBox(league, loggedInLeagueUser, singleLeagueServiceprovider));
 		add(topBar);
 		add(navigation);
 		add(main);

@@ -32,12 +32,12 @@ import com.jeno.fantasyleague.backend.data.service.repo.contestant.ContestantSer
 import com.jeno.fantasyleague.backend.data.service.repo.game.GameService;
 import com.jeno.fantasyleague.backend.data.service.repo.league.LeagueService;
 import com.jeno.fantasyleague.backend.data.service.repo.league.UserLeagueScore;
+import com.jeno.fantasyleague.backend.data.service.repo.leaguemessage.LeagueMessageService;
 import com.jeno.fantasyleague.backend.data.service.repo.user.UserService;
-import com.jeno.fantasyleague.backend.model.Contestant;
 import com.jeno.fantasyleague.backend.model.ContestantWeight;
 import com.jeno.fantasyleague.backend.model.Game;
 import com.jeno.fantasyleague.backend.model.League;
-import com.jeno.fantasyleague.backend.model.LeagueSetting;
+import com.jeno.fantasyleague.backend.model.LeagueMessage;
 import com.jeno.fantasyleague.backend.model.LeagueUser;
 import com.jeno.fantasyleague.backend.model.Prediction;
 import com.jeno.fantasyleague.backend.model.User;
@@ -64,6 +64,8 @@ public class SingleLeagueServiceProvider {
 	private ContestantService contestantService;
 	@Autowired
 	private ApplicationEmailService emailService;
+	@Autowired
+	private LeagueMessageService leagueMessageService;
 
 	@Autowired
 	private UserRepository userRepository;
@@ -128,6 +130,18 @@ public class SingleLeagueServiceProvider {
 	public void deactivateLeague(League league) {
 		league.setActive(false);
 		leagueRepository.saveAndFlush(league);
+	}
+
+	public void addMessage(String message, League league) {
+		leagueMessageService.addLeagueMessage(league, message, getLoggedInUser());
+	}
+
+	public void resetUnreadMessages(LeagueUser loggedInLeagueUser) {
+		leagueMessageService.resetUnreadMessages(loggedInLeagueUser);
+	}
+
+	public List<LeagueMessage> getLeagueMessages(League league) {
+		return leagueMessageService.getLeagueMessages(league, getLoggedInUser());
 	}
 
 	public GameRepository getGameRepository() {
@@ -203,6 +217,14 @@ public class SingleLeagueServiceProvider {
 
 	public User getLoggedInUser() {
 		return securityHolder.getUser();
+	}
+
+	public LeagueUser getLoggedInLeagueUser(League league) {
+		User loggedInUser = getLoggedInUser();
+		return leagueUserRepository.findByLeague(league).stream()
+				.filter(lu -> Objects.equals(loggedInUser.getId(), lu.getUser().getId()))
+				.findFirst()
+				.orElseThrow(() -> new RuntimeException("Impossible for a logged in user " + loggedInUser.getUsername() + " not to be part of the leagueUser list"));
 	}
 
 	public SecurityHolder getSecurityHolder() {

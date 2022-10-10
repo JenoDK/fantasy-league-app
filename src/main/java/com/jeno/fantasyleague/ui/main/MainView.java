@@ -9,6 +9,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.component.page.Viewport;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.router.RouteConfiguration;
@@ -19,6 +20,7 @@ import com.vaadin.flow.theme.lumo.Lumo;
 @Viewport(VIEWPORT)
 @JsModule("./styles/shared-styles.js")
 @Theme(value = Lumo.class, variant = Lumo.DARK)
+@Push
 public class MainView extends AppLayout {
 
 	private TopTabs topTabs;

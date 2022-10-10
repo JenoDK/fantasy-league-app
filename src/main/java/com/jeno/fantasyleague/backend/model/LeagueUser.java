@@ -102,6 +102,8 @@ public class LeagueUser implements java.io.Serializable {
 	@Enumerated
 	private HelpStage help_stage;
 
+	private int unread_messages;
+
 	public LeagueUser() {
 	}
 
@@ -135,5 +137,13 @@ public class LeagueUser implements java.io.Serializable {
 
 	public void setHelp_stage(HelpStage help_stage) {
 		this.help_stage = help_stage;
+	}
+
+	public int getUnread_messages() {
+		return unread_messages;
+	}
+
+	public void setUnread_messages(int unread_messages) {
+		this.unread_messages = unread_messages;
 	}
 }

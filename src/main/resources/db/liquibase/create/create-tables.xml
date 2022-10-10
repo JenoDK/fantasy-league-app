@@ -233,6 +233,20 @@
 		</createTable>
 	</changeSet>
 
+	<changeSet author="jeno" id="add-league_message-table">
+		<createTable tableName="league_message">
+			<column autoIncrement="true" name="id" type="BIGINT">
+				<constraints nullable="false" primaryKey="true"/>
+			</column>
+			<column name="league_id" type="BIGINT"/>
+			<column name="message" type="MEDIUMTEXT"/>
+			<column name="created_at" type="datetime"/>
+			<column name="updated_at" type="datetime"/>
+			<column name="created_by" type="BIGINT"/>
+			<column name="updated_by" type="BIGINT"/>
+		</createTable>
+	</changeSet>
+
     <changeSet author="jeno (generated)" id="1521469127930-8">
         <addPrimaryKey columnNames="user_id, role_id" constraintName="PRIMARY" tableName="user_roles"/>
     </changeSet>
@@ -270,6 +284,12 @@
             <column name="league_id"/>
         </createIndex>
     </changeSet>
+	<changeSet author="jeno" id="create-league-index-on-league_message">
+		<createIndex indexName="league_id_index"
+					 tableName="league_message">
+			<column name="league_id"/>
+		</createIndex>
+	</changeSet>
 
     <changeSet author="jeno" id="change-contestant-power_index-to-bigint">
         <modifyDataType columnName="power_index"
