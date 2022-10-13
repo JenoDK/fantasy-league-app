@@ -225,7 +225,7 @@ public class ChatBox extends PolymerTemplate<TemplateModel> {
 		topBar.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
 		topBar.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
 
-		Label chatLabel = new Label(league.getName() + " chat");
+		Label chatLabel = new Label("League Chat");
 		chatLabel.setWidthFull();
 		chatLabel.getStyle().set("margin-left", "5px");
 		topBar.add(chatLabel);
