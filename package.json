@@ -55,7 +55,7 @@
       "chokidar": "^3.5.0",
       "webpack-merge": "4.2.2",
       "typescript": "4.0.3",
-      "webpack-dev-server": "3.11.0"
+      "webpack-dev-server": "3.11.3"
     },
     "hash": "193d606346ac228d7be8c73aba8136e5bae70df3aeafa6c5e7d0f89ec257f8fa"
   },
@@ -113,7 +113,7 @@
     "webpack": "4.42.0",
     "webpack-babel-multi-target-plugin": "2.3.3",
     "webpack-cli": "3.3.11",
-    "webpack-dev-server": "3.11.0",
+    "webpack-dev-server": "3.11.3",
     "webpack-merge": "4.2.2"
   }
 }
