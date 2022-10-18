@@ -1,6 +1,7 @@
 package com.jeno.fantasyleague.ui.main.views.league;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import com.vaadin.flow.component.accordion.Accordion;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.shared.Registration;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 
@@ -42,6 +44,7 @@ public class LeagueView {
 	private LeagueGrid leagueGrid;
 	private StatusLabel leagueInfoLabel;
 	private SingleLeagueView singleLeagieView;
+	private Registration clickHandlerRegistration;
 
 	@Autowired
 	public LeagueView(SingleLeagueServiceProvider singleLeagueServiceProvider, NotificationModel notificationModel) {
@@ -58,6 +61,7 @@ public class LeagueView {
 		layout.removeAll();
 		layout.addClassName("league-view");
 		layout.setAlignItems(FlexComponent.Alignment.CENTER);
+		layout.getStyle().set("padding-top", "5px");
 
 		constructLeagueGridLayout();
 		uefa2020LeagueGrid.clickedLeague().subscribe(this::viewLeague);
@@ -114,6 +118,9 @@ public class LeagueView {
 					.collect(Collectors.toList());
 			leagueGrid.setLeagues(world2022Leagues);
 			uefa2020LeagueGrid.setLeagues(uefa2020Leagues);
+			if (world2022Leagues.size() == 1) {
+				viewLeague(world2022Leagues.get(0));
+			}
 		} else {
 			leagueInfoLabel.setVisible(true);
 			leagueInfoLabel.setInfoText("Your leagues will appear here, wait until you get invited to one and refresh the page or create your own league");
@@ -137,11 +144,13 @@ public class LeagueView {
 		layout.removeAll();
 		singleLeagieView = new SingleLeagueView(league, singleLeagueServiceProvider);
 		singleLeagieView.backToLeaguesView().subscribe(ignored -> showLeagueGridLayout());
+		clickHandlerRegistration = layout.addClickListener(singleLeagieView::leagueViewClicked);
 		layout.add(singleLeagieView);
 	}
 
 	protected void showLeagueGridLayout() {
 		layout.removeAll();
+		clickHandlerRegistration.remove();
 		constructLeagueGridLayout();
 		leagueGrid.getDataProvider().refreshAll();
 	}

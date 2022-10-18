@@ -17,7 +17,7 @@ $_documentContainer.innerHTML = `
 				}
 
 				[part="navbar"] {
-					z-index: 200;
+					z-index: 190;
 					box-shadow: 0 0 16px 2px var(--lumo-shade-20pct);
 				}
 
@@ -363,6 +363,16 @@ $_documentContainer.innerHTML = `
 					flex: auto;
 					height: 100%;
 				}
+
+				@media (min-width: 700px) {
+					.default-league-banner {
+						content:url("images/default_league_banner_worldcup_2022.png") !important;
+					}
+				}
+
+				.default-league-banner {
+					content:url("images/default_league_banner_worldcup_2022_mobile.png");
+				}
 			</style>
 		</template>
 	</dom-module>
@@ -473,6 +483,13 @@ $_documentContainer.innerHTML = `
 					padding-left: 1em;
 					padding-right: 1em;
 				}
+				.default-league-banner {
+					content:url("images/default_league_banner_worldcup_2022.png") !important;
+				}
+			}
+
+			.default-league-banner {
+				content:url("images/default_league_banner_worldcup_2022_mobile.png");
 			}
 
 		</style>

@@ -14,26 +14,29 @@ import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.User;
 import com.jeno.fantasyleague.ui.common.tabsheet.LazyTabComponent;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
-import com.jeno.fantasyleague.ui.main.views.league.singleleague.LeagueMenuBar;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.chart.ScoreChart;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.chart.UserScoreBean;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.usertotalscore.UserTotalScoreGrid;
+import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.contextmenu.MenuItem;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.menubar.MenuBar;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.NumberField;
 
 public class OverviewTab extends LazyTabComponent {
 
 	private final SingleLeagueServiceProvider singleLeagueServiceprovider;
 	private final League league;
-	private final LeagueMenuBar menuBar;
 	private final UserTotalScoreGrid totalScoreGrid;
 
 	private List<MenuItem> extraMenuItems;
 	private User loggedInUser;
 	private User.GraphPreference graphPreference;
 
-	public OverviewTab(League league, SingleLeagueServiceProvider singleLeagueServiceprovider, LeagueMenuBar menuBar) {
+	public OverviewTab(League league, SingleLeagueServiceProvider singleLeagueServiceprovider) {
 		super();
 		addClassName("overview-tab");
 		setMargin(false);
@@ -44,7 +47,6 @@ public class OverviewTab extends LazyTabComponent {
 
 		this.singleLeagueServiceprovider = singleLeagueServiceprovider;
 		this.league = league;
-		this.menuBar = menuBar;
 		this.loggedInUser = loggedInUser;
 		this.graphPreference = loggedInUser.getGraph_preference();
 
@@ -75,23 +77,47 @@ public class OverviewTab extends LazyTabComponent {
 		});
 		numberField.setHasControls(true);
 
-		add(numberField);
-		add(scoreChart);
-		add(totalScoreGrid);
+		MenuBar menuBar = new MenuBar();
+		menuBar.setWidthFull();
 
-		MenuItem hBarChartMenuItem = this.menuBar.addItem(VaadinIcon.BAR_CHART_H.create(), event -> {
+		MenuItem chartSettingsMenu = menuBar.addItem(createMenuItem(VaadinIcon.CHART, "Chart settings"), null);
+
+		MenuItem hBarChartMenuItem = addItemToSubMenu(chartSettingsMenu, VaadinIcon.BAR_CHART_H, "Horizontal bars", event -> {
 			setGraphPreference(User.GraphPreference.COLUMN);
 			scoreChart.showHBarChart(numberField.getValue());
 		});
-		MenuItem vBarChartMenuItem = this.menuBar.addItem(VaadinIcon.BAR_CHART.create(), event -> {
+		MenuItem vBarChartMenuItem = addItemToSubMenu(chartSettingsMenu, VaadinIcon.BAR_CHART, "Horizontal bars with country flags", event -> {
 			setGraphPreference(User.GraphPreference.COLUMN_FLAGS);
 			scoreChart.showVBarChart(numberField.getValue());
 		});
-		MenuItem lineChartMenuItem = this.menuBar.addItem(VaadinIcon.LINE_CHART.create(), event -> {
+		MenuItem lineChartMenuItem = addItemToSubMenu(chartSettingsMenu, VaadinIcon.LINE_CHART, "Line", event -> {
 			setGraphPreference(User.GraphPreference.LINE);
 			scoreChart.showLineChart(numberField.getValue());
 		});
 		extraMenuItems = List.of(hBarChartMenuItem, vBarChartMenuItem, lineChartMenuItem);
+
+		HorizontalLayout chartTopBar = new HorizontalLayout();
+		chartTopBar.setPadding(false);
+		chartTopBar.setMargin(false);
+		chartTopBar.setSpacing(false);
+		chartTopBar.add(numberField, menuBar);
+
+		add(chartTopBar);
+		add(scoreChart);
+		add(totalScoreGrid);
+	}
+
+	public MenuItem addItemToSubMenu(MenuItem subMenuItem, VaadinIcon icon, String text, ComponentEventListener<ClickEvent<MenuItem>> listener) {
+		HorizontalLayout layout = createMenuItem(icon, text);
+		return subMenuItem.getSubMenu().addItem(layout, listener);
+	}
+
+	private HorizontalLayout createMenuItem(VaadinIcon icon, String text) {
+		HorizontalLayout layout = new HorizontalLayout();
+		Label label = new Label(text);
+		label.getElement().getStyle().set("cursor", "pointer");
+		layout.add(icon.create(), label);
+		return layout;
 	}
 
 	private void setGraphPreference(User.GraphPreference graphPref) {

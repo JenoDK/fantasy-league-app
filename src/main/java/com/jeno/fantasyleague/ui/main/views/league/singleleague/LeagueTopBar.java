@@ -9,6 +9,8 @@ import com.jeno.fantasyleague.ui.common.image.VaadinImageUploader;
 import com.jeno.fantasyleague.ui.common.label.StatusLabel;
 import com.jeno.fantasyleague.util.ImageUtil;
 import com.jeno.fantasyleague.util.VaadinUtil;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -36,7 +38,8 @@ public class LeagueTopBar extends VerticalLayout {
 		StatusLabel statusLabel = new StatusLabel();
 		statusLabel.setVisible(false);
 		upload = new VaadinImageUploader(1200, 300, true, false, statusLabel);
-		CustomButton button = new CustomButton("Change banner", VaadinIcon.CAMERA.create());
+		Button button = new Button("Change banner", VaadinIcon.CAMERA.create());
+		button.addThemeVariants(ButtonVariant.LUMO_ICON, ButtonVariant.LUMO_SMALL);
 		upload.setUploadButton(button);
 		upload.setDropAllowed(false);
 		imageUploadLayout.add(statusLabel, upload);
@@ -52,6 +55,9 @@ public class LeagueTopBar extends VerticalLayout {
 		title.getStyle().set("flex", "1");
 		title.getStyle().set("margin-top", "0.5em");
 		VerticalLayout tL = new VerticalLayout(title);
+		tL.setSpacing(false);
+		tL.setPadding(false);
+		tL.setMargin(false);
 		tL.setWidthFull();
 
 		titleLayout.add(tL);

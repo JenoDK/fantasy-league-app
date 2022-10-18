@@ -59,15 +59,10 @@ class LeagueCard extends PolymerElement {
 					white-space: normal;
 				}
 
-				.picture_wrapper {
-					max-width: 100%;
-                    height: 250px;
-				}
-
-				.picture_wrapper img {
-					width: 100%;
-					height: 250px;
+				#leagueImageTag {
+					max-height: 300px;
 					object-fit: cover;
+					width: 100%;
 				}
 
 				@media (min-width: 600px) {
@@ -95,9 +90,7 @@ class LeagueCard extends PolymerElement {
 			</style>
 			<div id="content" class="content">
 				<vaadin-vertical-layout id="wrapper" class="wrapper">
-					<div id="leagueImage_div" class="picture_wrapper">
-                        <img id="leagueImageTag"></img>
-                    </div>
+                    <img id="leagueImageTag" />
 					<div id="info" class="info-wrapper">
 						<h2 id="leagueName" class="name"></h2>
 						<div class="minor_info">

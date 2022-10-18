@@ -10,14 +10,11 @@ import com.jeno.fantasyleague.ui.common.field.CustomButton;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.jeno.fantasyleague.ui.main.views.league.gridlayout.LeagueBean;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.chat.ChatBox;
-import com.jeno.fantasyleague.util.VaadinUtil;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 import io.reactivex.Observable;
@@ -27,31 +24,24 @@ public class SingleLeagueView extends VerticalLayout {
 
 	private static final Logger LOG = LogManager.getLogger(SingleLeagueView.class.getName());
 
-	private final BehaviorSubject<ClickEvent<Button>> backClick = BehaviorSubject.create();
+	private final BehaviorSubject<ClickEvent<?>> backClick = BehaviorSubject.create();
 	private final LeagueBean leagueBean;
 
-	private LeagueMenuBar tabSheet;
+	private ChatBox chatBox;
 
 	public SingleLeagueView(LeagueBean leagueBean, SingleLeagueServiceProvider singleLeagueServiceprovider) {
 		super();
 		this.leagueBean = leagueBean;
 
-		initLayout(leagueBean, singleLeagueServiceprovider);
+		initLayout(singleLeagueServiceprovider);
 	}
 
-	private void initLayout(LeagueBean leagueBean, SingleLeagueServiceProvider singleLeagueServiceprovider) {
+	private void initLayout(SingleLeagueServiceProvider singleLeagueServiceprovider) {
 		League league = leagueBean.getLeague();
 		setSizeFull();
+		setPadding(false);
+		setSpacing(false);
 		setMaxWidth("1200px");
-
-		Button back = new Button(VaadinIcon.ARROW_LEFT.create());
-		back.addClickListener(backClick::onNext);
-
-		Button help = new Button(VaadinIcon.QUESTION_CIRCLE.create());
-		help.addClickListener(ignored -> showHelp(leagueBean, singleLeagueServiceprovider));
-
-		HorizontalLayout navigation = new HorizontalLayout();
-		navigation.setWidthFull();
 
 		VerticalLayout main = new VerticalLayout();
 		main.setPadding(false);
@@ -69,23 +59,6 @@ public class SingleLeagueView extends VerticalLayout {
 			}
 		});
 
-
-		tabSheet = new LeagueMenuBar(league, singleLeagueServiceprovider, main);
-		navigation.add(tabSheet);
-
-		HorizontalLayout topButtonBar = new HorizontalLayout();
-		topButtonBar.setSpacing(false);
-		topButtonBar.setPadding(false);
-		topButtonBar.setMargin(false);
-		topButtonBar.setHeight(null);
-		topButtonBar.setWidthFull();
-		VaadinUtil.addStyles(topButtonBar.getStyle(),
-				"padding: var(--lumo-space-xs);\n");
-		topButtonBar.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
-		topButtonBar.setAlignItems(FlexComponent.Alignment.END);
-		topButtonBar.add(back, help);
-
-		add(topButtonBar);
 		LeagueUser loggedInLeagueUser = singleLeagueServiceprovider.getLoggedInLeagueUser(league);
 		if (loggedInLeagueUser.isShow_help()) {
 			showHelp(leagueBean, singleLeagueServiceprovider);
@@ -93,9 +66,15 @@ public class SingleLeagueView extends VerticalLayout {
 			loggedInLeagueUser.setShow_help(false);
 			singleLeagueServiceprovider.getLeagueUserRepository().saveAndFlush(loggedInLeagueUser);
 		}
-		main.add(new ChatBox(league, loggedInLeagueUser, singleLeagueServiceprovider));
+		chatBox = new ChatBox(league, loggedInLeagueUser, singleLeagueServiceprovider);
+		main.add(chatBox);
+		LeagueTabs leagueTabs = new LeagueTabs(leagueBean, singleLeagueServiceprovider, main);
+		CustomButton helpButton = new CustomButton(VaadinIcon.QUESTION_CIRCLE);
+		helpButton.addThemeVariants(ButtonVariant.LUMO_ICON, ButtonVariant.LUMO_TERTIARY_INLINE);
+		helpButton.addClickListener(event -> showHelp(leagueBean, singleLeagueServiceprovider));
+		leagueTabs.add(helpButton);
+		add(leagueTabs);
 		add(topBar);
-		add(navigation);
 		add(main);
 	}
 
@@ -112,8 +91,11 @@ public class SingleLeagueView extends VerticalLayout {
 		return button;
 	}
 
-	public Observable<ClickEvent<Button>> backToLeaguesView() {
+	public Observable<ClickEvent<?>> backToLeaguesView() {
 		return backClick;
 	}
 
+	public void leagueViewClicked(ClickEvent event) {
+		// TODO detect click is outside chatbox
+	}
 }

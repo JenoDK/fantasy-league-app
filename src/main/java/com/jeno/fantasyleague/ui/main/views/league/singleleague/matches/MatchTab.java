@@ -1,7 +1,5 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.matches;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -19,27 +17,26 @@ import com.jeno.fantasyleague.backend.model.Prediction;
 import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.ui.common.tabsheet.LazyTabComponent;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
-import com.jeno.fantasyleague.ui.main.views.league.singleleague.LeagueMenuBar;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.matches.single.SingleMatchLayout;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.OverviewUtil;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.menubar.MenuBar;
+import com.vaadin.flow.component.menubar.MenuBarVariant;
 
 public class MatchTab extends LazyTabComponent {
 
 	private final League league;
 	private final SingleLeagueServiceProvider singleLeagueServiceprovider;
 	private final boolean loggedInUserIsAdmin;
-	private final LeagueMenuBar menuBar;
 
 	private MatchGrid matchGrid;
 	private List<MenuItem> gridMenuItems = Lists.newArrayList();
 
-	public MatchTab(League league, SingleLeagueServiceProvider singleLeagueServiceprovider, LeagueMenuBar menuBar) {
+	public MatchTab(League league, SingleLeagueServiceProvider singleLeagueServiceprovider) {
 		this.league = league;
 		this.singleLeagueServiceprovider = singleLeagueServiceprovider;
 		this.loggedInUserIsAdmin = singleLeagueServiceprovider.loggedInUserIsLeagueAdmin(league);
-		this.menuBar = menuBar;
 
 		initLayout();
 	}
@@ -60,17 +57,21 @@ public class MatchTab extends LazyTabComponent {
 		setMargin(false);
 		setPadding(false);
 
+		MenuBar filterBar = new MenuBar();
+		filterBar.setWidthFull();
+		filterBar.addThemeVariants(MenuBarVariant.LUMO_SMALL, MenuBarVariant.LUMO_PRIMARY);
+
 		matchGrid = new MatchGrid(singleLeagueServiceprovider, loggedInUserIsAdmin, false);
 		matchGrid.setMatches(getMatches());
-		MenuItem refreshItem = menuBar.addItem(VaadinIcon.REFRESH.create());
+		MenuItem refreshItem = filterBar.addItem(VaadinIcon.REFRESH.create());
 		refreshItem.addClickListener(ignored -> matchGrid.setMatches(getMatches()));
-		MenuItem showAllItem = menuBar.addItem(Resources.getMessage("showAllMatches"));
+		MenuItem showAllItem = filterBar.addItem(Resources.getMessage("showAllMatches"));
 		showAllItem.addClickListener(ignored -> matchGrid.clearFilter());
 		gridMenuItems.add(refreshItem);
 		gridMenuItems.add(showAllItem);
 		Arrays.stream(SoccerCupStages.values())
 				.forEach(stage -> {
-					MenuItem item = menuBar.addItem(Resources.getMessage(stage.getName()));
+					MenuItem item = filterBar.addItem(Resources.getMessage(stage.getName()));
 					item.addClickListener(ignored -> matchGrid.filterOnStage(stage));
 					gridMenuItems.add(item);
 				});
@@ -80,7 +81,7 @@ public class MatchTab extends LazyTabComponent {
 			matchGrid.setVisible(false);
 			gridMenuItems.forEach(item -> item.setVisible(false));
 			SingleMatchLayout singleMatchLayout = new SingleMatchLayout(match, singleLeagueServiceprovider, loggedInUserIsAdmin);
-			MenuItem bacMenuItem = menuBar.addItem(VaadinIcon.ARROW_LEFT.create());
+			MenuItem bacMenuItem = filterBar.addItem(VaadinIcon.ARROW_LEFT.create());
 			bacMenuItem.addClickListener(ignored -> {
 				remove(singleMatchLayout);
 				matchGrid.setVisible(true);
@@ -90,6 +91,7 @@ public class MatchTab extends LazyTabComponent {
 			add(singleMatchLayout);
 		});
 
+		add(filterBar);
 		add(matchGrid);
 	}
 

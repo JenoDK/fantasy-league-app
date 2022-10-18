@@ -42,7 +42,9 @@ public class ImageUtil {
 		if (league.getLeague_picture() != null) {
 			return new Image(LeagueImageResourceCache.addOrGetLeagueImageResource(league), "league_banner");
 		} else {
-			return new Image(Images.DEFAULT_LEAGUE_BANNER, "league_banner");
+			Image league_banner = new Image("", "league_banner");
+			league_banner.addClassName("default-league-banner");
+			return league_banner;
 		}
 	}
 

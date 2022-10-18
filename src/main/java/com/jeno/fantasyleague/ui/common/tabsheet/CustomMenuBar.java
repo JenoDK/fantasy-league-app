@@ -19,7 +19,7 @@ public class CustomMenuBar extends MenuBar {
 
 	private VerticalLayout tabLayout;
 	private String currentId;
-	Map<String, ComponentCreationFunction> functions;
+	Map<String, LazyTabComponent.ComponentCreationFunction> functions;
 	Map<String, LazyTabComponent> initializedTabs;
 
 	public CustomMenuBar(VerticalLayout tabLayout) {
@@ -31,11 +31,21 @@ public class CustomMenuBar extends MenuBar {
 
 	public MenuItem addItem(VaadinIcon icon, String text, ComponentEventListener<ClickEvent<MenuItem>> listener) {
 		HorizontalLayout layout = new HorizontalLayout();
-		layout.add(icon.create(), new Label(text));
+		Label label = new Label(text);
+		label.getElement().getStyle().set("cursor", "pointer");
+		layout.add(icon.create(), label);
 		return addItem(layout, listener);
 	}
 
-	public CustomMenuItem addLazyItem(Optional<SubMenu> subMenu, String id, String caption, ComponentCreationFunction function, ComponentEventListener<ClickEvent<MenuItem>> clickListener) {
+	public MenuItem addItemToSubMenu(MenuItem subMenuItem, VaadinIcon icon, String text, ComponentEventListener<ClickEvent<MenuItem>> listener) {
+		HorizontalLayout layout = new HorizontalLayout();
+		Label label = new Label(text);
+		label.getElement().getStyle().set("cursor", "pointer");
+		layout.add(icon.create(), label);
+		return subMenuItem.getSubMenu().addItem(layout, listener);
+	}
+
+	public CustomMenuItem addLazyItem(Optional<SubMenu> subMenu, String id, String caption, LazyTabComponent.ComponentCreationFunction function, ComponentEventListener<ClickEvent<MenuItem>> clickListener) {
 		if (id == null || id.isEmpty()) {
 			throw new RuntimeException("LazyTabs does not work with tabs without an ID");
 		}
@@ -62,10 +72,6 @@ public class CustomMenuBar extends MenuBar {
 			menuItem = addItem(caption, listener);
 		}
 		return new CustomMenuItem(menuItem, listener);
-	}
-
-	public interface ComponentCreationFunction {
-		LazyTabComponent createComponent();
 	}
 
 	public class CustomMenuItem {

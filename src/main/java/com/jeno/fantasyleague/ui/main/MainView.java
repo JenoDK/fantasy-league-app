@@ -14,6 +14,8 @@ import com.vaadin.flow.component.page.Viewport;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.router.RouteConfiguration;
 import com.vaadin.flow.router.RouterLink;
+import com.vaadin.flow.server.InitialPageSettings;
+import com.vaadin.flow.server.PageConfigurator;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 
@@ -21,7 +23,7 @@ import com.vaadin.flow.theme.lumo.Lumo;
 @JsModule("./styles/shared-styles.js")
 @Theme(value = Lumo.class, variant = Lumo.DARK)
 @Push
-public class MainView extends AppLayout {
+public class MainView extends AppLayout implements PageConfigurator {
 
 	private TopTabs topTabs;
 
@@ -50,4 +52,9 @@ public class MainView extends AppLayout {
 		tabToSelect.ifPresent(tab -> topTabs.setSelectedTab((Tab)tab));
 	}
 
+	@Override
+	public void configurePage(InitialPageSettings settings) {
+		settings.addLink("shortcut icon", "VAADIN/themes/fantasy-league/favicon.ico");
+		settings.addFavIcon("icon", "icons/icon-192.png", "192x192");
+	}
 }

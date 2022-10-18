@@ -5,8 +5,6 @@ import java.util.stream.Collectors;
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.User;
 import com.jeno.fantasyleague.ui.common.LeagueImageResourceCache;
-import com.jeno.fantasyleague.util.ImageUtil;
-import com.jeno.fantasyleague.util.Images;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.html.Div;
@@ -34,9 +32,6 @@ public class LeagueCard extends PolymerTemplate<TemplateModel> {
 	@Id("wrapper")
 	private VerticalLayout wrapper;
 
-	@Id("leagueImage_div")
-	private Div imageDiv;
-
 	@Id("leagueImageTag")
 	private Image img;
 
@@ -62,13 +57,13 @@ public class LeagueCard extends PolymerTemplate<TemplateModel> {
 		if (league.getLeague_picture() != null) {
 			img.setSrc(LeagueImageResourceCache.addOrGetLeagueImageResource(league));
 		} else {
-			img.setSrc(Images.DEFAULT_LEAGUE_BANNER);
+			img.addClassName("default-league-banner");
 		}
 		wrapper.addClickListener(ignored -> clickedLeague.onNext(this.league));
 		name.setText(league.getName());
 		adminName.setText("Owners: " + this.league.getLeagueOwners().stream().map(User::getUsername).collect(Collectors.joining(", ")));
 		membersCount.setText("Members: " + this.league.getLeagueUsers().size());
-		wrapper.setHorizontalComponentAlignment(FlexComponent.Alignment.CENTER, imageDiv);
+		wrapper.setHorizontalComponentAlignment(FlexComponent.Alignment.CENTER, img);
 	}
 
 }

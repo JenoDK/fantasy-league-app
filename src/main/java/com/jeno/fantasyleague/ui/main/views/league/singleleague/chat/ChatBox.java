@@ -133,6 +133,10 @@ public class ChatBox extends PolymerTemplate<TemplateModel> {
 		minimize();
 	}
 
+	public boolean isOpen() {
+		return open;
+	}
+
 	@ClientCallable
 	private void openChatBox() {
 		if (!hasBeenOpened) {
@@ -183,7 +187,7 @@ public class ChatBox extends PolymerTemplate<TemplateModel> {
 		singleLeagueServiceprovider.addMessage(message, league);
 	}
 
-	private void minimize() {
+	public void minimize() {
 		chatLayout.setVisible(false);
 		openChatboxButton.setVisible(true);
 		open = false;
@@ -230,8 +234,8 @@ public class ChatBox extends PolymerTemplate<TemplateModel> {
 		chatLabel.getStyle().set("margin-left", "5px");
 		topBar.add(chatLabel);
 
-		CustomButton minimize = new CustomButton(VaadinIcon.MINUS_SQUARE_O);
-		minimize.addThemeName("small-for-mobile small tertiary");
+		CustomButton minimize = new CustomButton(VaadinIcon.MINUS);
+		minimize.addThemeName("large-for-mobile large tertiary");
 		minimize.setIconAfterText(true);
 		minimize.addClickListener(ignored -> minimize());
 		topBar.add(minimize);

@@ -14,4 +14,8 @@ public abstract class LazyTabComponent extends VerticalLayout {
 		setVisible(true);
 	}
 
+	public interface ComponentCreationFunction {
+		LazyTabComponent createComponent();
+	}
+
 }
