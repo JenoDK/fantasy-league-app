@@ -6,12 +6,16 @@ on:
         description: 'Show logs since'
         default: ''
         type: string
+      full:
+        description: 'If false it will tail the logs, otehrwise show the full logs'
+        default: false
+        type: boolean
 jobs:
   get_logs:
-    name: Get the logs of teh wk-app.service
+    name: Get the logs of the wk-app.service
     runs-on: ubuntu-latest
     steps:
-    - name: Get the logs of teh wk-app.service
+    - name: Get the logs of the wk-app.service
       uses: appleboy/ssh-action@v0.1.4
       with:
         host: ${{ secrets.OVH_DEBIAN_HOST }}
@@ -21,4 +25,8 @@ jobs:
         debug: true
         script: |
           echo ${{ inputs.since }}
-          sudo journalctl -u wk-app.service --no-tail
+          if [ "${{ inputs.full }}" = true ]; then
+            sudo journalctl -u wk-app.service --no-tail
+          else
+            sudo journalctl -u wk-app.service -f
+          fi

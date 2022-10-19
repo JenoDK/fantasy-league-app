@@ -1,0 +1,17 @@
+name: Restart wk-app
+on: workflow_dispatch
+jobs:
+  restart_service:
+    name: Restart the wk-app.service
+    runs-on: ubuntu-latest
+    steps:
+    - name: Restart the wk-app.service
+      uses: appleboy/ssh-action@v0.1.4
+      with:
+        host: ${{ secrets.OVH_DEBIAN_HOST }}
+        username: ${{ secrets.OVH_DEBIAN_USERNAME }}
+        password: ${{ secrets.OVH_DEBIAN_PASSWORD }}
+        port: ${{ secrets.OVH_DEBIAN_PORT }}
+        debug: true
+        script: |
+          sudo systemctl restart wk-app.service
