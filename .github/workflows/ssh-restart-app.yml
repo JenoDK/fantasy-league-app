@@ -1,17 +1,11 @@
-name: Get logs
-on:
-  workflow_dispatch:
-    inputs:
-      since:
-        description: 'Show logs since'
-        default: ''
-        type: string
+name: Restart wk-app
+on: workflow_dispatch
 jobs:
-  get_logs:
-    name: Get the logs of teh wk-app.service
+  restart_service:
+    name: Restart the wk-app.service
     runs-on: ubuntu-latest
     steps:
-    - name: Get the logs of teh wk-app.service
+    - name: Restart the wk-app.service
       uses: appleboy/ssh-action@v0.1.4
       with:
         host: ${{ secrets.OVH_DEBIAN_HOST }}
@@ -20,4 +14,4 @@ jobs:
         port: ${{ secrets.OVH_DEBIAN_PORT }}
         debug: true
         script: |
-          sudo journalctl -u wk-app.service --no-tail -f
+          sudo systemctl restart wk-app.service

@@ -1,0 +1,32 @@
+name: Get logs
+on:
+  workflow_dispatch:
+    inputs:
+      since:
+        description: 'Show logs since'
+        default: ''
+        type: string
+      full:
+        description: 'If false it will tail the logs, otehrwise show the full logs'
+        default: false
+        type: boolean
+jobs:
+  get_logs:
+    name: Get the logs of the wk-app.service
+    runs-on: ubuntu-latest
+    steps:
+    - name: Get the logs of the wk-app.service
+      uses: appleboy/ssh-action@v0.1.4
+      with:
+        host: ${{ secrets.OVH_DEBIAN_HOST }}
+        username: ${{ secrets.OVH_DEBIAN_USERNAME }}
+        password: ${{ secrets.OVH_DEBIAN_PASSWORD }}
+        port: ${{ secrets.OVH_DEBIAN_PORT }}
+        debug: true
+        script: |
+          echo ${{ inputs.since }}
+          if [ "${{ inputs.full }}" = true ]; then
+            sudo journalctl -u wk-app.service --no-tail
+          else
+            sudo journalctl -u wk-app.service -f
+          fi
