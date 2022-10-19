@@ -20,4 +20,5 @@ jobs:
         port: ${{ secrets.OVH_DEBIAN_PORT }}
         debug: true
         script: |
-          sudo journalctl -u wk-app.service --no-tail -f
+          echo ${{ inputs.since }}
+          sudo journalctl -u wk-app.service --no-tail
