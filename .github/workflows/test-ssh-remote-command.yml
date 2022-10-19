@@ -12,4 +12,7 @@ jobs:
         username: ${{ secrets.OVH_DEBIAN_USERNAME }}
         password: ${{ secrets.OVH_DEBIAN_PASSWORD }}
         port: ${{ secrets.OVH_DEBIAN_PORT }}
-        script: whoami
+        debug: true
+        script: |
+          whoami
+          ls -al
