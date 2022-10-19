@@ -1,0 +1,18 @@
+name: remote ssh command
+on:
+  push:
+    branches:
+      - main
+jobs:
+  who_am_i:
+    name: Who am I test
+    runs-on: ubuntu-latest
+    steps:
+    - name: executing remote ssh commands using password
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.OVH_DEBIAN_HOST }}
+        username: ${{ secrets.OVH_DEBIAN_USERNAME }}
+        password: ${{ secrets.OVH_DEBIAN_PASSWORD }}
+        port: ${{ secrets.OVH_DEBIAN_PORT }}
+        script: whoami
