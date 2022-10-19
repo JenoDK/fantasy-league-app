@@ -1,8 +1,5 @@
-name: remote ssh command
-on:
-  push:
-    branches:
-      - main
+name: remote ssh command test
+on: workflow_dispatch
 jobs:
   who_am_i:
     name: Who am I test

@@ -54,7 +54,7 @@ public class MainView extends AppLayout implements PageConfigurator {
 
 	@Override
 	public void configurePage(InitialPageSettings settings) {
-		settings.addLink("shortcut icon", "icons/images/favicon.ico");
-		settings.addFavIcon("icon", "icons/images/icon-192.png", "192x192");
+		settings.addLink("shortcut icon", "images/icons/favicon.ico");
+		settings.addFavIcon("icon", "images/icons/icon-192.png", "192x192");
 	}
 }
