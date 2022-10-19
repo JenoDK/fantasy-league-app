@@ -1,11 +1,17 @@
-name: remote ssh command test
-on: workflow_dispatch
+name: Get logs
+on:
+  workflow_dispatch:
+    inputs:
+      since:
+        description: 'Show logs since'
+        default: ''
+        type: string
 jobs:
-  who_am_i:
-    name: Who am I test
+  get_logs:
+    name: Get the logs of teh wk-app.service
     runs-on: ubuntu-latest
     steps:
-    - name: executing remote ssh commands using password
+    - name: Get the logs of teh wk-app.service
       uses: appleboy/ssh-action@v0.1.4
       with:
         host: ${{ secrets.OVH_DEBIAN_HOST }}
@@ -14,5 +20,4 @@ jobs:
         port: ${{ secrets.OVH_DEBIAN_PORT }}
         debug: true
         script: |
-          whoami
-          ls -al
+          sudo journalctl -u wk-app.service --no-tail -f
