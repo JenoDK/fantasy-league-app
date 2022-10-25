@@ -3,7 +3,9 @@ package com.jeno.fantasyleague.ui.main.views.league.singleleague.matches;
 import java.util.List;
 
 import com.google.common.collect.Lists;
+import com.jeno.fantasyleague.backend.data.service.leaguetemplates.FootballInitializer;
 import com.jeno.fantasyleague.backend.data.service.leaguetemplates.SoccerCupStages;
+import com.jeno.fantasyleague.backend.model.Contestant;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.data.provider.ListDataProvider;
@@ -52,6 +54,13 @@ public class MatchGrid extends Grid<MatchBean> {
 
 	public void clearFilter() {
 		matchListDataProvider.clearFilters();
+	}
+
+	public void filterOnGroupStage(FootballInitializer.Group group) {
+		matchListDataProvider.setFilter(matchBean -> {
+			Contestant team = matchBean.getHomeTeam() != null ? matchBean.getHomeTeam() : matchBean.getAwayTeam();
+			return SoccerCupStages.GROUP_PHASE.toString().equals(matchBean.getGame().getStage()) && group.getGroupName().equals(team.getContestant_group().getName());
+		});
 	}
 
 	public void setMatches(List<MatchBean> matches) {
