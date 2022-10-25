@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
 import com.jeno.fantasyleague.backend.data.service.leaguetemplates.SoccerCupStages;
+import com.jeno.fantasyleague.backend.data.service.leaguetemplates.fifaworld2022.FifaWorldCup2022Initializer;
 import com.jeno.fantasyleague.backend.model.Contestant;
 import com.jeno.fantasyleague.backend.model.ContestantWeight;
 import com.jeno.fantasyleague.backend.model.Game;
@@ -74,6 +75,13 @@ public class MatchTab extends LazyTabComponent {
 					MenuItem item = filterBar.addItem(Resources.getMessage(stage.getName()));
 					item.addClickListener(ignored -> matchGrid.filterOnStage(stage));
 					gridMenuItems.add(item);
+				});
+		MenuItem specificGroup = filterBar.addItem("Specific group");
+		gridMenuItems.add(specificGroup);
+		Arrays.stream(FifaWorldCup2022Initializer.groups())
+				.forEach(group -> {
+					MenuItem groupItem = specificGroup.getSubMenu().addItem(group.getGroupName());
+					groupItem.addClickListener(ignored -> matchGrid.filterOnGroupStage(group));
 				});
 		singleLeagueServiceprovider.predictionChanged(matchGrid.predictionChanged(), prediction -> {});
 		matchGrid.scoreChanged().subscribe(singleLeagueServiceprovider::updateGameScore);

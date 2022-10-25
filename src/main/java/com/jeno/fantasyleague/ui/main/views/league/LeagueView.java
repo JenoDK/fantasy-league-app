@@ -150,7 +150,9 @@ public class LeagueView {
 
 	protected void showLeagueGridLayout() {
 		layout.removeAll();
-		clickHandlerRegistration.remove();
+		if (clickHandlerRegistration != null) {
+			clickHandlerRegistration.remove();
+		}
 		constructLeagueGridLayout();
 		leagueGrid.getDataProvider().refreshAll();
 	}

@@ -6,6 +6,7 @@ import com.jeno.fantasyleague.ui.common.tabsheet.LazyTabComponent;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.jeno.fantasyleague.ui.main.views.league.gridlayout.LeagueBean;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.faq.FaqTab;
+import com.jeno.fantasyleague.ui.main.views.league.singleleague.groups.GroupsTab;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.leaguesettings.LeagueSettingsTab;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.matches.MatchTab;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.OverviewTab;
@@ -36,9 +37,10 @@ public class LeagueTabs extends CustomTabs {
 
 		LazyTab overview = createTab("Overview", () -> new OverviewTab(leagueBean.getLeague(), singleLeagueServiceprovider));
 		LazyTab matches = createTab("Matches", () -> new MatchTab(leagueBean.getLeague(), singleLeagueServiceprovider));
+		LazyTab groups = createTab("Groups", () -> new GroupsTab(leagueBean.getLeague(), singleLeagueServiceprovider));
 		LazyTab stocks = createTab("Stocks", () -> new StocksTab(leagueBean.getLeague(), singleLeagueServiceprovider));
 		LazyTab faq = createTab("FAQ", () -> new FaqTab(leagueBean.getLeague(), singleLeagueServiceprovider));
-		add(overview, matches, stocks, faq);
+		add(overview, matches, groups, stocks, faq);
 		if (singleLeagueServiceprovider.loggedInUserIsLeagueAdmin(leagueBean.getLeague())) {
 			LazyTab users = createTab("Users", () -> new UsersTab(leagueBean.getLeague(), singleLeagueServiceprovider));
 			LazyTab settings = createTab("Settings", () -> new LeagueSettingsTab(leagueBean.getLeague(), singleLeagueServiceprovider));

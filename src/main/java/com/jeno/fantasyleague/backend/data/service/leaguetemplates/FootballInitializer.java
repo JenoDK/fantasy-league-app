@@ -4,6 +4,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -140,7 +142,7 @@ public abstract class FootballInitializer {
 		contestant.setName(team.getName());
 		contestant.setIcon_path(team.getIconPath());
 		contestant.setLeague(league);
-		contestant.setPower_index(team.getUnibetScoreWinner());
+		contestant.setPower_index(team.getPowerIndex());
 		contestant.setContestant_group(groupsMap.get(team.getGroup()));
 		return contestant;
 	}
@@ -198,27 +200,40 @@ public abstract class FootballInitializer {
 
 		private final String name;
 		private final Group group;
-		private final Double unibetScoreWinner;
 		private final String iconPath;
-		private final Double unibetScoreTop4;
-		private final Double oddsToLeaveGroup;
+		private final Double oddsTop8;
+		private final Double oddsTop4;
+		private final Double oddsTop3;
+		private final Double oddsTop2;
+		private final Double oddsTop1;
+		private final Double powerIndex;
 
 		public Team(String name, Group group, Double unibetScoreWinner, String iconPath) {
 			this.name = name;
 			this.group = group;
-			this.oddsToLeaveGroup = null;
-			this.unibetScoreTop4 = null;
-			this.unibetScoreWinner = unibetScoreWinner;
+			this.oddsTop8 = null;
+			this.oddsTop4 = null;
+			this.oddsTop3 = null;
+			this.oddsTop2 = null;
+			this.oddsTop1 = unibetScoreWinner;
 			this.iconPath = iconPath;
+			this.powerIndex = null;
 		}
 
-		public Team(String name, Group group, Double oddsToLeaveGroup, Double unibetScoreTop4, Double unibetScoreWinner, String iconPath) {
+		public Team(String name, Group group, Double oddsTop8, Double oddsTop4, Double oddsTop3, Double oddsTop2, Double oddsTop1, String iconPath, Double powerIndex) {
 			this.name = name;
 			this.group = group;
-			this.oddsToLeaveGroup = oddsToLeaveGroup;
-			this.unibetScoreTop4 = unibetScoreTop4;
-			this.unibetScoreWinner = unibetScoreWinner;
+			this.oddsTop8 = oddsTop8;
+			this.oddsTop4 = oddsTop4;
+			this.oddsTop3 = oddsTop3;
+			this.oddsTop2 = oddsTop2;
+			this.oddsTop1 = oddsTop1;
 			this.iconPath = iconPath;
+			if (powerIndex == null) {
+				this.powerIndex = null;
+			} else {
+				this.powerIndex = powerIndex;
+			}
 		}
 
 		public String getName() {
@@ -229,26 +244,80 @@ public abstract class FootballInitializer {
 			return group;
 		}
 
-		public Double getOddsToLeaveGroup() {
-			return oddsToLeaveGroup;
+		public Double getOddsTop8() {
+			return oddsTop8;
 		}
 
-		public Double getUnibetScoreTop4() {
-			return unibetScoreTop4;
+		public Double getOddsTop4() {
+			return oddsTop4;
 		}
 
-		public Double getUnibetScoreWinner() {
-			return unibetScoreWinner;
+		public Double getOddsTop3() {
+			return oddsTop3;
+		}
+
+		public Double getOddsTop2() {
+			return oddsTop2;
+		}
+
+		public Double getOddsTop1() {
+			return oddsTop1;
+		}
+
+		public Double getPowerIndex() {
+			return powerIndex;
 		}
 
 		/**
 		 * Uses the unibet scores to calculate a power index ranging from 0 - 100 where 100 is the best.
 		 * @return the pwoer index
 		 */
-		public Double getPowerIndex(Double maxTop4Score, Double maxOutOfGroupsScore) {
-			Double maxCombined = maxTop4Score + maxOutOfGroupsScore;
-			Double combined = getUnibetScoreTop4() + getOddsToLeaveGroup();
-			return ((maxCombined - combined) / maxCombined) * 100;
+		public Double getPowerIndex(Double maxTop1, Double maxTop2, Double maxTop3, Double maxTop4, Double maxTop8, Double medianTop1, Double medianTop2, Double medianTop3, Double medianTop4, Double medianTop8, Double totalTop1, Double totalTop2, Double totalTop3, Double totalTop4, Double totalTop8) {
+//			double odds1Perc = (oddsTop1 / totalTop1) * 100;
+//			double odds2Perc = (oddsTop2 / totalTop2) * 100;
+//			double odds3Perc = (oddsTop3 / totalTop3) * 100;
+//			double odds4Perc = (oddsTop4 / totalTop4) * 100;
+//			double odds8Perc = (oddsTop8 / totalTop8) * 100;
+//
+//			double totalOddsPerc = (odds1Perc + odds2Perc + odds3Perc + odds4Perc + odds8Perc) / 5;
+
+//			Double oddsTop1Percentage = getSqrt(maxTop1, oddsTop1);
+//			Double oddsTop2Percentage = getSqrt(maxTop2, oddsTop2);
+//			Double oddsTop3Percentage = getSqrt(maxTop3, oddsTop3);
+//			Double oddsTop1Percentage = oddsTop1 * 100 / maxTop1;
+//			Double oddsTop2Percentage = oddsTop2 * 100 / maxTop2;
+//			Double oddsTop3Percentage = oddsTop3 * 100 / maxTop3;
+//			Double oddsTop4Percentage = oddsTop4 * 100 / maxTop4;
+			Double oddsTop8Percentage = oddsTop8 * 100 / maxTop8;
+//			boolean includeWinner = true;
+//			double percentageTotal;
+//			if (includeWinner) {
+//				percentageTotal = 100 - ((oddsTop1Percentage + oddsTop2Percentage + oddsTop3Percentage + oddsTop4Percentage + oddsTop8Percentage) / 5);
+//			} else {
+//				percentageTotal = 100 - ((oddsTop2Percentage + oddsTop3Percentage + oddsTop4Percentage + oddsTop8Percentage) / 4);
+//			}
+			BigDecimal wurtel = BigDecimal.valueOf(oddsTop1).sqrt(MathContext.DECIMAL32);
+			BigDecimal wurtel2 = BigDecimal.valueOf(oddsTop2).sqrt(MathContext.DECIMAL32);
+			BigDecimal wurtel3 = BigDecimal.valueOf(oddsTop3).sqrt(MathContext.DECIMAL32);
+			BigDecimal wurtel4 = BigDecimal.valueOf(oddsTop4).sqrt(MathContext.DECIMAL32);
+			BigDecimal wurtel8 = BigDecimal.valueOf(oddsTop8).sqrt(MathContext.DECIMAL32);
+
+			BigDecimal medianAvg = BigDecimal.valueOf(medianTop1 + medianTop2 + medianTop3 + medianTop4 + medianTop8).divide(BigDecimal.valueOf(5));
+
+			double logsken1 = Math.log(oddsTop1);
+			double logsken2 = Math.log(oddsTop2);
+			double logsken3 = Math.log(oddsTop3);
+			double logsken4 = Math.log(oddsTop4);
+			double logsken8 = Math.log(oddsTop8);
+			double logskenTot = logsken1 + logsken2 + logsken3 + logsken4 + logsken8;
+			double logskenTotSquared = BigDecimal.valueOf(logskenTot).pow(2).doubleValue();
+			double wurtelTot = 100 - wurtel.add(wurtel2).add(wurtel3).add(wurtel4).add(wurtel8).doubleValue();
+//			System.err.println(name + " -> " + BigDecimal.valueOf(logskenTot).pow(2));
+			return wurtelTot;
+		}
+
+		private double getSqrt(Double maxTop1, Double oddsTop1) {
+			return BigDecimal.valueOf(oddsTop1).sqrt(MathContext.DECIMAL32).doubleValue() * 100 / maxTop1;
 		}
 
 		public String getIconPath() {
