@@ -9,6 +9,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.NavigationTrigger;
+import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.router.RouterLayout;
@@ -16,6 +17,7 @@ import com.vaadin.flow.router.RouterLayout;
 @Tag("league-view")
 @Route(value = State.StateUrlConstants.LEAGUE, layout = MainView.class)
 @RouteAlias(value = State.StateUrlConstants.ROOT, layout = MainView.class)
+@PageTitle("League")
 public class LeagueModule extends VerticalLayout implements BeforeEnterObserver, RouterLayout {
 
 	private LeaguePresenter presenter;

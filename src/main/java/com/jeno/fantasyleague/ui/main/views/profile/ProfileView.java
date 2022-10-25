@@ -27,12 +27,14 @@ import com.vaadin.flow.data.binder.BindingValidationStatus;
 import com.vaadin.flow.data.validator.EmailValidator;
 import com.vaadin.flow.data.validator.StringLengthValidator;
 import com.vaadin.flow.data.value.ValueChangeMode;
+import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLayout;
 import com.vaadin.flow.server.StreamResource;
 
 @Tag("profile-view")
 @Route(value = State.StateUrlConstants.PROFILE, layout = MainView.class)
+@PageTitle("Profile")
 public class ProfileView extends VerticalLayout implements RouterLayout {
 
 	private final UserDao userDao;
