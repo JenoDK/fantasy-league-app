@@ -1,10 +1,12 @@
 package com.jeno.fantasyleague.backend.data.service.repo.user;
 
-import com.jeno.fantasyleague.backend.model.User;
-import org.springframework.data.jpa.domain.Specification;
+import java.util.Set;
 
 import javax.persistence.criteria.JoinType;
-import java.util.Set;
+
+import org.springframework.data.jpa.domain.Specification;
+
+import com.jeno.fantasyleague.backend.model.User;
 
 public class UserSpecifications {
 
@@ -17,7 +19,11 @@ public class UserSpecifications {
 	 * @return
 	 */
 	public static Specification<User> usernameEquals(String username) {
-		return (root, query, cb) -> cb.equal(root.get("username"), username);
+		return (root, query, cb) ->
+				cb.or(
+						cb.equal(root.get("username"), username),
+						cb.equal(root.get("email"), username)
+				);
 	}
 
 	/**

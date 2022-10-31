@@ -136,9 +136,11 @@ class ChatBox extends PolymerElement {
 
     sendMessage() {
         const textArea = this.root.getElementById("send-messages-textarea");
-        this.$server.sendMessage(textArea.value);
-        textArea.clear();
-        this.closeSmileyPicker();
+        if (textArea.value) {
+            this.$server.sendMessage(textArea.value);
+            textArea.clear();
+            this.closeSmileyPicker();
+        }
     }
 
     scrollToBottom() {

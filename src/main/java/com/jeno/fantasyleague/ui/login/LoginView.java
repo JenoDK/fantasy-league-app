@@ -44,7 +44,7 @@ public class LoginView extends VerticalLayout implements AfterNavigationObserver
 		i18n.setForm(new LoginI18n.Form());
 		i18n.getForm().setSubmit("Sign in");
 		i18n.getForm().setTitle("Sign in");
-		i18n.getForm().setUsername("Username");
+		i18n.getForm().setUsername("Username or email");
 		i18n.getForm().setPassword("Password");
 		loginForm = new LoginForm(i18n);
 		loginForm.setForgotPasswordButtonVisible(false);
