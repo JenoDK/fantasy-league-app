@@ -1,9 +1,13 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.groups;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.ArrayListMultimap;
@@ -11,6 +15,7 @@ import com.jeno.fantasyleague.backend.model.Contestant;
 import com.jeno.fantasyleague.backend.model.ContestantGroup;
 import com.jeno.fantasyleague.backend.model.Game;
 import com.jeno.fantasyleague.backend.model.League;
+import com.jeno.fantasyleague.backend.model.Prediction;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.html.H2;
@@ -50,12 +55,57 @@ public class GroupStandingsLayout extends VerticalLayout {
 			gamesPerContestant.put(game.getHome_team(), game);
 			gamesPerContestant.put(game.getAway_team(), game);
 		});
+		List<Game> games = new ArrayList<>();
+		games.addAll(gamesPerContestant.values());
+		Map<Long, Prediction> predictionPerGame = new HashMap<>();
+		for (Prediction prediction : singleLeagueService.getLoggedInUserPredictions(games)) {
+			predictionPerGame.put(prediction.getGame_fk(), prediction);
+		}
 		return gamesPerContestant.keySet().stream()
-				.map(contestant -> new GroupTeamBean(
-						contestant,
-						getPointsInGames(gamesPerContestant.get(contestant), contestant),
-						getGoalsInGames(gamesPerContestant.get(contestant), contestant)))
+				.map(contestant -> {
+					List<Game> gamesForContestant = gamesPerContestant.get(contestant);
+					Map<Long, Game> gamesToId = gamesForContestant.stream()
+							.collect(Collectors.toMap(Game::getId, Function.identity()));
+					List<Prediction> predictionsForContestant = gamesForContestant.stream()
+							.map(Game::getId)
+							.map(predictionPerGame::get)
+							.collect(Collectors.toList());
+					return new GroupTeamBean(
+							contestant,
+							getPointsInGames(gamesForContestant, contestant),
+							getGoalsInGames(gamesForContestant, contestant),
+							getPredictedGoals(predictionsForContestant, gamesToId, contestant),
+							getPredictedPoints(predictionsForContestant, contestant));
+				})
 				.collect(Collectors.toSet());
+	}
+
+	private Integer getPredictedPoints(List<Prediction> predictionsForContestant, Contestant contestant) {
+		return predictionsForContestant.stream()
+				.filter(prediction -> Objects.nonNull(prediction.getHome_team_score()) && Objects.nonNull(prediction.getAway_team_score()))
+				.mapToInt(prediction -> {
+					if (prediction.getWinner_fk() == null) {
+						return 1;
+					} else if (prediction.getWinner_fk().equals(contestant.getId())) {
+						return 3;
+					} else {
+						return 0;
+					}
+				})
+				.sum();
+	}
+
+	private Integer getPredictedGoals(List<Prediction> predictionsForContestant, Map<Long, Game> gamesToId, Contestant contestant) {
+		return predictionsForContestant.stream()
+				.mapToInt(prediction -> {
+					Game game = gamesToId.get(prediction.getGame_fk());
+					if (game.getHome_team_fk().equals(contestant.getId())) {
+						return Optional.ofNullable(prediction.getHome_team_score()).orElse(0);
+					} else {
+						return Optional.ofNullable(prediction.getAway_team_score()).orElse(0);
+					}
+				})
+				.sum();
 	}
 
 	private Integer getGoalsInGames(List<Game> games, Contestant contestant) {

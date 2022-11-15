@@ -20,16 +20,25 @@ public class GroupStandingsGrid extends CustomGrid<GroupTeamBean> {
 		addColumn(new ComponentRenderer<>(teamBean -> LayoutUtil.createTeamLayout(teamBean.getContestant())))
 				.setAutoWidth(true)
 				.setHeader(Resources.getMessage("team"))
-				.setId("stageColumn");
+				.setId("team");
 		Column<GroupTeamBean> pointsColumn = addColumn(GroupTeamBean::getPointsInGroup);
 		pointsColumn
 				.setAutoWidth(true)
 				.setHeader(Resources.getMessage("points"))
-				.setId("stageColumn");
+				.setId("points");
 		addColumn(GroupTeamBean::getGoalsInGroup)
 				.setAutoWidth(true)
 				.setHeader(Resources.getMessage("totalGoals"))
-				.setId("stageColumn");
-		sort(Lists.newArrayList(new GridSortOrder<>(pointsColumn, SortDirection.DESCENDING)));
+				.setId("totalGoals");
+		Column<GroupTeamBean> predictedPointsColumn = addColumn(GroupTeamBean::getPredictedPointsInGroup);
+		predictedPointsColumn
+				.setAutoWidth(true)
+				.setHeader("Predicted points")
+				.setId("predictedPoints");
+		addColumn(GroupTeamBean::getPredictedGoalsInGroup)
+				.setAutoWidth(true)
+				.setHeader("Predicted goals")
+				.setId("predictedGoals");
+		sort(Lists.newArrayList(new GridSortOrder<>(pointsColumn, SortDirection.DESCENDING), new GridSortOrder<>(predictedPointsColumn, SortDirection.DESCENDING)));
 	}
 }

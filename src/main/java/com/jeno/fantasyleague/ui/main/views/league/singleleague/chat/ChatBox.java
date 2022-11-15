@@ -17,6 +17,7 @@ import com.vaadin.flow.component.ClientCallable;
 import com.vaadin.flow.component.DetachEvent;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.UIDetachedException;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -87,14 +88,22 @@ public class ChatBox extends PolymerTemplate<TemplateModel> {
 	protected void onAttach(AttachEvent attachEvent) {
 		UI ui = attachEvent.getUI();
 		broadcasterRegistration = ChatBroadcaster.register(league.getId(), newMessage -> {
-			ui.access(() -> {
-				addMessage(newMessage);
-			});
+			try {
+				ui.access(() -> {
+					addMessage(newMessage);
+				});
+			} catch (UIDetachedException e) {
+				removeChatSubscription();
+			}
 		});
 	}
 
 	@Override
 	protected void onDetach(DetachEvent detachEvent) {
+		removeChatSubscription();
+	}
+
+	private void removeChatSubscription() {
 		broadcasterRegistration.remove();
 		broadcasterRegistration = null;
 	}
