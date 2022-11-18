@@ -3,7 +3,6 @@ package com.jeno.fantasyleague.ui.main.views.league.singleleague.matches;
 import java.util.Objects;
 import java.util.Optional;
 
-import com.jeno.fantasyleague.backend.data.service.leaguetemplates.SoccerCupStages;
 import com.jeno.fantasyleague.backend.model.Contestant;
 import com.jeno.fantasyleague.backend.model.Game;
 import com.jeno.fantasyleague.backend.model.League;

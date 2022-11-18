@@ -1,17 +1,15 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.overview;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Objects;
 import java.util.Optional;
 
-import com.jeno.fantasyleague.backend.data.service.leaguetemplates.SoccerCupStages;
 import com.jeno.fantasyleague.backend.model.Contestant;
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.Prediction;
 import com.jeno.fantasyleague.backend.model.User;
 import com.jeno.fantasyleague.resources.Resources;
+import com.jeno.fantasyleague.util.DateUtil;
 import com.jeno.fantasyleague.util.LayoutUtil;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.Label;
@@ -26,7 +24,7 @@ public class OverviewUtil {
 			return false;
 		}
 
-		return LocalDateTime.now(ZoneId.of("Europe/Brussels")).isBefore(prediction.getGame().getGameDateTime());
+		return DateUtil.nowIsBeforeUtcDateTime(prediction.getGame().getGameDateTime());
 	}
 
 	public static String getPredictionColumn(

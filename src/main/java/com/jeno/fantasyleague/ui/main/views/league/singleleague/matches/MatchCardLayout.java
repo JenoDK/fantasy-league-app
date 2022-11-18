@@ -1,7 +1,5 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.matches;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -154,7 +152,7 @@ public class MatchCardLayout extends Div {
 		matchWrapper.setId("match-wrapper");
 		Game game = match.getGame();
 		boolean isEightFinalAndCanChooseContestant = SoccerCupStages.EIGHTH_FINALS.toString().equals(game.getStage()) &&
-				LocalDateTime.now(ZoneId.of("Europe/Brussels")).isBefore(game.getGameDateTime()) &&
+				DateUtil.nowIsBeforeUtcDateTime(game.getGameDateTime()) &&
 				loggedInUserIsAdmin &&
 				canAdjustContestants;
 		HorizontalLayout left;
@@ -288,7 +286,7 @@ public class MatchCardLayout extends Div {
 	}
 
 	private boolean nowIsBeforeMatch() {
-		return LocalDateTime.now(ZoneId.of("Europe/Brussels")).isBefore(match.getGame().getGameDateTime());
+		return DateUtil.nowIsBeforeUtcDateTime(match.getGame().getGameDateTime());
 	}
 
 	private String getScoreWithWinnerText() {

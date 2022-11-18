@@ -1,7 +1,5 @@
 package com.jeno.fantasyleague.ui.main.views.league;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -46,6 +44,7 @@ import com.jeno.fantasyleague.backend.model.enums.NotificationType;
 import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.security.SecurityHolder;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.matches.MatchPredictionBean;
+import com.jeno.fantasyleague.util.DateUtil;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 
@@ -102,7 +101,7 @@ public class SingleLeagueServiceProvider {
 		predictionChanged
 				.subscribe(bean -> {
 					Prediction prediction = bean.setPredictionScoresAndGetModelItem();
-					if (LocalDateTime.now(ZoneId.of("Europe/Brussels")).isBefore(prediction.getGame().getGameDateTime())) {
+					if (DateUtil.nowIsBeforeUtcDateTime(prediction.getGame().getGameDateTime())) {
 						getPredictionRepository().saveAndFlush(prediction);
 						postConsume.accept(prediction);
 					} else {

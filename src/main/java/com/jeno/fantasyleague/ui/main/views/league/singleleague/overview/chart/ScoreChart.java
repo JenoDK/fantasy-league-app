@@ -9,8 +9,8 @@ import static j2html.TagCreator.tbody;
 import static j2html.TagCreator.td;
 import static j2html.TagCreator.tr;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.Instant;
+import java.time.ZoneOffset;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -260,9 +260,9 @@ public class ScoreChart extends PolymerTemplate<ScoreChartModel> {
 	}
 
 	public void showLineChart(double showTop) {
-		LocalDateTime now = LocalDateTime.now(ZoneId.of("Europe/Brussels"));
+		Instant now = Instant.now();
 		List<Game> gamesSorted = getGamesSorted().stream()
-				.filter(g -> g.getGameDateTime().isBefore(now))
+				.filter(g -> g.getGameDateTime().toInstant(ZoneOffset.UTC).isBefore(now))
 				.collect(Collectors.toList());
 		List<UserScoreBean> usersToShow = userScoreBeans.stream()
 				.filter(b -> b.getPosition() <= showTop || userIsLoggedInUser(user, b))

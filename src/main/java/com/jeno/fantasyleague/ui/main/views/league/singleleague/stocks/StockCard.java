@@ -1,8 +1,6 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.stocks;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.function.Function;
 
 import com.jeno.fantasyleague.backend.model.League;
@@ -10,6 +8,7 @@ import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.ui.common.label.StatusLabel;
 import com.jeno.fantasyleague.ui.common.window.PopupWindow;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.matches.MatchBindingModel;
+import com.jeno.fantasyleague.util.DateUtil;
 import com.jeno.fantasyleague.util.DecimalUtil;
 import com.jeno.fantasyleague.util.LayoutUtil;
 import com.vaadin.flow.component.ClientCallable;
@@ -18,11 +17,9 @@ import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.H5;
 import com.vaadin.flow.component.html.Label;
-import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -70,7 +67,7 @@ public class StockCard extends PolymerTemplate<MatchBindingModel> {
 	private void initLayout() {
 		teamLayout.add(LayoutUtil.createTeamLayout(bean.getContestant()));
 		buyStocks.setText(Resources.getMessage("buyStocks"));
-		buyStocks.setEnabled(LocalDateTime.now(ZoneId.of("Europe/Brussels")).isBefore(league.getLeague_starting_date()));
+		buyStocks.setEnabled(DateUtil.nowIsBeforeUtcDateTime(league.getLeague_starting_date()));
 		pricePerStock.setText(Resources.getMessage("price", DecimalUtil.getTwoDecimalsThousandSeperator(bean.getShareCost())));
 		updateStocksPurchasedLabel();
 	}
@@ -99,7 +96,7 @@ public class StockCard extends PolymerTemplate<MatchBindingModel> {
 		amountLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
 		amountLayout.add(LayoutUtil.createTeamLayout(true, bean.getContestant(), ""));
 
-		if (LocalDateTime.now(ZoneId.of("Europe/Brussels")).isBefore(league.getLeague_starting_date())) {
+		if (DateUtil.nowIsBeforeUtcDateTime(league.getLeague_starting_date())) {
 			StatusLabel statusLabel = new StatusLabel();
 			statusLabel.setVisible(false);
 

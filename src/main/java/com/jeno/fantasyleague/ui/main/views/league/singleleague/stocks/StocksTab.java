@@ -81,7 +81,7 @@ public class StocksTab extends LazyTabComponent {
 				return ValidationResult.error("You cannot purchase more than 10 stocks per team.");
 			}
 			boolean exceedsLimit = clientSideWeightToDistribute.compareTo(BigDecimal.ZERO) < 0;
-			boolean isInTime = LocalDateTime.now(ZoneId.of("Europe/Brussels")).isBefore(league.getLeague_starting_date());
+			boolean isInTime = DateUtil.nowIsBeforeUtcDateTime(league.getLeague_starting_date());
 			if (!isInTime) {
 				return ValidationResult.error(Resources.getMessage("cannotPurchaseStock", DateUtil.DATE_TIME_FORMATTER.format(league.getLeague_starting_date())));
 			} else if (exceedsLimit) {
