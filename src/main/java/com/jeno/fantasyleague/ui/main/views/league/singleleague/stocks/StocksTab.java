@@ -3,8 +3,6 @@ package com.jeno.fantasyleague.ui.main.views.league.singleleague.stocks;
 import static com.jeno.fantasyleague.ui.main.views.league.singleleague.stocks.StocksBean.COSMETICAL_PRICE_MODIFIER;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -83,7 +81,7 @@ public class StocksTab extends LazyTabComponent {
 			boolean exceedsLimit = clientSideWeightToDistribute.compareTo(BigDecimal.ZERO) < 0;
 			boolean isInTime = DateUtil.nowIsBeforeUtcDateTime(league.getLeague_starting_date());
 			if (!isInTime) {
-				return ValidationResult.error(Resources.getMessage("cannotPurchaseStock", DateUtil.DATE_TIME_FORMATTER.format(league.getLeague_starting_date())));
+				return ValidationResult.error(Resources.getMessage("cannotPurchaseStock", DateUtil.formatInUserTimezone(league.getLeague_starting_date())));
 			} else if (exceedsLimit) {
 				return ValidationResult.error(Resources.getMessage("cannotExceedBalanceLimit"));
 			}
@@ -101,7 +99,7 @@ public class StocksTab extends LazyTabComponent {
 						updateBalanceLabel();
 					});
 
-		Label infoLabel = new Label("Changes can be made until " + DateUtil.DATE_TIME_FORMATTER.format(league.getLeague_starting_date()));
+		Label infoLabel = new Label("Changes can be made until " + DateUtil.formatInUserTimezone(league.getLeague_starting_date()));
 
 		add(balanceLabel);
 		add(infoLabel);

@@ -113,7 +113,7 @@ public class ChatBox extends PolymerTemplate<TemplateModel> {
 		ChatMessageBlock block = new ChatMessageBlock(new ChatMessageBean(
 				newMessage.getUser().getUsername(),
 				newMessage.getMessage(),
-				DateUtil.DATE_TIME_FORMATTER.format(newMessage.getTimeSent()),
+				DateUtil.formatInUserTimezone(newMessage.getTimeSent()),
 				isFromLoggedInUser
 		), newMessage.getUser());
 		messagesLayout.add(block);
@@ -173,7 +173,7 @@ public class ChatBox extends PolymerTemplate<TemplateModel> {
 					return new ChatMessageBlock(new ChatMessageBean(
 							user.getUsername(),
 							leagueMessage.getMessage(),
-							DateUtil.DATE_TIME_FORMATTER.format(LocalDateTime.ofInstant(leagueMessage.getCreatedAt(), ZoneId.systemDefault())),
+							DateUtil.formatInUserTimezone(LocalDateTime.ofInstant(leagueMessage.getCreatedAt(), ZoneId.systemDefault())),
 							isFromLoggedInUser
 					), user);
 				})

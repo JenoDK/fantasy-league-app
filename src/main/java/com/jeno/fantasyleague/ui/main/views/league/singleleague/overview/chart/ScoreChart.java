@@ -10,6 +10,7 @@ import static j2html.TagCreator.td;
 import static j2html.TagCreator.tr;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Comparator;
 import java.util.List;
@@ -276,7 +277,7 @@ public class ScoreChart extends PolymerTemplate<ScoreChartModel> {
 							for (int i = 0; i < gamesSorted.size(); i++) {
 								List<Game> allGamesUpUntilNow = gamesSorted.subList(0, i + 1);
 								String date = allGamesUpUntilNow.stream().reduce((one, two) -> two)
-										.map(lastGame -> DateUtil.DATE_DAY_FORMATTER.format(lastGame.getGameDateTime()))
+										.map(lastGame -> DateUtil.formatInUserTimezone(lastGame.getGameDateTime(), DateUtil.DATE_DAY_FORMATTER))
 										.orElse("NA");
 								List<Double> scores = usersToShow.stream()
 										.map(u -> u.getScoreForGames(allGamesUpUntilNow))
@@ -292,7 +293,7 @@ public class ScoreChart extends PolymerTemplate<ScoreChartModel> {
 										.sorted(Comparator.comparing(Game::getGameDateTime))
 										.collect(Collectors.toList());
 								String date = gamesPartitioned.get(i).stream().reduce((one, two) -> two)
-										.map(lastGame -> DateUtil.DATE_DAY_FORMATTER.format(lastGame.getGameDateTime()))
+										.map(lastGame -> DateUtil.formatInUserTimezone(lastGame.getGameDateTime(), DateUtil.DATE_DAY_FORMATTER))
 										.orElse("NA");
 								List<Double> scores = usersToShow.stream()
 										.map(u -> u.getScoreForGames(allGamesUpUntilNow))
@@ -302,7 +303,7 @@ public class ScoreChart extends PolymerTemplate<ScoreChartModel> {
 						}
 					});
 		} else {
-			scoresPerDate.add(new ScoreChartDataPerDate(DateUtil.DATE_DAY_FORMATTER.format(now), usersToShow.stream().map(ignored -> 0d).collect(Collectors.toList())));
+			scoresPerDate.add(new ScoreChartDataPerDate(DateUtil.formatInUserTimezone(LocalDateTime.now(), DateUtil.DATE_DAY_FORMATTER), usersToShow.stream().map(ignored -> 0d).collect(Collectors.toList())));
 		}
 		getModel().setScoresPerDate(scoresPerDate);
 		List<String> headers = usersToShow.stream()

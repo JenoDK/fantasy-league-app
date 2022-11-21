@@ -1,7 +1,6 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.leaguesettings;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -9,10 +8,8 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.ArrayListMultimap;
-import com.jeno.fantasyleague.backend.data.service.leaguetemplates.SoccerCupStages;
 import com.jeno.fantasyleague.backend.model.ContestantWeight;
 import com.jeno.fantasyleague.backend.model.League;
-import com.jeno.fantasyleague.backend.model.LeagueSetting;
 import com.jeno.fantasyleague.backend.model.LeagueUser;
 import com.jeno.fantasyleague.backend.model.User;
 import com.jeno.fantasyleague.resources.Resources;
@@ -22,14 +19,11 @@ import com.jeno.fantasyleague.ui.common.tabsheet.LazyTabComponent;
 import com.jeno.fantasyleague.ui.common.window.PopupWindow;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.jeno.fantasyleague.util.DateUtil;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.value.ValueChangeMode;
 
 public class LeagueSettingsTab extends LazyTabComponent {
 
@@ -88,11 +82,14 @@ public class LeagueSettingsTab extends LazyTabComponent {
 		});
 		add(delete);
 
-		LocalDateTime now = LocalDateTime.now(ZoneId.of("Europe/Brussels"));
-
 		Label currentServerTime = new Label();
-		currentServerTime.setText("Current date time: " + DateUtil.DATE_TIME_FORMATTER.format(now));
+		LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
+		currentServerTime.setText("Current date time in UTC: " + DateUtil.DATE_TIME_FORMATTER.format(now));
 		add(currentServerTime);
+
+		Label currentDateTimeInBrowserTimezone = new Label();
+		currentDateTimeInBrowserTimezone.setText("Current date time in browser timezone: " + DateUtil.formatInUserTimezone(LocalDateTime.now()));
+		add(currentDateTimeInBrowserTimezone);
 
 		String diffHours = "Hours left: " + ChronoUnit.HOURS.between(now, league.getLeague_starting_date());
 		String minLeftS = "Minutes left: " + ChronoUnit.MINUTES.between(now, league.getLeague_starting_date());

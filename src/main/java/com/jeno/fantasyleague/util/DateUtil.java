@@ -7,14 +7,14 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
-import java.util.concurrent.atomic.AtomicInteger;
 
-import com.vaadin.flow.component.UI;
+import com.vaadin.flow.server.VaadinSession;
 
 public class DateUtil {
 
-	public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm").withZone(ZoneOffset.UTC);
+	public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 	public static final DateTimeFormatter DATE_DAY_FORMATTER = DateTimeFormatter.ofPattern("dd/MM");
+	public static final String TIMEZONE_OFFSET_ATTRIBUTE = "timezoneOffset";
 
 	private DateUtil() {
 	}
@@ -34,18 +34,19 @@ public class DateUtil {
 		return nowInUtc.isBefore(localDateTime.toInstant(ZoneOffset.UTC));
 	}
 
-	public static String toLocalDateTime(LocalDateTime localDateTime) {
-		AtomicInteger offsetInSeconds = new AtomicInteger(0);
-		UI currentUI = UI.getCurrent();
-		if (currentUI != null && currentUI.getPage() != null) {
-			currentUI.getPage().retrieveExtendedClientDetails(extendedClientDetails -> {
-				offsetInSeconds.set(extendedClientDetails.getRawTimezoneOffset() / 1000);
-			});
+	public static String formatInUserTimezone(LocalDateTime localDateTime) {
+		return formatInUserTimezone(localDateTime, DATE_TIME_FORMATTER);
+	}
+
+	public static String formatInUserTimezone(LocalDateTime localDateTime, DateTimeFormatter dateTimeFormatter) {
+		VaadinSession currentVaadinSession = VaadinSession.getCurrent();
+		if (currentVaadinSession != null && currentVaadinSession.getAttribute(TIMEZONE_OFFSET_ATTRIBUTE) != null) {
+			Instant asInstant = Instant.ofEpochSecond(localDateTime.toEpochSecond(ZoneOffset.UTC));
+			int timezoneOffsetInSeconds = (int) currentVaadinSession.getAttribute(TIMEZONE_OFFSET_ATTRIBUTE);
+			return dateTimeFormatter.format(asInstant.atOffset(ZoneOffset.ofTotalSeconds(timezoneOffsetInSeconds)));
+		} else {
+			return dateTimeFormatter.format(localDateTime);
 		}
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-		formatter.withZone(ZoneId.of("Europe/Brussels"));
-		ZonedDateTime dateTimeInMyZone = ZonedDateTime.of(localDateTime, ZoneOffset.ofTotalSeconds(offsetInSeconds.get()));
-		return formatter.format(localDateTime);
 	}
 
 }

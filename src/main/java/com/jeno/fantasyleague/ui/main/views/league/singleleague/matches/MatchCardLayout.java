@@ -265,7 +265,7 @@ public class MatchCardLayout extends Div {
 	}
 
 	private Div createInfoWrapper() {
-		H4 date = new H4(DateUtil.DATE_TIME_FORMATTER.format(match.getGame().getGameDateTime()));
+		H4 date = new H4(DateUtil.formatInUserTimezone(match.getGame().getGameDateTime()));
 		date.addClassName("left");
 		H4 stage = new H4(SoccerCupStages.getLeagueStageTitle(match.getGame(), match.getHomeTeam() != null ? match.getHomeTeam() : match.getAwayTeam()));
 		stage.addClassName("middle");

@@ -5,11 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.ui.common.OfflineBanner;
 import com.jeno.fantasyleague.ui.exception.AccessDeniedException;
+import com.jeno.fantasyleague.util.DateUtil;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.server.ServiceInitEvent;
 import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.server.VaadinServiceInitListener;
+import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 
 /**
@@ -33,6 +35,9 @@ public class ConfigureUIServiceInitListener implements VaadinServiceInitListener
 			ui.addBeforeEnterListener(this::beforeEnter);
 			Resources.set(resources);
 			securityHolder.loadUser(VaadinRequest.getCurrent());
+			ui.getPage().retrieveExtendedClientDetails(extendedClientDetails -> {
+				VaadinSession.getCurrent().setAttribute(DateUtil.TIMEZONE_OFFSET_ATTRIBUTE, extendedClientDetails.getRawTimezoneOffset() / 1000);
+			});
 		});
 	}
 

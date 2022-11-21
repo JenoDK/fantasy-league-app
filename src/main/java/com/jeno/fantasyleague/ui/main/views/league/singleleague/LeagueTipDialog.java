@@ -127,7 +127,7 @@ public class LeagueTipDialog extends VerticalLayout {
 	private void changeStage(Label caption, HtmlLabel infoLabel, LeagueUser.HelpStage nextStage) {
 		String infoText;
 		if (LeagueUser.HelpStage.FILL_PREDICTIONS.equals(nextStage)) {
-			infoText = Resources.getMessage(nextStage.getResourceKey(), DateUtil.DATE_TIME_FORMATTER.format(leagueBean.getLeague().getLeague_starting_date()));
+			infoText = Resources.getMessage(nextStage.getResourceKey(), DateUtil.formatInUserTimezone(leagueBean.getLeague().getLeague_starting_date()));
 		} else {
 			infoText = Resources.getMessage(nextStage.getResourceKey());
 		}

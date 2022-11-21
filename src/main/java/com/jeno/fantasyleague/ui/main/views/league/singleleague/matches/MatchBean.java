@@ -122,7 +122,7 @@ public class MatchBean {
 	}
 
 	public String getPredictionHiddenUntil() {
-		return DateUtil.DATE_TIME_FORMATTER.format(prediction.getGame().getGameDateTime());
+		return DateUtil.formatInUserTimezone(prediction.getGame().getGameDateTime());
 	}
 
 	public BehaviorSubject<Contestant> getHomeContestantChanged() {

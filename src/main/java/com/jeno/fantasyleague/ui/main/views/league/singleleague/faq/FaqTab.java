@@ -42,7 +42,7 @@ public class FaqTab extends LazyTabComponent {
 				getHowToPlayComponent());
 		addQuestion(
 				Resources.getMessage("faq.question.fillInPredictions"),
-				Resources.getMessage("faq.answer.fillInPredictions", DateUtil.DATE_TIME_FORMATTER.format(league.getLeague_starting_date())));
+				Resources.getMessage("faq.answer.fillInPredictions", DateUtil.formatInUserTimezone(league.getLeague_starting_date())));
 		addQuestion(
 				Resources.getMessage("faq.question.scoreCalculation"),
 				Resources.getMessage("faq.answer.scoreCalculation"),

@@ -15,7 +15,7 @@ public class MatchCardBean {
 	}
 
 	public String getDate() {
-		return DateUtil.DATE_TIME_FORMATTER.format(getGame().getGameDateTime());
+		return DateUtil.formatInUserTimezone(getGame().getGameDateTime());
 	}
 
 	public String getPlace() {
