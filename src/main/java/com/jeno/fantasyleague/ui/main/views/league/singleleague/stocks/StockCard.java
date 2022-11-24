@@ -39,6 +39,7 @@ public class StockCard extends PolymerTemplate<MatchBindingModel> {
 	private final BehaviorSubject<StocksBean> stocksChanged;
 	private final League league;
 	private final Function<StocksBean, ValidationResult> validateStockChange;
+	private final boolean forAdminModule;
 
 	@Id("teamLayout")
 	private Div teamLayout;
@@ -55,11 +56,12 @@ public class StockCard extends PolymerTemplate<MatchBindingModel> {
 	@Id("stocksLeft")
 	private H5 stocksLeft;
 
-	public StockCard(League league, StocksBean bean, BehaviorSubject<StocksBean> stocksChanged, Function<StocksBean, ValidationResult> validateStockChange) {
+	public StockCard(League league, StocksBean bean, BehaviorSubject<StocksBean> stocksChanged, Function<StocksBean, ValidationResult> validateStockChange, boolean forAdminModule) {
 		this.league = league;
 		this.bean = bean;
 		this.stocksChanged = stocksChanged;
 		this.validateStockChange = validateStockChange;
+		this.forAdminModule = forAdminModule;
 
 		initLayout();
 	}
@@ -67,7 +69,7 @@ public class StockCard extends PolymerTemplate<MatchBindingModel> {
 	private void initLayout() {
 		teamLayout.add(LayoutUtil.createTeamLayout(bean.getContestant()));
 		buyStocks.setText(Resources.getMessage("buyStocks"));
-		buyStocks.setEnabled(DateUtil.nowIsBeforeUtcDateTime(league.getLeague_starting_date()));
+		buyStocks.setEnabled(DateUtil.nowIsBeforeUtcDateTime(league.getLeague_starting_date()) || forAdminModule);
 		pricePerStock.setText(Resources.getMessage("price", DecimalUtil.getTwoDecimalsThousandSeperator(bean.getShareCost())));
 		updateStocksPurchasedLabel();
 	}
@@ -96,7 +98,7 @@ public class StockCard extends PolymerTemplate<MatchBindingModel> {
 		amountLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
 		amountLayout.add(LayoutUtil.createTeamLayout(true, bean.getContestant(), ""));
 
-		if (DateUtil.nowIsBeforeUtcDateTime(league.getLeague_starting_date())) {
+		if (DateUtil.nowIsBeforeUtcDateTime(league.getLeague_starting_date()) || forAdminModule) {
 			StatusLabel statusLabel = new StatusLabel();
 			statusLabel.setVisible(false);
 

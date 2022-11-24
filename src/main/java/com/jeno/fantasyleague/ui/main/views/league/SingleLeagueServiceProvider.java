@@ -211,7 +211,11 @@ public class SingleLeagueServiceProvider {
 	}
 
 	public List<ContestantWeight> getContestantWeights(League league) {
-		return contestantWeightRepository.findByUserAndLeagueAndJoinContestant(securityHolder.getUser(), league);
+		return getContestantWeights(league, securityHolder.getUser());
+	}
+
+	public List<ContestantWeight> getContestantWeights(League league, User user) {
+		return contestantWeightRepository.findByUserAndLeagueAndJoinContestant(user, league);
 	}
 
 	public User getLoggedInUser() {

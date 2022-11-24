@@ -10,6 +10,7 @@ import java.util.stream.Stream;
 
 import com.jeno.fantasyleague.backend.model.ContestantWeight;
 import com.jeno.fantasyleague.backend.model.League;
+import com.jeno.fantasyleague.backend.model.User;
 import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.ui.common.label.HtmlLabel;
 import com.jeno.fantasyleague.ui.common.label.StatusLabel;
@@ -24,6 +25,8 @@ import com.vaadin.flow.data.provider.DataProvider;
 
 public class StocksTab extends LazyTabComponent {
 
+	private final boolean forAdminModule;
+	private final User user;
 	private League league;
 	private SingleLeagueServiceProvider singleLeagueServiceprovider;
 	private StocksGrid stocksGrid;
@@ -32,9 +35,14 @@ public class StocksTab extends LazyTabComponent {
 	private List<StocksBean> teamWeights;
 
 	public StocksTab(League league, SingleLeagueServiceProvider singleLeagueServiceprovider) {
+		this(league, singleLeagueServiceprovider, false, null);
+	}
+	public StocksTab(League league, SingleLeagueServiceProvider singleLeagueServiceprovider, boolean forAdminModule, User user) {
 		super();
 		this.singleLeagueServiceprovider = singleLeagueServiceprovider;
 		this.league = league;
+		this.forAdminModule = forAdminModule;
+		this.user = user;
 
 		setMargin(false);
 		setPadding(false);
@@ -42,7 +50,7 @@ public class StocksTab extends LazyTabComponent {
 		setAlignItems(Alignment.CENTER);
 
 		fetchAndSetTeamWeights();
-		stocksGrid = new StocksGrid(league, DataProvider.fromStream(teamWeights.stream()), this::validateStockChange);
+		stocksGrid = new StocksGrid(league, DataProvider.fromStream(teamWeights.stream()), this::validateStockChange, forAdminModule);
 
 		initRightSide(league, singleLeagueServiceprovider);
 		add(stocksGrid);
@@ -53,15 +61,22 @@ public class StocksTab extends LazyTabComponent {
 	}
 
 	public void fetchAndSetTeamWeights() {
-		teamWeights = singleLeagueServiceprovider.getContestantWeights(league).stream()
+		teamWeights = getContestantWeights().stream()
 				.map(StocksBean::new)
-//				.sorted(Comparator.comparingInt(StocksBean::getStocksPurchased).reversed())
 				.sorted(Comparator.comparingDouble(StocksBean::getPowerIndex).reversed())
 				.collect(Collectors.toList());
 	}
 
+	private List<ContestantWeight> getContestantWeights() {
+		if (forAdminModule) {
+			return singleLeagueServiceprovider.getContestantWeights(league, user);
+		} else {
+			return singleLeagueServiceprovider.getContestantWeights(league);
+		}
+	}
+
 	public ValidationResult validateStockChange(StocksBean bean) {
-		List<ContestantWeight> serversideStream = singleLeagueServiceprovider.getContestantWeights(league);
+		List<ContestantWeight> serversideStream = getContestantWeights();
 		Stream<StocksBean> streamWithBeanReplaced = serversideStream.stream()
 				.map(contestantWeight -> {
 					if (bean.getContestantWeight().getId().equals(contestantWeight.getId())) {
@@ -79,7 +94,7 @@ public class StocksTab extends LazyTabComponent {
 				return ValidationResult.error("You cannot purchase more than 10 stocks per team.");
 			}
 			boolean exceedsLimit = clientSideWeightToDistribute.compareTo(BigDecimal.ZERO) < 0;
-			boolean isInTime = DateUtil.nowIsBeforeUtcDateTime(league.getLeague_starting_date());
+			boolean isInTime = DateUtil.nowIsBeforeUtcDateTime(league.getLeague_starting_date()) || forAdminModule;
 			if (!isInTime) {
 				return ValidationResult.error(Resources.getMessage("cannotPurchaseStock", DateUtil.formatInUserTimezone(league.getLeague_starting_date())));
 			} else if (exceedsLimit) {

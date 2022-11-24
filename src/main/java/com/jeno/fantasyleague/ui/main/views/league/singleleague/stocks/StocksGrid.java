@@ -16,17 +16,17 @@ public class StocksGrid extends Grid<StocksBean> {
 
 	private final BehaviorSubject<StocksBean> stockChanged = BehaviorSubject.create();
 
-	public StocksGrid(League league, ListDataProvider<StocksBean> dataProvider, Function<StocksBean, ValidationResult> validateStockChange) {
+	public StocksGrid(League league, ListDataProvider<StocksBean> dataProvider, Function<StocksBean, ValidationResult> validateStockChange, boolean forAdminModule) {
 		super();
 		setDataProvider(dataProvider);
-		initGrid(league, validateStockChange);
+		initGrid(league, validateStockChange, forAdminModule);
 	}
 
-	private void initGrid(League league, Function<StocksBean, ValidationResult> validateStockChange) {
+	private void initGrid(League league, Function<StocksBean, ValidationResult> validateStockChange, boolean forAdminModule) {
 		setSelectionMode(SelectionMode.NONE);
 		setHeightByRows(true);
 
-		addColumn(new ComponentRenderer<>(b -> new StockCard(league, b, stockChanged, validateStockChange)));
+		addColumn(new ComponentRenderer<>(b -> new StockCard(league, b, stockChanged, validateStockChange, forAdminModule)));
 		addThemeNames("card-grid", "no-row-borders");
 		removeThemeVariants(GridVariant.LUMO_ROW_STRIPES);
 		getStyle().set("border", "none");

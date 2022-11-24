@@ -22,9 +22,6 @@ public class AdminPresenter {
 		User user = securityHolder.getUser();
 		module.removeAll();
 		module.add(view.getLayout(model.getSingleLeagueForLoggedInUser(user)));
-		view.scoreChanged().subscribe(model::updateGameScoresGlobally);
-//		view.newLeague().subscribe(league -> view.addLeague(model.addLeague(league, user)));
-//		view.leagueAccepted().subscribe(ignored -> view.setLeagues(model.loadLeaguesForUser(user)));
 	}
 
 }
