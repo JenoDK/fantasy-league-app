@@ -52,7 +52,6 @@ public class AdminMatchesTab extends LazyTabComponent {
 			matchGrid.setMatches(getMatches(optionalLeague.get()));
 			matchGrid.scoreChanged().subscribe(this::updateGameScoresGlobally);
 			layout.add(matchGrid);
-			Observable<MatchPredictionBean> matchPredictionBeanObservable = matchGrid.scoreChanged();
 		} else {
 			layout.add(new Label("Admin user has not joined a league yet"));
 		}

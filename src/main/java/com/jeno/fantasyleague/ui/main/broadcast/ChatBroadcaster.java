@@ -11,8 +11,7 @@ import com.vaadin.flow.shared.Registration;
 
 public class ChatBroadcaster implements Serializable {
 
-	static ExecutorService executorService =
-			Executors.newSingleThreadExecutor();
+	static ExecutorService executorService = Executors.newSingleThreadExecutor();
 
 	private static ArrayListMultimap<Long, Consumer<ChatMessage>> listeners = ArrayListMultimap.create();
 
@@ -27,11 +26,9 @@ public class ChatBroadcaster implements Serializable {
 		};
 	}
 
-	public static synchronized void unregister(Long userId, Consumer<ChatMessage> listener) {
-		listeners.remove(userId, listener);
-	}
-
 	public static synchronized void broadcastChatMessage(final Long leagueId, final ChatMessage message) {
-		listeners.get(leagueId).forEach(listener -> listener.accept(message));
+		for (Consumer<ChatMessage> listener : listeners.get(leagueId)) {
+			executorService.execute(() -> listener.accept(message));
+		}
 	}
 }

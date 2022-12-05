@@ -111,12 +111,9 @@ public class MatchCardLayout extends Div {
 		}
 		wrapper.setPadding(false);
 
-		if (!isForSuperAdmin) {
-			Div predictionWrapper = createPredictionWrapper();
-			wrapper.add(predictionWrapper);
-		} else {
-			wrapper.getThemeList().add("boxed");
-		}
+		Div predictionWrapper = createPredictionWrapper();
+		wrapper.add(predictionWrapper);
+		wrapper.getThemeList().add("boxed");
 
 		add(wrapper);
 	}
@@ -142,7 +139,7 @@ public class MatchCardLayout extends Div {
 		setPredictionStatusText();
 		yourPredictionWrapper.add(yourPredictionLabel);
 		boolean matchIsEditable = match.getAwayTeam() != null && match.getHomeTeam() != null && nowIsBeforeMatch();
-		predictionButton.setEnabled(matchIsEditable);
+		predictionButton.setEnabled(matchIsEditable || isForSuperAdmin);
 
 		return predictionWrapper;
 	}
@@ -361,7 +358,7 @@ public class MatchCardLayout extends Div {
 		right.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
 		right.add(LayoutUtil.createTeamLayout(true, match.getAwayTeam(), match.getGame().getAway_team_placeholder()));
 
-		if (isScore || nowIsBeforeMatch()) {
+		if (isScore || nowIsBeforeMatch() || isForSuperAdmin) {
 			StatusLabel statusLabel = new StatusLabel();
 			statusLabel.setVisible(false);
 

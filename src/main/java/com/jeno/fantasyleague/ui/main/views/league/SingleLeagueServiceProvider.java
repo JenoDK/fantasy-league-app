@@ -3,6 +3,7 @@ package com.jeno.fantasyleague.ui.main.views.league;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -41,6 +42,7 @@ import com.jeno.fantasyleague.backend.model.Prediction;
 import com.jeno.fantasyleague.backend.model.User;
 import com.jeno.fantasyleague.backend.model.UserNotification;
 import com.jeno.fantasyleague.backend.model.enums.NotificationType;
+import com.jeno.fantasyleague.backend.model.enums.Template;
 import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.security.SecurityHolder;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.matches.MatchPredictionBean;
@@ -97,12 +99,39 @@ public class SingleLeagueServiceProvider {
 	@Autowired
 	private BeanFactory beanFactory;
 
-	public void predictionChanged(Observable<MatchPredictionBean> predictionChanged, Consumer<Prediction> postConsume) {
+	public void predictionChanged(Observable<MatchPredictionBean> predictionChanged, boolean isForSuperAdmin, Consumer<Prediction> postConsume) {
 		predictionChanged
 				.subscribe(bean -> {
 					Prediction prediction = bean.setPredictionScoresAndGetModelItem();
-					if (DateUtil.nowIsBeforeUtcDateTime(prediction.getGame().getGameDateTime())) {
+					if (bean.getHomeTeam() == null || bean.getAwayTeam() == null) {
+						Notification.show("Game is has no valid teams yet, try refreshing Hannes!", 3000, Notification.Position.MIDDLE);
+						return;
+					}
+					if (DateUtil.nowIsBeforeUtcDateTime(prediction.getGame().getGameDateTime()) || isForSuperAdmin) {
 						getPredictionRepository().saveAndFlush(prediction);
+						List<LeagueUser> leagueUsers = leagueUserRepository.findByUser(getLoggedInUser()).stream()
+								.filter(lu -> Template.FIFA_WORLD_CUP_2022.equals(lu.getLeague().getTemplate()))
+								.collect(Collectors.toList());
+						if (leagueUsers.size() > 1) {
+							leagueUsers.stream()
+									// Only for leagues other than this prediction
+									.filter(lu -> !bean.getLeague().getId().equals(lu.getLeague().getId()))
+									.forEach(lu -> {
+										Optional<Game> sameGameInOtherLeague = gameRepository.findByLeague(lu.getLeague()).stream()
+												.filter(game -> game.getMatchNumber().equals(bean.getGame().getMatchNumber()))
+												.findFirst();
+										if (sameGameInOtherLeague.isPresent()) {
+											Optional<Prediction> matchingPrediction = predictionRepository.findByGameInAndUser(List.of(sameGameInOtherLeague.get()), getLoggedInUser()).stream().findFirst();
+											// Only update matching predictions when they are empty
+											if (matchingPrediction.isPresent()) {
+												matchingPrediction.get().setAway_team_score(prediction.getAway_team_score());
+												matchingPrediction.get().setHome_team_score(prediction.getHome_team_score());
+												matchingPrediction.get().setWinner(prediction.getWinner());
+												getPredictionRepository().saveAndFlush(matchingPrediction.get());
+											}
+										}
+									});
+						}
 						postConsume.accept(prediction);
 					} else {
 						Notification.show(Resources.getMessage("toLateToUpdatePrediction"));

@@ -60,7 +60,7 @@ public class SingleMatchLayout extends VerticalLayout {
 		UserScoresForGameGrid grid = new UserScoresForGameGrid(match, items, singleLeagueServiceprovider.getLoggedInUser());
 		add(grid);
 
-		singleLeagueServiceprovider.predictionChanged(matchCard.predictionChanged(), prediction -> {
+		singleLeagueServiceprovider.predictionChanged(matchCard.predictionChanged(), false, prediction -> {
 			items.stream()
 					.filter(b -> b.getPrediction().getId().equals(prediction.getId()))
 					.forEach(b -> {

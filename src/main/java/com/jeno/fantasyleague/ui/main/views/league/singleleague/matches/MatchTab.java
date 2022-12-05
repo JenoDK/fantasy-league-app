@@ -19,6 +19,7 @@ import com.jeno.fantasyleague.backend.model.ContestantWeight;
 import com.jeno.fantasyleague.backend.model.Game;
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.Prediction;
+import com.jeno.fantasyleague.backend.model.User;
 import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.ui.common.tabsheet.LazyTabComponent;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
@@ -37,7 +38,9 @@ public class MatchTab extends LazyTabComponent {
 	public static final Predicate<Game> TOMORROW_PREDICATE = game -> LocalDateTime.now().plusDays(1).toLocalDate().equals(game.getGameDateTime().toLocalDate());
 	private final League league;
 	private final SingleLeagueServiceProvider singleLeagueServiceprovider;
-	private final boolean loggedInUserIsAdmin;
+	private final User user;
+	private final boolean userIsAdmin;
+	private final boolean isForAdminModule;
 
 	private MatchGrid matchGrid;
 	private MatchGrid matchesToday;
@@ -50,10 +53,12 @@ public class MatchTab extends LazyTabComponent {
 	private H2 tomorrowMatchesLabel;
 	private H2 allMatchesLabel;
 
-	public MatchTab(League league, SingleLeagueServiceProvider singleLeagueServiceprovider) {
+	public MatchTab(League league, SingleLeagueServiceProvider singleLeagueServiceprovider, boolean isForAdminModule, User user) {
 		this.league = league;
 		this.singleLeagueServiceprovider = singleLeagueServiceprovider;
-		this.loggedInUserIsAdmin = singleLeagueServiceprovider.loggedInUserIsLeagueAdmin(league);
+		this.user = user;
+		this.userIsAdmin = isForAdminModule || singleLeagueServiceprovider.userIsLeagueAdmin(league, user);
+		this.isForAdminModule = isForAdminModule;
 
 		initLayout();
 	}
@@ -95,13 +100,13 @@ public class MatchTab extends LazyTabComponent {
 	}
 	
 	private MatchGrid createGrid(Supplier<List<MatchBean>> matchesProvider) {
-		MatchGrid matchesGrid = new MatchGrid(singleLeagueServiceprovider, loggedInUserIsAdmin, false);
+		MatchGrid matchesGrid = new MatchGrid(singleLeagueServiceprovider, userIsAdmin, isForAdminModule);
 		matchesGrid.setMatches(matchesProvider.get());
-		singleLeagueServiceprovider.predictionChanged(matchesGrid.predictionChanged(), prediction -> {});
+		singleLeagueServiceprovider.predictionChanged(matchesGrid.predictionChanged(), isForAdminModule, prediction -> {});
 		matchesGrid.scoreChanged().subscribe(singleLeagueServiceprovider::updateGameScore);
 		matchesGrid.clickedMatch().subscribe(match -> {
 			hideMatches();
-			SingleMatchLayout singleMatchLayout = new SingleMatchLayout(match, singleLeagueServiceprovider, loggedInUserIsAdmin);
+			SingleMatchLayout singleMatchLayout = new SingleMatchLayout(match, singleLeagueServiceprovider, userIsAdmin);
 			MenuItem bacMenuItem = filterBar.addItem(VaadinIcon.ARROW_LEFT.create());
 			bacMenuItem.addClickListener(ignored -> {
 				remove(singleMatchLayout);
@@ -177,12 +182,12 @@ public class MatchTab extends LazyTabComponent {
 				.sorted(Comparator.comparing(Game::getGameDateTime))
 				.collect(Collectors.toList());
 		Map<Long, Prediction> predictions = singleLeagueServiceprovider.getPredictionRepository()
-				.findByLeagueAndUserAndJoinGames(league, singleLeagueServiceprovider.getLoggedInUser()).stream()
+				.findByLeagueAndUserAndJoinGames(league, user).stream()
 				.collect(Collectors.toMap(Prediction::getGame_fk, Function.identity()));
 		Map<Long, Contestant> contestantMap = singleLeagueServiceprovider.getContestantRepository().findByLeague(league).stream()
 				.collect(Collectors.toMap(Contestant::getId, Function.identity()));
 		List<ContestantWeight> weightsForUser = singleLeagueServiceprovider.getContestantWeightRepository().findByUserAndLeague(
-				singleLeagueServiceprovider.getLoggedInUser(),
+				user,
 				league);
 		Map<Long, Integer> weightsForUserPerContestant =
 				weightsForUser.stream()
@@ -200,7 +205,7 @@ public class MatchTab extends LazyTabComponent {
 						weightsForUserPerContestant.get(game.getHome_team_fk()),
 						weightsForUserPerContestant.get(game.getAway_team_fk()),
 						scoreForUserPerGame.get(game.getId()),
-						OverviewUtil.isHiddenForUser(singleLeagueServiceprovider.getLoggedInUser(), league, predictions.get(game.getId())),
+						OverviewUtil.isHiddenForUser(user, league, predictions.get(game.getId())),
 						league))
 				.collect(Collectors.toList());
 		return matches.stream()
