@@ -128,6 +128,10 @@ public class MatchPredictionBean {
 		this.homeTeamPredictionIsWinner = Optional.of(homeTeamPredictionIsWinner);
 	}
 
+	public void setHomeTeamPredictionIsWinner(Optional<Boolean> homeTeamPredictionIsWinner) {
+		this.homeTeamPredictionIsWinner = homeTeamPredictionIsWinner;
+	}
+
 	public Game getGame() {
 		return game;
 	}

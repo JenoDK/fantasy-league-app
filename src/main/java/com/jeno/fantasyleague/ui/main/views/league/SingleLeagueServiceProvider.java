@@ -121,14 +121,20 @@ public class SingleLeagueServiceProvider {
 												.filter(game -> game.getMatchNumber().equals(bean.getGame().getMatchNumber()))
 												.findFirst();
 										if (sameGameInOtherLeague.isPresent()) {
-											Optional<Prediction> matchingPrediction = predictionRepository.findByGameInAndUser(List.of(sameGameInOtherLeague.get()), getLoggedInUser()).stream().findFirst();
-											// Only update matching predictions when they are empty
-											if (matchingPrediction.isPresent()) {
-												matchingPrediction.get().setAway_team_score(prediction.getAway_team_score());
-												matchingPrediction.get().setHome_team_score(prediction.getHome_team_score());
-												matchingPrediction.get().setWinner(prediction.getWinner());
-												getPredictionRepository().saveAndFlush(matchingPrediction.get());
-											}
+											predictionRepository.findByGameAndJoinUsersAndJoinGames(sameGameInOtherLeague.get()).stream()
+													.filter(p -> getLoggedInUser().getId().equals(p.getUser_fk()))
+													.map(p -> {
+														MatchPredictionBean otherBean = new MatchPredictionBean(lu.getLeague(), p);
+														otherBean.setHomeTeamPrediction(bean.getHomeTeamPrediction());
+														otherBean.setAwayTeamPrediction(bean.getAwayTeamPrediction());
+														otherBean.setHomeTeamPredictionIsWinner(bean.getHomeTeamPredictionIsWinner());
+														return otherBean;
+													})
+													// Should only be one
+													.forEach(otherBean -> {
+														Prediction otherPrediction = otherBean.setPredictionScoresAndGetModelItem();
+														getPredictionRepository().saveAndFlush(otherPrediction);
+													});
 										}
 									});
 						}
@@ -234,9 +240,9 @@ public class SingleLeagueServiceProvider {
 		Set<Long> leagueUSerIds = leagueUsers.stream().map(User::getId).collect(Collectors.toSet());
 		return userNotificationRepository
 				.findByNotificationTypeAndReferenceIdAndJoinUsers(NotificationType.LEAGUE_INVITE, league.getId()).stream()
-						.filter(user -> !leagueUSerIds.contains(user.getUser().getId()))
-						.map(UserNotification::getUser)
-						.collect(Collectors.toList());
+				.filter(user -> !leagueUSerIds.contains(user.getUser().getId()))
+				.map(UserNotification::getUser)
+				.collect(Collectors.toList());
 	}
 
 	public List<ContestantWeight> getContestantWeights(League league) {
