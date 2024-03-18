@@ -1,10 +1,10 @@
 package com.jeno.fantasyleague.backend.data.service;
 
-import java.io.Serializable;
-
 import com.google.common.base.Objects;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+
+import java.io.Serializable;
 
 public class OffsetBasedPageRequest implements Pageable, Serializable {
 

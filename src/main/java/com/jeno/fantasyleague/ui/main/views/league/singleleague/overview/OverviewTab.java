@@ -1,13 +1,5 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.overview;
 
-import static com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.chart.ScoreChart.DEFAULT_TOP_SHOWN;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import com.google.common.collect.Maps;
 import com.jeno.fantasyleague.backend.model.Contestant;
 import com.jeno.fantasyleague.backend.model.League;
@@ -25,6 +17,14 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.NumberField;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.chart.ScoreChart.DEFAULT_TOP_SHOWN;
 
 public class OverviewTab extends LazyTabComponent {
 

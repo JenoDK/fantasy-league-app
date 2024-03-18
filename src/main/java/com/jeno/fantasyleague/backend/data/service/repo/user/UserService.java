@@ -1,10 +1,10 @@
 package com.jeno.fantasyleague.backend.data.service.repo.user;
 
+import com.jeno.fantasyleague.backend.model.User;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-
-import com.jeno.fantasyleague.backend.model.User;
 
 public interface UserService {
 

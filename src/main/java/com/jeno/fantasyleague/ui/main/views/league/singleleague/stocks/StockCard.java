@@ -1,8 +1,5 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.stocks;
 
-import java.math.BigDecimal;
-import java.util.function.Function;
-
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.ui.common.label.StatusLabel;
@@ -28,8 +25,10 @@ import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationResult;
 import com.vaadin.flow.data.binder.Validator;
-
 import io.reactivex.subjects.BehaviorSubject;
+
+import java.math.BigDecimal;
+import java.util.function.Function;
 
 @Tag("stock-card")
 @JsModule("./src/views/stocks/stock-card.js")

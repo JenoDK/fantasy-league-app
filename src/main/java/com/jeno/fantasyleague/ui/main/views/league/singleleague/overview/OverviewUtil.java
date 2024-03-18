@@ -1,9 +1,5 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.overview;
 
-import java.math.BigDecimal;
-import java.util.Objects;
-import java.util.Optional;
-
 import com.jeno.fantasyleague.backend.model.Contestant;
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.Prediction;
@@ -14,6 +10,10 @@ import com.jeno.fantasyleague.util.LayoutUtil;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+
+import java.math.BigDecimal;
+import java.util.Objects;
+import java.util.Optional;
 
 public class OverviewUtil {
 

@@ -1,12 +1,12 @@
 package com.jeno.fantasyleague.ui.common.grid;
 
-import java.util.Map;
-import java.util.function.Function;
-
 import com.google.common.collect.Maps;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.server.StreamResource;
+
+import java.util.Map;
+import java.util.function.Function;
 
 public class CustomGridBuilder<T> {
 

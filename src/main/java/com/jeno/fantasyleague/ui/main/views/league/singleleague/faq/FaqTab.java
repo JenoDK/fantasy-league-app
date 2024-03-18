@@ -1,15 +1,8 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.faq;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
 import com.google.common.collect.ArrayListMultimap;
-import com.jeno.fantasyleague.backend.data.service.leaguetemplates.SoccerCupStages;
 import com.jeno.fantasyleague.backend.data.service.leaguetemplates.FootballSettingsRenderer;
+import com.jeno.fantasyleague.backend.data.service.leaguetemplates.SoccerCupStages;
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.LeagueSetting;
 import com.jeno.fantasyleague.resources.Resources;
@@ -20,6 +13,13 @@ import com.jeno.fantasyleague.util.DateUtil;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.accordion.Accordion;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class FaqTab extends LazyTabComponent {
 

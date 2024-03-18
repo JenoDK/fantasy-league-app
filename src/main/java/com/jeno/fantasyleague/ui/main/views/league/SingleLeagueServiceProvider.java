@@ -1,29 +1,8 @@
 package com.jeno.fantasyleague.ui.main.views.league;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.google.common.collect.Sets;
 import com.jeno.fantasyleague.backend.data.dao.UserDao;
-import com.jeno.fantasyleague.backend.data.repository.ContestantGroupRepository;
-import com.jeno.fantasyleague.backend.data.repository.ContestantRepository;
-import com.jeno.fantasyleague.backend.data.repository.ContestantWeightRepository;
-import com.jeno.fantasyleague.backend.data.repository.EmailLeagueInviteRepository;
-import com.jeno.fantasyleague.backend.data.repository.GameRepository;
-import com.jeno.fantasyleague.backend.data.repository.LeagueRepository;
-import com.jeno.fantasyleague.backend.data.repository.LeagueSettingRepository;
-import com.jeno.fantasyleague.backend.data.repository.LeagueUserRepository;
-import com.jeno.fantasyleague.backend.data.repository.PredictionRepository;
-import com.jeno.fantasyleague.backend.data.repository.UserNotificationRepository;
-import com.jeno.fantasyleague.backend.data.repository.UserRepository;
+import com.jeno.fantasyleague.backend.data.repository.*;
 import com.jeno.fantasyleague.backend.data.service.email.ApplicationEmailService;
 import com.jeno.fantasyleague.backend.data.service.leaguetemplates.LeagueTemplateService;
 import com.jeno.fantasyleague.backend.data.service.leaguetemplates.SoccerCupStages;
@@ -33,14 +12,7 @@ import com.jeno.fantasyleague.backend.data.service.repo.league.LeagueService;
 import com.jeno.fantasyleague.backend.data.service.repo.league.UserLeagueScore;
 import com.jeno.fantasyleague.backend.data.service.repo.leaguemessage.LeagueMessageService;
 import com.jeno.fantasyleague.backend.data.service.repo.user.UserService;
-import com.jeno.fantasyleague.backend.model.ContestantWeight;
-import com.jeno.fantasyleague.backend.model.Game;
-import com.jeno.fantasyleague.backend.model.League;
-import com.jeno.fantasyleague.backend.model.LeagueMessage;
-import com.jeno.fantasyleague.backend.model.LeagueUser;
-import com.jeno.fantasyleague.backend.model.Prediction;
-import com.jeno.fantasyleague.backend.model.User;
-import com.jeno.fantasyleague.backend.model.UserNotification;
+import com.jeno.fantasyleague.backend.model.*;
 import com.jeno.fantasyleague.backend.model.enums.NotificationType;
 import com.jeno.fantasyleague.backend.model.enums.Template;
 import com.jeno.fantasyleague.resources.Resources;
@@ -49,8 +21,13 @@ import com.jeno.fantasyleague.ui.main.views.league.singleleague.matches.MatchPre
 import com.jeno.fantasyleague.util.DateUtil;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.spring.annotation.SpringComponent;
-
 import io.reactivex.Observable;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.*;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 @SpringComponent
 public class SingleLeagueServiceProvider {

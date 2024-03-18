@@ -1,8 +1,5 @@
 package com.jeno.fantasyleague.backend.data.service.leaguetemplates;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.jeno.fantasyleague.backend.model.LeagueSetting;
 import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.ui.common.field.CustomButton;
@@ -15,6 +12,9 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.converter.StringToIntegerConverter;
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class SettingsGroupLayout extends VerticalLayout {
 

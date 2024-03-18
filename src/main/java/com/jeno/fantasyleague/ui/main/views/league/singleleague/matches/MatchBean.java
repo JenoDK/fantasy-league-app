@@ -1,16 +1,15 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.matches;
 
-import java.util.Objects;
-import java.util.Optional;
-
 import com.jeno.fantasyleague.backend.model.Contestant;
 import com.jeno.fantasyleague.backend.model.Game;
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.Prediction;
 import com.jeno.fantasyleague.util.DateUtil;
-
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
+
+import java.util.Objects;
+import java.util.Optional;
 
 public class MatchBean {
 

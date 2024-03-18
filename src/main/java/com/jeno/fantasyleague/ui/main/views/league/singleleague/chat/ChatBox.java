@@ -1,9 +1,5 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.chat;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Comparator;
-
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.LeagueMessage;
 import com.jeno.fantasyleague.backend.model.LeagueUser;
@@ -12,13 +8,7 @@ import com.jeno.fantasyleague.ui.common.field.CustomButton;
 import com.jeno.fantasyleague.ui.main.broadcast.ChatBroadcaster;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.jeno.fantasyleague.util.DateUtil;
-import com.vaadin.flow.component.AttachEvent;
-import com.vaadin.flow.component.ClientCallable;
-import com.vaadin.flow.component.DetachEvent;
-import com.vaadin.flow.component.Tag;
-import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.UIDetachedException;
-import com.vaadin.flow.component.Unit;
+import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.JsModule;
@@ -33,6 +23,10 @@ import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.shared.Registration;
 import com.vaadin.flow.templatemodel.TemplateModel;
+
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Comparator;
 
 @Tag("chat-box")
 @JsModule("./src/components/chat-box.js")

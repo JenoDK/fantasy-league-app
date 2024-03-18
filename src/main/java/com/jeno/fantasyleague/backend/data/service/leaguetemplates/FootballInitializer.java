@@ -1,5 +1,17 @@
 package com.jeno.fantasyleague.backend.data.service.leaguetemplates;
 
+import com.google.common.collect.Lists;
+import com.jeno.fantasyleague.backend.data.repository.ContestantGroupRepository;
+import com.jeno.fantasyleague.backend.data.repository.ContestantRepository;
+import com.jeno.fantasyleague.backend.data.repository.GameRepository;
+import com.jeno.fantasyleague.backend.data.repository.LeagueRepository;
+import com.jeno.fantasyleague.backend.model.*;
+import com.jeno.fantasyleague.util.DateUtil;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVRecord;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -13,23 +25,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVRecord;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-
-import com.google.common.collect.Lists;
-import com.jeno.fantasyleague.backend.data.repository.ContestantGroupRepository;
-import com.jeno.fantasyleague.backend.data.repository.ContestantRepository;
-import com.jeno.fantasyleague.backend.data.repository.GameRepository;
-import com.jeno.fantasyleague.backend.data.repository.LeagueRepository;
-import com.jeno.fantasyleague.backend.model.Contestant;
-import com.jeno.fantasyleague.backend.model.ContestantGroup;
-import com.jeno.fantasyleague.backend.model.Game;
-import com.jeno.fantasyleague.backend.model.League;
-import com.jeno.fantasyleague.backend.model.User;
-import com.jeno.fantasyleague.util.DateUtil;
 
 public abstract class FootballInitializer {
 

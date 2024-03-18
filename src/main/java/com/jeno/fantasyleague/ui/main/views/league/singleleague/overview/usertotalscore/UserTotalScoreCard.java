@@ -13,7 +13,6 @@ import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
-
 import io.reactivex.subjects.BehaviorSubject;
 
 @Tag("user-total-score-card")

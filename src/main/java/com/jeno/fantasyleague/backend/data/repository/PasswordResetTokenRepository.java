@@ -1,7 +1,6 @@
 package com.jeno.fantasyleague.backend.data.repository;
 
 import com.jeno.fantasyleague.backend.model.PasswordResetToken;
-import com.jeno.fantasyleague.backend.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

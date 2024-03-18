@@ -1,12 +1,5 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.matches.single;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 import com.jeno.fantasyleague.backend.model.Contestant;
 import com.jeno.fantasyleague.backend.model.ContestantWeight;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
@@ -14,6 +7,9 @@ import com.jeno.fantasyleague.ui.main.views.league.singleleague.matches.MatchBea
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.matches.MatchCardLayout;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.OverviewUtil;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class SingleMatchLayout extends VerticalLayout {
 

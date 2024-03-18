@@ -1,17 +1,15 @@
 package com.jeno.fantasyleague.servlets;
 
-import java.io.IOException;
-import java.util.Optional;
+import com.jeno.fantasyleague.backend.data.repository.UserRepository;
+import com.jeno.fantasyleague.backend.model.User;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import com.jeno.fantasyleague.backend.data.repository.UserRepository;
-import com.jeno.fantasyleague.backend.model.User;
+import java.io.IOException;
+import java.util.Optional;
 
 public class ProfileImageServlet extends HttpServlet {
 

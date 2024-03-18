@@ -1,7 +1,5 @@
 package com.jeno.fantasyleague.ui.forgotpassword;
 
-import java.util.Optional;
-
 import com.jeno.fantasyleague.backend.data.repository.UserRepository;
 import com.jeno.fantasyleague.backend.data.service.email.PasswordResetService;
 import com.jeno.fantasyleague.backend.model.User;
@@ -13,8 +11,9 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLayout;
-
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Optional;
 
 @PageTitle("Forgot Password")
 @Route("forgotPassword")

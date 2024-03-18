@@ -1,11 +1,11 @@
 package com.jeno.fantasyleague.ui.main.views.league.gridlayout;
 
-import java.util.List;
-import java.util.Objects;
-
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.LeagueUser;
 import com.jeno.fantasyleague.backend.model.User;
+
+import java.util.List;
+import java.util.Objects;
 
 public class LeagueBean {
 

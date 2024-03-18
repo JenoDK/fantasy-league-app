@@ -1,17 +1,17 @@
 package com.jeno.fantasyleague.util;
 
-import java.awt.*;
-import java.awt.geom.Ellipse2D;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.util.Optional;
-
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.User;
 import com.jeno.fantasyleague.ui.common.LeagueImageResourceCache;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.server.StreamResource;
+
+import java.awt.*;
+import java.awt.geom.Ellipse2D;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.util.Optional;
 
 public class ImageUtil {
 

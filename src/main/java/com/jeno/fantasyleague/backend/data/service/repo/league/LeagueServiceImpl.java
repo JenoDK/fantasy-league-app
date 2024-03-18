@@ -1,23 +1,18 @@
 package com.jeno.fantasyleague.backend.data.service.repo.league;
 
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.jeno.fantasyleague.backend.data.repository.LeagueRepository;
 import com.jeno.fantasyleague.backend.data.repository.LeagueUserRepository;
 import com.jeno.fantasyleague.backend.data.service.leaguetemplates.LeagueTemplateService;
 import com.jeno.fantasyleague.backend.data.service.repo.contestantweight.ContestantWeightService;
 import com.jeno.fantasyleague.backend.data.service.repo.prediction.PredictionService;
-import com.jeno.fantasyleague.backend.model.ContestantWeight;
-import com.jeno.fantasyleague.backend.model.League;
-import com.jeno.fantasyleague.backend.model.LeagueUser;
-import com.jeno.fantasyleague.backend.model.Prediction;
-import com.jeno.fantasyleague.backend.model.User;
+import com.jeno.fantasyleague.backend.model.*;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Map;
 
 @Transactional
 @Component

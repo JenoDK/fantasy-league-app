@@ -1,14 +1,5 @@
 package com.jeno.fantasyleague.backend.data.service.leaguetemplates;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Maps;
 import com.jeno.fantasyleague.backend.data.repository.ContestantWeightRepository;
@@ -16,12 +7,15 @@ import com.jeno.fantasyleague.backend.data.repository.LeagueSettingRepository;
 import com.jeno.fantasyleague.backend.data.repository.LeagueUserRepository;
 import com.jeno.fantasyleague.backend.data.repository.PredictionRepository;
 import com.jeno.fantasyleague.backend.data.service.repo.league.UserLeagueScore;
-import com.jeno.fantasyleague.backend.model.ContestantWeight;
-import com.jeno.fantasyleague.backend.model.League;
-import com.jeno.fantasyleague.backend.model.LeagueSetting;
-import com.jeno.fantasyleague.backend.model.LeagueUser;
-import com.jeno.fantasyleague.backend.model.Prediction;
-import com.jeno.fantasyleague.backend.model.User;
+import com.jeno.fantasyleague.backend.model.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Component
 public class FootballLeagueScoreHelper {

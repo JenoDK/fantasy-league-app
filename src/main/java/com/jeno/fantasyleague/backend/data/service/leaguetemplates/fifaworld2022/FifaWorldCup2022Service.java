@@ -1,23 +1,18 @@
 package com.jeno.fantasyleague.backend.data.service.leaguetemplates.fifaworld2022;
 
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.jeno.fantasyleague.backend.data.service.leaguetemplates.FootballLeagueScoreHelper;
-import com.jeno.fantasyleague.backend.data.service.leaguetemplates.FootballSettingsRenderer;
-import com.jeno.fantasyleague.backend.data.service.leaguetemplates.LeagueSettingRenderer;
-import com.jeno.fantasyleague.backend.data.service.leaguetemplates.LeagueTemplateService;
-import com.jeno.fantasyleague.backend.data.service.leaguetemplates.TemplateException;
+import com.jeno.fantasyleague.backend.data.service.leaguetemplates.*;
 import com.jeno.fantasyleague.backend.data.service.repo.league.UserLeagueScore;
 import com.jeno.fantasyleague.backend.model.ContestantWeight;
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.Prediction;
 import com.jeno.fantasyleague.backend.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 @Transactional(rollbackFor = Exception.class)

@@ -1,8 +1,5 @@
 package com.jeno.fantasyleague.util;
 
-import com.vaadin.flow.server.VaadinSession;
-import com.vaadin.flow.server.WebBrowser;
-
 public class Images {
 
 	private Images() {

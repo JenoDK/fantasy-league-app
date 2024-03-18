@@ -1,10 +1,5 @@
 package com.jeno.fantasyleague.util;
 
-import java.util.Arrays;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Optional;
-
 import com.google.common.collect.Maps;
 import com.vaadin.flow.component.HasValidation;
 import com.vaadin.flow.component.UI;
@@ -16,6 +11,11 @@ import com.vaadin.flow.data.binder.Validator;
 import com.vaadin.flow.dom.Style;
 import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.server.VaadinServletRequest;
+
+import java.util.Arrays;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
 
 public class VaadinUtil {
 

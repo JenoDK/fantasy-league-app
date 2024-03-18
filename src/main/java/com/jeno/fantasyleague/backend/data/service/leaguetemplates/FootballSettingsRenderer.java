@@ -1,18 +1,8 @@
 package com.jeno.fantasyleague.backend.data.service.leaguetemplates;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Lists;
 import com.jeno.fantasyleague.backend.data.repository.LeagueSettingRepository;
-import com.jeno.fantasyleague.backend.data.service.leaguetemplates.LeagueSettingRenderer;
-import com.jeno.fantasyleague.backend.data.service.leaguetemplates.SoccerCupStages;
-import com.jeno.fantasyleague.backend.data.service.leaguetemplates.IntegerSettingsBean;
-import com.jeno.fantasyleague.backend.data.service.leaguetemplates.SettingsGroupLayout;
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.LeagueSetting;
 import com.jeno.fantasyleague.resources.Resources;
@@ -27,6 +17,11 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @org.springframework.stereotype.Component
 public class FootballSettingsRenderer implements LeagueSettingRenderer {

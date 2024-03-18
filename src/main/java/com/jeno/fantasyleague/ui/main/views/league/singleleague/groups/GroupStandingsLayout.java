@@ -1,25 +1,15 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.groups;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
 import com.google.common.collect.ArrayListMultimap;
-import com.jeno.fantasyleague.backend.model.Contestant;
-import com.jeno.fantasyleague.backend.model.ContestantGroup;
-import com.jeno.fantasyleague.backend.model.Game;
-import com.jeno.fantasyleague.backend.model.League;
-import com.jeno.fantasyleague.backend.model.Prediction;
+import com.jeno.fantasyleague.backend.model.*;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class GroupStandingsLayout extends VerticalLayout {
 

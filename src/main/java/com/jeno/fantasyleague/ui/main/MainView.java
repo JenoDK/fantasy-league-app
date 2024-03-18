@@ -1,9 +1,5 @@
 package com.jeno.fantasyleague.ui.main;
 
-import static com.jeno.fantasyleague.util.AppConst.VIEWPORT;
-
-import java.util.Optional;
-
 import com.jeno.fantasyleague.ui.main.navigation.TopTabs;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -18,6 +14,10 @@ import com.vaadin.flow.server.InitialPageSettings;
 import com.vaadin.flow.server.PageConfigurator;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
+
+import java.util.Optional;
+
+import static com.jeno.fantasyleague.util.AppConst.VIEWPORT;
 
 @Viewport(VIEWPORT)
 @JsModule("./styles/shared-styles.js")

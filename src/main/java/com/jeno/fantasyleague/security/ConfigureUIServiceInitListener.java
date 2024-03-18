@@ -1,7 +1,5 @@
 package com.jeno.fantasyleague.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.ui.common.OfflineBanner;
 import com.jeno.fantasyleague.ui.exception.AccessDeniedException;
@@ -13,6 +11,7 @@ import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.server.VaadinServiceInitListener;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Adds before enter listener to check access to views.

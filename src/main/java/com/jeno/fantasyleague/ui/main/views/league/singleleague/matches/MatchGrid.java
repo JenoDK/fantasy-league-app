@@ -1,7 +1,5 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.matches;
 
-import java.util.List;
-
 import com.google.common.collect.Lists;
 import com.jeno.fantasyleague.backend.data.service.leaguetemplates.FootballInitializer;
 import com.jeno.fantasyleague.backend.data.service.leaguetemplates.SoccerCupStages;
@@ -10,9 +8,10 @@ import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
-
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
+
+import java.util.List;
 
 public class MatchGrid extends Grid<MatchBean> {
 

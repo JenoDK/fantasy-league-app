@@ -1,5 +1,16 @@
 package com.jeno.fantasyleague.ui.common.image;
 
+import com.google.common.collect.Sets;
+import com.jeno.fantasyleague.ui.common.label.StatusLabel;
+import com.jeno.fantasyleague.util.ImageUtil;
+import com.vaadin.flow.component.upload.SucceededEvent;
+import com.vaadin.flow.component.upload.Upload;
+import com.vaadin.flow.component.upload.receivers.FileBuffer;
+import elemental.json.Json;
+import io.reactivex.Observable;
+import io.reactivex.subjects.BehaviorSubject;
+
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -7,19 +18,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Optional;
 import java.util.Set;
-
-import javax.imageio.ImageIO;
-
-import com.google.common.collect.Sets;
-import com.jeno.fantasyleague.ui.common.label.StatusLabel;
-import com.jeno.fantasyleague.util.ImageUtil;
-import com.vaadin.flow.component.upload.SucceededEvent;
-import com.vaadin.flow.component.upload.Upload;
-import com.vaadin.flow.component.upload.receivers.FileBuffer;
-
-import elemental.json.Json;
-import io.reactivex.Observable;
-import io.reactivex.subjects.BehaviorSubject;
 
 public class VaadinImageUploader extends Upload {
 

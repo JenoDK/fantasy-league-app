@@ -1,9 +1,9 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.faq;
 
-import java.util.List;
-
 import com.jeno.fantasyleague.resources.Resources;
 import com.vaadin.flow.component.grid.Grid;
+
+import java.util.List;
 
 public class LeagueSettingsGameScoresGrid extends Grid<LeagueSettingsGameScoreBean> {
 

@@ -1,9 +1,9 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.matches.single;
 
-import java.util.Optional;
-
 import com.jeno.fantasyleague.backend.model.Prediction;
 import com.jeno.fantasyleague.backend.model.User;
+
+import java.util.Optional;
 
 public class UserScoresForGameBean {
 

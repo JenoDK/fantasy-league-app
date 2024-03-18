@@ -1,10 +1,10 @@
 package com.jeno.fantasyleague.ui.common.label;
 
-import java.util.Objects;
-import java.util.Optional;
-
 import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.OverviewUtil;
+
+import java.util.Objects;
+import java.util.Optional;
 
 public class PredictionStatusLabel extends StatusLabel {
 

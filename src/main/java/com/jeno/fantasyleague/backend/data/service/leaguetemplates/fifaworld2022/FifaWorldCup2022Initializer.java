@@ -1,19 +1,17 @@
 package com.jeno.fantasyleague.backend.data.service.leaguetemplates.fifaworld2022;
 
+import com.google.common.math.Quantiles;
+import com.jeno.fantasyleague.backend.data.service.leaguetemplates.FootballInitializer;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.math.BigDecimal;
 import java.math.MathContext;
-import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.ToDoubleFunction;
 import java.util.stream.Collectors;
-
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.google.common.math.Quantiles;
-import com.jeno.fantasyleague.backend.data.service.leaguetemplates.FootballInitializer;
 
 @Component
 @Transactional(rollbackFor = Exception.class)

@@ -1,12 +1,12 @@
 package com.jeno.fantasyleague.backend.data.service.leaguetemplates;
 
-import java.util.List;
-
 import com.google.common.collect.ArrayListMultimap;
 import com.jeno.fantasyleague.backend.model.Contestant;
 import com.jeno.fantasyleague.backend.model.Game;
 import com.jeno.fantasyleague.backend.model.LeagueSetting;
 import com.jeno.fantasyleague.resources.Resources;
+
+import java.util.List;
 
 public enum SoccerCupStages {
 

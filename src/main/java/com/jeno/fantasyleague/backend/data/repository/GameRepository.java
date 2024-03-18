@@ -1,8 +1,5 @@
 package com.jeno.fantasyleague.backend.data.repository;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 import com.jeno.fantasyleague.backend.model.ContestantGroup;
 import com.jeno.fantasyleague.backend.model.Game;
 import com.jeno.fantasyleague.backend.model.League;
@@ -11,6 +8,9 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Repository
 public interface GameRepository extends JpaRepository<Game, Long>, JpaSpecificationExecutor<Game> {

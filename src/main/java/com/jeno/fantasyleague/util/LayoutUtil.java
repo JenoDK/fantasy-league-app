@@ -1,9 +1,5 @@
 package com.jeno.fantasyleague.util;
 
-import java.util.Optional;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
 import com.jeno.fantasyleague.backend.model.Contestant;
 import com.jeno.fantasyleague.backend.model.User;
 import com.jeno.fantasyleague.resources.Resources;
@@ -17,15 +13,14 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.binder.Binder;
-import com.vaadin.flow.data.binder.BinderValidationStatus;
-import com.vaadin.flow.data.binder.BinderValidationStatusHandler;
-import com.vaadin.flow.data.binder.Setter;
-import com.vaadin.flow.data.binder.ValidationResult;
+import com.vaadin.flow.data.binder.*;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.function.ValueProvider;
-
 import io.reactivex.subjects.BehaviorSubject;
+
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class LayoutUtil {
 

@@ -1,19 +1,18 @@
 package com.jeno.fantasyleague.resources;
 
-import java.text.MessageFormat;
-import java.util.List;
-import java.util.Locale;
-import java.util.MissingResourceException;
-
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.i18n.I18NProvider;
+import com.vaadin.flow.spring.annotation.SpringComponent;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.context.support.ResourceBundleMessageSource;
 
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.UI;
-import com.vaadin.flow.i18n.I18NProvider;
-import com.vaadin.flow.spring.annotation.SpringComponent;
+import java.text.MessageFormat;
+import java.util.List;
+import java.util.Locale;
+import java.util.MissingResourceException;
 
 @SpringComponent
 public class Resources implements I18NProvider {

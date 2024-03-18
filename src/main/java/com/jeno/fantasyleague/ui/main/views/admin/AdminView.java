@@ -1,9 +1,5 @@
 package com.jeno.fantasyleague.ui.main.views.admin;
 
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -11,6 +7,9 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Optional;
 
 @SpringComponent
 @UIScope

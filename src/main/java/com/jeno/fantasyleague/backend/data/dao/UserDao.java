@@ -1,8 +1,5 @@
 package com.jeno.fantasyleague.backend.data.dao;
 
-import java.util.Map;
-import java.util.Optional;
-
 import com.google.common.collect.Sets;
 import com.jeno.fantasyleague.backend.data.repository.RoleRepository;
 import com.jeno.fantasyleague.backend.data.repository.UserRepository;
@@ -11,6 +8,9 @@ import com.jeno.fantasyleague.backend.model.RoleName;
 import com.jeno.fantasyleague.backend.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.Map;
+import java.util.Optional;
 
 @Component
 public class UserDao extends AbstractDao<User, UserRepository> {

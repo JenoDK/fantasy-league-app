@@ -1,8 +1,5 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.LeagueUser;
 import com.jeno.fantasyleague.ui.common.LeagueImageResourceCache;
@@ -16,9 +13,10 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class SingleLeagueView extends VerticalLayout {
 

@@ -1,14 +1,13 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.matches.single;
 
-import java.util.List;
-
 import com.jeno.fantasyleague.backend.model.User;
 import com.jeno.fantasyleague.ui.common.grid.CustomGrid;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.matches.MatchBean;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
-
 import io.reactivex.subjects.BehaviorSubject;
+
+import java.util.List;
 
 public class UserScoresForGameGrid extends CustomGrid<UserScoresForGameBean> {
 

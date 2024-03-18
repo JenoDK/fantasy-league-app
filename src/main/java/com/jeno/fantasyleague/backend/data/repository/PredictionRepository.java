@@ -1,7 +1,5 @@
 package com.jeno.fantasyleague.backend.data.repository;
 
-import java.util.List;
-
 import com.jeno.fantasyleague.backend.model.Game;
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.Prediction;
@@ -10,6 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface PredictionRepository extends JpaRepository<Prediction, Long> {

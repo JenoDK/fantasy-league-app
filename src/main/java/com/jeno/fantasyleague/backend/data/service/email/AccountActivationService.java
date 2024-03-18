@@ -1,13 +1,13 @@
 package com.jeno.fantasyleague.backend.data.service.email;
 
-import java.util.UUID;
-
 import com.jeno.fantasyleague.backend.data.repository.AccountActivationTokenRepository;
-import com.jeno.fantasyleague.exception.EmailException;
 import com.jeno.fantasyleague.backend.model.AccountActivationToken;
 import com.jeno.fantasyleague.backend.model.User;
+import com.jeno.fantasyleague.exception.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Service
 public class AccountActivationService {

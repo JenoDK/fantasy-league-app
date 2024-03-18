@@ -1,10 +1,5 @@
 package com.jeno.fantasyleague.backend.data.service.leaguetemplates.custom;
 
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.google.common.collect.Lists;
 import com.jeno.fantasyleague.backend.data.service.leaguetemplates.LeagueSettingRenderer;
 import com.jeno.fantasyleague.backend.data.service.leaguetemplates.LeagueTemplateService;
@@ -14,6 +9,10 @@ import com.jeno.fantasyleague.backend.model.ContestantWeight;
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.Prediction;
 import com.jeno.fantasyleague.backend.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
+import java.util.Map;
 
 public class CustomTemplateService implements LeagueTemplateService {
 

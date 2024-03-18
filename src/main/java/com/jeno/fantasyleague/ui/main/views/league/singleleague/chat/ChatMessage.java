@@ -1,8 +1,8 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.chat;
 
-import java.time.LocalDateTime;
-
 import com.jeno.fantasyleague.backend.model.User;
+
+import java.time.LocalDateTime;
 
 public class ChatMessage {
 

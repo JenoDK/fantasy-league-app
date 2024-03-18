@@ -1,9 +1,9 @@
 package com.jeno.fantasyleague.backend.data.security;
 
-import java.util.regex.Pattern;
-
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import java.util.regex.Pattern;
 
 @Component
 public class CustomBCryptPasswordEncoder extends BCryptPasswordEncoder {

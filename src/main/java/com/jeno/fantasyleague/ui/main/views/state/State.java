@@ -1,14 +1,14 @@
 package com.jeno.fantasyleague.ui.main.views.state;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.jeno.fantasyleague.ui.main.views.admin.AdminModule;
 import com.jeno.fantasyleague.ui.main.views.league.LeagueModule;
 import com.jeno.fantasyleague.ui.main.views.profile.ProfileView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.icon.VaadinIcon;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public enum State {
 

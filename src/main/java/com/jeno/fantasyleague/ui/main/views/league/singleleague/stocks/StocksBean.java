@@ -1,12 +1,11 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.stocks;
 
-import java.math.BigDecimal;
-
 import com.jeno.fantasyleague.backend.model.Contestant;
 import com.jeno.fantasyleague.backend.model.ContestantWeight;
-
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
+
+import java.math.BigDecimal;
 
 public class StocksBean {
 

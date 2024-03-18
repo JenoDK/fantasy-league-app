@@ -1,11 +1,11 @@
 package com.jeno.fantasyleague.backend.data.service.repo.league;
 
-import java.util.List;
-import java.util.Map;
-
 import com.jeno.fantasyleague.backend.data.service.leaguetemplates.SoccerCupStages;
 import com.jeno.fantasyleague.backend.model.Prediction;
 import com.jeno.fantasyleague.backend.model.User;
+
+import java.util.List;
+import java.util.Map;
 
 public class UserLeagueScore {
 

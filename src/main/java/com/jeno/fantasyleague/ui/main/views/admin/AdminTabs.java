@@ -1,7 +1,5 @@
 package com.jeno.fantasyleague.ui.main.views.admin;
 
-import java.util.Optional;
-
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.ui.common.tabsheet.CustomTabs;
 import com.jeno.fantasyleague.ui.common.tabsheet.LazyTab;
@@ -13,6 +11,8 @@ import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.TabsVariant;
+
+import java.util.Optional;
 
 public class AdminTabs extends CustomTabs {
 

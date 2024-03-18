@@ -1,7 +1,5 @@
 package com.jeno.fantasyleague.ui.register;
 
-import java.util.Map;
-
 import com.jeno.fantasyleague.backend.model.User;
 import com.jeno.fantasyleague.ui.common.CustomTitleForm;
 import com.jeno.fantasyleague.ui.common.image.ImageUploadWithPlaceholder;
@@ -17,6 +15,8 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.validator.EmailValidator;
 import io.reactivex.Observable;
+
+import java.util.Map;
 
 @CssImport(value = "./styles/shared-styles.css")
 public class RegisterUserForm extends CustomTitleForm {

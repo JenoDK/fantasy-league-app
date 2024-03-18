@@ -1,7 +1,5 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.matches.single;
 
-import java.util.Objects;
-
 import com.jeno.fantasyleague.backend.model.Contestant;
 import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.ui.common.label.PredictionStatusLabel;
@@ -17,8 +15,9 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
-
 import io.reactivex.subjects.BehaviorSubject;
+
+import java.util.Objects;
 
 @Tag("user-score-for-game-card")
 @JsModule("./src/views/match/user-score-for-game-card.js")

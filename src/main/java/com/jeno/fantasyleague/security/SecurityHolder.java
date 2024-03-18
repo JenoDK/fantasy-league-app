@@ -1,14 +1,5 @@
 package com.jeno.fantasyleague.security;
 
-import java.security.Principal;
-import java.util.List;
-import java.util.Optional;
-
-import javax.transaction.Transactional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
-
 import com.jeno.fantasyleague.backend.data.repository.UserNotificationRepository;
 import com.jeno.fantasyleague.backend.data.service.repo.user.UserService;
 import com.jeno.fantasyleague.backend.model.User;
@@ -16,6 +7,13 @@ import com.jeno.fantasyleague.backend.model.UserNotification;
 import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
+
+import javax.transaction.Transactional;
+import java.security.Principal;
+import java.util.List;
+import java.util.Optional;
 
 @SpringComponent
 public class SecurityHolder {

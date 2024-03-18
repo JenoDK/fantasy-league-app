@@ -1,14 +1,13 @@
 package com.jeno.fantasyleague.ui.main.views.league.gridlayout;
 
-import java.util.List;
-
 import com.google.common.collect.Lists;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
-
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
+
+import java.util.List;
 
 public class LeagueGrid extends Grid<LeagueBean> {
 

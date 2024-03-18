@@ -1,12 +1,10 @@
 package com.jeno.fantasyleague.backend.data.service.repo.user;
 
-import java.util.Set;
-
-import javax.persistence.criteria.JoinType;
-
+import com.jeno.fantasyleague.backend.model.User;
 import org.springframework.data.jpa.domain.Specification;
 
-import com.jeno.fantasyleague.backend.model.User;
+import javax.persistence.criteria.JoinType;
+import java.util.Set;
 
 public class UserSpecifications {
 

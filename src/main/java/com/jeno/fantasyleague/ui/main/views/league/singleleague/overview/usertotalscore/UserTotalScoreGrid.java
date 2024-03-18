@@ -1,14 +1,13 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.usertotalscore;
 
-import java.util.List;
-
 import com.jeno.fantasyleague.backend.model.User;
 import com.jeno.fantasyleague.ui.common.grid.CustomGrid;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.chart.UserScoreBean;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
-
 import io.reactivex.subjects.BehaviorSubject;
+
+import java.util.List;
 
 public class UserTotalScoreGrid extends CustomGrid<UserScoreBean> {
 

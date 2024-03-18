@@ -1,11 +1,11 @@
 package com.jeno.fantasyleague.ui.common;
 
-import java.io.ByteArrayInputStream;
-import java.util.Map;
-
 import com.google.common.collect.Maps;
 import com.jeno.fantasyleague.backend.model.League;
 import com.vaadin.flow.server.StreamResource;
+
+import java.io.ByteArrayInputStream;
+import java.util.Map;
 
 public class LeagueImageResourceCache {
 

@@ -1,12 +1,12 @@
 package com.jeno.fantasyleague.backend.data.service.repo.league;
 
-import java.util.List;
-import java.util.Map;
-
 import com.jeno.fantasyleague.backend.model.ContestantWeight;
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.Prediction;
 import com.jeno.fantasyleague.backend.model.User;
+
+import java.util.List;
+import java.util.Map;
 
 public interface LeagueService {
 

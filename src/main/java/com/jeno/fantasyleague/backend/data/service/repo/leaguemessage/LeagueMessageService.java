@@ -1,11 +1,11 @@
 package com.jeno.fantasyleague.backend.data.service.repo.leaguemessage;
 
-import java.util.List;
-
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.LeagueMessage;
 import com.jeno.fantasyleague.backend.model.LeagueUser;
 import com.jeno.fantasyleague.backend.model.User;
+
+import java.util.List;
 
 public interface LeagueMessageService {
 

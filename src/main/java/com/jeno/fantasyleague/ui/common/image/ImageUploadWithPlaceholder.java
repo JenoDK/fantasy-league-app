@@ -1,9 +1,5 @@
 package com.jeno.fantasyleague.ui.common.image;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.util.Optional;
-
 import com.jeno.fantasyleague.ui.common.field.CustomButton;
 import com.jeno.fantasyleague.ui.common.label.StatusLabel;
 import com.jeno.fantasyleague.util.Images;
@@ -11,8 +7,11 @@ import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.server.StreamResource;
-
 import io.reactivex.Observable;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.util.Optional;
 
 public class ImageUploadWithPlaceholder extends VerticalLayout {
 

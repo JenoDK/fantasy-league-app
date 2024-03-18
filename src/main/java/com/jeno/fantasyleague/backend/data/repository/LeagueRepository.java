@@ -1,15 +1,14 @@
 package com.jeno.fantasyleague.backend.data.repository;
 
-import java.util.List;
-
+import com.jeno.fantasyleague.backend.model.League;
+import com.jeno.fantasyleague.backend.model.User;
+import com.jeno.fantasyleague.backend.model.enums.Template;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.jeno.fantasyleague.backend.model.League;
-import com.jeno.fantasyleague.backend.model.User;
-import com.jeno.fantasyleague.backend.model.enums.Template;
+import java.util.List;
 
 @Repository
 public interface LeagueRepository extends JpaRepository<League, Long> {

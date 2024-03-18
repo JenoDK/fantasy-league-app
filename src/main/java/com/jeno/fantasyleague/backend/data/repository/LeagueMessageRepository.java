@@ -1,12 +1,11 @@
 package com.jeno.fantasyleague.backend.data.repository;
 
-import java.util.List;
-
+import com.jeno.fantasyleague.backend.model.League;
+import com.jeno.fantasyleague.backend.model.LeagueMessage;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.jeno.fantasyleague.backend.model.League;
-import com.jeno.fantasyleague.backend.model.LeagueMessage;
+import java.util.List;
 
 @Repository
 public interface LeagueMessageRepository extends JpaRepository<LeagueMessage, Long> {

@@ -1,8 +1,5 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.users;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.google.common.collect.Lists;
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.LeagueUser;
@@ -13,6 +10,9 @@ import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class UsersTab extends LazyTabComponent {
 

@@ -1,10 +1,5 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.users;
 
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import com.google.common.collect.Lists;
 import com.jeno.fantasyleague.backend.data.service.email.ApplicationEmailService;
 import com.jeno.fantasyleague.backend.model.EmailLeagueInvite;
@@ -28,9 +23,13 @@ import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.data.provider.CallbackDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.provider.ListDataProvider;
-
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class InviteUserLayout extends VerticalLayout {
 

@@ -1,7 +1,5 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.leaguesettings;
 
-import java.util.List;
-
 import com.jeno.fantasyleague.backend.data.service.email.ApplicationEmailService;
 import com.jeno.fantasyleague.backend.model.User;
 import com.jeno.fantasyleague.resources.Resources;
@@ -10,6 +8,8 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
+
+import java.util.List;
 
 public class SendMailPopupWindow {
 

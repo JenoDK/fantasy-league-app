@@ -1,10 +1,7 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague;
 
-import java.io.ByteArrayOutputStream;
-
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.ui.common.LeagueImageResourceCache;
-import com.jeno.fantasyleague.ui.common.field.CustomButton;
 import com.jeno.fantasyleague.ui.common.image.VaadinImageUploader;
 import com.jeno.fantasyleague.ui.common.label.StatusLabel;
 import com.jeno.fantasyleague.util.ImageUtil;
@@ -16,8 +13,9 @@ import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-
 import io.reactivex.Observable;
+
+import java.io.ByteArrayOutputStream;
 
 public class LeagueTopBar extends VerticalLayout {
 

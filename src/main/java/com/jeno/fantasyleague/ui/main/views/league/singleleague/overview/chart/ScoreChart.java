@@ -1,13 +1,21 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.chart;
 
-import static j2html.TagCreator.div;
-import static j2html.TagCreator.each;
-import static j2html.TagCreator.img;
-import static j2html.TagCreator.span;
-import static j2html.TagCreator.table;
-import static j2html.TagCreator.tbody;
-import static j2html.TagCreator.td;
-import static j2html.TagCreator.tr;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Multimap;
+import com.jeno.fantasyleague.backend.model.Contestant;
+import com.jeno.fantasyleague.backend.model.Game;
+import com.jeno.fantasyleague.backend.model.User;
+import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.chart.model.*;
+import com.jeno.fantasyleague.util.DateUtil;
+import com.jeno.fantasyleague.util.DecimalUtil;
+import com.vaadin.flow.component.ClientCallable;
+import com.vaadin.flow.component.Tag;
+import com.vaadin.flow.component.dependency.JsModule;
+import com.vaadin.flow.component.dependency.NpmPackage;
+import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.polymertemplate.Id;
+import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -19,27 +27,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Multimap;
-import com.jeno.fantasyleague.backend.model.Contestant;
-import com.jeno.fantasyleague.backend.model.Game;
-import com.jeno.fantasyleague.backend.model.User;
-import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.chart.model.DataRole;
-import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.chart.model.IconColor;
-import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.chart.model.ScoreChartData;
-import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.chart.model.ScoreChartDataPerDate;
-import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.chart.model.ScoreChartModel;
-import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.chart.model.ScoreChartSerieData;
-import com.jeno.fantasyleague.util.DateUtil;
-import com.jeno.fantasyleague.util.DecimalUtil;
-import com.vaadin.flow.component.ClientCallable;
-import com.vaadin.flow.component.Tag;
-import com.vaadin.flow.component.dependency.JsModule;
-import com.vaadin.flow.component.dependency.NpmPackage;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.polymertemplate.Id;
-import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
+import static j2html.TagCreator.*;
 
 @Tag("score-chart")
 @NpmPackage(value = "google-charts", version = "^2.0.0")

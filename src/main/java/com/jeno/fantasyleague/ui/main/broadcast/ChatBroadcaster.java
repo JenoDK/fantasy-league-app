@@ -1,13 +1,13 @@
 package com.jeno.fantasyleague.ui.main.broadcast;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.jeno.fantasyleague.ui.main.views.league.singleleague.chat.ChatMessage;
+import com.vaadin.flow.shared.Registration;
+
 import java.io.Serializable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
-
-import com.google.common.collect.ArrayListMultimap;
-import com.jeno.fantasyleague.ui.main.views.league.singleleague.chat.ChatMessage;
-import com.vaadin.flow.shared.Registration;
 
 public class ChatBroadcaster implements Serializable {
 

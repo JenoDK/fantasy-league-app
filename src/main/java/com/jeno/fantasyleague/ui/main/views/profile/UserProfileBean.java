@@ -1,10 +1,9 @@
 package com.jeno.fantasyleague.ui.main.views.profile;
 
+import com.jeno.fantasyleague.backend.model.User;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
-
-import com.jeno.fantasyleague.backend.model.User;
 
 public class UserProfileBean {
 

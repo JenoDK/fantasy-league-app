@@ -1,8 +1,5 @@
 package com.jeno.fantasyleague.ui.common.window;
 
-import java.util.List;
-import java.util.function.Function;
-
 import com.google.common.collect.Lists;
 import com.jeno.fantasyleague.ui.common.field.CustomButton;
 import com.jeno.fantasyleague.util.VaadinUtil;
@@ -11,6 +8,9 @@ import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+
+import java.util.List;
+import java.util.function.Function;
 
 public class PopupWindow extends Dialog {
 

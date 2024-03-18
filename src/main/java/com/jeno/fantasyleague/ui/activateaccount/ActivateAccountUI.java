@@ -1,8 +1,5 @@
 package com.jeno.fantasyleague.ui.activateaccount;
 
-import java.util.List;
-import java.util.Map;
-
 import com.jeno.fantasyleague.backend.data.dao.UserDao;
 import com.jeno.fantasyleague.backend.data.repository.AccountActivationTokenRepository;
 import com.jeno.fantasyleague.backend.data.repository.UserRepository;
@@ -13,15 +10,11 @@ import com.jeno.fantasyleague.ui.resetpassword.InvalidResetPasswordRequest;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.router.BeforeEvent;
-import com.vaadin.flow.router.HasUrlParameter;
-import com.vaadin.flow.router.Location;
-import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.QueryParameters;
-import com.vaadin.flow.router.Route;
-import com.vaadin.flow.router.RouterLayout;
-
+import com.vaadin.flow.router.*;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
+import java.util.Map;
 
 @PageTitle("Reset Password")
 @Route("activateAccount")

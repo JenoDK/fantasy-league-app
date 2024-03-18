@@ -1,9 +1,8 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.chart.model;
 
-import java.util.List;
-import java.util.Map;
-
 import com.vaadin.flow.templatemodel.TemplateModel;
+
+import java.util.List;
 
 public interface ScoreChartModel extends TemplateModel {
 	List<IconColor> iconColors();

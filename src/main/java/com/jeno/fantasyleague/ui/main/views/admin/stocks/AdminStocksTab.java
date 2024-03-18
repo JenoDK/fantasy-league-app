@@ -1,9 +1,5 @@
 package com.jeno.fantasyleague.ui.main.views.admin.stocks;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.User;
 import com.jeno.fantasyleague.backend.model.enums.Template;
@@ -14,6 +10,10 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.ListDataProvider;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class AdminStocksTab extends LazyTabComponent {
 

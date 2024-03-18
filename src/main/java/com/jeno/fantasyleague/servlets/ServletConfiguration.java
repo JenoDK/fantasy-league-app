@@ -1,10 +1,9 @@
 package com.jeno.fantasyleague.servlets;
 
+import com.jeno.fantasyleague.backend.data.repository.UserRepository;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import com.jeno.fantasyleague.backend.data.repository.UserRepository;
 
 @Configuration
 public class ServletConfiguration {

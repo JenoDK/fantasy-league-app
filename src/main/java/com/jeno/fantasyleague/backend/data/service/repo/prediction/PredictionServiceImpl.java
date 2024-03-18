@@ -1,8 +1,5 @@
 package com.jeno.fantasyleague.backend.data.service.repo.prediction;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.jeno.fantasyleague.backend.data.repository.GameRepository;
 import com.jeno.fantasyleague.backend.data.repository.PredictionRepository;
 import com.jeno.fantasyleague.backend.model.Game;
@@ -12,6 +9,9 @@ import com.jeno.fantasyleague.backend.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Transactional
 @Component

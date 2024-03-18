@@ -1,8 +1,5 @@
 package com.jeno.fantasyleague.ui.register;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-
 import com.jeno.fantasyleague.backend.data.dao.UserDao;
 import com.jeno.fantasyleague.backend.data.dao.ValidationException;
 import com.jeno.fantasyleague.backend.data.repository.EmailLeagueInviteRepository;
@@ -18,6 +15,8 @@ import com.vaadin.flow.component.page.Viewport;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLayout;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 @PageTitle("Register")
 @Route(value = "register")

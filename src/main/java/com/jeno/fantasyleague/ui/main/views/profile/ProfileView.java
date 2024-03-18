@@ -1,11 +1,5 @@
 package com.jeno.fantasyleague.ui.main.views.profile;
 
-import java.io.ByteArrayInputStream;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.jeno.fantasyleague.backend.data.dao.UserDao;
 import com.jeno.fantasyleague.backend.data.dao.ValidationException;
 import com.jeno.fantasyleague.backend.model.User;
@@ -31,6 +25,11 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLayout;
 import com.vaadin.flow.server.StreamResource;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.io.ByteArrayInputStream;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Tag("profile-view")
 @Route(value = State.StateUrlConstants.PROFILE, layout = MainView.class)

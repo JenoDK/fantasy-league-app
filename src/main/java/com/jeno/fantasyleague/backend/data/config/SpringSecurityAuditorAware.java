@@ -1,10 +1,10 @@
 package com.jeno.fantasyleague.backend.data.config;
 
-import java.util.Optional;
-
 import com.jeno.fantasyleague.backend.model.User;
 import com.vaadin.flow.server.VaadinSession;
 import org.springframework.data.domain.AuditorAware;
+
+import java.util.Optional;
 
 public class SpringSecurityAuditorAware implements AuditorAware<User> {
 

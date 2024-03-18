@@ -1,21 +1,18 @@
 package com.jeno.fantasyleague.ui.main.views.notifications;
 
-import java.util.function.Consumer;
-
 import com.jeno.fantasyleague.backend.model.UserNotification;
 import com.vaadin.flow.component.ClientCallable;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.H4;
-import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import com.vaadin.flow.templatemodel.TemplateModel;
+
+import java.util.function.Consumer;
 
 @Tag("notification-card")
 @JsModule("./src/views/notification/notification-card.js")

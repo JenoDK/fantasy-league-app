@@ -1,7 +1,5 @@
 package com.jeno.fantasyleague.ui.main.views.league.gridlayout;
 
-import java.util.stream.Collectors;
-
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.User;
 import com.jeno.fantasyleague.ui.common.LeagueImageResourceCache;
@@ -16,8 +14,9 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import com.vaadin.flow.templatemodel.TemplateModel;
-
 import io.reactivex.subjects.BehaviorSubject;
+
+import java.util.stream.Collectors;
 
 @Tag("league-card")
 @JsModule("./src/views/league/league-card.js")

@@ -1,7 +1,5 @@
 package com.jeno.fantasyleague.ui.main.views.league.gridlayout;
 
-import java.util.Map;
-
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.enums.Template;
 import com.jeno.fantasyleague.ui.common.field.CustomButton;
@@ -17,8 +15,9 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
-
 import io.reactivex.Observable;
+
+import java.util.Map;
 
 @JsModule("./styles/league-form-styles.js")
 public class LeagueForm extends HorizontalLayout {

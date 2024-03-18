@@ -1,13 +1,5 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.stocks;
 
-import static com.jeno.fantasyleague.ui.main.views.league.singleleague.stocks.StocksBean.COSMETICAL_PRICE_MODIFIER;
-
-import java.math.BigDecimal;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import com.jeno.fantasyleague.backend.model.ContestantWeight;
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.User;
@@ -22,6 +14,14 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.data.binder.ValidationResult;
 import com.vaadin.flow.data.provider.DataProvider;
+
+import java.math.BigDecimal;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static com.jeno.fantasyleague.ui.main.views.league.singleleague.stocks.StocksBean.COSMETICAL_PRICE_MODIFIER;
 
 public class StocksTab extends LazyTabComponent {
 

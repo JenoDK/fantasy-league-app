@@ -1,9 +1,8 @@
 package com.jeno.fantasyleague.backend.data.service.leaguetemplates.eufaeuro2020;
 
+import com.jeno.fantasyleague.backend.data.service.leaguetemplates.FootballInitializer;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.jeno.fantasyleague.backend.data.service.leaguetemplates.FootballInitializer;
 
 @Component
 @Transactional(rollbackFor = Exception.class)
