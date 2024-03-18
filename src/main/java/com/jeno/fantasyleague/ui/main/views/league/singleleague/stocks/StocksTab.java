@@ -56,7 +56,7 @@ public class StocksTab extends LazyTabComponent {
 		add(stocksGrid);
 		HtmlLabel source = new HtmlLabel();
 		source.getElement().getThemeList().add("small");
-		source.setText("<i>Stock prices are decided based on scores found at <a href=\"https://nl-sports.unibet.be/betting/sports/event/1007377084\" target=\"_blank\">Unibet</a></i>");
+		source.setText("<i>Stock prices are decided based on scores found at <a href=\"https://kassiesa.net/uefa/data/method5/crank2024.html\" target=\"_blank\">UEFA Country Ranking 2024</a></i>");
 		add(source);
 	}
 

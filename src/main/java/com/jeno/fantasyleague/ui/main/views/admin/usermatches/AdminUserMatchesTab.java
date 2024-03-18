@@ -73,7 +73,7 @@ public class AdminUserMatchesTab extends LazyTabComponent {
 
 	private List<League> getLeagues() {
 		return singleLeagueServiceProvider.getLeagueRepository().findAll().stream()
-				.filter(leagueBean -> Template.FIFA_WORLD_CUP_2022.equals(leagueBean.getTemplate()))
+				.filter(leagueBean -> Template.UEFA_EURO_2024.equals(leagueBean.getTemplate()))
 				.collect(Collectors.toList());
 	}
 }

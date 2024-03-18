@@ -110,7 +110,7 @@ public class SingleLeagueServiceProvider {
 					if (DateUtil.nowIsBeforeUtcDateTime(prediction.getGame().getGameDateTime()) || isForSuperAdmin) {
 						getPredictionRepository().saveAndFlush(prediction);
 						List<LeagueUser> leagueUsers = leagueUserRepository.findByUser(getLoggedInUser()).stream()
-								.filter(lu -> Template.FIFA_WORLD_CUP_2022.equals(lu.getLeague().getTemplate()))
+								.filter(lu -> Template.UEFA_EURO_2024.equals(lu.getLeague().getTemplate()))
 								.collect(Collectors.toList());
 						if (leagueUsers.size() > 1) {
 							leagueUsers.stream()

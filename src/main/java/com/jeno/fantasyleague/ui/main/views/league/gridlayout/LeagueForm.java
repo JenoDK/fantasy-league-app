@@ -93,7 +93,7 @@ public class LeagueForm extends HorizontalLayout {
 
 	public void reset() {
 		League bean = new League();
-		bean.setTemplate(Template.FIFA_WORLD_CUP_2022);
+		bean.setTemplate(Template.UEFA_EURO_2024);
 		binder.setBean(bean);
 	}
 }

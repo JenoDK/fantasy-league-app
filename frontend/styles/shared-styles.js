@@ -366,12 +366,12 @@ $_documentContainer.innerHTML = `
 
 				@media (min-width: 700px) {
 					.default-league-banner {
-						content:url("images/default_league_banner_worldcup_2022.png") !important;
+						content:url("images/default_league_banner_euro_2024.png") !important;
 					}
 				}
 
 				.default-league-banner {
-					content:url("images/default_league_banner_worldcup_2022_mobile.png");
+					content:url("images/default_league_banner_euro_2024.png");
 				}
 			</style>
 		</template>
@@ -484,12 +484,12 @@ $_documentContainer.innerHTML = `
 					padding-right: 1em;
 				}
 				.default-league-banner {
-					content:url("images/default_league_banner_worldcup_2022.png") !important;
+					content:url("images/default_league_banner_euro_2024.png") !important;
 				}
 			}
 
 			.default-league-banner {
-				content:url("images/default_league_banner_worldcup_2022_mobile.png");
+				content:url("images/default_league_banner_euro_2024.png");
 			}
 
 		</style>

@@ -111,7 +111,7 @@ public class LeagueView {
 		if (!leagues.isEmpty()) {
 			leagueInfoLabel.setVisible(false);
 			List<LeagueBean> world2022Leagues = leagues.stream()
-					.filter(leagueBean -> Template.FIFA_WORLD_CUP_2022.equals(leagueBean.getLeague().getTemplate()))
+					.filter(leagueBean -> Template.UEFA_EURO_2024.equals(leagueBean.getLeague().getTemplate()))
 					.collect(Collectors.toList());
 			List<LeagueBean> uefa2020Leagues = leagues.stream()
 					.filter(leagueBean -> Template.UEFA_EURO_2020.equals(leagueBean.getLeague().getTemplate()))

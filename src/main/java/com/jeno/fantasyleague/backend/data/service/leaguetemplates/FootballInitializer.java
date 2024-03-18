@@ -217,7 +217,7 @@ public abstract class FootballInitializer {
 			this.oddsTop2 = null;
 			this.oddsTop1 = unibetScoreWinner;
 			this.iconPath = iconPath;
-			this.powerIndex = null;
+			this.powerIndex = unibetScoreWinner;
 		}
 
 		public Team(String name, Group group, Double oddsTop8, Double oddsTop4, Double oddsTop3, Double oddsTop2, Double oddsTop1, String iconPath, Double powerIndex) {

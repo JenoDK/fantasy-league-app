@@ -1,25 +1,9 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague.matches;
 
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
-
 import com.google.common.collect.Lists;
 import com.jeno.fantasyleague.backend.data.service.leaguetemplates.SoccerCupStages;
 import com.jeno.fantasyleague.backend.data.service.leaguetemplates.fifaworld2022.FifaWorldCup2022Initializer;
-import com.jeno.fantasyleague.backend.model.Contestant;
-import com.jeno.fantasyleague.backend.model.ContestantWeight;
-import com.jeno.fantasyleague.backend.model.Game;
-import com.jeno.fantasyleague.backend.model.League;
-import com.jeno.fantasyleague.backend.model.Prediction;
-import com.jeno.fantasyleague.backend.model.User;
+import com.jeno.fantasyleague.backend.model.*;
 import com.jeno.fantasyleague.resources.Resources;
 import com.jeno.fantasyleague.ui.common.tabsheet.LazyTabComponent;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
@@ -30,6 +14,13 @@ import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.menubar.MenuBarVariant;
+
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class MatchTab extends LazyTabComponent {
 
@@ -42,10 +33,10 @@ public class MatchTab extends LazyTabComponent {
 	private final boolean userIsAdmin;
 	private final boolean isForAdminModule;
 
-	private MatchGrid matchGrid;
-	private MatchGrid matchesToday;
-	private MatchGrid matchesYesterday;
-	private MatchGrid matchesTomorrow;
+	private MatchGrid allMatchesGrid;
+	private MatchGrid matchesTodayGrid;
+	private MatchGrid matchesYesterdayGrid;
+	private MatchGrid matchesTomorrowGrid;
 	private List<MenuItem> gridMenuItems = Lists.newArrayList();
 	private MenuBar filterBar;
 	private H2 todayMatchesLabel;
@@ -83,20 +74,31 @@ public class MatchTab extends LazyTabComponent {
 		filterBar.setWidthFull();
 		filterBar.addThemeVariants(MenuBarVariant.LUMO_SMALL, MenuBarVariant.LUMO_PRIMARY);
 
-		matchesToday = createGrid(() -> getMatchBeans(Optional.of(TODAY_PREDICATE)));
-		matchesYesterday = createGrid(() -> getMatchBeans(Optional.of(YESTERDAY_PREDICATE)));
-		matchesTomorrow = createGrid(() -> getMatchBeans(Optional.of(TOMORROW_PREDICATE)));
-		matchGrid = createGrid(this::getMatches);
+		List<MatchBean> matchesToday = getMatchBeans(Optional.of(TODAY_PREDICATE));
+		List<MatchBean> matchesYesterday = getMatchBeans(Optional.of(YESTERDAY_PREDICATE));
+		List<MatchBean> matchesTomorrow = getMatchBeans(Optional.of(TOMORROW_PREDICATE));
 
 		createFilterBar(filterBar);
+		add(filterBar);
+		if (!matchesToday.isEmpty()) {
+			todayMatchesLabel = new H2("Matches of today");
+			matchesTodayGrid = createGrid(() -> matchesToday);
+			add(todayMatchesLabel, matchesTodayGrid);
+		}
+		if (!matchesYesterday.isEmpty()) {
+			yesterdayMatchesLabel = new H2("Matches of yesterday");
+			matchesYesterdayGrid = createGrid(() -> matchesYesterday);
+			add(yesterdayMatchesLabel, matchesYesterdayGrid);
+		}
+		if (!matchesTomorrow.isEmpty()) {
+			tomorrowMatchesLabel = new H2("Matches of tomorrow");
+			matchesTomorrowGrid = createGrid(() -> matchesTomorrow);
+			add(tomorrowMatchesLabel, matchesTomorrowGrid);
+		}
 
-		todayMatchesLabel = new H2("Matches of today");
-		yesterdayMatchesLabel = new H2("Matches of yesterday");
-		tomorrowMatchesLabel = new H2("Matches of tomorrow");
+		allMatchesGrid = createGrid(this::getMatches);
 		allMatchesLabel = new H2("All matches");
-
-		add(filterBar, todayMatchesLabel, matchesToday, yesterdayMatchesLabel, matchesYesterday, tomorrowMatchesLabel, matchesTomorrow);
-		add(allMatchesLabel, matchGrid);
+		add(allMatchesLabel, allMatchesGrid);
 	}
 	
 	private MatchGrid createGrid(Supplier<List<MatchBean>> matchesProvider) {
@@ -118,46 +120,70 @@ public class MatchTab extends LazyTabComponent {
 	}
 
 	private void showMatches(MenuItem bacMenuItem) {
-		matchesToday.setVisible(true);
-		matchesYesterday.setVisible(true);
-		matchesTomorrow.setVisible(true);
-		matchGrid.setVisible(true);
+		if (matchesTodayGrid != null) {
+			matchesTodayGrid.setVisible(true);
+		}
+		if (matchesYesterdayGrid != null) {
+			matchesYesterdayGrid.setVisible(true);
+		}
+		if (matchesTomorrowGrid != null) {
+			matchesTomorrowGrid.setVisible(true);
+		}
+		if (todayMatchesLabel != null) {
+			todayMatchesLabel.setVisible(true);
+		}
+		if (yesterdayMatchesLabel != null) {
+			yesterdayMatchesLabel.setVisible(true);
+		}
+		if (tomorrowMatchesLabel != null) {
+			tomorrowMatchesLabel.setVisible(true);
+		}
+		allMatchesGrid.setVisible(true);
 		bacMenuItem.setVisible(false);
 		gridMenuItems.forEach(item -> item.setVisible(true));
-		todayMatchesLabel.setVisible(true);
-		yesterdayMatchesLabel.setVisible(true);
-		tomorrowMatchesLabel.setVisible(true);
 		allMatchesLabel.setVisible(true);
 	}
 
 	private void hideMatches() {
-		matchesToday.setVisible(false);
-		matchesYesterday.setVisible(false);
-		matchesTomorrow.setVisible(false);
-		matchGrid.setVisible(false);
+		if (matchesTodayGrid != null) {
+			matchesTodayGrid.setVisible(false);
+		}
+		if (matchesYesterdayGrid != null) {
+			matchesYesterdayGrid.setVisible(false);
+		}
+		if (matchesTomorrowGrid != null) {
+			matchesTomorrowGrid.setVisible(false);
+		}
+		if (todayMatchesLabel != null) {
+			todayMatchesLabel.setVisible(false);
+		}
+		if (yesterdayMatchesLabel != null) {
+			yesterdayMatchesLabel.setVisible(false);
+		}
+		if (tomorrowMatchesLabel != null) {
+			tomorrowMatchesLabel.setVisible(false);
+		}
+		allMatchesGrid.setVisible(false);
 		gridMenuItems.forEach(item -> item.setVisible(false));
-		todayMatchesLabel.setVisible(false);
-		yesterdayMatchesLabel.setVisible(false);
-		tomorrowMatchesLabel.setVisible(false);
 		allMatchesLabel.setVisible(false);
 	}
 
 	private void createFilterBar(MenuBar filterBar) {
 		MenuItem refreshItem = filterBar.addItem(VaadinIcon.REFRESH.create());
 		refreshItem.addClickListener(ignored -> {
-			matchGrid.setMatches(getMatches());
-			matchesToday.setMatches(getMatchBeans(Optional.of(TODAY_PREDICATE)));
-			matchesYesterday.setMatches(getMatchBeans(Optional.of(YESTERDAY_PREDICATE)));
-			matchesTomorrow.setMatches(getMatchBeans(Optional.of(TOMORROW_PREDICATE)));
+			allMatchesGrid.setMatches(getMatches());
+			matchesTodayGrid.setMatches(getMatchBeans(Optional.of(TODAY_PREDICATE)));
+			matchesYesterdayGrid.setMatches(getMatchBeans(Optional.of(YESTERDAY_PREDICATE)));
+			matchesTomorrowGrid.setMatches(getMatchBeans(Optional.of(TOMORROW_PREDICATE)));
 		});
 		MenuItem showAllItem = filterBar.addItem(Resources.getMessage("showAllMatches"));
-		showAllItem.addClickListener(ignored -> matchGrid.clearFilter());
+		showAllItem.addClickListener(ignored -> allMatchesGrid.clearFilter());
 		gridMenuItems.add(refreshItem);
 		gridMenuItems.add(showAllItem);
 		Arrays.stream(SoccerCupStages.values())
 				.forEach(stage -> {
 					MenuItem item = filterBar.addItem(Resources.getMessage(stage.getName()));
-					item.addClickListener(ignored -> matchGrid.filterOnStage(stage));
+					item.addClickListener(ignored -> allMatchesGrid.filterOnStage(stage));
 					gridMenuItems.add(item);
 				});
 		MenuItem specificGroup = filterBar.addItem("Specific group");
@@ -165,7 +191,7 @@ public class MatchTab extends LazyTabComponent {
 		Arrays.stream(FifaWorldCup2022Initializer.groups())
 				.forEach(group -> {
 					MenuItem groupItem = specificGroup.getSubMenu().addItem(group.getGroupName());
-					groupItem.addClickListener(ignored -> matchGrid.filterOnGroupStage(group));
+					groupItem.addClickListener(ignored -> allMatchesGrid.filterOnGroupStage(group));
 				});
 	}
 

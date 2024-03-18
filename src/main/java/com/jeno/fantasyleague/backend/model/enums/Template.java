@@ -5,6 +5,7 @@ import com.jeno.fantasyleague.util.Images;
 
 public enum Template {
 
+	UEFA_EURO_2024("UEFA EURO 2024", Images.Icons.UEFA_EURO_2024, LeagueTemplateConfig.UEFA_EURO_2024),
 	FIFA_WORLD_CUP_2022("FIFA WORLD CUP QATAR 2022", Images.Icons.FIFA_WORLD_CUP_2022, LeagueTemplateConfig.FIFA_WORLD_CUP_2022),
 	UEFA_EURO_2020("UEFA EURO 2020", Images.Icons.UEFA_EURO_2020, LeagueTemplateConfig.UEFA_EURO_2020),
 	FIFA_WORLD_CUP_2018("FIFA World Cup 2018", Images.Icons.FIFA_WORLD_CUP_2018, LeagueTemplateConfig.FIFA_WORLD_CUP_2018),
