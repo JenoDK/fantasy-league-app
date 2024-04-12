@@ -20,4 +20,5 @@ public interface LeagueService {
 
 	Map<Long,Double> getPredictionScoresForUser(League league, List<Prediction> predictionsWithJoinedGames, List<ContestantWeight> contestantWeights);
 
+	void addUserToDefaultLeague(User user);
 }

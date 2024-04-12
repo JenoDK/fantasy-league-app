@@ -23,6 +23,7 @@ public class UefaEuro2024Initializer extends FootballInitializer {
 
 	@Override
 	protected Team[] getTeams() {
+		// Power indices based of https://kassiesa.net/uefa/data/method5/crank2024.html
 		return new Team[]{
 				new Team("England", GROUP_C, 100.0, "images/icons/country_icons/england.png"),
 				new Team("Spain", GROUP_B, 85.14962612926846, "images/icons/country_icons/spain.png"),
@@ -38,16 +39,16 @@ public class UefaEuro2024Initializer extends FootballInitializer {
 				new Team("Switzerland", GROUP_A, 31.91914856542855, "images/icons/country_icons/switzerland.png"),
 				new Team("Austria", GROUP_D, 31.618874366131498, "images/icons/country_icons/austria.png"),
 				new Team("Denmark", GROUP_C, 30.54010250774111, "images/icons/country_icons/denmark.png"),
+				new Team("Ukraine", GROUP_E, 27.05, "images/icons/country_icons/ukraine.png"),
 				new Team("Serbia", GROUP_C, 26.907041981802263, "images/icons/country_icons/serbia.png"),
 				new Team("Croatia", GROUP_B, 24.740229479201854, "images/icons/country_icons/croatia.png"),
+				new Team("Poland", GROUP_D, 24.53, "images/icons/country_icons/poland.png"),
 				new Team("Hungary", GROUP_A, 21.220504273638458, "images/icons/country_icons/hungary.png"),
 				new Team("Romania", GROUP_E, 20.756575755057408, "images/icons/country_icons/romania.png"),
 				new Team("Slovakia", GROUP_E, 19.032777315806147, "images/icons/country_icons/slovakia.png"),
 				new Team("Slovenia", GROUP_C, 12.850973412076513, "images/icons/country_icons/slovenia.png"),
+				new Team("Georgia", GROUP_F, 7.37, "images/icons/country_icons/georgia.png"),
 				new Team("Albania", GROUP_B, 7.164637513812147, "images/icons/country_icons/albania.png"),
-				new Team("Play-off Winner A", GROUP_D, 0.0, "images/icons/country_icons/unknown.png"),
-				new Team("Play-off Winner B", GROUP_E, 0.0, "images/icons/country_icons/unknown.png"),
-				new Team("Play-off Winner C", GROUP_F, 0.0, "images/icons/country_icons/unknown.png"),
 		};
 	}
 

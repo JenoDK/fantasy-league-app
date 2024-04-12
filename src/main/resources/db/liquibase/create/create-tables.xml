@@ -91,6 +91,7 @@
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
+            <column name="guid" type="VARCHAR(36)"/>
             <column name="name" type="VARCHAR(32)"/>
             <column name="description" type="LONGTEXT"/>
             <column name="league_picture" type="LONGBLOB"/>

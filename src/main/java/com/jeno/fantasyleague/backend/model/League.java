@@ -3,6 +3,7 @@ package com.jeno.fantasyleague.backend.model;
 import com.google.common.collect.Sets;
 import com.jeno.fantasyleague.backend.model.audit.UserAudit;
 import com.jeno.fantasyleague.backend.model.enums.Template;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -18,6 +19,10 @@ public class League extends UserAudit {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
+	@GeneratedValue(generator = "uuid-hibernate-generator")
+	@GenericGenerator(name = "uuid-hibernate-generator", strategy = "org.hibernate.id.UUIDGenerator")
+	private String guid;
 
 	@NotEmpty
 	@Length(max = 255)
@@ -52,6 +57,14 @@ public class League extends UserAudit {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getGuid() {
+		return guid;
+	}
+
+	public void setGuid(String guid) {
+		this.guid = guid;
 	}
 
 	public String getName() {

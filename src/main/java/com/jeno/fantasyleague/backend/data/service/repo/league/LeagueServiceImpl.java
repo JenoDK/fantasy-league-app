@@ -14,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Map;
 
+import static com.jeno.fantasyleague.FantasyLeagueApplicationRunner.DEFAULT_LUEAGUE_GUID;
+
 @Transactional
 @Component
 public class LeagueServiceImpl implements LeagueService {
@@ -76,6 +78,11 @@ public class LeagueServiceImpl implements LeagueService {
 			List<ContestantWeight> contestantWeights) {
 		LeagueTemplateService templateServiceBean = beanFactory.getBean(league.getTemplate().getTemplateServiceBeanName(), LeagueTemplateService.class);
 		return templateServiceBean.calculateScoresForUser(league, predictionsWithJoinedGames, contestantWeights);
+	}
+
+	@Override
+	public void addUserToDefaultLeague(User user) {
+		leagueRepo.findByGuid(DEFAULT_LUEAGUE_GUID).ifPresent(defaultLeague -> addUserToLeague(defaultLeague, user));
 	}
 
 }

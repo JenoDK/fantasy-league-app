@@ -9,9 +9,12 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface LeagueRepository extends JpaRepository<League, Long> {
+
+	Optional<League> findByGuid(String guid);
 
 	@Query("SELECT l.owners FROM League l WHERE l.id = :id")
 	List<User> fetchLeagueOwners(@Param("id") Long leagueId);

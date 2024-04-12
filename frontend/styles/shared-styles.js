@@ -371,7 +371,7 @@ $_documentContainer.innerHTML = `
 				}
 
 				.default-league-banner {
-					content:url("images/default_league_banner_euro_2024.png");
+					content:url("images/default_league_banner_euro_2024_mobile.png");
 				}
 			</style>
 		</template>
@@ -489,7 +489,7 @@ $_documentContainer.innerHTML = `
 			}
 
 			.default-league-banner {
-				content:url("images/default_league_banner_euro_2024.png");
+				content:url("images/default_league_banner_euro_2024_mobile.png");
 			}
 
 		</style>

@@ -10,6 +10,7 @@ public class SpringSecurityAuditorAware implements AuditorAware<User> {
 
 	@Override
 	public Optional<User> getCurrentAuditor() {
-		return Optional.ofNullable(VaadinSession.getCurrent().getAttribute(User.class));
+		return Optional.ofNullable(VaadinSession.getCurrent())
+				.map(session -> session.getAttribute(User.class));
 	}
 }
