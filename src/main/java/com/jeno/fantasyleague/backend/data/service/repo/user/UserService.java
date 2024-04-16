@@ -43,4 +43,11 @@ public interface UserService {
 	 * @return users with their roles
 	 */
 	Optional<User> findByUsernameAndJoinRoles(String name);
+
+	/**
+	 * Fetches users where externalAuthId equals <i>externalId</i> and join the users' roles
+	 * @param externalId
+	 * @return users with their roles
+	 */
+	Optional<User> findByExternalAuthIdAndJoinRoles(String externalId);
 }

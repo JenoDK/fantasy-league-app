@@ -56,7 +56,7 @@ public class RegisterUI extends RedirectUI implements RouterLayout {
 			}
 			if (accountActivationRequired) {
 				User createdUser = userDao.add(user);
-				leagueService.addUserToDefaultLeague(user);
+				leagueService.addUserToDefaultLeague(createdUser);
 				accountActivationService.sendAccountActivationEmail(createdUser, VaadinUtil.getRootRequestURL());
 				StringBuilder sb = new StringBuilder();
 				sb.append("Thanks for your registration " + createdUser.getUsername());
@@ -65,7 +65,7 @@ public class RegisterUI extends RedirectUI implements RouterLayout {
 			} else {
 				user.setActive(true);
 				User createdUser = userDao.add(user);
-				leagueService.addUserToDefaultLeague(user);
+				leagueService.addUserToDefaultLeague(createdUser);
 				emailLeagueInviteRepository.findByEmail(user.getEmail()).forEach(emailLeagueInvite -> {
 					leagueService.addUserToLeague(emailLeagueInvite.getLeague(), createdUser);
 					emailLeagueInvite.setConsumed(true);

@@ -65,6 +65,10 @@ public class User extends DateAudit {
 	@Enumerated(EnumType.STRING)
 	private GraphPreference graph_preference = GraphPreference.COLUMN;
 
+	@Length(max = 100)
+	@Column(name = "external_auth_id")
+	private String externalAuthId;
+
 	public User() {
 	}
 
@@ -153,5 +157,13 @@ public class User extends DateAudit {
 
 	public void setNotifications(Set<UserNotification> notifications) {
 		this.notifications = notifications;
+	}
+
+	public String getExternalAuthId() {
+		return externalAuthId;
+	}
+
+	public void setExternalAuthId(String externalAuthId) {
+		this.externalAuthId = externalAuthId;
 	}
 }

@@ -49,6 +49,11 @@ public class UserServiceImpl implements UserService {
 		return userRepository.findOne(UserSpecifications.rolesJoin().and(UserSpecifications.usernameEquals(name)));
 	}
 
+	@Override
+	public Optional<User> findByExternalAuthIdAndJoinRoles(String externalId) {
+		return userRepository.findOne(UserSpecifications.rolesJoin().and(UserSpecifications.externalIdEquals(externalId)));
+	}
+
 	private static OffsetBasedPageRequest getDefaultPageRequest(int offset, int limit) {
 		return new OffsetBasedPageRequest(offset, limit, Sort.Direction.ASC, "username", "name");
 	}

@@ -38,6 +38,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		this.userDetailsService = userDetailsService;
 	}
 
+	@Autowired
+	private CustomAuthenticationSuccessHandler authenticationSuccessHandler;
+
 	/**
 	 * Registers our UserDetailsService and the password encoder to be used on login attempts.
 	 */
@@ -77,7 +80,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.successHandler(new SavedRequestAwareAuthenticationSuccessHandler())
 
 				// Configure logout
-				.and().logout().logoutSuccessUrl("/login");
+				.and().logout().logoutSuccessUrl("/login")
+
+				// Configure OAuth2
+				.and().oauth2Login().loginPage(LOGIN_URL).successHandler(authenticationSuccessHandler);
 	}
 
 	/**

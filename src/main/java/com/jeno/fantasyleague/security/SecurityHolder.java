@@ -8,6 +8,7 @@ import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.util.StringUtils;
 
 import javax.transaction.Transactional;
@@ -29,7 +30,12 @@ public class SecurityHolder {
 		if (principal == null || StringUtils.isEmpty(principal.getName())){
 			return;
 		}
-		Optional<User> user = userService.findByUsernameAndJoinRoles(principal.getName());
+		Optional<User> user;
+		if (principal instanceof OAuth2AuthenticationToken) {
+			user = userService.findByExternalAuthIdAndJoinRoles(principal.getName());
+		} else {
+			user = userService.findByUsernameAndJoinRoles(principal.getName());
+		}
 		if (!user.isPresent()) {
 			return;
 		}

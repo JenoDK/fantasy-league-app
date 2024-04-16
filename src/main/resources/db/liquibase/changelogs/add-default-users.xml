@@ -13,6 +13,7 @@
             <column name="password" value="$2a$10$Oi9NHNKh4msYZszqp7oG0ezbpdE6G/oLaO99cj88MhL9e88DJT9A6"/>
             <column name="email" value="jenodekeyzer@gmail.com"/>
             <column name="active" valueBoolean="true"/>
+            <column name="external_auth_id" value="109304807898320874702"/>
         </insert>
     </changeSet>
 

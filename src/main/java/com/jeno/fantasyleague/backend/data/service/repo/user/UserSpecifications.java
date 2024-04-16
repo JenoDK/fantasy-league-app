@@ -24,6 +24,10 @@ public class UserSpecifications {
 				);
 	}
 
+	public static Specification<User> externalIdEquals(String externalId) {
+		return (root, query, cb) -> cb.equal(root.get("externalAuthId"), externalId);
+	}
+
 	/**
 	 * SQL: WHERE NOT user.id IN <i>idsToExclude</i>
 	 * @param idsToExclude
