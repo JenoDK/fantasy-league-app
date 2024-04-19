@@ -103,6 +103,7 @@
 }
 
 .loginBtn {
+    cursor: pointer;
     box-sizing: border-box;
     position: relative;
     /* width: 13em;  - apply for fixed size */
