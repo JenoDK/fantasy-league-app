@@ -44,7 +44,7 @@ public class LoginView extends VerticalLayout implements AfterNavigationObserver
 		loginForm.setForgotPasswordButtonVisible(false);
 		loginForm.setAction("login");
 		add(loginForm);
-		Anchor googleLoginLink = new Anchor("/oauth2/authorization/google");
+		Anchor googleLoginLink = new Anchor("oauth2/authorization/google");
 		// Generated with https://developers.google.com/identity/branding-guidelines, add the css to login-styles.css
 		googleLoginLink.getElement().setProperty("innerHTML",
 				"<button class=\"gsi-material-button\">\n" +
@@ -65,7 +65,7 @@ public class LoginView extends VerticalLayout implements AfterNavigationObserver
 				"</button>");
 		add(googleLoginLink);
 
-		Anchor facebookLoginLink = new Anchor("/oauth2/authorization/facebook");
+		Anchor facebookLoginLink = new Anchor("oauth2/authorization/facebook");
 		// https://codepen.io/davidelrizzo/pen/vEYvyv
 		facebookLoginLink.getElement().setProperty("innerHTML",
 				"<button class=\"loginBtn loginBtn--facebook\">\n" +

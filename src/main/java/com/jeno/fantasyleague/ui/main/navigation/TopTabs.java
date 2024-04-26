@@ -51,9 +51,8 @@ public class TopTabs extends Tabs {
 	}
 
 	private static Anchor createLogoutLink() {
-		String contextPath = VaadinServlet.getCurrent().getServletContext().getContextPath();
 		final Anchor a = populateLink(new Anchor(), VaadinIcon.ARROW_RIGHT, "Logout");
-		a.setHref(contextPath + "/logout");
+		a.setHref("logout");
 		return a;
 	}
 
