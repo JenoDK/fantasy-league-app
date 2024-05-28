@@ -67,9 +67,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 				// Allow all flow internal requests.
 				.requestMatchers(SecurityUtils::isFrameworkInternalRequest).permitAll()
+				.antMatchers("/actuator/**").hasRole("ENDPOINT_ADMIN")
 
 				// Allow all requests by logged in users.
 				.anyRequest().hasAnyAuthority(RoleName.allRoles())
+				.and().httpBasic()
 
 				// Configure the login page.
 				.and().formLogin().loginPage(LOGIN_URL).permitAll().loginProcessingUrl(LOGIN_PROCESSING_URL)

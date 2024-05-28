@@ -1,7 +1,7 @@
 package com.jeno.fantasyleague.backend.model;
 
-import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+import javax.validation.constraints.NotEmpty;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -15,7 +15,7 @@ public class ContestantGroup {
 	private Long id;
 
 	@NotEmpty
-	@Length(max = 32)
+	@Size(max = 32)
 	private String name;
 
 	@ManyToOne(targetEntity = League.class, fetch = FetchType.LAZY)

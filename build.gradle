@@ -1,6 +1,6 @@
 buildscript {
 	ext {
-		springBootVersion = '2.2.2.RELEASE'
+		springBootVersion = '2.5.6'
 	}
 	repositories {
 		mavenCentral()
@@ -11,8 +11,8 @@ buildscript {
 }
 
 plugins {
-	id 'org.springframework.boot' version '2.2.4.RELEASE'
-	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+	id 'org.springframework.boot' version '2.5.6'
+	id 'io.spring.dependency-management' version '1.1.4'
 	id 'java'
 	id 'com.vaadin' version '0.14.10.4'
 //	id 'org.liquibase.gradle' version '2.0.4'
@@ -22,8 +22,8 @@ plugins {
 
 group = 'com.jeno'
 version = '2.0.0'
-sourceCompatibility = 11
-targetCompatibility = 11
+sourceCompatibility = 17
+targetCompatibility = 17
 
 repositories {
 	mavenCentral()
@@ -77,15 +77,16 @@ dependencies {
 	implementation('org.springframework.boot:spring-boot-starter-security')
 	implementation('org.springframework.boot:spring-boot-starter-web')
 	implementation('org.springframework.boot:spring-boot-starter-oauth2-client')
+	implementation('org.springframework.boot:spring-boot-starter-validation')
 
-	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-log4j2', version: '2.0.0.RELEASE'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-log4j2', version: '3.2.5'
 
 //	compile vaadin.bom()
 //	compile vaadin.core()
 //	compile vaadin.lumoTheme()
 //	compile('com.vaadin:vaadin-spring-boot-starter')
 
-	implementation("org.liquibase:liquibase-core:3.8.2") {
+	implementation("org.liquibase:liquibase-core:4.5.0") {
 		exclude group: "org.slf4j", module: "slf4j-api"
 		exclude group: "ch.qos.logback", module: "logback-classic"
 	}
@@ -96,6 +97,7 @@ dependencies {
 	implementation('org.apache.commons:commons-csv:1.5')
 	implementation('com.j2html:j2html:1.4.0')
 	implementation('mysql:mysql-connector-java')
+	implementation('de.codecentric:spring-boot-admin-starter-client:2.5.5')
 
 	testImplementation('org.springframework.boot:spring-boot-starter-test')
 	testImplementation('org.springframework.security:spring-security-test')

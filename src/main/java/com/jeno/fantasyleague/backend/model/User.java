@@ -3,9 +3,9 @@ package com.jeno.fantasyleague.backend.model;
 import com.google.common.collect.Sets;
 import com.jeno.fantasyleague.backend.model.audit.DateAudit;
 import org.hibernate.annotations.NaturalId;
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotBlank;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -30,21 +30,21 @@ public class User extends DateAudit {
 	private Long id;
 
 	@NotBlank
-	@Length(max = 40)
+	@Size(max = 40)
 	private String name;
 
 	@NotBlank
-	@Length(max = 30)
+	@Size(max = 30)
 	private String username;
 
 	@NaturalId(mutable = true)
 	@NotBlank
-	@Length(max = 40)
+	@Size(max = 40)
 	@Email
 	private String email;
 
 	@NotBlank
-	@Length(max = 100)
+	@Size(max = 100)
 	private String password;
 
 	private boolean active = false;
@@ -65,7 +65,7 @@ public class User extends DateAudit {
 	@Enumerated(EnumType.STRING)
 	private GraphPreference graph_preference = GraphPreference.COLUMN;
 
-	@Length(max = 100)
+	@Size(max = 100)
 	@Column(name = "external_auth_id")
 	private String externalAuthId;
 

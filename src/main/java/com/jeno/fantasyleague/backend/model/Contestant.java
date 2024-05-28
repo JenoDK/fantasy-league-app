@@ -1,8 +1,8 @@
 package com.jeno.fantasyleague.backend.model;
 
 import com.jeno.fantasyleague.backend.model.audit.UserAudit;
-import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+import javax.validation.constraints.NotEmpty;
 
 import javax.persistence.*;
 
@@ -15,14 +15,14 @@ public class Contestant extends UserAudit {
 	private Long id;
 
 	@NotEmpty
-	@Length(max = 32)
+	@Size(max = 32)
 	private String name;
 
 	@Lob
 	@Basic(fetch = FetchType.LAZY)
 	private byte[] icon;
 
-	@Length(max = 128)
+	@Size(max = 128)
 	private String icon_path;
 
 	@ManyToOne(targetEntity = League.class, fetch = FetchType.LAZY)

@@ -13,4 +13,10 @@
         </insert>
     </changeSet>
 
+    <changeSet author="Jeno" id="add-endpoint-admin-roles">
+        <insert tableName="roles">
+            <column name="name" value="ROLE_ENDPOINT_ADMIN"/>
+        </insert>
+    </changeSet>
+
 </databaseChangeLog>

@@ -1,7 +1,7 @@
 package com.jeno.fantasyleague.backend.model;
 
 import com.jeno.fantasyleague.backend.model.audit.UserAudit;
-import org.hibernate.validator.constraints.Length;
+import javax.validation.constraints.Size;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -50,7 +50,7 @@ public class Game extends UserAudit {
 	@Column(name = "next_game_id", insertable = false, updatable = false)
 	private Long next_game_fk;
 
-	@Length(max = 128)
+	@Size(max = 128)
 	private String location;
 
 	@Column(name = "game_date_time")

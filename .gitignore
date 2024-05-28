@@ -45,3 +45,4 @@ webpack.generated.js
 ### Personal stuff ###
 src/main/resources/application-hetzner.properties
 /release_hetzner.sh
+/fantasy-league.log

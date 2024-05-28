@@ -4,11 +4,11 @@ import com.google.common.collect.Sets;
 import com.jeno.fantasyleague.backend.model.audit.UserAudit;
 import com.jeno.fantasyleague.backend.model.enums.Template;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -24,8 +24,8 @@ public class League extends UserAudit {
 	@GenericGenerator(name = "uuid-hibernate-generator", strategy = "org.hibernate.id.UUIDGenerator")
 	private String guid;
 
-	@NotEmpty
-	@Length(max = 255)
+	@NotBlank
+	@Size(max = 255)
 	private String name;
 
 	private String description;

@@ -1,0 +1,26 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <include file="add-default-roles.xml" relativeToChangelogFile="true"/>
+
+    <changeSet author="Jeno" id="add-endpoint-admin-user">
+        <insert tableName="users">
+            <column name="name" value="ActuatorAdmin"/>
+            <column name="username" value="ActuatorAdmin"/>
+            <column name="password" value="$2a$12$xQ3jg8Biok0w2KlmZHxzYOHIWHA98bux8Q/BBWcPgXFPex/LpQcAm"/>
+            <column name="email" value="jenodekeyzer@outlook.com"/>
+            <column name="active" valueBoolean="true"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="Jeno" id="add-endpoint-admin-user-role">
+        <insert tableName="user_roles">
+            <column name="user_id" valueComputed="(SELECT id FROM users WHERE username = 'ActuatorAdmin')"/>
+            <column name="role_id" valueComputed="(SELECT id FROM roles WHERE name = 'ROLE_ENDPOINT_ADMIN')"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
