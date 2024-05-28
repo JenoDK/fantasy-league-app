@@ -33,12 +33,18 @@ public class LeagueTabs extends CustomTabs {
 
 	private void initLayout() {
 		setWidthFull();
+		getStyle()
+				.set("position", "sticky")
+				.set("top", "0")
+				.set("background-color", "var(--lumo-base-color)")
+				.set("z-index", "99999")
+				.set("box-shadow", "inset 0 -1px 0 0 var(--lumo-contrast-10pct)");
 		addThemeVariants(TabsVariant.LUMO_ICON_ON_TOP);
 
 		LazyTab overview = createTab("Overview", () -> new OverviewTab(leagueBean.getLeague(), singleLeagueServiceprovider));
 		LazyTab matches = createTab("Matches", () -> new MatchTab(leagueBean.getLeague(), singleLeagueServiceprovider, false, singleLeagueServiceprovider.getLoggedInUser()));
-		LazyTab groups = createTab("Groups", () -> new GroupsTab(leagueBean.getLeague(), singleLeagueServiceprovider));
 		LazyTab stocks = createTab("Stocks", () -> new StocksTab(leagueBean.getLeague(), singleLeagueServiceprovider));
+		LazyTab groups = createTab("Groups", () -> new GroupsTab(leagueBean.getLeague(), singleLeagueServiceprovider));
 		LazyTab faq = createTab("FAQ", () -> new FaqTab(leagueBean.getLeague(), singleLeagueServiceprovider));
 		add(overview, matches, groups, stocks, faq);
 		if (singleLeagueServiceprovider.loggedInUserIsLeagueAdmin(leagueBean.getLeague())) {
