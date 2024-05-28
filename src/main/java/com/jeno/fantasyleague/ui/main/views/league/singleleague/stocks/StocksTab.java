@@ -123,7 +123,7 @@ public class StocksTab extends LazyTabComponent {
 	private void updateBalanceLabel() {
 		BigDecimal weightToDistribute = getWeightToDistribute();
 		boolean exceedsLimit = weightToDistribute.compareTo(BigDecimal.ZERO) < 0;
-		balanceLabel.setText("$" + getWeightToDistributeString(weightToDistribute));
+		balanceLabel.setText(getWeightToDistributeString(weightToDistribute));
 		balanceLabel.addComponentAsFirst(VaadinIcon.WALLET.create());
 		if (exceedsLimit) {
 			balanceLabel.setErrorStyle();

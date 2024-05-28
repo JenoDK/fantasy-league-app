@@ -2,13 +2,16 @@ package com.jeno.fantasyleague.ui.main.views.league.singleleague.overview;
 
 import com.google.common.collect.Maps;
 import com.jeno.fantasyleague.backend.model.Contestant;
+import com.jeno.fantasyleague.backend.model.ContestantWeight;
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.User;
+import com.jeno.fantasyleague.ui.common.label.StatusLabel;
 import com.jeno.fantasyleague.ui.common.tabsheet.LazyTabComponent;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.chart.ScoreChart;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.chart.UserScoreBean;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.usertotalscore.UserTotalScoreGrid;
+import com.jeno.fantasyleague.util.VaadinUtil;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.contextmenu.MenuItem;
@@ -44,6 +47,14 @@ public class OverviewTab extends LazyTabComponent {
 		setSpacing(false);
 
 		User loggedInUser = singleLeagueServiceprovider.getLoggedInUser();
+
+		List<ContestantWeight> contestantWeights = singleLeagueServiceprovider.getContestantWeights(league);
+		if (contestantWeights.stream().allMatch(cw -> cw.getWeight() == 0)) {
+			StatusLabel purchaseStocksWarning = new StatusLabel();
+			purchaseStocksWarning.setErrorText("Don't forget to purchase your stocks.");
+			VaadinUtil.addStyles(purchaseStocksWarning.getStyle(), "margin: var(--lumo-space-xs);");
+			add(purchaseStocksWarning);
+		}
 
 		this.singleLeagueServiceprovider = singleLeagueServiceprovider;
 		this.league = league;

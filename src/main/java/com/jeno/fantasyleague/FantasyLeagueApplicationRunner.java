@@ -10,6 +10,8 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
+import java.util.Set;
+
 @Component
 public class FantasyLeagueApplicationRunner implements ApplicationRunner {
 
@@ -31,6 +33,8 @@ public class FantasyLeagueApplicationRunner implements ApplicationRunner {
                 defaultLeague.setName("EURO 2024 Pronostiek");
                 defaultLeague.setGuid(DEFAULT_LUEAGUE_GUID);
                 defaultLeague.setTemplate(Template.UEFA_EURO_2024);
+                defaultLeague.getOwners().add(jenoUser);
+                defaultLeague.setCreatedBy(jenoUser);
                 leagueService.addLeague(defaultLeague, jenoUser);
             });
         }

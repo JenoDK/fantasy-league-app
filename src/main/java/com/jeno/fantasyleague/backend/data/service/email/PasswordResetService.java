@@ -25,7 +25,7 @@ public class PasswordResetService {
 		String url = contextPath + "/resetPassword?token=" + token;
 		emailService.sendEmail(
 				"Reset password " + user.getUsername(),
-				"Click the following link to reset your password: " + url,
+				"Go to the following link to reset your password: " + url,
 				user);
 	}
 }
