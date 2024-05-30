@@ -7,7 +7,6 @@ import com.jeno.fantasyleague.ui.common.label.HtmlLabel;
 import com.jeno.fantasyleague.ui.common.window.PopupWindow;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.jeno.fantasyleague.ui.main.views.league.gridlayout.LeagueBean;
-import com.jeno.fantasyleague.util.DateUtil;
 import com.jeno.fantasyleague.util.VaadinUtil;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -58,13 +57,13 @@ public class LeagueTipDialog extends VerticalLayout {
 		changeStage(caption, infoLabel, leagueUser.getHelp_stage());
 
 		CustomButton skip = new CustomButton(VaadinIcon.ARROW_RIGHT, "");
-		skip.addThemeName("small-for-mobile small");
+		skip.addThemeName("small-for-mobile medium");
 		skip.setIconAfterText(true);
 		if (leagueUser.getHelp_stage().isLastStage()) {
 			skip.setEnabled(false);
 		}
 		CustomButton previous = new CustomButton(VaadinIcon.ARROW_LEFT, "");
-		previous.addThemeName("small-for-mobile small");
+		previous.addThemeName("small-for-mobile medium");
 		if (leagueUser.getHelp_stage().isFirstStage()) {
 			previous.setEnabled(false);
 		}
@@ -124,14 +123,10 @@ public class LeagueTipDialog extends VerticalLayout {
 	}
 
 	private void changeStage(Label caption, HtmlLabel infoLabel, LeagueUser.HelpStage nextStage) {
-		String infoText;
-		if (LeagueUser.HelpStage.FILL_PREDICTIONS.equals(nextStage)) {
-			infoText = Resources.getMessage(nextStage.getResourceKey(), DateUtil.formatInUserTimezone(leagueBean.getLeague().getLeague_starting_date()));
-		} else {
-			infoText = Resources.getMessage(nextStage.getResourceKey());
-		}
-		infoLabel.setText(infoText);
+		infoLabel.setText(Resources.getMessage(nextStage.getResourceKey()));
 		caption.setText(Resources.getMessage(nextStage.getTitleResourceKey()));
+		// Scroll the label back to top
+		infoLabel.getElement().executeJs("$0.scrollTop = 0;", infoLabel);
 	}
 
 	private HorizontalLayout createBasicBar() {
@@ -150,7 +145,7 @@ public class LeagueTipDialog extends VerticalLayout {
 				.setType(PopupWindow.Type.NO_BUTTONS)
 				.addExtraThemeNames("league-tip")
 				.setWidth("100%")
-				.setHeight("60%")
+				.setHeight("80%")
 				.build();
 		popupWindow.open();
 	}

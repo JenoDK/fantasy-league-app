@@ -130,7 +130,7 @@ $_documentContainer.innerHTML = `
 
 					:host([theme~="league-tip"]) {
 						max-width: 65em;
-						width: 80%
+						width: 90%
 					}
 				}
 

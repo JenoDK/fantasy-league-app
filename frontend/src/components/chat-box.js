@@ -20,7 +20,7 @@ class ChatBox extends PolymerElement {
                     z-index: 195;
 				}
 
-				@media (max-width: 900px) {
+				@media (max-width: 1300px) {
 					.chat-box {
 						bottom: 5px;
 						margin-left: 5px;
