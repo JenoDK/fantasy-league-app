@@ -17,6 +17,8 @@ import io.reactivex.subjects.BehaviorSubject;
 
 public class LeagueTipDialog extends VerticalLayout {
 
+	public static final String START_PLAYING_TEXT = "Start playing!";
+	public static final String NEXT_TIP_TEXT = "Next tip";
 	private final LeagueBean leagueBean;
 	private final LeagueUser leagueUser;
 	private BehaviorSubject<LeagueUser> hideTips = BehaviorSubject.create();
@@ -56,12 +58,11 @@ public class LeagueTipDialog extends VerticalLayout {
 
 		changeStage(caption, infoLabel, leagueUser.getHelp_stage());
 
-		CustomButton skip = new CustomButton(VaadinIcon.ARROW_RIGHT, "");
+		String startingText = leagueUser.getHelp_stage().isLastStage() ? START_PLAYING_TEXT : NEXT_TIP_TEXT;
+		CustomButton skip = new CustomButton(startingText, VaadinIcon.ARROW_RIGHT.create());
+		skip.setThemeName("primary");
 		skip.addThemeName("small-for-mobile medium");
 		skip.setIconAfterText(true);
-		if (leagueUser.getHelp_stage().isLastStage()) {
-			skip.setEnabled(false);
-		}
 		CustomButton previous = new CustomButton(VaadinIcon.ARROW_LEFT, "");
 		previous.addThemeName("small-for-mobile medium");
 		if (leagueUser.getHelp_stage().isFirstStage()) {
@@ -71,16 +72,17 @@ public class LeagueTipDialog extends VerticalLayout {
 			leagueUser.getHelp_stage().getNextStage()
 					.ifPresentOrElse(
 							nextStage -> {
+								skip.setText(NEXT_TIP_TEXT);
 								leagueUser.setHelp_stage(nextStage);
 								changeStage(caption, infoLabel, nextStage);
 							},
-							() -> skip.setEnabled(false)
+							this::close
 					);
 			if (leagueUser.getHelp_stage().getPreviousStage().isPresent()) {
 				previous.setEnabled(true);
 			}
-			if (leagueUser.getHelp_stage().isLastStage()) {
-				skip.setEnabled(false);
+			if (leagueUser.getHelp_stage().getNextStage().isEmpty()) {
+				skip.setText(START_PLAYING_TEXT);
 			}
 			skipTip.onNext(leagueUser);
 		});
@@ -88,6 +90,7 @@ public class LeagueTipDialog extends VerticalLayout {
 			leagueUser.getHelp_stage().getPreviousStage()
 					.ifPresentOrElse(
 							previousStage -> {
+								skip.setText(NEXT_TIP_TEXT);
 								leagueUser.setHelp_stage(previousStage);
 								changeStage(caption, infoLabel, previousStage);
 							},
