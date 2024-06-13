@@ -11,4 +11,11 @@
 		</update>
 	</changeSet>
 
+	<changeSet id="fix-turkey-name-and-games-also-for-away-games" author="Jeno">
+		<update tableName="game">
+			<column name="away_team_id" valueComputed="(SELECT con.id FROM contestant as con WHERE con.name = 'Turkey' AND con.league_id = game.league_id)"/>
+			<where>away_team_placeholder='Türkiye'</where>
+		</update>
+	</changeSet>
+
 </databaseChangeLog>
