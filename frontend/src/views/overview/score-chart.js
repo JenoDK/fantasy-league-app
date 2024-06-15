@@ -177,9 +177,9 @@ class ScoreChart extends PolymerElement {
                     var image = rect.parentElement.appendChild(document.createElementNS('http://www.w3.org/2000/svg', 'image'));
                     var profilePictureLink = '';
                     if (positionUserWithProfilePicture.has(index - 1)) {
-                        profilePictureLink = '/profileImage?userPk=' + positionUserWithProfilePicture.get(index - 1);
+                        profilePictureLink = '/fantasy-league/profileImage?userPk=' + positionUserWithProfilePicture.get(index - 1);
                     } else {
-                        profilePictureLink = "/images/default_profile_picture.png";
+                        profilePictureLink = "/fantasy-league/images/default_profile_picture.png";
                     }
                     image.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', profilePictureLink);
                     image.setAttribute('x', x);
