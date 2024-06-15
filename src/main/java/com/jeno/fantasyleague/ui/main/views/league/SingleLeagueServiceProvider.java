@@ -129,7 +129,7 @@ public class SingleLeagueServiceProvider {
 		if (loggedInUserIsLeagueAdmin(matchPredictionBean.getLeague())) {
 			Game game = matchPredictionBean.setGameScoresAndGetGameModelItem();
 			if (SoccerCupStages.GROUP_PHASE.toString().equals(game.getStage())) {
-				getGameService().updateGroupStageGameScores(List.of(game));
+				getGameService().updateGroupStageGameScores(game);
 			} else {
 				getGameService().updateKnockoutStageScore(game);
 			}

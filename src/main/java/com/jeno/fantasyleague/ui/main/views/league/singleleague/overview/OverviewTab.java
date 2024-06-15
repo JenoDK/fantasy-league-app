@@ -5,9 +5,11 @@ import com.jeno.fantasyleague.backend.model.Contestant;
 import com.jeno.fantasyleague.backend.model.ContestantWeight;
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.User;
+import com.jeno.fantasyleague.ui.common.field.CustomButton;
 import com.jeno.fantasyleague.ui.common.label.StatusLabel;
 import com.jeno.fantasyleague.ui.common.tabsheet.LazyTabComponent;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
+import com.jeno.fantasyleague.ui.main.views.league.singleleague.LeagueTabs;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.chart.ScoreChart;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.chart.UserScoreBean;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.usertotalscore.UserTotalScoreGrid;
@@ -34,13 +36,15 @@ public class OverviewTab extends LazyTabComponent {
 	private final SingleLeagueServiceProvider singleLeagueServiceprovider;
 	private final League league;
 	private final UserTotalScoreGrid totalScoreGrid;
+	private final LeagueTabs.TabSelector tabSelector;
 
 	private List<MenuItem> extraMenuItems;
 	private User loggedInUser;
 	private User.GraphPreference graphPreference;
 
-	public OverviewTab(League league, SingleLeagueServiceProvider singleLeagueServiceprovider) {
+	public OverviewTab(League league, SingleLeagueServiceProvider singleLeagueServiceprovider, LeagueTabs.TabSelector tabSelector) {
 		super();
+		this.tabSelector = tabSelector;
 		addClassName("overview-tab");
 		setMargin(false);
 		setPadding(false);
@@ -89,7 +93,7 @@ public class OverviewTab extends LazyTabComponent {
 		numberField.setHasControls(true);
 
 		MenuBar menuBar = new MenuBar();
-		menuBar.setWidthFull();
+		menuBar.getStyle().set("margin", "4px");
 
 		MenuItem chartSettingsMenu = menuBar.addItem(createMenuItem(VaadinIcon.CHART, "Chart settings"), null);
 
@@ -107,11 +111,15 @@ public class OverviewTab extends LazyTabComponent {
 		});
 		extraMenuItems = List.of(hBarChartMenuItem, vBarChartMenuItem, lineChartMenuItem);
 
+		CustomButton goToPredictions = new CustomButton("My predictions", VaadinIcon.GAMEPAD.create());
+		goToPredictions.getStyle().set("margin", "4px");
+		goToPredictions.addClickListener(ignored -> this.tabSelector.selectMatchesTab());
+
 		HorizontalLayout chartTopBar = new HorizontalLayout();
 		chartTopBar.setPadding(false);
 		chartTopBar.setMargin(false);
 		chartTopBar.setSpacing(false);
-		chartTopBar.add(numberField, menuBar);
+		chartTopBar.add(numberField, menuBar, goToPredictions);
 
 		add(chartTopBar);
 		add(scoreChart);

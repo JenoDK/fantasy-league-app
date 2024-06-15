@@ -11,6 +11,7 @@ public class DateUtil {
 	public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 	public static final DateTimeFormatter DATE_DAY_FORMATTER = DateTimeFormatter.ofPattern("dd/MM");
 	public static final String TIMEZONE_OFFSET_ATTRIBUTE = "timezoneOffset";
+	public static final String TIMEZONE_ID = "timezoneId";
 
 	private DateUtil() {
 	}
@@ -36,10 +37,12 @@ public class DateUtil {
 
 	public static String formatInUserTimezone(LocalDateTime localDateTime, DateTimeFormatter dateTimeFormatter) {
 		VaadinSession currentVaadinSession = VaadinSession.getCurrent();
-		if (currentVaadinSession != null && currentVaadinSession.getAttribute(TIMEZONE_OFFSET_ATTRIBUTE) != null) {
-			Instant asInstant = Instant.ofEpochSecond(localDateTime.toEpochSecond(ZoneOffset.UTC));
-			int timezoneOffsetInSeconds = (int) currentVaadinSession.getAttribute(TIMEZONE_OFFSET_ATTRIBUTE);
-			return dateTimeFormatter.format(asInstant.atOffset(ZoneOffset.ofTotalSeconds(timezoneOffsetInSeconds)));
+		if (currentVaadinSession != null && currentVaadinSession.getAttribute(TIMEZONE_ID) != null) {
+			ZoneId zoneId = ZoneId.of((String) currentVaadinSession.getAttribute(TIMEZONE_ID));
+			ZoneId utcZoneId = ZoneId.of("UTC");
+			ZonedDateTime utcZonedDateTime = localDateTime.atZone(utcZoneId);
+			ZonedDateTime targetZonedDateTime = utcZonedDateTime.withZoneSameInstant(zoneId);
+			return dateTimeFormatter.format(targetZonedDateTime);
 		} else {
 			return dateTimeFormatter.format(localDateTime);
 		}

@@ -169,7 +169,7 @@ public class ScoreChart extends PolymerTemplate<ScoreChartModel> {
 				.filter(s -> s.getScore() > 0)
 				.sorted(Comparator.comparing(ScorePerContestant::getScore).reversed())
 				.collect(Collectors.toList());
-		String profilePictureSrc = b.getUser().getProfile_picture() != null ? "/fantasy-league/profileImage?userPk=" + b.getUser().getId().toString() : "/images/default_profile_picture.png";
+		String profilePictureSrc = b.getUser().getProfile_picture() != null ? "/fantasy-league/profileImage?userPk=" + b.getUser().getId().toString() : "/fantasy-league/images/default_profile_picture.png";
 		return
 				div(
 						div(

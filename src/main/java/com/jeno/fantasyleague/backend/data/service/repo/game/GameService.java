@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface GameService {
 
-	void updateGroupStageGameScores(List<Game> games);
+	void updateGroupStageGameScores(Game game);
 
 	Game updateKnockoutStageScore(Game game);
 }

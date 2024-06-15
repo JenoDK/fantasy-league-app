@@ -41,8 +41,8 @@ public class LeagueTabs extends CustomTabs {
 				.set("box-shadow", "inset 0 -1px 0 0 var(--lumo-contrast-10pct)");
 		addThemeVariants(TabsVariant.LUMO_ICON_ON_TOP);
 
-		LazyTab overview = createTab("Overview", () -> new OverviewTab(leagueBean.getLeague(), singleLeagueServiceprovider));
 		LazyTab matches = createTab("Matches", () -> new MatchTab(leagueBean.getLeague(), singleLeagueServiceprovider, false, singleLeagueServiceprovider.getLoggedInUser()));
+		LazyTab overview = createTab("Overview", () -> new OverviewTab(leagueBean.getLeague(), singleLeagueServiceprovider, () -> setSelectedTab(matches)));
 		LazyTab stocks = createTab("Stocks", () -> new StocksTab(leagueBean.getLeague(), singleLeagueServiceprovider));
 		LazyTab groups = createTab("Groups", () -> new GroupsTab(leagueBean.getLeague(), singleLeagueServiceprovider));
 		LazyTab faq = createTab("FAQ", () -> new FaqTab(leagueBean.getLeague(), singleLeagueServiceprovider));
@@ -62,6 +62,10 @@ public class LeagueTabs extends CustomTabs {
 			}
 		};
 		return tab;
+	}
+
+	public interface TabSelector {
+		void selectMatchesTab();
 	}
 
 }

@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Transactional
 @Component
@@ -32,11 +31,8 @@ public class GameServiceImpl implements GameService {
 	private ContestantGroupRepository contestantGroupRepository;
 
 	@Override
-	public void updateGroupStageGameScores(List<Game> games) {
-		gameRepository.saveAll(games);
-		contestantRepository.saveAll(games.stream()
-				.flatMap(game -> Stream.of(game.getHome_team(), game.getAway_team()))
-				.collect(Collectors.toList()));
+	public void updateGroupStageGameScores(Game game) {
+		gameRepository.saveAndFlush(game);
 	}
 
 	@Override

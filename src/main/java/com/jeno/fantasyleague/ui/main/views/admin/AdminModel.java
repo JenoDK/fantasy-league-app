@@ -39,7 +39,7 @@ public class AdminModel {
 			allGamesWithMatchNumber.forEach(matchPredictionBean::setGameScoresAndGetGameModelItem);
 			allGamesWithMatchNumber.forEach(game -> {
 				if (SoccerCupStages.GROUP_PHASE.toString().equals(game.getStage())) {
-					singleLeagueServiceProvider.getGameService().updateGroupStageGameScores(List.of(game));
+					singleLeagueServiceProvider.getGameService().updateGroupStageGameScores(game);
 				} else {
 					singleLeagueServiceProvider.getGameService().updateKnockoutStageScore(game);
 				}

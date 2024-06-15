@@ -35,6 +35,7 @@ public class ConfigureUIServiceInitListener implements VaadinServiceInitListener
 			Resources.set(resources);
 			securityHolder.loadUser(VaadinRequest.getCurrent());
 			ui.getPage().retrieveExtendedClientDetails(extendedClientDetails -> {
+				VaadinSession.getCurrent().setAttribute(DateUtil.TIMEZONE_ID, extendedClientDetails.getTimeZoneId());
 				VaadinSession.getCurrent().setAttribute(DateUtil.TIMEZONE_OFFSET_ATTRIBUTE, extendedClientDetails.getRawTimezoneOffset() / 1000);
 			});
 		});
