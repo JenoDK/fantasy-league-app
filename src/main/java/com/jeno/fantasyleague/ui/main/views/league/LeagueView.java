@@ -37,7 +37,7 @@ public class LeagueView {
 	private final BehaviorSubject<UserNotification> leagueAccepted = BehaviorSubject.create();
 
 	private VerticalLayout layout;
-	private LeagueGrid uefa2020LeagueGrid;
+	private LeagueGrid oldLeaguesGrid;
 	private LeagueGrid leagueGrid;
 	private StatusLabel leagueInfoLabel;
 	private SingleLeagueView singleLeagieView;
@@ -48,7 +48,7 @@ public class LeagueView {
 		this.singleLeagueServiceProvider = singleLeagueServiceProvider;
 		this.notificationModel = notificationModel;
 		this.leagueForm = new LeagueForm();
-		this.uefa2020LeagueGrid = new LeagueGrid();
+		this.oldLeaguesGrid = new LeagueGrid();
 		this.leagueGrid = new LeagueGrid();
 		this.leagueInfoLabel = new StatusLabel(true);
 		this.leagueInfoLabel.setVisible(false);
@@ -61,7 +61,7 @@ public class LeagueView {
 		layout.getStyle().set("padding-top", "5px");
 
 		constructLeagueGridLayout();
-		uefa2020LeagueGrid.clickedLeague().subscribe(this::viewLeague);
+		oldLeaguesGrid.clickedLeague().subscribe(this::viewLeague);
 		leagueGrid.clickedLeague().subscribe(this::viewLeague);
 	}
 
@@ -73,7 +73,7 @@ public class LeagueView {
 		}
 		Accordion oldLeagues = new Accordion();
 		oldLeagues.setWidthFull();
-		oldLeagues.add("UEFA Euro 2020", uefa2020LeagueGrid);
+		oldLeagues.add("Previous tournaments", oldLeaguesGrid);
 		oldLeagues.close();
 		addSection(Lists.newArrayList(leagueInfoLabel, leagueGrid), "Your leagues", style -> {});
 		addSection(Lists.newArrayList(oldLeagues), "Old leagues", style -> {});
@@ -107,16 +107,18 @@ public class LeagueView {
 	public void setLeagues(List<LeagueBean> leagues) {
 		if (!leagues.isEmpty()) {
 			leagueInfoLabel.setVisible(false);
-			List<LeagueBean> world2022Leagues = leagues.stream()
-					.filter(leagueBean -> Template.UEFA_EURO_2024.equals(leagueBean.getLeague().getTemplate()))
+			// The current tournament is featured under "Your leagues"; every other format is archived
+			// under "Previous tournaments".
+			List<LeagueBean> currentLeagues = leagues.stream()
+					.filter(leagueBean -> Template.FIFA_WORLD_CUP_2026.equals(leagueBean.getLeague().getTemplate()))
 					.collect(Collectors.toList());
-			List<LeagueBean> uefa2020Leagues = leagues.stream()
-					.filter(leagueBean -> Template.UEFA_EURO_2020.equals(leagueBean.getLeague().getTemplate()))
+			List<LeagueBean> oldLeagues = leagues.stream()
+					.filter(leagueBean -> !Template.FIFA_WORLD_CUP_2026.equals(leagueBean.getLeague().getTemplate()))
 					.collect(Collectors.toList());
-			leagueGrid.setLeagues(world2022Leagues);
-			uefa2020LeagueGrid.setLeagues(uefa2020Leagues);
-			if (world2022Leagues.size() == 1) {
-				viewLeague(world2022Leagues.get(0));
+			leagueGrid.setLeagues(currentLeagues);
+			oldLeaguesGrid.setLeagues(oldLeagues);
+			if (currentLeagues.size() == 1) {
+				viewLeague(currentLeagues.get(0));
 			}
 		} else {
 			leagueInfoLabel.setVisible(true);

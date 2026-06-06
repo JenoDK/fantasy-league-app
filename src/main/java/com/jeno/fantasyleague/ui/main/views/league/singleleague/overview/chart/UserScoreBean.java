@@ -21,7 +21,9 @@ public class UserScoreBean {
 	}
 
 	public double getScore(SoccerCupStages stage) {
-		return userLeagueScore.getScoresPerStage().get(stage);
+		// A stage absent from the map (e.g. Round of 32 in a tournament that has no such round)
+		// means zero points for that stage rather than an error.
+		return userLeagueScore.getScoresPerStage().getOrDefault(stage, 0.0);
 	}
 
 	public User getUser() {

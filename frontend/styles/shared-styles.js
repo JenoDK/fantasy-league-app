@@ -366,12 +366,12 @@ $_documentContainer.innerHTML = `
 
 				@media (min-width: 700px) {
 					.default-league-banner {
-						content:url("images/euro_finalists.jpeg") !important;
+						content:url("images/default_league_banner_wk_2026.png") !important;
 					}
 				}
 
 				.default-league-banner {
-					content:url("images/euro_finalists.jpeg");
+					content:url("images/default_league_banner_wk_2026.png");
 				}
 			</style>
 		</template>
@@ -484,12 +484,12 @@ $_documentContainer.innerHTML = `
 					padding-right: 1em;
 				}
 				.default-league-banner {
-					content:url("images/euro_finalists.jpeg") !important;
+					content:url("images/default_league_banner_wk_2026.png") !important;
 				}
 			}
 
 			.default-league-banner {
-				content:url("images/euro_finalists.jpeg");
+				content:url("images/default_league_banner_wk_2026.png");
 			}
 
 		</style>

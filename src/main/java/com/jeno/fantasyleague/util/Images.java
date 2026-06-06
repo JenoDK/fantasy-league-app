@@ -10,13 +10,14 @@ public class Images {
 	public static final String DEFAULT_PROFILE_PICTURE = "images/default_profile_picture.png";
 	public static final String NOTIFICATION = "images/notification.png";
 	public static final String NOTIFICATION_ACTIVE = "images/notification_active.png";
-	public static final String DEFAULT_LEAGUE_BANNER = "images/default_league_banner_worldcup_2022.png";
+	public static final String DEFAULT_LEAGUE_BANNER = "images/default_league_banner_wk_2026.png";
 
 	public class Icons {
 		public static final String HOME_ICON = "images/icons/home_icon.png";
 		public static final String LEAGUE_ICON = "images/icons/league_icon.png";
 
 		public static final String UEFA_EURO_2024 = "images/icons/euro_finalists.jpeg";
+		public static final String FIFA_WORLD_CUP_2026 = "images/icons/fifa_world_cup_2026.png";
 		public static final String FIFA_WORLD_CUP_2022 = "images/icons/fifa_world_cup_2022.png";
 		public static final String FIFA_WORLD_CUP_2018 = "images/icons/fifa_world_cup_2018.png";
 		public static final String UEFA_EURO_2020 = "images/icons/uefa_euro_2020.png";

@@ -16,6 +16,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.time.LocalDateTime;
@@ -78,7 +79,7 @@ public abstract class FootballInitializer {
 		String location = record.get(LOCATION);
 		String home_team = record.get(HOME_TEAM);
 		String away_team = record.get(AWAY_TEAM);
-		String nextGameId = record.get(NEXT_GAME);
+		String nextGameId = record.isMapped(NEXT_GAME) ? record.get(NEXT_GAME) : null;
 
 		Game game = new Game();
 
@@ -143,7 +144,9 @@ public abstract class FootballInitializer {
 	}
 
 	private SoccerCupStages getStage(String round) {
-		if ("Round of 16".equals(round)) {
+		if ("Round of 32".equals(round)) {
+			return SoccerCupStages.ROUND_OF_32;
+		} else if ("Round of 16".equals(round)) {
 			return SoccerCupStages.EIGHTH_FINALS;
 		} else if ("Quarter Finals".equals(round)) {
 			return SoccerCupStages.QUARTER_FINALS;
@@ -157,7 +160,7 @@ public abstract class FootballInitializer {
 
 	private List<CSVRecord> readCsv(String path) {
 		try {
-			Reader in = new InputStreamReader(new ClassPathResource(path).getInputStream());
+			Reader in = new InputStreamReader(new ClassPathResource(path).getInputStream(), StandardCharsets.UTF_8);
 			return Lists.newArrayList(CSVFormat.RFC4180.withHeader().parse(in));
 		} catch (FileNotFoundException e) {
 			throw new TemplateException("CSV file not found", e);

@@ -27,6 +27,8 @@ public class UserTotalScoreCard extends PolymerTemplate<MatchBindingModel> {
 
 	@Id("groupScore")
 	private Span groupScore;
+	@Id("roundOf32")
+	private Span roundOf32;
 	@Id("eighthFinals")
 	private Span eighthFinals;
 	@Id("quarterFinals")
@@ -49,6 +51,7 @@ public class UserTotalScoreCard extends PolymerTemplate<MatchBindingModel> {
 		Image profileIcon = LayoutUtil.initUserH4(user, bean.getUser(), bean.getPosition() + ". " + bean.getUser().getUsername());
 		profileIcon.setId("user_profile_icon_" + bean.getPosition());
 		groupScore.setText(getStageScore(SoccerCupStages.GROUP_PHASE));
+		roundOf32.setText(getStageScore(SoccerCupStages.ROUND_OF_32));
 		eighthFinals.setText(getStageScore(SoccerCupStages.EIGHTH_FINALS));
 		quarterFinals.setText(getStageScore(SoccerCupStages.QUARTER_FINALS));
 		semiFinals.setText(getStageScore(SoccerCupStages.SEMI_FINALS));

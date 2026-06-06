@@ -47,7 +47,7 @@ public class LeagueForm extends HorizontalLayout {
 		setMargin(false);
 		getStyle().set("--lumo-border-radius", "0.5em");
 
-		Image icon = new Image(Images.Icons.FIFA_WORLD_CUP_2022, "FIFA WORLD CUP QATAR 2022");
+		Image icon = new Image(Images.Icons.FIFA_WORLD_CUP_2026, "FIFA WORLD CUP 2026");
 		icon.addClassName("league-logo");
 		icon.setWidth("150px");
 		add(icon);
@@ -92,7 +92,7 @@ public class LeagueForm extends HorizontalLayout {
 
 	public void reset() {
 		League bean = new League();
-		bean.setTemplate(Template.UEFA_EURO_2024);
+		bean.setTemplate(Template.FIFA_WORLD_CUP_2026);
 		binder.setBean(bean);
 	}
 }

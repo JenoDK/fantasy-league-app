@@ -111,6 +111,10 @@ public class FootballSettingsRenderer implements LeagueSettingRenderer {
 		labSettings.add(createLeagueScoreSettings(newLeague, SoccerCupStages.GROUP_PHASE.getName() + WRONG_SCORE, 2));
 		labSettings.add(createLeagueScoreSettings(newLeague, SoccerCupStages.GROUP_PHASE.getName() + ALL_WRONG, 0));
 
+		labSettings.add(createLeagueScoreSettings(newLeague, SoccerCupStages.ROUND_OF_32.getName() + ALL_CORRECT, 4));
+		labSettings.add(createLeagueScoreSettings(newLeague, SoccerCupStages.ROUND_OF_32.getName() + WRONG_SCORE, 3));
+		labSettings.add(createLeagueScoreSettings(newLeague, SoccerCupStages.ROUND_OF_32.getName() + ALL_WRONG, 0));
+
 		labSettings.add(createLeagueScoreSettings(newLeague, SoccerCupStages.EIGHTH_FINALS.getName() + ALL_CORRECT, 6));
 		labSettings.add(createLeagueScoreSettings(newLeague, SoccerCupStages.EIGHTH_FINALS.getName() + WRONG_SCORE, 4));
 		labSettings.add(createLeagueScoreSettings(newLeague, SoccerCupStages.EIGHTH_FINALS.getName() + ALL_WRONG, 0));

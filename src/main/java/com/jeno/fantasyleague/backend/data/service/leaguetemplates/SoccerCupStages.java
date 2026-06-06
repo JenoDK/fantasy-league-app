@@ -11,6 +11,7 @@ import java.util.List;
 public enum SoccerCupStages {
 
 	GROUP_PHASE("groupPhase", 0),
+	ROUND_OF_32("roundOf32", 5),
 	EIGHTH_FINALS("eighthFinals", 10),
 	QUARTER_FINALS("quarterFinals", 20),
 	SEMI_FINALS("semiFinals", 30),
@@ -37,6 +38,8 @@ public enum SoccerCupStages {
 		for (LeagueSetting leagueSetting : allLeagueSettings) {
 			if (leagueSetting.getName().contains(GROUP_PHASE.getName())) {
 				leagueSettingPerGroup.put(GROUP_PHASE, leagueSetting);
+			} else if (leagueSetting.getName().contains(ROUND_OF_32.getName())) {
+				leagueSettingPerGroup.put(ROUND_OF_32, leagueSetting);
 			} else if (leagueSetting.getName().contains(EIGHTH_FINALS.getName())) {
 				leagueSettingPerGroup.put(EIGHTH_FINALS, leagueSetting);
 			} else if (leagueSetting.getName().contains(QUARTER_FINALS.getName())) {
@@ -55,6 +58,8 @@ public enum SoccerCupStages {
 		switch (stage) {
 			case GROUP_PHASE:
 				return team.getContestant_group().getName() + " - stage " + game.getRound();
+			case ROUND_OF_32:
+				return Resources.getMessage("roundOf32");
 			case EIGHTH_FINALS:
 				return Resources.getMessage("roundOf16");
 			case QUARTER_FINALS:
