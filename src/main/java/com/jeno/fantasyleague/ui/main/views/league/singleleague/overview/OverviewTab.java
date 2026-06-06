@@ -68,7 +68,7 @@ public class OverviewTab extends LazyTabComponent {
 		List<UserScoreBean> scoreBeans = fetchTotalScores();
 		totalScoreGrid = new UserTotalScoreGrid(scoreBeans, false, loggedInUser);
 		totalScoreGrid.setWidth("100%");
-		Set<String> iconPaths = singleLeagueServiceprovider.getContestantRepository().findAll().stream()
+		Set<String> iconPaths = singleLeagueServiceprovider.getContestantRepository().findByLeague(league).stream()
 				.map(Contestant::getIcon_path)
 				.filter(Objects::nonNull)
 				.collect(Collectors.toSet());
@@ -179,7 +179,8 @@ public class OverviewTab extends LazyTabComponent {
 		int i = 0;
 		Map<String, String> colorMap = Maps.newHashMap();
 		for (String iconPath : iconPaths) {
-			colorMap.put(iconPath, colors[i]);
+			// Wrap around the palette so more contestants than available colors never overflows.
+			colorMap.put(iconPath, colors[i % colors.length]);
 			i++;
 		}
 		return colorMap;

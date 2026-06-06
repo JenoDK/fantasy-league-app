@@ -147,7 +147,17 @@ public class MatchCardLayout extends Div {
 		Div matchWrapper = new Div();
 		matchWrapper.setId("match-wrapper");
 		Game game = match.getGame();
-		boolean isEightFinalAndCanChooseContestant = SoccerCupStages.EIGHTH_FINALS.toString().equals(game.getStage()) &&
+		// The first knockout round is where group-position placeholders (e.g. 1A, 2B, 3ABCDF) are
+		// assigned to real teams by the admin. That round is the Round of 16 for older templates and
+		// the Round of 32 for FIFA World Cup 2026. We additionally require the placeholders to map to
+		// groups, so later knockout rounds (filled automatically via next_game) never show comboboxes.
+		boolean isFirstKnockoutRound = SoccerCupStages.EIGHTH_FINALS.toString().equals(game.getStage()) ||
+				SoccerCupStages.ROUND_OF_32.toString().equals(game.getStage());
+		boolean placeholdersAreGroupBased =
+				(game.getHome_team_placeholder() != null && !GameServiceImpl.getGroups(game.getHome_team_placeholder()).isEmpty()) ||
+				(game.getAway_team_placeholder() != null && !GameServiceImpl.getGroups(game.getAway_team_placeholder()).isEmpty());
+		boolean isEightFinalAndCanChooseContestant = isFirstKnockoutRound &&
+				placeholdersAreGroupBased &&
 				DateUtil.nowIsBeforeUtcDateTime(game.getGameDateTime()) &&
 				loggedInUserIsAdmin &&
 				canAdjustContestants;

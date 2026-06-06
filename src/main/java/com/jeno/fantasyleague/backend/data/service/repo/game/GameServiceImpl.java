@@ -5,7 +5,7 @@ import com.jeno.fantasyleague.backend.data.repository.ContestantGroupRepository;
 import com.jeno.fantasyleague.backend.data.repository.ContestantRepository;
 import com.jeno.fantasyleague.backend.data.repository.GameRepository;
 import com.jeno.fantasyleague.backend.data.service.leaguetemplates.FootballInitializer;
-import com.jeno.fantasyleague.backend.data.service.leaguetemplates.fifaworld2022.FifaWorldCup2022Initializer;
+import com.jeno.fantasyleague.backend.data.service.leaguetemplates.fifaworld2026.FifaWorldCup2026Initializer;
 import com.jeno.fantasyleague.backend.model.Contestant;
 import com.jeno.fantasyleague.backend.model.Game;
 import com.jeno.fantasyleague.backend.model.League;
@@ -100,7 +100,10 @@ public class GameServiceImpl implements GameService {
 	}
 
 	public static List<FootballInitializer.Group> getGroups(String placeHolder) {
-		return Arrays.stream(FifaWorldCup2022Initializer.groups())
+		// Use the 12-group (A-L) FIFA World Cup 2026 list as the universe of groups: it is a
+		// superset of every other template (A-F, A-H), and matching is driven by the placeholder
+		// content, so shorter tournaments only ever match their own groups.
+		return Arrays.stream(FifaWorldCup2026Initializer.groups())
 				.filter(group -> placeHolder.contains(group.getShortName()))
 				.collect(Collectors.toList());
 	}

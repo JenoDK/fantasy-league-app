@@ -93,6 +93,7 @@ class UserTotalScoreCard extends PolymerElement {
 						</div>
 						<div class="right">
 							<span id="groupScore" class="smallScore"></span>
+							<span id="roundOf32" class="smallScore"></span>
 							<span id="eighthFinals" class="smallScore"></span>
 							<span id="quarterFinals" class="smallScore"></span>
 							<span id="semiFinals" class="smallScore"></span>
