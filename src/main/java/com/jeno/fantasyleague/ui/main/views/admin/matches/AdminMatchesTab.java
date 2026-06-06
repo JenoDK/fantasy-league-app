@@ -1,6 +1,7 @@
 package com.jeno.fantasyleague.ui.main.views.admin.matches;
 
 import com.jeno.fantasyleague.backend.data.service.leaguetemplates.SoccerCupStages;
+import com.jeno.fantasyleague.backend.data.service.leaguetemplates.fifaworld2026.FifaWorldCup2026Initializer;
 import com.jeno.fantasyleague.backend.model.Contestant;
 import com.jeno.fantasyleague.backend.model.Game;
 import com.jeno.fantasyleague.backend.model.League;
@@ -11,11 +12,15 @@ import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.matches.MatchBean;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.matches.MatchGrid;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.matches.MatchPredictionBean;
+import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.menubar.MenuBar;
+import com.vaadin.flow.component.menubar.MenuBarVariant;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -49,12 +54,36 @@ public class AdminMatchesTab extends LazyTabComponent {
 			matchGrid = new MatchGrid(singleLeagueServiceProvider, singleLeagueServiceProvider.loggedInUserIsLeagueAdmin(optionalLeague.get()), true);
 			matchGrid.setMatches(getMatches(optionalLeague.get()));
 			matchGrid.scoreChanged().subscribe(this::updateGameScoresGlobally);
-			layout.add(matchGrid);
+			layout.add(createFilterBar(), matchGrid);
 		} else {
 			layout.add(new Label("Admin user has not joined a league yet"));
 		}
 
 		add(layout);
+	}
+
+	private MenuBar createFilterBar() {
+		MenuBar filterBar = new MenuBar();
+		filterBar.setWidthFull();
+		filterBar.addThemeVariants(MenuBarVariant.LUMO_SMALL, MenuBarVariant.LUMO_PRIMARY);
+
+		MenuItem showAll = filterBar.addItem(Resources.getMessage("showAllMatches"));
+		showAll.addClickListener(ignored -> matchGrid.clearFilter());
+
+		Arrays.stream(SoccerCupStages.values())
+				.forEach(stage -> {
+					MenuItem item = filterBar.addItem(Resources.getMessage(stage.getName()));
+					item.addClickListener(ignored -> matchGrid.filterOnStage(stage));
+				});
+
+		MenuItem specificGroup = filterBar.addItem("Specific group");
+		Arrays.stream(FifaWorldCup2026Initializer.groups())
+				.forEach(group -> {
+					MenuItem groupItem = specificGroup.getSubMenu().addItem(group.getGroupName());
+					groupItem.addClickListener(ignored -> matchGrid.filterOnGroupStage(group));
+				});
+
+		return filterBar;
 	}
 
 	private List<MatchBean> getMatches(League league) {

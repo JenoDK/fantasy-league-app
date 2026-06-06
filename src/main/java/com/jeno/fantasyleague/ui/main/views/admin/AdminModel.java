@@ -29,7 +29,7 @@ public class AdminModel {
 		return leagueUserRepository.findByUser(user).stream()
 				.map(LeagueUser::getLeague)
 				.filter(League::getActive)
-				.filter(l -> Template.UEFA_EURO_2024.equals(l.getTemplate()))
+				.filter(l -> Template.FIFA_WORLD_CUP_2026.equals(l.getTemplate()))
 				.findFirst();
 	}
 
