@@ -4,9 +4,12 @@ import com.google.common.collect.Lists;
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.LeagueUser;
 import com.jeno.fantasyleague.backend.model.User;
+import com.jeno.fantasyleague.ui.common.field.CustomButton;
 import com.jeno.fantasyleague.ui.common.tabsheet.LazyTabComponent;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
@@ -43,6 +46,12 @@ public class UsersTab extends LazyTabComponent {
 				.setWidth("130px");
 		leftSide.add(new H3("Pending invites"));
 		leftSide.add(pendingUserInvitesGrid);
+		if (singleLeagueServiceProvider.loggedInUserIsLeagueAdmin(league)) {
+			Button resendAllButton = new CustomButton("Resend invite email to all pending", VaadinIcon.MAILBOX.create());
+			resendAllButton.addClickListener(ignored ->
+					UserGrid.openInviteEmailDialog(singleLeagueServiceProvider.getUsersWithPendingInvite(league, users), singleLeagueServiceProvider, league));
+			leftSide.add(resendAllButton);
+		}
 
 		add(leftSide);
 

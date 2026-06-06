@@ -12,7 +12,6 @@ import com.jeno.fantasyleague.ui.common.grid.CustomGridBuilder;
 import com.jeno.fantasyleague.ui.main.broadcast.Broadcaster;
 import com.jeno.fantasyleague.ui.main.views.league.SingleLeagueServiceProvider;
 import com.jeno.fantasyleague.util.Images;
-import com.jeno.fantasyleague.util.VaadinUtil;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -40,7 +39,7 @@ public class InviteUserLayout extends VerticalLayout {
 		setMargin(false);
 		setPadding(false);
 
-		String rootUrl = VaadinUtil.getRootRequestURL();
+		String rootUrl = "https://jenodk.com/fantasy-league";
 
 		H3 inviteUsers = new H3("Invite Users");
 		add(inviteUsers);
@@ -95,7 +94,7 @@ public class InviteUserLayout extends VerticalLayout {
 							try {
 								ApplicationEmailService emailService = singleLeagueServiceProvider.getEmailService();
 								emailService.sendEmail(
-										"FIFA World Cup 2022 - League Invite",
+										"FIFA World Cup 2026 - League Invite",
 										"You got invited to participate in the league " + league.getName() + ". Log in to " + rootUrl + " and accept the invite.",
 										user);
 							} catch (Exception e) {
@@ -136,7 +135,7 @@ public class InviteUserLayout extends VerticalLayout {
 				try {
 					ApplicationEmailService emailService = singleLeagueServiceProvider.getEmailService();
 					emailService.sendEmail(
-							"FIFA World Cup 2022 - League Invite",
+							"FIFA World Cup 2026 - League Invite",
 							"You got invited to participate in the league " + league.getName() + ". Log in or register at " + rootUrl + " and start playing!",
 							emailLeagueInvite.getEmail());
 					singleLeagueServiceProvider.getEmailLeagueInviteRepository().save(emailLeagueInvite);
