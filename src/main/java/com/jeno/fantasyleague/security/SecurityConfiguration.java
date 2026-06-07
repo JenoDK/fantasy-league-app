@@ -2,6 +2,7 @@ package com.jeno.fantasyleague.security;
 
 import com.jeno.fantasyleague.backend.model.RoleName;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -28,10 +29,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	private static final String LOGIN_FAILURE_URL = "/login?error";
 	private static final String LOGIN_URL = "/login";
 
+	// Keep users logged in for ~395 days (the practical maximum a browser will retain a cookie).
+	private static final int REMEMBER_ME_VALIDITY_SECONDS = 395 * 24 * 60 * 60;
+
 	private final UserDetailsService userDetailsService;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+
+	// Fixed secret so remember-me cookies stay valid across app restarts/redeploys. Override per
+	// environment via the app.remember-me.key property.
+	@Value("${app.remember-me.key:bf3c1a9e-7d24-4e8b-9a1f-fantasy-league-2026}")
+	private String rememberMeKey;
 	
 	@Autowired
 	public SecurityConfiguration(UserDetailsService userDetailsService) {
@@ -83,6 +92,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 				// Configure logout
 				.and().logout().logoutSuccessUrl("/login")
+
+				// Keep users logged in via a long-lived remember-me cookie. alwaysRemember is used
+				// because the plain HTML login form has no "remember me" checkbox: every successful
+				// login should be remembered. This re-authenticates the user on a new request even
+				// after the server-side session has ended (timeout, restart, ...).
+				.and().rememberMe()
+				.key(rememberMeKey)
+				.alwaysRemember(true)
+				.tokenValiditySeconds(REMEMBER_ME_VALIDITY_SECONDS)
+				// Unique cookie name so it cannot collide with other apps on the same domain.
+				.rememberMeCookieName("FANTASYLEAGUEREMEMBERME")
+				.userDetailsService(userDetailsService)
 
 				// Configure OAuth2
 				.and().oauth2Login().loginPage(LOGIN_URL).successHandler(authenticationSuccessHandler);
