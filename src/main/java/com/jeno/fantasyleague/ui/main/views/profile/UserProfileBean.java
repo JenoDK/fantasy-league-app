@@ -16,9 +16,12 @@ public class UserProfileBean {
 	@Email
 	private String email;
 
+	private boolean reminderEmailsEnabled;
+
 	public UserProfileBean(User user) {
 		this.username = user.getUsername();
 		this.email = user.getEmail();
+		this.reminderEmailsEnabled = user.isReminder_emails_enabled();
 	}
 
 	public String getUsername() {
@@ -35,5 +38,13 @@ public class UserProfileBean {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public boolean isReminderEmailsEnabled() {
+		return reminderEmailsEnabled;
+	}
+
+	public void setReminderEmailsEnabled(boolean reminderEmailsEnabled) {
+		this.reminderEmailsEnabled = reminderEmailsEnabled;
 	}
 }

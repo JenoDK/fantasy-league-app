@@ -49,6 +49,9 @@ public class User extends DateAudit {
 
 	private boolean active = false;
 
+	@Column(name = "reminder_emails_enabled", nullable = false)
+	private boolean reminder_emails_enabled = true;
+
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "user_roles",
 			joinColumns = @JoinColumn(name = "user_id"),
@@ -133,6 +136,14 @@ public class User extends DateAudit {
 
 	public void setActive(boolean active) {
 		this.active = active;
+	}
+
+	public boolean isReminder_emails_enabled() {
+		return reminder_emails_enabled;
+	}
+
+	public void setReminder_emails_enabled(boolean reminder_emails_enabled) {
+		this.reminder_emails_enabled = reminder_emails_enabled;
 	}
 
 	public byte[] getProfile_picture() {

@@ -11,6 +11,7 @@ import com.jeno.fantasyleague.ui.main.MainView;
 import com.jeno.fantasyleague.ui.main.views.state.State;
 import com.jeno.fantasyleague.util.ImageUtil;
 import com.vaadin.flow.component.Tag;
+import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -70,6 +71,8 @@ public class ProfileView extends VerticalLayout implements RouterLayout {
 		TextField email = new TextField("E-mail");
 		email.setValueChangeMode(ValueChangeMode.EAGER);
 		email.setWidthFull();
+		Checkbox reminderEmails = new Checkbox("Receive reminder emails");
+		reminderEmails.setWidthFull();
 		CustomButton save = new CustomButton("Save", VaadinIcon.CHECK.create());
 		CustomButton reset = new CustomButton("Reset", VaadinIcon.ARROW_BACKWARD.create());
 
@@ -88,6 +91,9 @@ public class ProfileView extends VerticalLayout implements RouterLayout {
 				.withValidator(new StringLengthValidator(
 						"Please add the username", 1, null))
 				.bind(UserProfileBean::getUsername, UserProfileBean::setUsername);
+
+		binder.forField(reminderEmails)
+				.bind(UserProfileBean::isReminderEmailsEnabled, UserProfileBean::setReminderEmailsEnabled);
 		// Click listeners for the buttons
 		save.addClickListener(event -> {
 			if (binder.writeBeanIfValid(bean)) {
@@ -95,6 +101,7 @@ public class ProfileView extends VerticalLayout implements RouterLayout {
 				String previousEmail = user.getEmail();
 				user.setUsername(bean.getUsername());
 				user.setEmail(bean.getEmail());
+				user.setReminder_emails_enabled(bean.isReminderEmailsEnabled());
 				uploadLayout.getImage().map(ByteArrayInputStream::readAllBytes).ifPresent(user::setProfile_picture);
 				try {
 					userDao.update(user);
@@ -124,7 +131,7 @@ public class ProfileView extends VerticalLayout implements RouterLayout {
 		VerticalLayout formLayout = new VerticalLayout();
 		formLayout.setWidth(null);
 		formLayout.setAlignItems(Alignment.CENTER);
-		formLayout.add(uploadLayout, username, email, actions, infoLabel);
+		formLayout.add(uploadLayout, username, email, reminderEmails, actions, infoLabel);
 
 		layout.add(formLayout);
 	}
