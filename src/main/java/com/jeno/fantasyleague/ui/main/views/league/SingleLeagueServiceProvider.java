@@ -25,6 +25,7 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import io.reactivex.Observable;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -78,6 +79,13 @@ public class SingleLeagueServiceProvider {
 	private SecurityHolder securityHolder;
 	@Autowired
 	private BeanFactory beanFactory;
+
+	@Value("${giphy.api.key:}")
+	private String giphyApiKey;
+
+	public String getGiphyApiKey() {
+		return giphyApiKey;
+	}
 
 	public void predictionChanged(Observable<MatchPredictionBean> predictionChanged, boolean isForSuperAdmin, Consumer<Prediction> postConsume) {
 		predictionChanged

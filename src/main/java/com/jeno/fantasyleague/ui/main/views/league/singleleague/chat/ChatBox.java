@@ -131,6 +131,11 @@ public class ChatBox extends PolymerTemplate<TemplateModel> {
 	private void initLayout() {
 		mainLayout.addClassName("chat-box");
 
+		String giphyApiKey = singleLeagueServiceprovider.getGiphyApiKey();
+		if (giphyApiKey != null && !giphyApiKey.isBlank()) {
+			getElement().setProperty("giphyApiKey", giphyApiKey);
+		}
+
 		openChatboxButton.addClickListener(ignored -> openChatBox());
 		initChatLayout();
 		minimize();
@@ -197,8 +202,7 @@ public class ChatBox extends PolymerTemplate<TemplateModel> {
 	}
 
 	private void initChatLayout() {
-		chatLayout.setHeight(600, Unit.PIXELS);
-		chatLayout.setWidth(350, Unit.PIXELS);
+		// Size is controlled via CSS (#open-chat-box) so it can be made responsive on mobile.
 		chatLayout.setPadding(false);
 		chatLayout.setSpacing(false);
 		chatLayout.setMargin(false);

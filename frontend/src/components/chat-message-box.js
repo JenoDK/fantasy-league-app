@@ -1,5 +1,6 @@
 import {PolymerElement} from "@polymer/polymer";
 import {html} from "@polymer/polymer/lib/utils/html-tag";
+import "@polymer/polymer/lib/elements/dom-if.js";
 import emojiRegex from "emoji-regex";
 
 class ChatMessageBox extends PolymerElement {
@@ -75,6 +76,13 @@ class ChatMessageBox extends PolymerElement {
 					font-size: 36px;
 				}
 
+				.message.gif {
+					max-width: 200px;
+					max-height: 200px;
+					border-radius: 8px;
+					display: block;
+				}
+
 				.right .message {
 					margin-left: 8px;
 				}
@@ -92,7 +100,12 @@ class ChatMessageBox extends PolymerElement {
                         <p class="timestamp">[[chatMessage.timeSent]]</p>
                     </div>
                     <h4 id="user" class="iconLabel"></h4>
-                    <p class$="message {{_isOnlyOneEmoji()}}">[[chatMessage.message]]</p>
+                    <template is="dom-if" if="[[_isGif(chatMessage.message)]]">
+                        <img class="message gif" src="[[_getGifUrl(chatMessage.message)]]" alt="GIF"/>
+                    </template>
+                    <template is="dom-if" if="[[!_isGif(chatMessage.message)]]">
+                        <p class$="message {{_isOnlyOneEmoji()}}">[[chatMessage.message]]</p>
+                    </template>
                 </div>
 			</div>
         `;
@@ -100,6 +113,15 @@ class ChatMessageBox extends PolymerElement {
 
     _getUserIconClassName(){
         return this.chatMessage.isFromLoggedInUser ? "right" : "left";
+    }
+
+    _isGif(message) {
+        return /^\[gif\](.+)\[\/gif\]$/.test(message);
+    }
+
+    _getGifUrl(message) {
+        const match = /^\[gif\](.+)\[\/gif\]$/.exec(message);
+        return match ? match[1] : "";
     }
 
     _isOnlyOneEmoji() {
