@@ -3,15 +3,22 @@ package com.jeno.fantasyleague.security;
 import com.jeno.fantasyleague.backend.model.RoleName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Configures spring security, doing the following:
@@ -98,15 +105,39 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				// login should be remembered. This re-authenticates the user on a new request even
 				// after the server-side session has ended (timeout, restart, ...).
 				.and().rememberMe()
-				.key(rememberMeKey)
-				.alwaysRemember(true)
-				.tokenValiditySeconds(REMEMBER_ME_VALIDITY_SECONDS)
-				// Unique cookie name so it cannot collide with other apps on the same domain.
-				.rememberMeCookieName("FANTASYLEAGUEREMEMBERME")
-				.userDetailsService(userDetailsService)
+				.rememberMeServices(rememberMeServices())
 
 				// Configure OAuth2
 				.and().oauth2Login().loginPage(LOGIN_URL).successHandler(authenticationSuccessHandler);
+	}
+
+	/**
+	 * Remember-me services for form/password logins.
+	 *
+	 * <p>The remember-me filter runs for every authentication mechanism, including OAuth2. The
+	 * default {@link TokenBasedRememberMeServices} cannot build a token for an OAuth2/OIDC principal
+	 * (it has no password) and falls back to looking the user up via {@link UserDetailsService} using
+	 * {@code principal.toString()}, which throws {@code UsernameNotFoundException} and aborts the
+	 * OAuth2 login. We therefore only issue a remember-me cookie when the principal is a
+	 * {@link UserDetails} (i.e. a form/password login).
+	 */
+	@Bean
+	public TokenBasedRememberMeServices rememberMeServices() {
+		TokenBasedRememberMeServices services =
+				new TokenBasedRememberMeServices(rememberMeKey, userDetailsService) {
+					@Override
+					public void onLoginSuccess(HttpServletRequest request, HttpServletResponse response,
+							Authentication successfulAuthentication) {
+						if (successfulAuthentication.getPrincipal() instanceof UserDetails) {
+							super.onLoginSuccess(request, response, successfulAuthentication);
+						}
+					}
+				};
+		services.setAlwaysRemember(true);
+		services.setTokenValiditySeconds(REMEMBER_ME_VALIDITY_SECONDS);
+		// Unique cookie name so it cannot collide with other apps on the same domain.
+		services.setCookieName("FANTASYLEAGUEREMEMBERME");
+		return services;
 	}
 
 	/**
