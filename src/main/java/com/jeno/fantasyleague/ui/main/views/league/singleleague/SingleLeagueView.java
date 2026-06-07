@@ -64,6 +64,13 @@ public class SingleLeagueView extends VerticalLayout {
 			loggedInLeagueUser.setShow_help(false);
 			singleLeagueServiceprovider.getLeagueUserRepository().saveAndFlush(loggedInLeagueUser);
 		}
+		// Announce this week's winner, once per member per announcement.
+		singleLeagueServiceprovider.getWeeklyWinnerService().getLatestUnseen(league, loggedInLeagueUser)
+				.ifPresent(weeklyWinner -> {
+					new WeeklyWinnerDialog(weeklyWinner).show();
+					loggedInLeagueUser.setLast_seen_weekly_winner_id(weeklyWinner.getId());
+					singleLeagueServiceprovider.getLeagueUserRepository().saveAndFlush(loggedInLeagueUser);
+				});
 		chatBox = new ChatBox(league, loggedInLeagueUser, singleLeagueServiceprovider);
 		main.add(chatBox);
 		LeagueTabs leagueTabs = new LeagueTabs(leagueBean, singleLeagueServiceprovider, main);

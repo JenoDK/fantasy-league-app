@@ -14,5 +14,6 @@
 	<include file="changelogs/add-league-active-column.xml" relativeToChangelogFile="true"/>
 	<include file="changelogs/add-game-match-number-column.xml" relativeToChangelogFile="true"/>
 	<include file="changelogs/fix-turkey-name-and-games.xml" relativeToChangelogFile="true"/>
+	<include file="changelogs/add-weekly-winner.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

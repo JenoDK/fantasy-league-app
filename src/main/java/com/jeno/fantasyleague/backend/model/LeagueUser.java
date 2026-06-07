@@ -78,6 +78,9 @@ public class LeagueUser implements java.io.Serializable {
 
 	private boolean show_help;
 
+	// Id of the most recent weekly-winner announcement this member has already seen (null = none yet).
+	private Long last_seen_weekly_winner_id;
+
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
@@ -116,6 +119,14 @@ public class LeagueUser implements java.io.Serializable {
 
 	public void setShow_help(boolean show_help) {
 		this.show_help = show_help;
+	}
+
+	public Long getLast_seen_weekly_winner_id() {
+		return last_seen_weekly_winner_id;
+	}
+
+	public void setLast_seen_weekly_winner_id(Long last_seen_weekly_winner_id) {
+		this.last_seen_weekly_winner_id = last_seen_weekly_winner_id;
 	}
 
 	public HelpStage getHelp_stage() {

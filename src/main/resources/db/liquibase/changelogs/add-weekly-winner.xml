@@ -1,0 +1,39 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="add-weekly-winner-table" author="Jeno">
+        <createTable tableName="weekly_winner">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="league_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="announced_at" type="datetime"/>
+            <column name="top_score" type="DOUBLE"/>
+            <column name="created_at" type="datetime"/>
+            <column name="updated_at" type="datetime"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="add-weekly-winner-winners-table" author="Jeno">
+        <createTable tableName="weekly_winner_winners">
+            <column name="weekly_winner_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="add-league-users-last-seen-weekly-winner-column" author="Jeno">
+        <addColumn tableName="league_users">
+            <column name="last_seen_weekly_winner_id" type="BIGINT"/>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>

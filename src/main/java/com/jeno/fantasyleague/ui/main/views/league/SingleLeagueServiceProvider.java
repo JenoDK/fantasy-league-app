@@ -12,6 +12,7 @@ import com.jeno.fantasyleague.backend.data.service.repo.league.LeagueService;
 import com.jeno.fantasyleague.backend.data.service.repo.league.UserLeagueScore;
 import com.jeno.fantasyleague.backend.data.service.repo.leaguemessage.LeagueMessageService;
 import com.jeno.fantasyleague.backend.data.service.repo.user.UserService;
+import com.jeno.fantasyleague.backend.data.service.repo.weeklywinner.WeeklyWinnerService;
 import com.jeno.fantasyleague.backend.model.*;
 import com.jeno.fantasyleague.backend.model.enums.NotificationType;
 import com.jeno.fantasyleague.backend.model.enums.Template;
@@ -44,6 +45,8 @@ public class SingleLeagueServiceProvider {
 	private ApplicationEmailService emailService;
 	@Autowired
 	private LeagueMessageService leagueMessageService;
+	@Autowired
+	private WeeklyWinnerService weeklyWinnerService;
 
 	@Autowired
 	private UserRepository userRepository;
@@ -165,6 +168,10 @@ public class SingleLeagueServiceProvider {
 
 	public LeagueUserRepository getLeagueUserRepository() {
 		return leagueUserRepository;
+	}
+
+	public WeeklyWinnerService getWeeklyWinnerService() {
+		return weeklyWinnerService;
 	}
 
 	public UserService getUserService() {
