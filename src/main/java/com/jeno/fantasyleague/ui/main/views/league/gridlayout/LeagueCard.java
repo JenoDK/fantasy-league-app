@@ -2,7 +2,7 @@ package com.jeno.fantasyleague.ui.main.views.league.gridlayout;
 
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.User;
-import com.jeno.fantasyleague.ui.common.LeagueImageResourceCache;
+import com.jeno.fantasyleague.util.ImageUtil;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.html.Div;
@@ -53,8 +53,8 @@ public class LeagueCard extends PolymerTemplate<TemplateModel> {
 	private void initLayout() {
 		League league = this.league.getLeague();
 		img.setAlt("league_banner");
-		if (league.getLeague_picture() != null) {
-			img.setSrc(LeagueImageResourceCache.addOrGetLeagueImageResource(league));
+		if (league.hasLeaguePicture()) {
+			img.setSrc(ImageUtil.getLeagueImageUrl(league));
 		} else {
 			img.addClassName("default-league-banner");
 		}

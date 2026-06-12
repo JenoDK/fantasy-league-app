@@ -48,8 +48,8 @@ public class ImageUploadWithPlaceholder extends VerticalLayout {
 				new StreamResource(upload.getFileName(), () -> new ByteArrayInputStream(os.toByteArray())));
 	}
 
-	public void updateImage(StreamResource pictureResource) {
-		imageLayout.setSrc(pictureResource);
+	public void updateImage(String src) {
+		imageLayout.setSrc(src);
 	}
 
 	public Optional<ByteArrayInputStream> getImage() {

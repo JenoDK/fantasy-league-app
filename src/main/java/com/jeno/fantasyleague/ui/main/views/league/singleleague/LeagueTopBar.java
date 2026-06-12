@@ -1,7 +1,6 @@
 package com.jeno.fantasyleague.ui.main.views.league.singleleague;
 
 import com.jeno.fantasyleague.backend.model.League;
-import com.jeno.fantasyleague.ui.common.LeagueImageResourceCache;
 import com.jeno.fantasyleague.ui.common.image.VaadinImageUploader;
 import com.jeno.fantasyleague.ui.common.label.StatusLabel;
 import com.jeno.fantasyleague.util.ImageUtil;
@@ -73,6 +72,8 @@ public class LeagueTopBar extends VerticalLayout {
 	}
 
 	public void updateLeagueImage(League league) {
-		imageLayout.setSrc(LeagueImageResourceCache.addOrGetLeagueImageResource(league));
+		// A first-time upload replaces the CSS default banner.
+		imageLayout.removeClassName("default-league-banner");
+		imageLayout.setSrc(ImageUtil.getLeagueImageUrl(league));
 	}
 }

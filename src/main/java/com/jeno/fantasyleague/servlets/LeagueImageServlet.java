@@ -1,24 +1,24 @@
 package com.jeno.fantasyleague.servlets;
 
-import com.jeno.fantasyleague.backend.data.repository.UserRepository;
+import com.jeno.fantasyleague.backend.data.repository.LeagueRepository;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class ProfileImageServlet extends HttpServlet {
+public class LeagueImageServlet extends HttpServlet {
 
-	private final UserRepository userRepository;
+	private final LeagueRepository leagueRepository;
 
-	public ProfileImageServlet(UserRepository userRepository) {
-		this.userRepository = userRepository;
+	public LeagueImageServlet(LeagueRepository leagueRepository) {
+		this.leagueRepository = leagueRepository;
 	}
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-		Long userPk = ServletUtil.parseIdParameter(req, "userPk");
-		byte[] picture = userPk != null ? userRepository.findProfilePictureById(userPk) : null;
+		Long leaguePk = ServletUtil.parseIdParameter(req, "leaguePk");
+		byte[] picture = leaguePk != null ? leagueRepository.findLeaguePictureById(leaguePk) : null;
 		if (picture == null) {
 			resp.sendError(HttpServletResponse.SC_NOT_FOUND);
 			return;

@@ -9,6 +9,8 @@ import com.jeno.fantasyleague.backend.model.User;
 import com.jeno.fantasyleague.ui.main.views.league.singleleague.overview.chart.model.*;
 import com.jeno.fantasyleague.util.DateUtil;
 import com.jeno.fantasyleague.util.DecimalUtil;
+import com.jeno.fantasyleague.util.ImageUtil;
+import com.jeno.fantasyleague.util.Images;
 import com.vaadin.flow.component.ClientCallable;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.JsModule;
@@ -144,7 +146,7 @@ public class ScoreChart extends PolymerTemplate<ScoreChartModel> {
 					return new ScoreChartData(
 							getDisplayName(b),
 							b.getUser().getId().intValue(),
-							b.getUser().getProfile_picture() != null,
+							b.getUser().hasProfilePicture(),
 							List.of(totalScore),
 							b.getPosition(),
 							List.of(
@@ -169,7 +171,7 @@ public class ScoreChart extends PolymerTemplate<ScoreChartModel> {
 				.filter(s -> s.getScore() > 0)
 				.sorted(Comparator.comparing(ScorePerContestant::getScore).reversed())
 				.collect(Collectors.toList());
-		String profilePictureSrc = b.getUser().getProfile_picture() != null ? "/fantasy-league/profileImage?userPk=" + b.getUser().getId().toString() : "/fantasy-league/images/default_profile_picture.png";
+		String profilePictureSrc = b.getUser().hasProfilePicture() ? ImageUtil.getProfileImageUrl(b.getUser()) : Images.DEFAULT_PROFILE_PICTURE;
 		return
 				div(
 						div(
@@ -226,7 +228,7 @@ public class ScoreChart extends PolymerTemplate<ScoreChartModel> {
 					.map(b -> new ScoreChartData(
 							getDisplayName(b),
 							b.getUser().getId().intValue(),
-							b.getUser().getProfile_picture() != null,
+							b.getUser().hasProfilePicture(),
 							getScoresPerContestant(contestants, gamesSorted, b).stream().map(ScorePerContestant::getScore).collect(Collectors.toList()),
 							b.getPosition(),
 							List.of()))

@@ -10,6 +10,7 @@ import com.jeno.fantasyleague.ui.common.label.StatusLabel;
 import com.jeno.fantasyleague.ui.main.MainView;
 import com.jeno.fantasyleague.ui.main.views.state.State;
 import com.jeno.fantasyleague.util.ImageUtil;
+import com.jeno.fantasyleague.util.Images;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -25,7 +26,6 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLayout;
-import com.vaadin.flow.server.StreamResource;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.ByteArrayInputStream;
@@ -55,8 +55,8 @@ public class ProfileView extends VerticalLayout implements RouterLayout {
 		User user = securityHolder.getUser();
 
 		ImageUploadWithPlaceholder uploadLayout = new ImageUploadWithPlaceholder();
-		Optional<StreamResource> ogProfilePic = ImageUtil.getUserProfilePictureResource(user);
-		ogProfilePic.ifPresent(uploadLayout::updateImage);
+		String ogProfilePicSrc = user.hasProfilePicture() ? ImageUtil.getProfileImageUrl(user) : Images.DEFAULT_PROFILE_PICTURE;
+		uploadLayout.updateImage(ogProfilePicSrc);
 
 		Binder<UserProfileBean> binder = new Binder<>();
 
@@ -102,9 +102,10 @@ public class ProfileView extends VerticalLayout implements RouterLayout {
 				user.setUsername(bean.getUsername());
 				user.setEmail(bean.getEmail());
 				user.setReminder_emails_enabled(bean.isReminderEmailsEnabled());
-				uploadLayout.getImage().map(ByteArrayInputStream::readAllBytes).ifPresent(user::setProfile_picture);
+				Optional<byte[]> newProfilePicture = uploadLayout.getImage().map(ByteArrayInputStream::readAllBytes);
 				try {
 					userDao.update(user);
+					newProfilePicture.ifPresent(picture -> userDao.updateProfilePicture(user, picture));
 					infoLabel.setSuccessText("Changes saved");
 				} catch (ValidationException e) {
 					infoLabel.setErrorText(String.join(",<br/>", e.getErrorMap().values()));
@@ -123,7 +124,7 @@ public class ProfileView extends VerticalLayout implements RouterLayout {
 		});
 		reset.addClickListener(event -> {
 			binder.readBean(new UserProfileBean(user));
-			ogProfilePic.ifPresent(uploadLayout::updateImage);
+			uploadLayout.updateImage(ogProfilePicSrc);
 			infoLabel.reset();
 		});
 		binder.readBean(bean);

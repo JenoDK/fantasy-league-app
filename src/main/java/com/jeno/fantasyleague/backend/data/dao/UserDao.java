@@ -9,6 +9,7 @@ import com.jeno.fantasyleague.backend.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
 import java.util.Map;
 import java.util.Optional;
 
@@ -59,6 +60,14 @@ public class UserDao extends AbstractDao<User, UserRepository> {
 		encodePasswordIfNeeded(user);
 
 		super.preUpdate(user, errorMap);
+	}
+
+	public void updateProfilePicture(User user, byte[] picture) {
+		Instant now = Instant.now();
+		repository.updateProfilePicture(user.getId(), picture, now);
+		// Keep the in-memory instance consistent: fresh cache-buster + formula flag.
+		user.setUpdatedAt(now);
+		user.setHasProfilePicture(true);
 	}
 
 	private void encodePasswordIfNeeded(User user) {

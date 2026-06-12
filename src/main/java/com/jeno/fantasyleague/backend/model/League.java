@@ -3,6 +3,7 @@ package com.jeno.fantasyleague.backend.model;
 import com.google.common.collect.Sets;
 import com.jeno.fantasyleague.backend.model.audit.UserAudit;
 import com.jeno.fantasyleague.backend.model.enums.Template;
+import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -30,9 +31,10 @@ public class League extends UserAudit {
 
 	private String description;
 
-	@Lob
-	@Basic(fetch = FetchType.LAZY)
-	private byte[] league_picture;
+	// The league_picture LONGBLOB column stays in the DB but is intentionally not mapped:
+	// bytes are served over HTTP by LeagueImageServlet and never loaded with the entity.
+	@Formula("(league_picture is not null)")
+	private Boolean hasLeaguePicture = Boolean.FALSE;
 
 	@NotNull
 	@Enumerated(EnumType.STRING)
@@ -83,12 +85,13 @@ public class League extends UserAudit {
 		this.description = description;
 	}
 
-	public byte[] getLeague_picture() {
-		return league_picture;
+	public boolean hasLeaguePicture() {
+		return Boolean.TRUE.equals(hasLeaguePicture);
 	}
 
-	public void setLeague_picture(byte[] league_picture) {
-		this.league_picture = league_picture;
+	/** In-memory only — @Formula fields are never written by Hibernate. Used after upload. */
+	public void setHasLeaguePicture(boolean hasLeaguePicture) {
+		this.hasLeaguePicture = hasLeaguePicture;
 	}
 
 	public Template getTemplate() {

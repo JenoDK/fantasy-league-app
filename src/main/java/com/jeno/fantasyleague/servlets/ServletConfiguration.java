@@ -1,5 +1,6 @@
 package com.jeno.fantasyleague.servlets;
 
+import com.jeno.fantasyleague.backend.data.repository.LeagueRepository;
 import com.jeno.fantasyleague.backend.data.repository.UserRepository;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +13,11 @@ public class ServletConfiguration {
 	public ServletRegistrationBean customServletBean(UserRepository userRepository) {
 		ServletRegistrationBean bean = new ServletRegistrationBean(new ProfileImageServlet(userRepository), "/profileImage");
 		return bean;
+	}
+
+	@Bean
+	public ServletRegistrationBean leagueImageServletBean(LeagueRepository leagueRepository) {
+		return new ServletRegistrationBean(new LeagueImageServlet(leagueRepository), "/leagueImage");
 	}
 
 }

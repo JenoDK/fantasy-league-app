@@ -2,36 +2,40 @@ package com.jeno.fantasyleague.util;
 
 import com.jeno.fantasyleague.backend.model.League;
 import com.jeno.fantasyleague.backend.model.User;
-import com.jeno.fantasyleague.ui.common.LeagueImageResourceCache;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.server.StreamResource;
 
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.util.Optional;
+import java.time.Instant;
 
 public class ImageUtil {
 
-	public static Optional<StreamResource> getUserProfilePictureResource(User user) {
-		if (user.getProfile_picture() != null) {
-			return Optional.of(new StreamResource(
-					"profile_picture.png",
-					() -> new ByteArrayInputStream(user.getProfile_picture())));
-		} else {
-			return Optional.empty();
-		}
+	/**
+	 * Relative URL (no leading slash) on purpose: Vaadin sets <base href> to the app
+	 * context root, so this resolves correctly both at localhost:8080/ and behind the
+	 * /fantasy-league nginx prefix in production. The ?v= cache-buster is derived from
+	 * updated_at so browsers can cache the response indefinitely.
+	 */
+	public static String getProfileImageUrl(User user) {
+		return "profileImage?userPk=" + user.getId() + "&v=" + cacheBuster(user.getUpdatedAt());
+	}
+
+	public static String getLeagueImageUrl(League league) {
+		return "leagueImage?leaguePk=" + league.getId() + "&v=" + cacheBuster(league.getUpdatedAt());
+	}
+
+	private static long cacheBuster(Instant updatedAt) {
+		return updatedAt != null ? updatedAt.toEpochMilli() : 0L;
 	}
 
 	public static Image createProfileIcon(User user) {
-		Optional<StreamResource> userProfilePic = ImageUtil.getUserProfilePictureResource(user);
 		Image icon = new Image();
 		icon.setWidth("50px");
 		icon.setHeight("50px");
-		if (userProfilePic.isPresent()) {
-			icon.setSrc(userProfilePic.get());
+		if (user.hasProfilePicture()) {
+			icon.setSrc(getProfileImageUrl(user));
 		} else {
 			icon.setSrc(Images.DEFAULT_PROFILE_PICTURE);
 		}
@@ -39,8 +43,8 @@ public class ImageUtil {
 	}
 
 	public static Image getLeaguePictureImage(League league) {
-		if (league.getLeague_picture() != null) {
-			return new Image(LeagueImageResourceCache.addOrGetLeagueImageResource(league), "league_banner");
+		if (league.hasLeaguePicture()) {
+			return new Image(getLeagueImageUrl(league), "league_banner");
 		} else {
 			Image league_banner = new Image("", "league_banner");
 			league_banner.addClassName("default-league-banner");

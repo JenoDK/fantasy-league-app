@@ -2,6 +2,7 @@ package com.jeno.fantasyleague.backend.model;
 
 import com.google.common.collect.Sets;
 import com.jeno.fantasyleague.backend.model.audit.DateAudit;
+import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.NaturalId;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -61,9 +62,10 @@ public class User extends DateAudit {
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
 	private Set<UserNotification> notifications;
 
-	@Lob
-	@Basic(fetch = FetchType.LAZY)
-	private byte[] profile_picture;
+	// The profile_picture LONGBLOB column stays in the DB but is intentionally not mapped:
+	// bytes are served over HTTP by ProfileImageServlet and never loaded with the entity.
+	@Formula("(profile_picture is not null)")
+	private Boolean hasProfilePicture = Boolean.FALSE;
 
 	@Enumerated(EnumType.STRING)
 	private GraphPreference graph_preference = GraphPreference.COLUMN;
@@ -146,12 +148,13 @@ public class User extends DateAudit {
 		this.reminder_emails_enabled = reminder_emails_enabled;
 	}
 
-	public byte[] getProfile_picture() {
-		return profile_picture;
+	public boolean hasProfilePicture() {
+		return Boolean.TRUE.equals(hasProfilePicture);
 	}
 
-	public void setProfile_picture(byte[] profile_picture) {
-		this.profile_picture = profile_picture;
+	/** In-memory only — @Formula fields are never written by Hibernate. Used after upload. */
+	public void setHasProfilePicture(boolean hasProfilePicture) {
+		this.hasProfilePicture = hasProfilePicture;
 	}
 
 	public GraphPreference getGraph_preference() {

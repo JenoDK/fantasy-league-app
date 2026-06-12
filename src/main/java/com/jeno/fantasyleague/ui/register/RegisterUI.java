@@ -51,11 +51,9 @@ public class RegisterUI extends RedirectUI implements RouterLayout {
 
 	private void addUser(User user) {
 		try {
-			if (form.getProfilePictureUploader().getImage().isPresent()) {
-				user.setProfile_picture(form.getProfilePictureUploader().getImage().get().readAllBytes());
-			}
 			if (accountActivationRequired) {
 				User createdUser = userDao.add(user);
+				saveProfilePicture(createdUser);
 				leagueService.addUserToDefaultLeague(createdUser);
 				accountActivationService.sendAccountActivationEmail(createdUser, VaadinUtil.getRootRequestURL());
 				StringBuilder sb = new StringBuilder();
@@ -65,6 +63,7 @@ public class RegisterUI extends RedirectUI implements RouterLayout {
 			} else {
 				user.setActive(true);
 				User createdUser = userDao.add(user);
+				saveProfilePicture(createdUser);
 				leagueService.addUserToDefaultLeague(createdUser);
 				emailLeagueInviteRepository.findByEmail(user.getEmail()).forEach(emailLeagueInvite -> {
 					leagueService.addUserToLeague(emailLeagueInvite.getLeague(), createdUser);
@@ -76,6 +75,13 @@ public class RegisterUI extends RedirectUI implements RouterLayout {
 		} catch (ValidationException ex) {
 			form.setErrorMap(ex.getErrorMap());
 		}
+	}
+
+	// The picture can no longer ride along on the INSERT since the blob is not mapped
+	// on the User entity; it is saved right after the user row exists.
+	private void saveProfilePicture(User createdUser) {
+		form.getProfilePictureUploader().getImage()
+				.ifPresent(image -> userDao.updateProfilePicture(createdUser, image.readAllBytes()));
 	}
 
 }

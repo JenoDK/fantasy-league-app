@@ -28,7 +28,8 @@ public class LayoutUtil {
 	}
 
 	public static CustomGridBuilder.IconColumnValue getUserIconColumnValue(User user) {
-		return ImageUtil.getUserProfilePictureResource(user).map(CustomGridBuilder.IconColumnValue::new).orElseGet(() -> new CustomGridBuilder.IconColumnValue(Images.DEFAULT_PROFILE_PICTURE, grid -> {}));
+		String src = user.hasProfilePicture() ? ImageUtil.getProfileImageUrl(user) : Images.DEFAULT_PROFILE_PICTURE;
+		return new CustomGridBuilder.IconColumnValue(src, grid -> {});
 	}
 
 	public static HorizontalLayout createTeamLayout(Contestant contestant, String teamPlaceHolder) {

@@ -109,9 +109,7 @@ public class CustomGrid<T> extends Grid<T> {
 		Image icon = new Image();
 		icon.setWidth("30px");
 		icon.setHeight("30px");
-		if (iconColumnValue.resource != null) {
-			icon.setSrc(iconColumnValue.resource);
-		} else if (iconColumnValue.path != null) {
+		if (iconColumnValue.path != null) {
 			icon.setSrc(iconColumnValue.path);
 		}
 		if (iconColumnValue.iconClickAction != null) {
