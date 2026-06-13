@@ -69,7 +69,9 @@ class ScoreChart extends PolymerElement {
 
 				/* Smartphone */
 				@media (max-width: 600px) {
-
+					#chart {
+						height: 300px;
+					}
 				}
 			</style>
 			<div id="content" class="content">

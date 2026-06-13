@@ -119,6 +119,7 @@ public class OverviewTab extends LazyTabComponent {
 		chartTopBar.setPadding(false);
 		chartTopBar.setMargin(false);
 		chartTopBar.setSpacing(false);
+		chartTopBar.getStyle().set("flex-wrap", "wrap");
 		chartTopBar.add(numberField, menuBar, goToPredictions);
 
 		add(chartTopBar);

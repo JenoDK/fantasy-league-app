@@ -60,7 +60,9 @@ class UserTotalScoreCard extends PolymerElement {
 				}
                 
                 .left {
-                    max-width: 20%;
+                    flex: 1;
+                    min-width: 0;
+                    max-width: 60%;
                 }
 
 				.right {
@@ -81,7 +83,12 @@ class UserTotalScoreCard extends PolymerElement {
 
 				/* Smartphone */
 				@media (max-width: 600px) {
-
+					.left {
+						max-width: 55%;
+					}
+					.right span, .right h4 {
+						font-size: var(--lumo-font-size-xs);
+					}
 				}
 
 			</style>

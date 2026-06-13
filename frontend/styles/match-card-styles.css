@@ -95,15 +95,20 @@
 @media (max-width: 400px) {
     #match-wrapper {
         flex-direction: column;
-        align-items: start;
+        align-items: center;
     }
 
     #match-wrapper .left {
         flex-direction: row-reverse;
         margin-left: 5px;
+        width: 100%;
+    }
+
+    #match-wrapper .right {
+        width: 100%;
     }
 
     #match-wrapper .score {
-        margin: 5px 70px;
+        margin: 5px 0;
     }
 }

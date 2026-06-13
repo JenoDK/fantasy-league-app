@@ -70,7 +70,15 @@ class UserScoreForGameCard extends PolymerElement {
 
 				/* Smartphone */
 				@media (max-width: 600px) {
-
+					.content {
+						max-width: 100%;
+					}
+					#top {
+						flex-direction: column;
+					}
+					.wrapper .iconLabel {
+						margin-bottom: 8px;
+					}
 				}
 
 			</style>
