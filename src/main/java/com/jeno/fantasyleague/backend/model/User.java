@@ -68,7 +68,7 @@ public class User extends DateAudit {
 	private Boolean hasProfilePicture = Boolean.FALSE;
 
 	@Enumerated(EnumType.STRING)
-	private GraphPreference graph_preference = GraphPreference.COLUMN;
+	private GraphPreference graph_preference = GraphPreference.COLUMN_FLAGS;
 
 	@Size(max = 100)
 	@Column(name = "external_auth_id")

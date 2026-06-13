@@ -58,7 +58,7 @@ public class ScoreChart extends PolymerTemplate<ScoreChartModel> {
 				showHBarChart(DEFAULT_TOP_SHOWN);
 				break;
 			case COLUMN_FLAGS:
-				showHBarChart(DEFAULT_TOP_SHOWN);
+				showVBarChart(DEFAULT_TOP_SHOWN);
 				break;
 			case LINE:
 				showLineChart(DEFAULT_TOP_SHOWN);
