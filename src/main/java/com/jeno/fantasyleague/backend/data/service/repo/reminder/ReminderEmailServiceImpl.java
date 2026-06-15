@@ -47,7 +47,7 @@ public class ReminderEmailServiceImpl implements ReminderEmailService {
 	private static final DateTimeFormatter EMAIL_DATE_TIME = DateTimeFormatter.ofPattern("dd/MM HH:mm");
 	private static final String LOGIN_URL = "https://jenodk.com/fantasy-league";
 	// Predictions digest looks at matches starting within this window.
-	private static final Duration PREDICTION_WINDOW = Duration.ofHours(24);
+	private static final Duration PREDICTION_WINDOW = Duration.ofHours(48);
 
 	@Autowired
 	private LeagueRepository leagueRepository;
