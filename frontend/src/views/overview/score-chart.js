@@ -270,64 +270,41 @@ class ScoreChart extends PolymerElement {
         var iconColorsMap = new Map(this.iconColors.map(obj => [obj.color, obj.iconPath]));
 
         GoogleCharts.api.visualization.events.addListener(chart, 'ready', function () {
+            var svgArray = chart.container.getElementsByTagName('svg');
+            if (svgArray.length === 0) return;
+            var svg = svgArray[0];
+            svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
 
-            var observer = new MutationObserver(function () {
-                observer.disconnect();
-                var svgArray = chart.container.getElementsByTagName('svg');
-                if (svgArray.length > 0) {
-                    svgArray[0].setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+            // Collect all flag images into a single <g> appended last in the SVG so
+            // they render on top. pointer-events="none" keeps Google Charts' own hover
+            // and tooltip handling working on the underlying rects.
+            var flagGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            flagGroup.setAttribute('pointer-events', 'none');
+            svg.appendChild(flagGroup);
+
+            Array.prototype.forEach.call(chart.container.getElementsByTagName('rect'), function (rect) {
+                var color = rect.getAttribute('fill');
+                if (color != null) {
+                    color = color.toUpperCase();
                 }
-                var chartWidth = chart.container.offsetWidth;
-                var chartHeight = chart.container.offsetHeight;
-                var defs = chart.container.getElementsByTagName('defs')[0];
-                Array.prototype.forEach.call(chart.container.getElementsByTagName('rect'), function (rect) {
-                    var color = rect.getAttribute('fill');
-                    if (color != null) {
-                        color = color.toUpperCase();
+                var iconPath = iconColorsMap.get(color);
+                if (typeof iconPath !== 'undefined') {
+                    var x = parseFloat(rect.getAttribute('x'));
+                    var y = parseFloat(rect.getAttribute('y'));
+                    var width = parseFloat(rect.getAttribute('width'));
+                    var height = parseFloat(rect.getAttribute('height'));
+                    if (width > 0 && height > 0) {
+                        var image = document.createElementNS('http://www.w3.org/2000/svg', 'image');
+                        image.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', iconPath);
+                        image.setAttribute('x', x);
+                        image.setAttribute('y', y);
+                        image.setAttribute('width', width);
+                        image.setAttribute('height', height);
+                        image.setAttribute('preserveAspectRatio', 'none');
+                        flagGroup.appendChild(image);
                     }
-                    var iconPath = iconColorsMap.get(color);
-                    if (typeof iconPath !== 'undefined') {
-                        var x = rect.getAttribute('x');
-                        var y = rect.getAttribute('y');
-                        var width = rect.getAttribute('width');
-                        var height = rect.getAttribute('height');
-                        var id = x + y;
-                        addPattern(id, x, y, width, height, chartWidth, chartHeight, iconPath, defs);
-                        rect.setAttribute('fill', 'url(#' + id + ')');
-                    }
-                });
-                observer.observe(chart.container, {
-                    childList: true,
-                    subtree: true
-                });
-            });
-            observer.observe(chart.container, {
-                childList: true,
-                subtree: true
-            });
-
-            function addPattern(id, x, y, width, height, chartWidth, chartHeight, imagePath, defs) {
-                if (defs.querySelector('#' + CSS.escape(id))) {
-                    return;
                 }
-                var pattern = document.createElementNS('http://www.w3.org/2000/svg', 'pattern');
-                pattern.setAttribute('id', id);
-                pattern.setAttribute('patternUnits', 'userSpaceOnUse');
-                pattern.setAttribute('width', chartWidth);
-                pattern.setAttribute('height', chartHeight);
-
-                var image = document.createElementNS('http://www.w3.org/2000/svg', 'image');
-                image.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', imagePath);
-                image.setAttribute('x', x);
-                image.setAttribute('y', y);
-                image.setAttribute("preserveAspectRatio", "none");
-                image.setAttribute('width', width);
-                image.setAttribute('height', height);
-
-                pattern.appendChild(image);
-                defs.appendChild(pattern);
-            }
-
+            });
         });
 
         chart.draw(data, options);
