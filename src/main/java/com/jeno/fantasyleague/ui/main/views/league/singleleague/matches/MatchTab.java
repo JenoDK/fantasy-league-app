@@ -15,7 +15,8 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.menubar.MenuBarVariant;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -24,9 +25,15 @@ import java.util.stream.Collectors;
 
 public class MatchTab extends LazyTabComponent {
 
-	public static final Predicate<Game> TODAY_PREDICATE = game -> LocalDateTime.now().toLocalDate().equals(game.getGameDateTime().toLocalDate());
-	public static final Predicate<Game> YESTERDAY_PREDICATE = game -> LocalDateTime.now().minusDays(1).toLocalDate().equals(game.getGameDateTime().toLocalDate());
-	public static final Predicate<Game> TOMORROW_PREDICATE = game -> LocalDateTime.now().plusDays(1).toLocalDate().equals(game.getGameDateTime().toLocalDate());
+	public static final int RECENT_DAYS_BACK = 2;
+	public static final int UPCOMING_DAYS_FORWARD = 3;
+
+	public static final Predicate<Game> RECENT_AND_UPCOMING_PREDICATE = game -> {
+		LocalDate gameDate = game.getGameDateTime().toLocalDate();
+		LocalDate utcToday = LocalDate.now(ZoneOffset.UTC);
+		return !gameDate.isBefore(utcToday.minusDays(RECENT_DAYS_BACK))
+			&& !gameDate.isAfter(utcToday.plusDays(UPCOMING_DAYS_FORWARD));
+	};
 	private final League league;
 	private final SingleLeagueServiceProvider singleLeagueServiceprovider;
 	private final User user;
@@ -34,14 +41,10 @@ public class MatchTab extends LazyTabComponent {
 	private final boolean isForAdminModule;
 
 	private MatchGrid allMatchesGrid;
-	private MatchGrid matchesTodayGrid;
-	private MatchGrid matchesYesterdayGrid;
-	private MatchGrid matchesTomorrowGrid;
+	private MatchGrid recentAndUpcomingGrid;
 	private List<MenuItem> gridMenuItems = Lists.newArrayList();
 	private MenuBar filterBar;
-	private H2 todayMatchesLabel;
-	private H2 yesterdayMatchesLabel;
-	private H2 tomorrowMatchesLabel;
+	private H2 recentAndUpcomingLabel;
 	private H2 allMatchesLabel;
 
 	public MatchTab(League league, SingleLeagueServiceProvider singleLeagueServiceprovider, boolean isForAdminModule, User user) {
@@ -74,30 +77,20 @@ public class MatchTab extends LazyTabComponent {
 		filterBar.setWidthFull();
 		filterBar.addThemeVariants(MenuBarVariant.LUMO_SMALL, MenuBarVariant.LUMO_PRIMARY);
 
-		List<MatchBean> matchesToday = getMatchBeans(Optional.of(TODAY_PREDICATE));
-		List<MatchBean> matchesYesterday = getMatchBeans(Optional.of(YESTERDAY_PREDICATE));
-		List<MatchBean> matchesTomorrow = getMatchBeans(Optional.of(TOMORROW_PREDICATE));
+		List<MatchBean> allMatchBeans = getMatchBeans();
+		List<MatchBean> recentAndUpcomingBeans = filterInMemory(allMatchBeans, RECENT_AND_UPCOMING_PREDICATE);
 
 		createFilterBar(filterBar);
 		add(filterBar);
-		if (!matchesToday.isEmpty()) {
-			todayMatchesLabel = new H2("Matches of today");
-			matchesTodayGrid = createGrid(() -> matchesToday);
-			add(todayMatchesLabel, matchesTodayGrid);
-		}
-		if (!matchesYesterday.isEmpty()) {
-			yesterdayMatchesLabel = new H2("Matches of yesterday");
-			matchesYesterdayGrid = createGrid(() -> matchesYesterday);
-			add(yesterdayMatchesLabel, matchesYesterdayGrid);
-		}
-		if (!matchesTomorrow.isEmpty()) {
-			tomorrowMatchesLabel = new H2("Matches of tomorrow");
-			matchesTomorrowGrid = createGrid(() -> matchesTomorrow);
-			add(tomorrowMatchesLabel, matchesTomorrowGrid);
+
+		if (!recentAndUpcomingBeans.isEmpty()) {
+			recentAndUpcomingLabel = new H2("Recent & upcoming matches");
+			recentAndUpcomingGrid = createGrid(() -> recentAndUpcomingBeans);
+			add(recentAndUpcomingLabel, recentAndUpcomingGrid);
 		}
 
-		allMatchesGrid = createGrid(this::getMatches);
 		allMatchesLabel = new H2("All matches");
+		allMatchesGrid = createGrid(() -> allMatchBeans);
 		add(allMatchesLabel, allMatchesGrid);
 	}
 	
@@ -120,23 +113,11 @@ public class MatchTab extends LazyTabComponent {
 	}
 
 	private void showMatches(MenuItem bacMenuItem) {
-		if (matchesTodayGrid != null) {
-			matchesTodayGrid.setVisible(true);
+		if (recentAndUpcomingGrid != null) {
+			recentAndUpcomingGrid.setVisible(true);
 		}
-		if (matchesYesterdayGrid != null) {
-			matchesYesterdayGrid.setVisible(true);
-		}
-		if (matchesTomorrowGrid != null) {
-			matchesTomorrowGrid.setVisible(true);
-		}
-		if (todayMatchesLabel != null) {
-			todayMatchesLabel.setVisible(true);
-		}
-		if (yesterdayMatchesLabel != null) {
-			yesterdayMatchesLabel.setVisible(true);
-		}
-		if (tomorrowMatchesLabel != null) {
-			tomorrowMatchesLabel.setVisible(true);
+		if (recentAndUpcomingLabel != null) {
+			recentAndUpcomingLabel.setVisible(true);
 		}
 		allMatchesGrid.setVisible(true);
 		bacMenuItem.setVisible(false);
@@ -145,23 +126,11 @@ public class MatchTab extends LazyTabComponent {
 	}
 
 	private void hideMatches() {
-		if (matchesTodayGrid != null) {
-			matchesTodayGrid.setVisible(false);
+		if (recentAndUpcomingGrid != null) {
+			recentAndUpcomingGrid.setVisible(false);
 		}
-		if (matchesYesterdayGrid != null) {
-			matchesYesterdayGrid.setVisible(false);
-		}
-		if (matchesTomorrowGrid != null) {
-			matchesTomorrowGrid.setVisible(false);
-		}
-		if (todayMatchesLabel != null) {
-			todayMatchesLabel.setVisible(false);
-		}
-		if (yesterdayMatchesLabel != null) {
-			yesterdayMatchesLabel.setVisible(false);
-		}
-		if (tomorrowMatchesLabel != null) {
-			tomorrowMatchesLabel.setVisible(false);
+		if (recentAndUpcomingLabel != null) {
+			recentAndUpcomingLabel.setVisible(false);
 		}
 		allMatchesGrid.setVisible(false);
 		gridMenuItems.forEach(item -> item.setVisible(false));
@@ -171,10 +140,13 @@ public class MatchTab extends LazyTabComponent {
 	private void createFilterBar(MenuBar filterBar) {
 		MenuItem refreshItem = filterBar.addItem(VaadinIcon.REFRESH.create());
 		refreshItem.addClickListener(ignored -> {
-			allMatchesGrid.setMatches(getMatches());
-			matchesTodayGrid.setMatches(getMatchBeans(Optional.of(TODAY_PREDICATE)));
-			matchesYesterdayGrid.setMatches(getMatchBeans(Optional.of(YESTERDAY_PREDICATE)));
-			matchesTomorrowGrid.setMatches(getMatchBeans(Optional.of(TOMORROW_PREDICATE)));
+			List<MatchBean> allMatchBeans = getMatchBeans();
+			List<MatchBean> recentAndUpcoming = filterInMemory(allMatchBeans, RECENT_AND_UPCOMING_PREDICATE);
+			allMatchesGrid.setMatches(allMatchBeans);
+			if (recentAndUpcomingGrid != null) {
+				recentAndUpcomingGrid.setMatches(recentAndUpcoming);
+				recentAndUpcomingLabel.setVisible(!recentAndUpcoming.isEmpty());
+			}
 		});
 		MenuItem showAllItem = filterBar.addItem(Resources.getMessage("showAllMatches"));
 		showAllItem.addClickListener(ignored -> allMatchesGrid.clearFilter());
@@ -193,6 +165,12 @@ public class MatchTab extends LazyTabComponent {
 					MenuItem groupItem = specificGroup.getSubMenu().addItem(group.getGroupName());
 					groupItem.addClickListener(ignored -> allMatchesGrid.filterOnGroupStage(group));
 				});
+	}
+
+	private List<MatchBean> filterInMemory(List<MatchBean> beans, Predicate<Game> predicate) {
+		return beans.stream()
+				.filter(bean -> predicate.test(bean.getGame()))
+				.collect(Collectors.toList());
 	}
 
 	private List<MatchBean> getMatches() {

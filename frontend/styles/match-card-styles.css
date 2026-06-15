@@ -33,20 +33,70 @@
     color: var(--lumo-primary-contrast-color);
 }
 
-.info-wrapper, .prediction-wrapper {
+/* Info header: compact left column + badge on the right */
+.info-wrapper {
     width: 100%;
     display: flex;
     flex-direction: row;
-    align-items: flex-end;
+    align-items: flex-start;
     justify-content: space-between;
 }
 
-.info-wrapper > h4, .prediction-wrapper > h4 {
+.info-left {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.info-date {
+    margin: 0;
+}
+
+.info-meta {
+    font-size: var(--lumo-font-size-s);
+    color: var(--lumo-secondary-text-color);
+    display: block;
+}
+
+.status-badge {
+    font-size: var(--lumo-font-size-xs);
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: var(--lumo-border-radius-m);
+    white-space: nowrap;
+    flex-shrink: 0;
+    align-self: flex-start;
+}
+
+.status-badge--finished {
+    background-color: var(--lumo-success-color-10pct);
+    color: var(--lumo-success-text-color);
+}
+
+.status-badge--live {
+    background-color: var(--lumo-error-color-10pct);
+    color: var(--lumo-error-text-color);
+}
+
+.status-badge--upcoming {
+    background-color: var(--lumo-contrast-5pct);
+    color: var(--lumo-secondary-text-color);
+}
+
+.prediction-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.prediction-wrapper > h4 {
     margin: 0px;
 }
 
-.info-wrapper > .right {
-    text-align: end;
+#prediction-button {
+    align-self: flex-end;
 }
 
 #match-wrapper, #score-wrapper {
@@ -56,9 +106,30 @@
     justify-content: center;
 }
 
-#your-prediction-wrapper {
-    margin-right: 70px;
+.team-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    gap: 4px;
 }
+
+.team-flag {
+    width: var(--lumo-size-l);
+    height: auto;
+}
+
+.team-name {
+    font-size: var(--lumo-font-size-s);
+    text-align: center;
+}
+
+.score {
+    margin: 0 12px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
 
 /* Non smartphone */
 @media (min-width: 600px) {
@@ -69,46 +140,8 @@
 
 /* Smartphone */
 @media (max-width: 600px) {
-    .info-wrapper, .prediction-wrapper {
-        flex-direction: column;
-        align-items: start;
-    }
-
-    .info-wrapper > .right, .prediction-wrapper > .right {
-        flex-direction: column;
-        text-align: start;
-    }
-
-    .info-wrapper > h4, .prediction-wrapper > h4 {
+    .prediction-wrapper > h4 {
         font-size: var(--lumo-font-size-s);
     }
-
-    .prediction-wrapper > .middle {
-        margin: 10px 0px;
-    }
-
-    #your-prediction-wrapper {
-        margin-right: 0px;
-    }
 }
 
-@media (max-width: 400px) {
-    #match-wrapper {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    #match-wrapper .left {
-        flex-direction: row-reverse;
-        margin-left: 5px;
-        width: 100%;
-    }
-
-    #match-wrapper .right {
-        width: 100%;
-    }
-
-    #match-wrapper .score {
-        margin: 5px 0;
-    }
-}

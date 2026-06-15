@@ -37,7 +37,7 @@ public class MatchGrid extends Grid<MatchBean> {
 		setHeightByRows(true);
 
 		addColumn(new ComponentRenderer<>(match -> {
-			MatchCardLayout card = new MatchCardLayout(match, isForSuperAdmin ? null : clickedMatch, loggedInUserIsAdmin, isForSuperAdmin, true, singleLeagueServiceProvider);
+			MatchCardLayout card = new MatchCardLayout(match, isForSuperAdmin ? null : clickedMatch, loggedInUserIsAdmin, isForSuperAdmin, true, false, singleLeagueServiceProvider);
 			card.predictionChanged().subscribe(predictionChanged::onNext);
 			card.scoreChanged().subscribe(scoreChanged::onNext);
 			return card;

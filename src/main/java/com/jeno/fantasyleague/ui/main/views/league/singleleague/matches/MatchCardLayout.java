@@ -24,6 +24,7 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -38,6 +39,8 @@ import com.vaadin.flow.function.ValueProvider;
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
 
+import java.time.Instant;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -55,6 +58,7 @@ public class MatchCardLayout extends Div {
 	private final boolean loggedInUserIsAdmin;
 	private final boolean isForSuperAdmin;
 	private final boolean canAdjustContestants;
+	private final boolean showDetails;
 	private final SingleLeagueServiceProvider singleLeagueServiceProvider;
 
 	private MatchBean match;
@@ -73,6 +77,7 @@ public class MatchCardLayout extends Div {
 			boolean loggedInUserIsAdmin,
 			boolean isForSuperAdmin,
 			boolean canAdjustContestants,
+			boolean showDetails,
 			SingleLeagueServiceProvider singleLeagueServiceProvider) {
 		this.match = match;
 		this.predictionBean = new MatchPredictionBean(match.getLeague(), match.getPrediction());
@@ -80,6 +85,7 @@ public class MatchCardLayout extends Div {
 		this.loggedInUserIsAdmin = loggedInUserIsAdmin;
 		this.isForSuperAdmin = isForSuperAdmin;
 		this.canAdjustContestants = canAdjustContestants;
+		this.showDetails = showDetails;
 		this.singleLeagueServiceProvider = singleLeagueServiceProvider;
 		initLayout();
 	}
@@ -120,14 +126,18 @@ public class MatchCardLayout extends Div {
 	private Div createPredictionWrapper() {
 		predictionButton = new CustomButton("Fill in prediction");
 		predictionButton.setId("prediction-button");
+		predictionButton.addThemeName("small");
 		predictionButton.addPreventClickPropagation();
 		predictionButton.addClickListener(ignored -> openPrediction());
+
 		yourPredictionWrapper = new Div();
 		yourPredictionWrapper.setId("your-prediction-wrapper");
-		yourPredictionWrapper.setClassName("middle");
+
 		H4 pointsGained = new H4(Resources.getMessage("points") + ": " + OverviewUtil.getScoreFormatted(match.getPredictionScore()));
-		pointsGained.setClassName("right");
-		Div predictionWrapper = new Div(predictionButton, yourPredictionWrapper, pointsGained);
+		pointsGained.setVisible(match.getGameHomeTeamScore() != null);
+
+		// Order: prediction label | points | button (button pushed to the right)
+		Div predictionWrapper = new Div(yourPredictionWrapper, pointsGained, predictionButton);
 		predictionWrapper.setClassName("prediction-wrapper");
 
 		yourPredictionLabel = new PredictionStatusLabel("yourPrediction");
@@ -137,8 +147,9 @@ public class MatchCardLayout extends Div {
 		});
 		setPredictionStatusText();
 		yourPredictionWrapper.add(yourPredictionLabel);
+
 		boolean matchIsEditable = match.getAwayTeam() != null && match.getHomeTeam() != null && nowIsBeforeMatch();
-		predictionButton.setEnabled(matchIsEditable || isForSuperAdmin);
+		predictionButton.setVisible(matchIsEditable || isForSuperAdmin);
 
 		return predictionWrapper;
 	}
@@ -161,42 +172,40 @@ public class MatchCardLayout extends Div {
 				DateUtil.nowIsBeforeUtcDateTime(game.getGameDateTime()) &&
 				loggedInUserIsAdmin &&
 				canAdjustContestants;
-		HorizontalLayout left;
+
+		Component left;
+		Component right;
 		if (isEightFinalAndCanChooseContestant) {
-			left = new HorizontalLayout();
-			left.setPadding(true);
-			left.add(getContestantComboBox(game, match.getHomeContestantChanged(), game.getHome_team_placeholder(), game.getHome_team(), game::setHome_team));
+			HorizontalLayout leftH = new HorizontalLayout();
+			leftH.setPadding(true);
+			leftH.add(getContestantComboBox(game, match.getHomeContestantChanged(), game.getHome_team_placeholder(), game.getHome_team(), game::setHome_team));
+			left = leftH;
+
+			HorizontalLayout rightH = new HorizontalLayout();
+			rightH.setPadding(true);
+			rightH.addClassName("combobox-contestant-selector");
+			rightH.add(getContestantComboBox(game, match.getAwayContestantChanged(), game.getAway_team_placeholder(), game.getAway_team(), game::setAway_team));
+			right = rightH;
 		} else {
-			left = LayoutUtil.createTeamLayout(true, match.getHomeTeam(), game.getHome_team_placeholder());
-			left.addClassName("left");
-			left.setWidthFull();
-			left.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
-			left.getStyle().set("margin-right", "20px");
+			Div homeCard = createTeamCard(match.getHomeTeam(), game.getHome_team_placeholder());
 			match.getHomeContestantChanged().subscribe(homeTeam -> {
 				if (homeTeam != null) {
-					left.removeAll();
-					left.add(LayoutUtil.createTeamLayout(true, homeTeam));
+					homeCard.removeAll();
+					populateTeamCard(homeCard, homeTeam);
 				}
 			});
-		}
-		HorizontalLayout right;
-		if (isEightFinalAndCanChooseContestant) {
-			right = new HorizontalLayout();
-			right.setPadding(true);
-			right.addClassName("combobox-contestant-selector");
-			right.add(getContestantComboBox(game, match.getAwayContestantChanged(), game.getAway_team_placeholder(), game.getAway_team(), game::setAway_team));
-		} else {
-			right = LayoutUtil.createTeamLayout(false, match.getAwayTeam(), game.getAway_team_placeholder());
-			right.addClassName("right");
-			right.setWidthFull();
-			right.getStyle().set("margin-left", "20px");
+			left = homeCard;
+
+			Div awayCard = createTeamCard(match.getAwayTeam(), game.getAway_team_placeholder());
 			match.getAwayContestantChanged().subscribe(awayTeam -> {
 				if (awayTeam != null) {
-					right.removeAll();
-					right.add(LayoutUtil.createTeamLayout(false, awayTeam));
+					awayCard.removeAll();
+					populateTeamCard(awayCard, awayTeam);
 				}
 			});
+			right = awayCard;
 		}
+
 		matchWrapper.add(left);
 		scoreLabel = new Label(getScoreWithWinnerText());
 		scoreLabel.addClassName("score");
@@ -209,6 +218,25 @@ public class MatchCardLayout extends Div {
 			scoreWrapper.setVisible(false);
 		}
 		return matchWrapper;
+	}
+
+	private Div createTeamCard(Contestant contestant, String placeholder) {
+		Div card = new Div();
+		card.addClassName("team-card");
+		if (contestant != null) {
+			populateTeamCard(card, contestant);
+		} else {
+			card.add(new Label(placeholder));
+		}
+		return card;
+	}
+
+	private void populateTeamCard(Div card, Contestant contestant) {
+		Image flag = new Image(contestant.getIcon_path(), contestant.getName());
+		flag.addClassName("team-flag");
+		Label name = new Label(contestant.getName());
+		name.addClassName("team-name");
+		card.add(flag, name);
 	}
 
 	private Div createScoreWrapper() {
@@ -272,14 +300,46 @@ public class MatchCardLayout extends Div {
 
 	private Div createInfoWrapper() {
 		H4 date = new H4(DateUtil.formatInUserTimezone(match.getGame().getGameDateTime()));
-		date.addClassName("left");
-		H4 stage = new H4(SoccerCupStages.getLeagueStageTitle(match.getGame(), match.getHomeTeam() != null ? match.getHomeTeam() : match.getAwayTeam()));
-		stage.addClassName("middle");
-		H4 place = new H4(match.getGame().getLocation());
-		place.addClassName("right");
-		Div infoWrapper = new Div(date, stage, place);
+		date.addClassName("info-date");
+
+		Div infoLeft = new Div(date);
+		infoLeft.setClassName("info-left");
+
+		if (showDetails) {
+			Span stage = new Span(SoccerCupStages.getLeagueStageTitle(match.getGame(), match.getHomeTeam() != null ? match.getHomeTeam() : match.getAwayTeam()));
+			stage.addClassName("info-meta");
+			Span place = new Span(match.getGame().getLocation());
+			place.addClassName("info-meta");
+			infoLeft.add(stage, place);
+		}
+
+		Div infoWrapper = new Div(infoLeft, createStatusBadge());
 		infoWrapper.setClassName("info-wrapper");
 		return infoWrapper;
+	}
+
+	private Span createStatusBadge() {
+		Span badge = new Span();
+		badge.addClassName("status-badge");
+		Instant now = Instant.now();
+		Instant matchStart = match.getGame().getGameDateTime().toInstant(ZoneOffset.UTC);
+		boolean hasScore = match.getGameHomeTeamScore() != null;
+		boolean isLive = now.isAfter(matchStart) && now.isBefore(matchStart.plusSeconds(2 * 60 * 60));
+		boolean isUpcoming = now.isBefore(matchStart);
+		if (hasScore) {
+			badge.setText("Finished");
+			badge.addClassName("status-badge--finished");
+		} else if (isLive) {
+			badge.setText("Live");
+			badge.addClassName("status-badge--live");
+		} else if (isUpcoming) {
+			badge.setText("Upcoming");
+			badge.addClassName("status-badge--upcoming");
+		} else {
+			badge.setText("Awaiting score");
+			badge.addClassName("status-badge--upcoming");
+		}
+		return badge;
 	}
 
 	private void setPredictionStatusText() {
