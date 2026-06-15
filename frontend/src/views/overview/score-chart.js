@@ -272,6 +272,7 @@ class ScoreChart extends PolymerElement {
         GoogleCharts.api.visualization.events.addListener(chart, 'ready', function () {
 
             var observer = new MutationObserver(function () {
+                observer.disconnect();
                 var svgArray = chart.container.getElementsByTagName('svg');
                 if (svgArray.length > 0) {
                     svgArray[0].setAttribute('xmlns', 'http://www.w3.org/2000/svg');
@@ -295,6 +296,10 @@ class ScoreChart extends PolymerElement {
                         rect.setAttribute('fill', 'url(#' + id + ')');
                     }
                 });
+                observer.observe(chart.container, {
+                    childList: true,
+                    subtree: true
+                });
             });
             observer.observe(chart.container, {
                 childList: true,
@@ -302,6 +307,9 @@ class ScoreChart extends PolymerElement {
             });
 
             function addPattern(id, x, y, width, height, chartWidth, chartHeight, imagePath, defs) {
+                if (defs.querySelector('#' + CSS.escape(id))) {
+                    return;
+                }
                 var pattern = document.createElementNS('http://www.w3.org/2000/svg', 'pattern');
                 pattern.setAttribute('id', id);
                 pattern.setAttribute('patternUnits', 'userSpaceOnUse');
