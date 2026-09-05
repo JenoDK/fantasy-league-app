@@ -1,9 +1,7 @@
 package com.jeno.fantasyleague.backend.data.service.repo.weeklywinner;
 
 import com.jeno.fantasyleague.backend.data.repository.LeagueRepository;
-import com.jeno.fantasyleague.backend.data.repository.LeagueUserRepository;
 import com.jeno.fantasyleague.backend.data.repository.WeeklyWinnerRepository;
-import com.jeno.fantasyleague.backend.data.service.email.ApplicationEmailService;
 import com.jeno.fantasyleague.backend.data.service.repo.league.LeagueService;
 import com.jeno.fantasyleague.backend.data.service.repo.league.UserLeagueScore;
 import com.jeno.fantasyleague.backend.model.League;
@@ -38,11 +36,7 @@ public class WeeklyWinnerServiceImpl implements WeeklyWinnerService {
 	@Autowired
 	private LeagueRepository leagueRepository;
 	@Autowired
-	private LeagueUserRepository leagueUserRepository;
-	@Autowired
 	private WeeklyWinnerRepository weeklyWinnerRepository;
-	@Autowired
-	private ApplicationEmailService emailService;
 
 	// Every Sunday at 20:00 Belgian local time (handles CET/CEST DST automatically).
 	@Scheduled(cron = "0 0 20 * * SUN", zone = "Europe/Brussels")
@@ -75,28 +69,6 @@ public class WeeklyWinnerServiceImpl implements WeeklyWinnerService {
 		weeklyWinnerRepository.saveAndFlush(weeklyWinner);
 		LOG.info("Weekly winner for league '{}': {} with {} points", league.getName(),
 				winners.stream().map(User::getUsername).collect(Collectors.joining(", ")), topScore);
-
-		emailAllMembers(league, winners, topScore);
-	}
-
-	private void emailAllMembers(League league, Set<User> winners, double topScore) {
-		String names = winners.stream().map(User::getUsername).sorted().collect(Collectors.joining(", "));
-		String scoreText = topScore == Math.floor(topScore) ? String.valueOf((long) topScore) : String.valueOf(topScore);
-		String announcement = winners.size() == 1
-				? names + " is this week's leader in " + league.getName() + " with " + scoreText + " points!"
-				: "Joint leaders this week in " + league.getName() + " with " + scoreText + " points: " + names;
-		String subject = "FIFA World Cup 2026 - Winner of the week";
-		String body = announcement + "\n\nLog in to https://jenodk.com/fantasy-league to see the full standings.";
-
-		leagueUserRepository.findByLeague(league).stream()
-				.map(LeagueUser::getUser)
-				.forEach(user -> {
-					try {
-						emailService.sendEmail(subject, body, user);
-					} catch (Exception e) {
-						LOG.warn("Failed to send weekly winner email to {}", user.getEmail(), e);
-					}
-				});
 	}
 
 	private double totalScore(UserLeagueScore score) {
